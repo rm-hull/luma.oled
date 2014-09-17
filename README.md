@@ -4,7 +4,7 @@ Interfacing OLED matrix displays with the SSD1306 driver in Python using
 I2C on the Raspberry Pi. The particular kit I bought can be acquired for 
 a few pounds from eBay: http://www.ebay.co.uk/itm/191279261331
 
-The display is 128x96 pixels, and the board is _tiny_, and will fit neatly
+The display is 128x64 pixels, and the board is _tiny_, and will fit neatly
 inside the RPi case. My intention is to solder wires directly to the underside
 of the RPi GPIO pins so that the pins are still available for other purposes.
 
@@ -19,7 +19,8 @@ The SSD1306 device is an I2C device, so connecting to the RPi is very straightfo
 | 3         | SCL   | Clock       | 5       | GPIO 3 (SCL) |
 | 4         | SDA   | Data        | 3       | GPIO 2 (SDA) |
 
-![GPIO_header](https://raw.githubusercontent.com/rm-hull/ssd1306/master/doc/tech-spec/images/GPIOs.png) [Attribution: http://elinux.org/Rpi_Low-level_peripherals]
+![GPIO_header](https://raw.githubusercontent.com/rm-hull/ssd1306/master/doc/tech-spec/images/GPIOs.png) 
+[Attribution: http://elinux.org/Rpi_Low-level_peripherals]
 
 ## Pre-requisites
 
@@ -68,6 +69,7 @@ the device indicates it uses two addresses.
 
 * https://learn.adafruit.com/monochrome-oled-breakouts
 * https://github.com/adafruit/Adafruit_Python_SSD1306
+* http://www.dafont.com/bitmap.php
 
 # License
 
