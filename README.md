@@ -12,15 +12,32 @@ of the RPi GPIO pins so that the pins are still available for other purposes.
 
 The SSD1306 device is an I2C device, so connecting to the RPi is very straightforward:
 
+### P1 Header
+
+For prototyping , the P1 header pins should be connected as follows:
+
 | Board Pin | Name  | Remarks     | RPi Pin | RPi Function |
 |----------:|:------|:------------|--------:|--------------|
-| 1         | GND   | Ground      | 6       | GND          |
-| 2         | VCC   | +3.3V Power | 1       | 3V3          |
-| 3         | SCL   | Clock       | 5       | GPIO 3 (SCL) |
-| 4         | SDA   | Data        | 3       | GPIO 2 (SDA) |
+| 1         | GND   | Ground      | P01-6   | GND          |
+| 2         | VCC   | +3.3V Power | P01-1   | 3V3          |
+| 3         | SCL   | Clock       | P01-5   | GPIO 3 (SCL) |
+| 4         | SDA   | Data        | P01-3   | GPIO 2 (SDA) |
 
-![GPIO_header](https://raw.githubusercontent.com/rm-hull/ssd1306/master/doc/tech-spec/images/GPIOs.png) 
-[Attribution: http://elinux.org/Rpi_Low-level_peripherals]
+<img style="float:right" src="https://raw.githubusercontent.com/rm-hull/ssd1306/master/doc/GPIOs.png" text="[Attribution: http://elinux.org/Rpi_Low-level_peripherals]"> 
+
+### P5 Header
+
+On rev.2 RPi's, right next to the male pins of the P1 header, there is a bare 
+P5 header which features I2C channel 0. 
+
+| Board Pin | Name  | Remarks     | RPi Pin | RPi Function  | Colour |
+|----------:|:------|:------------|--------:|---------------|--------|
+| 1         | GND   | Ground      | P5-07   | GND           | Black  |
+| 2         | VCC   | +3.3V Power | P5-02   | 3V3           | White  |
+| 3         | SCL   | Clock       | P5-04   | GPIO 29 (SCL) | Grey   |
+| 4         | SDA   | Data        | P5-03   | GPIO 28 (SDA) | Purple |
+
+<img src="https://raw.githubusercontent.com/rm-hull/ssd1306/master/doc/RPi_P5_header.png" text="[Attribution: http://elinux.org/Rpi_Low-level_peripherals]"> 
 
 ## Pre-requisites
 
