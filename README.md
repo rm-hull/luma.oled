@@ -16,26 +16,27 @@ The SSD1306 device is an I2C device, so connecting to the RPi is very straightfo
 
 For prototyping , the P1 header pins should be connected as follows:
 
-| Board Pin | Name  | Remarks     | RPi Pin | RPi Function |
-|----------:|:------|:------------|--------:|--------------|
-| 1         | GND   | Ground      | P01-6   | GND          |
-| 2         | VCC   | +3.3V Power | P01-1   | 3V3          |
-| 3         | SCL   | Clock       | P01-5   | GPIO 3 (SCL) |
-| 4         | SDA   | Data        | P01-3   | GPIO 2 (SDA) |
+| Board Pin | Name  | Remarks     | RPi Pin | RPi Function | Colour |
+|----------:|:------|:------------|--------:|--------------|--------|
+| 1         | GND   | Ground      | P01-6   | GND          | Black  |
+| 2         | VCC   | +3.3V Power | P01-1   | 3V3          | White  |
+| 3         | SCL   | Clock       | P01-5   | GPIO 3 (SCL) | Purple |
+| 4         | SDA   | Data        | P01-3   | GPIO 2 (SDA) | Grey   |
 
 <img style="float:right" src="https://raw.githubusercontent.com/rm-hull/ssd1306/master/doc/GPIOs.png" text="[Attribution: http://elinux.org/Rpi_Low-level_peripherals]"> 
 
 ### P5 Header
 
 On rev.2 RPi's, right next to the male pins of the P1 header, there is a bare 
-P5 header which features I2C channel 0. 
+P5 header which features I2C channel 0, although this doesn't appear to be
+initially enabled and may be configured for use with the Camera module. 
 
 | Board Pin | Name  | Remarks     | RPi Pin | RPi Function  | Colour |
 |----------:|:------|:------------|--------:|---------------|--------|
 | 1         | GND   | Ground      | P5-07   | GND           | Black  |
 | 2         | VCC   | +3.3V Power | P5-02   | 3V3           | White  |
-| 3         | SCL   | Clock       | P5-04   | GPIO 29 (SCL) | Grey   |
-| 4         | SDA   | Data        | P5-03   | GPIO 28 (SDA) | Purple |
+| 3         | SCL   | Clock       | P5-04   | GPIO 29 (SCL) | Purple |
+| 4         | SDA   | Data        | P5-03   | GPIO 28 (SDA) | Grey   |
 
 <img src="https://raw.githubusercontent.com/rm-hull/ssd1306/master/doc/RPi_P5_header.png" text="[Attribution: http://elinux.org/Rpi_Low-level_peripherals]"> 
 
@@ -58,12 +59,18 @@ or
     regmap_i2c              1661  3 snd_soc_pcm512x,snd_soc_wm8804,snd_soc_core
 
 If you dont see the I2C drivers, alter */etc/modules* and add the following 
-two lines and reboot:
+two lines:
 
     i2c-bcm2708
     i2c-dev
 
-And that the device is communicating properly (if using a rev.1 board, 
+And alter */etc/modprobe.d/raspi-blacklist.conf* and comment out the line:
+
+   blacklist i2c-bcm2708
+
+Then reboot.
+
+Next check that the device is communicating properly (if using a rev.1 board, 
 use 0 for the bus not 1):
 
     $ i2cdetect -y 1
@@ -87,6 +94,7 @@ the device indicates it uses two addresses.
 * https://learn.adafruit.com/monochrome-oled-breakouts
 * https://github.com/adafruit/Adafruit_Python_SSD1306
 * http://www.dafont.com/bitmap.php
+* http://raspberrypi.znix.com/hipidocs/topic_i2cbus_2.htm
 
 # License
 
