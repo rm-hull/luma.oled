@@ -10,7 +10,7 @@ The display is 128x64 pixels, and the board is _tiny_, and will fit neatly
 inside the RPi case. My intention is to solder wires directly to the underside
 of the RPi GPIO pins so that the pins are still available for other purposes.
 
-![mounted](https://raw.githubusercontent.com/rm-hull/ssd1306/master/doc/mounted_display.png)
+![mounted](https://raw.githubusercontent.com/rm-hull/ssd1306/master/doc/mounted_display.jpg)
 
 ## GPIO pin-outs
 
