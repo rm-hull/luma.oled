@@ -4,7 +4,7 @@ Interfacing OLED matrix displays with the SSD1306 driver in Python using
 I2C on the Raspberry Pi. The particular kit I bought can be acquired for 
 a few pounds from eBay: http://www.ebay.co.uk/itm/191279261331. Further 
 technical details for the SSD1306 OLED display can be found in the 
-[datasheet](https://raw.githubusercontent.com/rm-hull/ssd1306/master/doc/tech-spec/SD1306.pdf) [PDF].
+[datasheet](https://raw.githubusercontent.com/rm-hull/ssd1306/master/doc/tech-spec/SSD1306.pdf) [PDF].
 
 The display is 128x64 pixels, and the board is _tiny_, and will fit neatly
 inside the RPi case. My intention is to solder wires directly to the underside
