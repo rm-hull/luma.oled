@@ -2,11 +2,15 @@
 
 Interfacing OLED matrix displays with the SSD1306 driver in Python using
 I2C on the Raspberry Pi. The particular kit I bought can be acquired for 
-a few pounds from eBay: http://www.ebay.co.uk/itm/191279261331
+a few pounds from eBay: http://www.ebay.co.uk/itm/191279261331. Further 
+technical details for the SSD1306 OLED display can be found in the 
+[datasheet](https://raw.githubusercontent.com/rm-hull/ssd1306/master/doc/tech-spec/SD1306.pdf) [PDF].
 
 The display is 128x64 pixels, and the board is _tiny_, and will fit neatly
 inside the RPi case. My intention is to solder wires directly to the underside
 of the RPi GPIO pins so that the pins are still available for other purposes.
+
+![mounted](https://raw.githubusercontent.com/rm-hull/ssd1306/master/doc/mounted_display.png)
 
 ## GPIO pin-outs
 
@@ -23,7 +27,9 @@ For prototyping , the P1 header pins should be connected as follows:
 | 3         | SCL   | Clock       | P01-5   | GPIO 3 (SCL) | Purple |
 | 4         | SDA   | Data        | P01-3   | GPIO 2 (SDA) | Grey   |
 
-<img style="float:right" src="https://raw.githubusercontent.com/rm-hull/ssd1306/master/doc/GPIOs.png" text="[Attribution: http://elinux.org/Rpi_Low-level_peripherals]"> 
+![GPIOS](https://raw.githubusercontent.com/rm-hull/ssd1306/master/doc/GPIOs.png)
+
+[Attribution: http://elinux.org/Rpi_Low-level_peripherals]
 
 ### P5 Header
 
@@ -38,7 +44,9 @@ initially enabled and may be configured for use with the Camera module.
 | 3         | SCL   | Clock       | P5-04   | GPIO 29 (SCL) | Purple |
 | 4         | SDA   | Data        | P5-03   | GPIO 28 (SDA) | Grey   |
 
-<img src="https://raw.githubusercontent.com/rm-hull/ssd1306/master/doc/RPi_P5_header.png" text="[Attribution: http://elinux.org/Rpi_Low-level_peripherals]"> 
+![P5 Header](https://raw.githubusercontent.com/rm-hull/ssd1306/master/doc/RPi_P5_header.png)
+
+[Attribution: http://elinux.org/Rpi_Low-level_peripherals]
 
 ## Pre-requisites
 
@@ -69,6 +77,14 @@ And alter */etc/modprobe.d/raspi-blacklist.conf* and comment out the line:
    blacklist i2c-bcm2708
 
 Then reboot.
+
+Then add your user to the i2c group:
+
+    $ sudo adduser pi i2c
+
+Install some packages:
+
+    $ sudo apt-get install i2c-tools python-smbus
 
 Next check that the device is communicating properly (if using a rev.1 board, 
 use 0 for the bus not 1):
