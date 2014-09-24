@@ -68,12 +68,12 @@ class canvas:
         return self.draw
 
     def __exit__(self, type, value, traceback):
-        # do the drawing onto the device
-        self.device.display(self.image)
+        if type is None:
+            # do the drawing onto the device
+            self.device.display(self.image)
 
-        # tidy up the resources
-        del self.draw
-        return self.image
+        del self.draw   # Tidy up the resources
+        return False    # Never suppress exceptions
 
 
 class device:
@@ -96,7 +96,7 @@ class device:
             const.SETDISPLAYCLOCKDIV, 0x80,
             const.SETMULTIPLEX,       0x3F,
             const.SETDISPLAYOFFSET,   0x00,
-            const.SETSTARTLINE,
+            const.SETSTARTLINE | 0,
             const.CHARGEPUMP,         0x14,
             const.MEMORYMODE,         0x00,
             const.SEGREMAP,
@@ -115,31 +115,45 @@ class device:
         device - maximum allowed is 32 bytes in one go.
         """
         assert(len(cmd) <= 32)
-        self.bus.write_i2c_block_data(self.address, 0x00, cmd)
+        self.bus.write_i2c_block_data(self.address, 0x00, list(cmd))
 
     def data(self, *data):
         """
         Sends a data byte or sequence of data bytes through to the
-        device - maximum allowed is 32 bytes in one go.
+        device - maximum allowed in one transaction is 32 bytes, so if
+        data is larger than this it is sent in chunks.
         """
-        assert(len(data) <= 32)
-        self.bus.write_i2c_block_data(self.address, 0x40, data)
+        for i in xrange(0, len(data), 32):
+            self.bus.write_i2c_block_data(self.address, 0x40, list(data[i:i+32]))
 
     def display(self, image):
+        """
+        Takes a 1-bit 128x64 image and dumps it to the OLED display. Sections ported from:
+        https://github.com/adafruit/Adafruit_Python_SSD1306/blob/master/Adafruit_SSD1306/SSD1306.py
+        """
+        assert(image.mode == '1')
+        assert(image.size[0] == self.width)
+        assert(image.size[1] == self.height)
         pix = image.load()
-        buf = [0] * self.width
-
+        buf = [0] * self.width * self.pages
+        index = 0
         for page in xrange(self.pages):
-            for x in xrange(self.width):
+            x = self.width-1
+            while x >= 0:
                 bits = 0
                 for bit in xrange(8):
                     bits = bits << 1
-                    bits != 0 if pix[(x, page*8+7-bit)] == 0 else 1
-                buf[x] = bits
+                    bits |= 0 if pix[(x, page*8+7-bit)] == 0 else 1
 
-            self.command(const.COLUMNADDR, 0x00, self.width-1) # Column start/end address
-            self.command(const.PAGEADDR, 0x00, self.pages-1)   # Page start/end address
-            self.data(*buf)
+                buf[index] = bits
+                index += 1
+                x -= 1
+
+        self.command(
+                const.COLUMNADDR, 0x00, self.width-1, # Column start/end address
+                const.PAGEADDR,   0x00, self.pages-1) # Page start/end address
+
+        self.data(*buf)
 
 class const:
     CHARGEPUMP = 0x8D
