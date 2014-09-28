@@ -84,7 +84,7 @@ Then add your user to the i2c group:
 
 Install some packages:
 
-    $ sudo apt-get install i2c-tools python-smbus
+    $ sudo apt-get install i2c-tools python-smbus python-pil
 
 Next check that the device is communicating properly (if using a rev.1 board, 
 use 0 for the bus not 1):
@@ -104,6 +104,40 @@ According to the manual, "UU" means that probing was skipped,
 because the address was in use by a driver. It suggest that
 there is a chip at that address. Indeed the documentation for
 the device indicates it uses two addresses.
+
+# Software Display Driver
+
+The screen can be driven with python using the _ssd1306.py_ script.
+There are two classes and usage is very simple if you have ever
+used [Pillow](http://pillow.readthedocs.org/en/latest/) or PIL.
+
+First, impoort and initialise the device:
+
+```python
+from ssd13055 import device, canvas
+from PIL import ImageFont, ImageDraw
+
+oled = device(port=1, address=0x3C)  # rev.1 users set port=0
+```
+The display device should now be configured for use. The _device_ class 
+exposes a _display()_ method which takes an image. However, for most cases,
+for drawing text and graphics primitives, the canvas class should be used 
+as follows:
+
+```python
+with canvas(oled) as draw:
+    font = ImageFont.load_default()
+    draw.rectangle((0, 0, oled.width, oled.height), outline=0, fill=0)
+    draw.text(30, 40, "Hello World", font=font, fill=255)
+```
+
+The _canvas_ class automatically creates an ImageDraw object of the 
+correct dimensions and bit depth suitable for the device, so you
+may then call the usual Pillow methods to draw onto the canvas.
+
+As soon as the with scope is ended, the resultant image is automatically
+flushed to the device's display memory and the ImageDraw object is
+garbage collected.
 
 # References
 
