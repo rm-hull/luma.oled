@@ -111,7 +111,7 @@ The screen can be driven with python using the _ssd1306.py_ script.
 There are two classes and usage is very simple if you have ever
 used [Pillow](http://pillow.readthedocs.org/en/latest/) or PIL.
 
-First, impoort and initialise the device:
+First, import and initialise the device:
 
 ```python
 from ssd13055 import device, canvas
