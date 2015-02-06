@@ -1,13 +1,15 @@
-# SSD1306 OLED Driver
+# SSD1306 / SH1106 OLED Driver
 
-Interfacing OLED matrix displays with the SSD1306 driver in Python using
+Interfacing OLED matrix displays with the SSD1306 (or SH1106) driver in Python using
 I2C on the Raspberry Pi. The particular kit I bought can be acquired for 
 a few pounds from eBay: http://www.ebay.co.uk/itm/191279261331. Further 
 technical details for the SSD1306 OLED display can be found in the 
-[datasheet](https://raw.githubusercontent.com/rm-hull/ssd1306/master/doc/tech-spec/SSD1306.pdf) [PDF].
+[datasheet](https://raw.githubusercontent.com/rm-hull/ssd1306/master/doc/tech-spec/SSD1306.pdf) [PDF]. 
+See also the [datasheet](https://raw.githubusercontent.com/rm-hull/ssd1306/sh1106-compat/doc/tech-spec/SH1106.pdf) [PDF] for the SH1106 chipset.
 
-The display is 128x64 pixels, and the board is _tiny_, and will fit neatly
-inside the RPi case. My intention is to solder wires directly to the underside
+The SSD1306 display is 128x64 pixels, and the board is _tiny_, and will fit neatly
+inside the RPi case (the SH1106 is slightly different, in that it supports 132x64
+pixels). My intention is to solder wires directly to the underside
 of the RPi GPIO pins so that the pins are still available for other purposes.
 
 ![mounted](https://raw.githubusercontent.com/rm-hull/ssd1306/master/doc/mounted_display.jpg)
@@ -114,25 +116,28 @@ used [Pillow](http://pillow.readthedocs.org/en/latest/) or PIL.
 First, import and initialise the device:
 
 ```python
-from ssd13055 import device, canvas
+from oled.device import ssd13055, sh1106
+from oled.render import canvas
 from PIL import ImageFont, ImageDraw
 
-oled = device(port=1, address=0x3C)  # rev.1 users set port=0
+# substitute sh1106(...) below if using that device
+device = ssd1306(port=1, address=0x3C)  # rev.1 users set port=0
 ```
-The display device should now be configured for use. The _device_ class 
-exposes a _display()_ method which takes an image. However, for most cases,
-for drawing text and graphics primitives, the canvas class should be used 
-as follows:
+
+The display device should now be configured for use. The specific `ssd1306` or 
+`sh1106` classes both expose a `display()` method which takes a 1-bit depth image. 
+However, for most cases, for drawing text and graphics primitives, the canvas class
+should be used as follows:
 
 ```python
-with canvas(oled) as draw:
+with canvas(device) as draw:
     font = ImageFont.load_default()
-    draw.rectangle((0, 0, oled.width, oled.height), outline=0, fill=0)
+    draw.rectangle((0, 0, device.width, device.height), outline=0, fill=0)
     draw.text(30, 40, "Hello World", font=font, fill=255)
 ```
 
-The _canvas_ class automatically creates an ImageDraw object of the 
-correct dimensions and bit depth suitable for the device, so you
+The `canvas` class automatically creates an [ImageDraw](http://pillow.readthedocs.org/en/latest/reference/ImageDraw.html) 
+object of the correct dimensions and bit depth suitable for the device, so you
 may then call the usual Pillow methods to draw onto the canvas.
 
 As soon as the with scope is ended, the resultant image is automatically
@@ -151,7 +156,7 @@ garbage collected.
 
 The MIT License (MIT)
 
-Copyright (c) 2014 Richard Hull
+Copyright (c) 2015 Richard Hull
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

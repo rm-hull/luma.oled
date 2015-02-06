@@ -12,7 +12,8 @@ if os.name != 'posix':
 import psutil
 
 from datetime import datetime
-from ssd1306 import device, canvas
+from oled.device import ssd1306, sh1106
+from oled.render import canvas
 from PIL import ImageDraw, ImageFont
 
 # TODO: custom font bitmaps for up/down arrows
@@ -68,7 +69,7 @@ def stats(oled):
         draw.text((0, 38), network('wlan0'), font=font2, fill=255)
 
 def main():
-    oled = device(port=1, address=0x3C)
+    oled = ssd1306(port=1, address=0x3C)
     stats(oled)
 
 if __name__ == "__main__":
