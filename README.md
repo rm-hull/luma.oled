@@ -109,8 +109,8 @@ the device indicates it uses two addresses.
 
 # Software Display Driver
 
-The screen can be driven with python using the _ssd1306.py_ script.
-There are two classes and usage is very simple if you have ever
+The screen can be driven with python using the _oled/device.py_ script.
+There are two device classes and usage is very simple if you have ever
 used [Pillow](http://pillow.readthedocs.org/en/latest/) or PIL.
 
 First, import and initialise the device:
