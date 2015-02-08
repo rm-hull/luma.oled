@@ -95,7 +95,7 @@ class sh1106(device):
 
     def __init__(self, port=1, address=0x3C):
         super(sh1106, self).__init__(port, address)
-        self.width = 132
+        self.width = 128
         self.height = 64
         self.pages = self.height / 8
 
@@ -130,7 +130,7 @@ class sh1106(device):
         for y in xrange(0, self.pages * 8, 8):
 
             # move to given page, then reset the column address
-            self.command(page, 0x00, 0x10)
+            self.command(page, 0x02, 0x10)
             page += 1
 
             buf = []

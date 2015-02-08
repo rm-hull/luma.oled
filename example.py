@@ -16,7 +16,9 @@ with canvas(device) as draw:
     padding = 2
     shape_width = 20
     top = padding
-    bottom = device.height - padding
+    bottom = device.height - padding - 1
+    # Draw a rectangle of the same size of screen
+    draw.rectangle((0, 0, device.width-1, device.height-1), outline=255, fill=0)
     # Move left to right keeping track of the current x position for drawing shapes.
     x = padding
     # Draw an ellipse.
