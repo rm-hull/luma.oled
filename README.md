@@ -86,7 +86,8 @@ Then add your user to the i2c group:
 
 Install some packages:
 
-    $ sudo apt-get install i2c-tools python-smbus python-pil
+    $ sudo apt-get install i2c-tools python-smbus python-pip
+    $ sudo pip install pillow
 
 Next check that the device is communicating properly (if using a rev.1 board, 
 use 0 for the bus not 1):
