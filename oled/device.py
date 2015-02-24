@@ -178,7 +178,7 @@ class ssd1306(device):
             const.NORMALDISPLAY,
             const.DISPLAYON)
 
-    def display(self, image, threshold=128):
+    def display(self, image):
         """
         Takes a 1-bit image and dumps it to the SSD1306 OLED display.
         """
