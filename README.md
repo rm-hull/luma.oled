@@ -108,6 +108,15 @@ because the address was in use by a driver. It suggest that
 there is a chip at that address. Indeed the documentation for
 the device indicates it uses two addresses.
 
+# Installing the Python Package
+
+From the bash prompt, enter:
+
+    $ sudo python setup.py install
+
+This will install the python files in `/usr/local/lib/python2.7`
+making them ready for use in other programs.
+
 # Software Display Driver
 
 The screen can be driven with python using the _oled/device.py_ script.
@@ -144,6 +153,10 @@ may then call the usual Pillow methods to draw onto the canvas.
 As soon as the with scope is ended, the resultant image is automatically
 flushed to the device's display memory and the ImageDraw object is
 garbage collected.
+
+Run the demos in the example directory:
+
+    $ python examples/demo.py
 
 # References
 
