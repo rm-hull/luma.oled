@@ -194,15 +194,15 @@ class ssd1306(device):
         step = self.width * 8
         buf = []
         for y in xrange(0, self.pages * step, step):
-            x = self.width-1
-            while x >= 0:
+            i = y + self.width-1
+            while i >= y:
                 byte = 0
                 for n in xrange(0, step, self.width):
-                    byte |= (pix[x + y + n] & 0x01) << 8
+                    byte |= (pix[i + n] & 0x01) << 8
                     byte >>= 1
 
                 buf.append(byte)
-                x -= 1
+                i -= 1
 
         self.data(buf)
 
