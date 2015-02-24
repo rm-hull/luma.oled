@@ -126,7 +126,7 @@ used [Pillow](http://pillow.readthedocs.org/en/latest/) or PIL.
 First, import and initialise the device:
 
 ```python
-from oled.device import ssd13055, sh1106
+from oled.device import ssd1306, sh1106
 from oled.render import canvas
 from PIL import ImageFont, ImageDraw
 
@@ -157,6 +157,9 @@ garbage collected.
 Run the demos in the example directory:
 
     $ python examples/demo.py
+    $ python examples/sys_info.py
+    $ python examples/pi_logo.py
+    $ python examples/maze.py
 
 # References
 

@@ -72,7 +72,7 @@ class device(object):
         assert(len(cmd) <= 32)
         self.bus.write_i2c_block_data(self.addr, self.cmd_mode, list(cmd))
 
-    def data(self, *data):
+    def data(self, data):
         """
         Sends a data byte or sequence of data bytes through to the
         device - maximum allowed in one transaction is 32 bytes, so if
@@ -125,9 +125,10 @@ class sh1106(device):
         assert(image.size[0] == self.width)
         assert(image.size[1] == self.height)
 
-        pix = image.load()
         page = 0xB0
-        for y in xrange(0, self.pages * 8, 8):
+        pix = list(image.getdata())
+        step = self.width * 8
+        for y in xrange(0, self.pages * step, step):
 
             # move to given page, then reset the column address
             self.command(page, 0x02, 0x10)
@@ -135,17 +136,14 @@ class sh1106(device):
 
             buf = []
             for x in xrange(self.width):
-                buf.append(
-                    pix[(x, y + 0)] & 0x01 |
-                    pix[(x, y + 1)] & 0x02 |
-                    pix[(x, y + 2)] & 0x04 |
-                    pix[(x, y + 3)] & 0x08 |
-                    pix[(x, y + 4)] & 0x10 |
-                    pix[(x, y + 5)] & 0x20 |
-                    pix[(x, y + 6)] & 0x40 |
-                    pix[(x, y + 7)] & 0x80)
+                byte = 0
+                for n in xrange(0, step, self.width):
+                    byte |= (pix[x + y + n] & 0x01) << 8
+                    byte >>= 1
 
-            self.data(*buf)
+                buf.append(byte)
+
+            self.data(buf)
 
 
 class ssd1306(device):
@@ -180,7 +178,7 @@ class ssd1306(device):
             const.NORMALDISPLAY,
             const.DISPLAYON)
 
-    def display(self, image):
+    def display(self, image, threshold=128):
         """
         Takes a 1-bit image and dumps it to the SSD1306 OLED display.
         """
@@ -192,24 +190,21 @@ class ssd1306(device):
             const.COLUMNADDR, 0x00, self.width-1,  # Column start/end address
             const.PAGEADDR,   0x00, self.pages-1)  # Page start/end address
 
-        pix = image.load()
-        for y in xrange(0, self.pages * 8, 8):
+        pix = list(image.getdata())
+        step = self.width * 8
+        buf = []
+        for y in xrange(0, self.pages * step, step):
             x = self.width-1
-            buf = []
             while x >= 0:
-                buf.append(
-                    pix[(x, y + 0)] & 0x01 |
-                    pix[(x, y + 1)] & 0x02 |
-                    pix[(x, y + 2)] & 0x04 |
-                    pix[(x, y + 3)] & 0x08 |
-                    pix[(x, y + 4)] & 0x10 |
-                    pix[(x, y + 5)] & 0x20 |
-                    pix[(x, y + 6)] & 0x40 |
-                    pix[(x, y + 7)] & 0x80)
+                byte = 0
+                for n in xrange(0, step, self.width):
+                    byte |= (pix[x + y + n] & 0x01) << 8
+                    byte >>= 1
 
+                buf.append(byte)
                 x -= 1
 
-            self.data(*buf)
+        self.data(buf)
 
 
 class const:
