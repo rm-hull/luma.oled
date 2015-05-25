@@ -10,19 +10,22 @@ and the SPI interface has been tested with
 [this display](http://www.ebay.com/itm/281648238188)
 .
 
-Further technical details for the SSD1306 OLED display can be found in the
-datasheets for the
-[SSD1306](https://raw.githubusercontent.com/rm-hull/ssd1306/master/doc/tech-spec/SSD1306.pdf)
+Technical details for the supported OLED displays can be found in the datasheets
+for the
+[SSD1306](/doc/tech-spec/SSD1306.pdf?raw=true)
 and
-[SH1106](https://raw.githubusercontent.com/rm-hull/ssd1306/sh1106-compat/doc/tech-spec/SH1106.pdf)
+[SH1106](/doc/tech-spec/SH1106.pdf)
 OLED controllers.
 
 These 128x64 pixel OLED displays are tiny and fit neatly inside a transparent
 RPi case:
 
-![OLED display mounted](/doc/mounted_display.jpg?raw=true)
+![OLED display mounted](/doc/display_inside_i2c.jpg?raw=true)
 
 Or fastened with double sided tape on the outside:
+
+![OLED display mounted](/doc/display_outside_spi.jpg?raw=true)
+
 
 ## Identifying your serial interface
 
