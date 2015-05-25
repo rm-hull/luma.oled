@@ -30,6 +30,12 @@ You can determine if you have an I2C or a SPI interface by counting the number
 of pins on your card. An I2C display will have 4 pins while an SPI interface
 will have 6 or 7 pins.
 
+If you have a SPI display, check the back of your display for a configuration
+table such as this:
+
+![SPI configuration table](/master/doc/serial_config.jpg?raw=true)
+
+
 ## I2C
 
 How to connect a I2C serial interface display.
