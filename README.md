@@ -301,6 +301,8 @@ After installing the library, enter the `examples` directory and edit the
 examples to select your serial interface and controller chip type and
 parameters, then run them.
 
+| Example          | Description                                              |
+|------------------|----------------------------------------------------------|
 | bounce.py        | Display a bouncing ball animation and frames per second  |
 | draw_commands.py | Use misc draw commands to create a simple image          |
 | sys_info.py      | Display system information (as shown in the image above) |
