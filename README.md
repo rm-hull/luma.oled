@@ -273,7 +273,7 @@ device = oled.device.sh1106(serial_interface)
 For SSD1306:
 ```python
 device = oled.device.ssd1306(serial_interface)
-```python
+```
 
 The display device should now be configured for use. The device classes expose a
 `display()` method which takes a 1-bit depth image. However, for most cases, for
