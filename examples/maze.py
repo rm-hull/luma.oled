@@ -5,15 +5,30 @@
 # Adapted from:
 #    https://github.com/rm-hull/maze/blob/master/src/maze/generator.clj
 
+# Stdlib.
+import sys
 import time
-from oled.device import ssd1306, sh1106
-from oled.render import canvas
-from PIL import Image
 from random import randrange
+
+# Allow running example without installing library.
+sys.path.append('..')
+
+# 3rd party.
+from PIL import ImageFont
+
+import oled.device
+import oled.render
+
+# Select serial interface to match your OLED device.
+# The defaults for the arguments are shown. No arguments are required.
+#serial_interface = oled.device.I2C(port=1, address=0x3C, cmd_mode=0x00, data_mode=0x40)
+serial_interface = oled.device.SPI(port=0, spi_bus_speed_hz=32000000, gpio_command_data_select=24, gpio_reset=25)
+# Select controller chip to match your OLED device.
+device = oled.device.sh1106(serial_interface)
+#device = oled.device.ssd1306(serial_interface)
 
 NORTH = 1
 WEST = 2
-
 
 class Maze(object):
 
@@ -137,12 +152,10 @@ class Maze(object):
         return s
 
 def demo(iterations):
-    device = ssd1306(port=1, address=0x3C)
-    screen = (128, 64)
     for loop in range(iterations):
         for scale in [2,3,4,3]:
-            sz = map(lambda z: z/scale-1, screen)
-            with canvas(device) as draw:
+            sz = map(lambda z: z/scale-1, (device.width, device.height))
+            with oled.render.canvas(device) as draw:
                 Maze(sz).render(draw, lambda z: int(z * scale))
                 time.sleep(1)
 

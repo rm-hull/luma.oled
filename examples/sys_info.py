@@ -4,20 +4,39 @@
 #
 #    $ sudo pip install psutil
 #
+# TODO: custom font bitmaps for up/down arrows
+# TODO: Load histogram
 
+# Stdlib.
+from datetime import datetime
 import os
 import sys
 if os.name != 'posix':
     sys.exit('platform not supported')
-import psutil
+    
+# 3rd party.
+try:
+    import psutil
+except ImportError:
+    print 'Need psutil. Try: sudo pip install psutil'
+    sys.exit(1)
 
-from datetime import datetime
-from oled.device import ssd1306, sh1106
-from oled.render import canvas
-from PIL import ImageDraw, ImageFont
+from PIL import ImageFont
 
-# TODO: custom font bitmaps for up/down arrows
-# TODO: Load histogram
+# Allow running example without installing library.
+sys.path.append('..')
+
+import oled.device
+import oled.render
+
+# Select serial interface to match your OLED device.
+# The defaults for the arguments are shown. No arguments are required.
+#serial_interface = oled.device.I2C(port=1, address=0x3C, cmd_mode=0x00, data_mode=0x40)
+serial_interface = oled.device.SPI(port=0, spi_bus_speed_hz=32000000, gpio_command_data_select=24, gpio_reset=25)
+# Select controller chip to match your OLED device.
+device = oled.device.sh1106(serial_interface)
+#device = oled.device.ssd1306(serial_interface)
+
 
 def bytes2human(n):
     """
@@ -69,8 +88,7 @@ def stats(oled):
         draw.text((0, 38), network('wlan0'), font=font2, fill=255)
 
 def main():
-    oled = ssd1306(port=1, address=0x3C)
-    stats(oled)
+    stats(device)
 
 if __name__ == "__main__":
     main()

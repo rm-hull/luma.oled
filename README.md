@@ -1,26 +1,47 @@
 # SSD1306 / SH1106 OLED Driver
 
-Interfacing OLED matrix displays with the SSD1306 (or SH1106) driver in Python using
-I2C on the Raspberry Pi. The particular kit I bought can be acquired for 
-a few pounds from eBay: http://www.ebay.co.uk/itm/191279261331. Further 
-technical details for the SSD1306 OLED display can be found in the 
-[datasheet](https://raw.githubusercontent.com/rm-hull/ssd1306/master/doc/tech-spec/SSD1306.pdf) [PDF]. 
-See also the [datasheet](https://raw.githubusercontent.com/rm-hull/ssd1306/sh1106-compat/doc/tech-spec/SH1106.pdf) [PDF] for the SH1106 chipset.
+Interfacing OLED matrix displays with the SSD1306 or SH1106 driver in Python
+using I2C or SPI on the Raspberry Pi.
 
-The SSD1306 display is 128x64 pixels, and the board is _tiny_, and will fit neatly
-inside the RPi case (the SH1106 is slightly different, in that it supports 132x64
-pixels). My intention is to solder wires directly to the underside
-of the RPi GPIO pins so that the pins are still available for other purposes.
+These displays are available for a few pounds from eBay. The I2C interface has
+been tested with
+[this display](http://www.ebay.co.uk/itm/191279261331)
+and the SPI interface has been tested with
+[this display](http://www.ebay.com/itm/281648238188)
+.
 
-![mounted](https://raw.githubusercontent.com/rm-hull/ssd1306/master/doc/mounted_display.jpg)
+Further technical details for the SSD1306 OLED display can be found in the
+datasheets for the
+[SSD1306](https://raw.githubusercontent.com/rm-hull/ssd1306/master/doc/tech-spec/SSD1306.pdf)
+and
+[SH1106](https://raw.githubusercontent.com/rm-hull/ssd1306/sh1106-compat/doc/tech-spec/SH1106.pdf)
+OLED controllers.
 
-## GPIO pin-outs
+These 128x64 pixel OLED displays are tiny and fit neatly inside a transparent
+RPi case:
 
-The SSD1306 device is an I2C device, so connecting to the RPi is very straightforward:
+![mounted](https://raw.githubusercontent.com/rm-hull/ssd1306##/master/doc/mounted_display.jpg)
 
-### P1 Header
+Or fastened with double sided tape on the outside:
 
-For prototyping , the P1 header pins should be connected as follows:
+## Identify your serial interface
+
+You can determine if you have an I2C or a SPI interface by counting the number
+of pins on your card. An I2C display will have 4 pins while an SPI interface
+will have 6 or 7 pins.
+
+## I2C
+
+How to connect a I2C serial interface display.
+
+### GPIO pin-outs
+
+The SSD1306 device is an I2C device, so connecting to the RPi is very
+straightforward:
+
+#### P1 Header
+
+For prototyping, the P1 header pins should be connected as follows:
 
 | Board Pin | Name  | Remarks     | RPi Pin | RPi Function | Colour |
 |----------:|:------|:------------|--------:|--------------|--------|
@@ -33,10 +54,10 @@ For prototyping , the P1 header pins should be connected as follows:
 
 [Attribution: http://elinux.org/Rpi_Low-level_peripherals]
 
-### P5 Header
+#### P5 Header
 
-On rev.2 RPi's, right next to the male pins of the P1 header, there is a bare 
-P5 header which features I2C channel 0, although this doesn't appear to be
+On rev.2 RPi's, right next to the male pins of the P1 header, there is a bare P5
+header which features I2C channel 0, although this doesn't appear to be
 initially enabled and may be configured for use with the Camera module. 
 
 | Board Pin | Name  | Remarks     | RPi Pin | RPi Function  | Colour |
@@ -50,10 +71,10 @@ initially enabled and may be configured for use with the Camera module.
 
 [Attribution: http://elinux.org/Rpi_Low-level_peripherals]
 
-## Pre-requisites
+### Pre-requisites
 
-This was tested with Raspian on a rev.2 model B, with a vanilla kernel version 3.12.28+. 
-Ensure that the I2C kernel driver is enabled:
+This was tested with Raspian on a rev.2 model B, with a vanilla kernel version
+3.12.28+. Ensure that the I2C kernel driver is enabled:
 
     $ dmesg | grep i2c
     [   19.310456] bcm2708_i2c_init_pinmode(1,2)
@@ -68,8 +89,8 @@ or
     i2c_bcm2708             4943  0 
     regmap_i2c              1661  3 snd_soc_pcm512x,snd_soc_wm8804,snd_soc_core
 
-If you dont see the I2C drivers, alter */etc/modules* and add the following 
-two lines:
+If you dont see the I2C drivers, alter */etc/modules* and add the following two
+lines:
 
     i2c-bcm2708
     i2c-dev
@@ -89,7 +110,7 @@ Install some packages:
     $ sudo apt-get install i2c-tools python-smbus python-pip
     $ sudo pip install pillow
 
-Next check that the device is communicating properly (if using a rev.1 board, 
+Next check that the device is communicating properly (if using a rev.1 board,
 use 0 for the bus not 1):
 
     $ i2cdetect -y 1
@@ -103,10 +124,9 @@ use 0 for the bus not 1):
     60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
     70: -- -- -- -- -- -- -- --
 
-According to the manual, "UU" means that probing was skipped, 
-because the address was in use by a driver. It suggest that
-there is a chip at that address. Indeed the documentation for
-the device indicates it uses two addresses.
+According to the manual, "UU" means that probing was skipped, because the
+address was in use by a driver. It suggest that there is a chip at that address.
+Indeed the documentation for the device indicates it uses two addresses.
 
 # Installing the Python Package
 
@@ -114,14 +134,62 @@ From the bash prompt, enter:
 
     $ sudo python setup.py install
 
-This will install the python files in `/usr/local/lib/python2.7`
-making them ready for use in other programs.
+This will install the python files in `/usr/local/lib/python2.7` making them
+ready for use in other programs.
+
+## SPI
+
+How to connect a SPI serial interface display.
+
+### Wiring
+
+The GPIO pins used for this SPI connection are the same for all versions of the
+Raspberry Pi, up to and including the Raspberry Pi 2 B.
+
+| OLED Pin  | Name  | Remarks     | RPi Pin | RPi Function |
+|----------:|:------|:------------|--------:|--------------|
+| 1         | VCC   | +3.3V Power | P01-17  | 3V3          |
+| 2         | GND   | Ground      | P01-20  | GND          |
+| 3         | D0    | Clock       | P01-23  | GPIO 11      |
+| 4         | D1    | MOSI        | P01-19  | GPIO 10      |
+| 4         | RST   | Reset       | P01-22  | GPIO 25      |
+| 4         | DC    | Data/Command| P01-18  | GPIO 24      |
+| 4         | CS    | Chip Select | P01-24  | GPIO 8 (CE0) |
+
+Notes:
+
+* When using the SPI connection, Data/Command is an "out of band" signal that
+  tells the controller if you're sending commands or display data. With I2C, the
+  signal is sent "in band" as an address. If you're already using the listed
+  GPIO pin, you can select another and just pass an `gpio_command_data_select`
+  argument specifying the new pin number in your serial interface create call.
+  
+* By connecting CS to CE0, the display becomes available on SPI port 0. You
+  can connect it to CE1 to have it available on port 1. If so, pass `port=1`
+  in your serial interface create call.
+
+* The Reset connection is not strictly necessary. It's useful if the display
+  gets into an undefined state. Without Reset connected, you'd have to
+  disconnect and reconnect the Raspberry Pi power to reset the display.
+
+### Setup
+
+Enable the SPI port:
+
+    $ sudo raspi-config
+    > Advanced Options > A6 SPI
+
+If raspi-config is not available, this can be done manually. Search the web.
+
+Install dependencies:
+
+    $ sudo pip install wiringpi2
 
 # Software Display Driver
 
-The screen can be driven with python using the _oled/device.py_ script.
-There are two device classes and usage is very simple if you have ever
-used [Pillow](http://pillow.readthedocs.org/en/latest/) or PIL.
+The screen can be driven with python using the _oled/device.py_ script. There
+are two device classes and usage is very simple if you have ever used
+[Pillow](http://pillow.readthedocs.org/en/latest/) or PIL.
 
 First, import and initialise the device:
 
@@ -154,12 +222,17 @@ As soon as the with scope is ended, the resultant image is automatically
 flushed to the device's display memory and the ImageDraw object is
 garbage collected.
 
-Run the demos in the example directory:
+## Examples
+    
+After installing the library, enter the `examples` directory and edit the
+examples to select your serial interface and controller chip type and
+parameters, then run them.
 
-    $ python examples/demo.py
-    $ python examples/sys_info.py
-    $ python examples/pi_logo.py
-    $ python examples/maze.py
+| bounce.py        | Display a bouncing ball animation and frames per second  |
+| draw_commands.py | Use misc draw commands to create a simple image          |
+| sys_info.py      | Display system information (as shown in the image above) |
+| pi_logo.py       | Display an image of the Raspberry Pi logo                |
+| maze.py          | Display a maze                                           |
 
 # References
 
