@@ -33,7 +33,7 @@ will have 6 or 7 pins.
 If you have a SPI display, check the back of your display for a configuration
 table such as this:
 
-![SPI configuration table](/master/doc/serial_config.jpg?raw=true)
+![SPI configuration table](/doc/serial_config.jpg?raw=true)
 
 
 ## I2C
