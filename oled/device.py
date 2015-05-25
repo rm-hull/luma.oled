@@ -150,20 +150,16 @@ class sh1106(object):
         pix = list(image.getdata())
         step = self.width * 8
         for y in xrange(0, self.pages * step, step):
-
             # move to given page, then reset the column address
             self._serial_interface.command(page, 0x02, 0x10)
             page += 1
-
             buf = []
             for x in xrange(self.width):
                 byte = 0
                 for n in xrange(0, step, self.width):
                     byte |= (pix[x + y + n] & 0x01) << 8
                     byte >>= 1
-
                 buf.append(byte)
-
             self._serial_interface.data(buf)
 
 

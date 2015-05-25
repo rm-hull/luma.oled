@@ -1,6 +1,6 @@
 # SSD1306 / SH1106 OLED Driver
 
-Interfacing OLED matrix displays with the SSD1306 or SH1106 driver in Python
+Interfacing OLED matrix displays with the SSD1306 or SH1106 controller in Python
 using I2C or 4-wire SPI on the Raspberry Pi.
 
 These displays are available for a few pounds from eBay. The I2C interface has
@@ -46,14 +46,29 @@ that is currently supported by the SPI mode of this library.
 with each byte, which causes a small amount of overhead. Supporting 3-wire SPI
 would be trivial but has not been implemented yet (no devices to test with).
 
+## I2C vs. SPI
+
+If you have not yet purchased your display, you may be wondering if you should
+get I2C or SPI. The basic tradeoff is that I2C will be easier to connect because
+it has fewer pins while SPI may have a faster display update rate due to running
+at a higher frequency and having less overhead.
+
+## Tips for connecting the display
+
+* If you don't want to solder directly on the Pi, get 2.54mm 40 pin female
+  single row headers, cut them to length, push them onto the Pi pins, then
+  solder wires to the headers.
+
+* If you need to remove existing pins to connect wires, be careful to heat each
+  pin thoroughly, or circuit board traces may be broken.
+  
+* Triple check your connections. In particular, do not reverse VCC and GND.
+
 ## I2C
 
 How to connect a I2C serial interface display.
 
-### GPIO pin-outs
-
-The SSD1306 device is an I2C device, so connecting to the RPi is very
-straightforward:
+### Wiring
 
 #### P1 Header
 
@@ -144,15 +159,6 @@ According to the manual, "UU" means that probing was skipped, because the
 address was in use by a driver. It suggest that there is a chip at that address.
 Indeed the documentation for the device indicates it uses two addresses.
 
-# Installing the Python Package
-
-From the bash prompt, enter:
-
-    $ sudo python setup.py install
-
-This will install the python files in `/usr/local/lib/python2.7` making them
-ready for use in other programs.
-
 ## SPI
 
 How to connect a 4-wire SPI serial interface display.
@@ -175,11 +181,21 @@ Raspberry Pi, up to and including the Raspberry Pi 2 B.
 Notes:
 
 * When using the 4-wire SPI connection, Data/Command is an "out of band" signal
-  that tells the controller if you're sending commands or display data. With
-  3-wire SPI and I2C, the signal is sent "in band". If you're already using the
-  listed GPIO pin, you can select another and just pass an
-  `gpio_command_data_select` argument specifying the new pin number in your
-  serial interface create call.
+  that tells the controller if you're sending commands or display data. This
+  line is not a part of SPI and the library controls it with a separate GPIO
+  pin. With 3-wire SPI and I2C, the Data/Command signal is sent "in band".
+  
+* If you're already using the listed GPIO pins for Data/Command and/or Reset,
+  you can select other pins and pass a `gpio_command_data_select` and/or a
+  `gpio_reset` argument specifying the new pin numbers in your serial interface
+  create call.
+  
+* The use of the terms 4-wire and 3-wire SPI are a bit confusing because, in
+  most SPI documentation, the terms are used to describe the regular 4-wire
+  configuration of SPI and a 3-wire mode where the input and ouput lines, MOSI
+  and MISO, have been combined into a single line called SISO. However, in the
+  context of these OLED controllers, 4-wire means MOSI + Data/Command and 3-wire
+  means Data/Command sent as an extra bit over MOSI.
   
 * Because CS is connected to CE0, the display is available on SPI port 0. You
   can connect it to CE1 to have it available on port 1. If so, pass `port=1` in
@@ -203,27 +219,66 @@ Install dependencies:
 
     $ sudo pip install wiringpi2
 
-# Software Display Driver
+# Installing the display driver
 
-The screen can be driven with python using the _oled/device.py_ script. There
-are two device classes and usage is very simple if you have ever used
-[Pillow](http://pillow.readthedocs.org/en/latest/) or PIL.
+The package is installed directly from GitHub:
+
+    $ sudo apt-get install git
+
+Copy the HTTPS clone URL from the right sidebar on this page.
+
+    $ git clone <HTTPS clone URL>
+    $ cd ssd1306
+    $ sudo python setup.py install
+
+This will install the python files in `/usr/local/lib/python2.7` making them
+ready for use in other programs.
+
+# Using the display driver
+
+Driving the display from Python is very simple, expecially if you have ever used
+[Pillow](http://pillow.readthedocs.org/en/latest/) or PIL. The performance is
+also acceptable, at 12 FPS when drawing 10 filled circles and printing a line of
+text in each frame (see the bounce.py example).
 
 First, import and initialise the device:
 
 ```python
-from oled.device import ssd1306, sh1106
-from oled.render import canvas
-from PIL import ImageFont, ImageDraw
+import oled.device
+import oled.render
 
-# substitute sh1106(...) below if using that device
-device = ssd1306(port=1, address=0x3C)  # rev.1 users set port=0
+from PIL import ImageFont, ImageDraw
 ```
 
-The display device should now be configured for use. The specific `ssd1306` or 
-`sh1106` classes both expose a `display()` method which takes a 1-bit depth image. 
-However, for most cases, for drawing text and graphics primitives, the canvas class
-should be used as follows:
+Select serial interface to match your OLED device. The defaults for the
+arguments are shown. No arguments are required.
+
+For I2C:
+```python
+serial_interface = oled.device.I2C(port=1, address=0x3C, cmd_mode=0x00, data_mode=0x40)
+```
+
+For SPI:
+```python
+serial_interface = oled.device.SPI(port=0, spi_bus_speed_hz=32000000, gpio_command_data_select=24, gpio_reset=25)
+```
+
+Then select the controller chip to match your OLED device.
+
+For SH1106:
+```python
+device = oled.device.sh1106(serial_interface)
+```
+
+For SSD1306:
+```python
+device = oled.device.ssd1306(serial_interface)
+```python
+
+The display device should now be configured for use. The device classes expose a
+`display()` method which takes a 1-bit depth image. However, for most cases, for
+drawing text and graphics primitives, the canvas class should be used as
+follows:
 
 ```python
 with canvas(device) as draw:
@@ -232,13 +287,13 @@ with canvas(device) as draw:
     draw.text(30, 40, "Hello World", font=font, fill=255)
 ```
 
-The `canvas` class automatically creates an [ImageDraw](http://pillow.readthedocs.org/en/latest/reference/ImageDraw.html) 
+The `canvas` class automatically creates an
+[ImageDraw](http://pillow.readthedocs.org/en/latest/reference/ImageDraw.html)
 object of the correct dimensions and bit depth suitable for the device, so you
 may then call the usual Pillow methods to draw onto the canvas.
 
-As soon as the with scope is ended, the resultant image is automatically
-flushed to the device's display memory and the ImageDraw object is
-garbage collected.
+As soon as the with scope is ended, the resultant image is automatically flushed
+to the device's display memory and the ImageDraw object is garbage collected.
 
 ## Examples
     
