@@ -1,7 +1,7 @@
 # SSD1306 / SH1106 OLED Driver
 
 Interfacing OLED matrix displays with the SSD1306 or SH1106 driver in Python
-using I2C or SPI on the Raspberry Pi.
+using I2C or 4-wire SPI on the Raspberry Pi.
 
 These displays are available for a few pounds from eBay. The I2C interface has
 been tested with
@@ -20,7 +20,7 @@ OLED controllers.
 These 128x64 pixel OLED displays are tiny and fit neatly inside a transparent
 RPi case:
 
-![mounted](https://raw.githubusercontent.com/rm-hull/ssd1306##/master/doc/mounted_display.jpg)
+![OLED display mounted](/master/doc/mounted_display.jpg?raw=true)
 
 Or fastened with double sided tape on the outside:
 
@@ -31,10 +31,17 @@ of pins on your card. An I2C display will have 4 pins while an SPI interface
 will have 6 or 7 pins.
 
 If you have a SPI display, check the back of your display for a configuration
-table such as this:
+such as this:
 
 ![SPI configuration table](/master/doc/serial_config.jpg?raw=true)
 
+For this display, two 0 ohm (jumper) resistors have been connected to "0" and
+the table shows that "0 0" is 4-wire SPI. That is the type of connection that is
+currently supported by the SPI mode of this library.
+
+3-wire SPI eliminates the separate Data/Command line by sending an extra bit
+with each byte, which causes a small amount of overhead. Supporting 3-wire SPI
+would be trivial but has not been implemented yet (no devices to test with).
 
 ## I2C
 
@@ -145,7 +152,7 @@ ready for use in other programs.
 
 ## SPI
 
-How to connect a SPI serial interface display.
+How to connect a 4-wire SPI serial interface display.
 
 ### Wiring
 
@@ -164,11 +171,12 @@ Raspberry Pi, up to and including the Raspberry Pi 2 B.
 
 Notes:
 
-* When using the SPI connection, Data/Command is an "out of band" signal that
-  tells the controller if you're sending commands or display data. With I2C, the
-  signal is sent "in band" as an address. If you're already using the listed
-  GPIO pin, you can select another and just pass an `gpio_command_data_select`
-  argument specifying the new pin number in your serial interface create call.
+* When using the 4-wire SPI connection, Data/Command is an "out of band" signal
+  that tells the controller if you're sending commands or display data. With
+  3-wire SPI and I2C, the signal is sent "in band" as an address. If you're
+  already using the listed GPIO pin, you can select another and just pass an
+  `gpio_command_data_select` argument specifying the new pin number in your
+  serial interface create call.
   
 * By connecting CS to CE0, the display becomes available on SPI port 0. You
   can connect it to CE1 to have it available on port 1. If so, pass `port=1`
