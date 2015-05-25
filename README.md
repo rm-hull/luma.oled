@@ -33,7 +33,7 @@ will have 6 or 7 pins.
 If you have a SPI display, check the back of your display for a configuration
 such as this:
 
-![SPI configuration table](/master/doc/serial_config.jpg?raw=true)
+![SPI configuration table](/doc/serial_config.jpg?raw=true)
 
 For this display, two 0 ohm (jumper) resistors have been connected to "0" and
 the table shows that "0 0" is 4-wire SPI. That is the type of connection that is
