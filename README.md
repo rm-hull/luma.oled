@@ -20,11 +20,11 @@ OLED controllers.
 These 128x64 pixel OLED displays are tiny and fit neatly inside a transparent
 RPi case:
 
-![OLED display mounted](/doc/display_inside_i2c.jpg?raw=true)
+![I2C OLED](/doc/display_inside_i2c.jpg?raw=true)
 
 Or fastened with double sided tape on the outside:
 
-![OLED display mounted](/doc/display_outside_spi.jpg?raw=true)
+![SPI OLED](/doc/display_outside_spi.jpg?raw=true)
 
 
 ## Identifying your serial interface
