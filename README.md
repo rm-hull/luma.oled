@@ -20,11 +20,11 @@ OLED controllers.
 These 128x64 pixel OLED displays are tiny and fit neatly inside a transparent
 RPi case:
 
-![OLED display mounted](/master/doc/mounted_display.jpg?raw=true)
+![OLED display mounted](/doc/mounted_display.jpg?raw=true)
 
 Or fastened with double sided tape on the outside:
 
-## Identify your serial interface
+## Identifying your serial interface
 
 You can determine if you have an I2C or a SPI interface by counting the number
 of pins on your card. An I2C display will have 4 pins while an SPI interface
@@ -35,9 +35,9 @@ such as this:
 
 ![SPI configuration table](/doc/serial_config.jpg?raw=true)
 
-For this display, two 0 ohm (jumper) resistors have been connected to "0" and
-the table shows that "0 0" is 4-wire SPI. That is the type of connection that is
-currently supported by the SPI mode of this library.
+For this display, the two 0 ohm (jumper) resistors have been connected to "0"
+and the table shows that "0 0" is 4-wire SPI. That is the type of connection
+that is currently supported by the SPI mode of this library.
 
 3-wire SPI eliminates the separate Data/Command line by sending an extra bit
 with each byte, which causes a small amount of overhead. Supporting 3-wire SPI
@@ -63,7 +63,7 @@ For prototyping, the P1 header pins should be connected as follows:
 | 3         | SCL   | Clock       | P01-5   | GPIO 3 (SCL) | Purple |
 | 4         | SDA   | Data        | P01-3   | GPIO 2 (SDA) | Grey   |
 
-![GPIOS](https://raw.githubusercontent.com/rm-hull/ssd1306/master/doc/GPIOs.png)
+![GPIOS](/doc/GPIOs.png?raw=true)
 
 [Attribution: http://elinux.org/Rpi_Low-level_peripherals]
 
@@ -80,7 +80,7 @@ initially enabled and may be configured for use with the Camera module.
 | 3         | SCL   | Clock       | P5-04   | GPIO 29 (SCL) | Purple |
 | 4         | SDA   | Data        | P5-03   | GPIO 28 (SDA) | Grey   |
 
-![P5 Header](https://raw.githubusercontent.com/rm-hull/ssd1306/master/doc/RPi_P5_header.png)
+![P5 Header](/doc/RPi_P5_header.png?raw=true)
 
 [Attribution: http://elinux.org/Rpi_Low-level_peripherals]
 
@@ -165,26 +165,27 @@ Raspberry Pi, up to and including the Raspberry Pi 2 B.
 | 2         | GND   | Ground      | P01-20  | GND          |
 | 3         | D0    | Clock       | P01-23  | GPIO 11      |
 | 4         | D1    | MOSI        | P01-19  | GPIO 10      |
-| 4         | RST   | Reset       | P01-22  | GPIO 25      |
-| 4         | DC    | Data/Command| P01-18  | GPIO 24      |
-| 4         | CS    | Chip Select | P01-24  | GPIO 8 (CE0) |
+| 5         | RST   | Reset       | P01-22  | GPIO 25      |
+| 6         | DC    | Data/Command| P01-18  | GPIO 24      |
+| 7         | CS    | Chip Select | P01-24  | GPIO 8 (CE0) |
 
 Notes:
 
 * When using the 4-wire SPI connection, Data/Command is an "out of band" signal
   that tells the controller if you're sending commands or display data. With
-  3-wire SPI and I2C, the signal is sent "in band" as an address. If you're
-  already using the listed GPIO pin, you can select another and just pass an
+  3-wire SPI and I2C, the signal is sent "in band". If you're already using the
+  listed GPIO pin, you can select another and just pass an
   `gpio_command_data_select` argument specifying the new pin number in your
   serial interface create call.
   
-* By connecting CS to CE0, the display becomes available on SPI port 0. You
-  can connect it to CE1 to have it available on port 1. If so, pass `port=1`
-  in your serial interface create call.
+* Because CS is connected to CE0, the display is available on SPI port 0. You
+  can connect it to CE1 to have it available on port 1. If so, pass `port=1` in
+  your serial interface create call.
 
 * The Reset connection is not strictly necessary. It's useful if the display
-  gets into an undefined state. Without Reset connected, you'd have to
-  disconnect and reconnect the Raspberry Pi power to reset the display.
+  gets into an undefined state. Without Reset connected, you'll have to
+  disconnect and reconnect the Raspberry Pi power if it becomes necessary to
+  reset the display.
 
 ### Setup
 
