@@ -281,8 +281,8 @@ drawing text and graphics primitives, the canvas class should be used as
 follows:
 
 ```python
-with canvas(device) as draw:
-    font = ImageFont.load_default()
+font = ImageFont.load_default()
+with oled.render.canvas(device) as draw:
     draw.rectangle((0, 0, device.width, device.height), outline=0, fill=0)
     draw.text(30, 40, "Hello World", font=font, fill=255)
 ```
