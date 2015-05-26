@@ -223,7 +223,7 @@ Install SPI related dependencies:
 
 Install general dependencies:
 
-  $ sudo apt-get install libfreetype6-dev pillow
+    $ sudo apt-get install libfreetype6-dev pillow
 
 The ssd1306 package is installed directly from GitHub:
 
@@ -245,7 +245,7 @@ Driving the display from Python is very simple, expecially if you have ever used
 also acceptable, at 12 FPS when drawing 10 filled circles and printing a line of
 text in each frame (see the bounce.py example).
 
-First, import and initialise the device:
+First, import the library and PIL:
 
 ```python
 import oled.device
@@ -279,10 +279,10 @@ For SSD1306:
 device = oled.device.ssd1306(serial_interface)
 ```
 
-The display device should now be configured for use. The device classes expose a
-`display()` method which takes a 1-bit depth image. However, for most cases, for
-drawing text and graphics primitives, the canvas class should be used as
-follows:
+The display device should now be configured, initialized and ready for use. The
+device classes expose a `display()` method which takes a 1-bit depth image.
+However, for most cases, for drawing text and graphics primitives, the canvas
+class should be used as follows:
 
 ```python
 font = ImageFont.load_default()
