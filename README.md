@@ -309,6 +309,10 @@ parameters, then run them.
 | pi_logo.py       | Display the Raspberry Pi logo (loads image as .png)      |
 | maze.py          | Display a maze                                           |
 
+# Collaborators
+
+* Roger Dahl, https://github.com/rogerdahl, http://www.dahlsys.com: SPI support, misc refactoring.
+
 # References
 
 * https://learn.adafruit.com/monochrome-oled-breakouts
