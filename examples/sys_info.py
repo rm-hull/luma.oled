@@ -41,22 +41,23 @@ device = oled.device.sh1106(serial_interface)
 
 
 def main():
-    # Nicer font, only availalable if Pillow was compiled with TrueType support.
+    # Alternate font, only availalable if Pillow was compiled with TrueType support.
     ttf_path = os.path.join(os.path.dirname(__file__), 'fonts', 'C&C Red Alert [INET].ttf')
     try:
       font = ImageFont.truetype(ttf_path, 12)
-    except ImportError, EnvironmentError:
+    except (ImportError, EnvironmentError):
       # Fall back to default font.
       font = ImageFont.load_default()
 
     pos = 0
     with oled.render.canvas(device) as draw:
         pos += print_line(draw, font, pos, hostname())
+        pos += print_line(draw, font, pos, uptime())
         pos += print_line(draw, font, pos, cpu_usage())
         pos += print_line(draw, font, pos, mem_usage())
         pos += print_line(draw, font, pos, disk_usage('/'))
         pos += print_line(draw, font, pos, network('eth0'))
-        pos += print_line(draw, font, pos, network('wlan0'))
+        #pos += print_line(draw, font, pos, network('wlan0'))
 
 def print_line(draw, font, pos, msg):
     draw.text((0, pos), msg, font=font, fill=255)
@@ -65,13 +66,13 @@ def print_line(draw, font, pos, msg):
 def hostname():
     return "Host: {}".format(socket.gethostname())
 
+def uptime():
+    uptime = datetime.datetime.now() - datetime.datetime.fromtimestamp(psutil.BOOT_TIME)
+    return 'Up: {}'.format(str(uptime).split('.')[0])
+
 def cpu_usage():
     # load average, uptime
     return "Ld: {:.1f} {:.1f} {:.1f}".format(*os.getloadavg())
-
-def uptime():
-    uptime = datetime.datetime.now() - datetime.datetime.fromtimestamp(psutil.BOOT_TIME)
-    return 'Up: {}'.format(datetime.timedelta(uptime))
 
 def mem_usage():
     usage = psutil.phymem_usage()
