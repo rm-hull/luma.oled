@@ -53,7 +53,7 @@ def main():
     with oled.render.canvas(device) as draw:
         pos += print_line(draw, font, pos, hostname())
         pos += print_line(draw, font, pos, uptime())
-        pos += print_line(draw, font, pos, cpu_usage())
+        pos += print_line(draw, font, pos, load_average())
         pos += print_line(draw, font, pos, mem_usage())
         pos += print_line(draw, font, pos, disk_usage('/'))
         pos += print_line(draw, font, pos, network('eth0'))
@@ -70,8 +70,7 @@ def uptime():
     uptime = datetime.datetime.now() - datetime.datetime.fromtimestamp(psutil.BOOT_TIME)
     return 'Up: {}'.format(str(uptime).split('.')[0])
 
-def cpu_usage():
-    # load average, uptime
+def load_average():
     return "Ld: {:.1f} {:.1f} {:.1f}".format(*os.getloadavg())
 
 def mem_usage():
