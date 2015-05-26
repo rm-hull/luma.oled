@@ -136,10 +136,9 @@ Then add your user to the i2c group:
 
     $ sudo adduser pi i2c
 
-Install some packages:
+Install I2C related dependencies:
 
-    $ sudo apt-get install i2c-tools python-smbus python-pip
-    $ sudo pip install pillow
+    $ sudo apt-get install i2c-tools python-smbus
 
 Next check that the device is communicating properly (if using a rev.1 board,
 use 0 for the bus not 1):
@@ -215,13 +214,18 @@ Enable the SPI port:
 
 If raspi-config is not available, this can be done manually. Search the web.
 
-Install dependencies:
+Install SPI related dependencies:
 
+    $ sudo apt-get install python-pip
     $ sudo pip install wiringpi2
 
 # Installing the display driver
 
-The package is installed directly from GitHub:
+Install general dependencies:
+
+  $ sudo apt-get install libfreetype6-dev pillow
+
+The ssd1306 package is installed directly from GitHub:
 
     $ sudo apt-get install git
 

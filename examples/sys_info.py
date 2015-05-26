@@ -8,9 +8,11 @@
 # TODO: Load histogram
 
 # Stdlib.
-from datetime import datetime
+import datetime
 import os
+import socket
 import sys
+
 if os.name != 'posix':
     sys.exit('platform not supported')
     
@@ -38,6 +40,55 @@ device = oled.device.sh1106(serial_interface)
 #device = oled.device.ssd1306(serial_interface)
 
 
+def main():
+    # Nicer font, only availalable if Pillow was compiled with TrueType support.
+    ttf_path = os.path.join(os.path.dirname(__file__), 'fonts', 'C&C Red Alert [INET].ttf')
+    try:
+      font = ImageFont.truetype(ttf_path, 12)
+    except ImportError, EnvironmentError:
+      # Fall back to default font.
+      font = ImageFont.load_default()
+
+    pos = 0
+    with oled.render.canvas(device) as draw:
+        pos += print_line(draw, font, pos, hostname())
+        pos += print_line(draw, font, pos, cpu_usage())
+        pos += print_line(draw, font, pos, mem_usage())
+        pos += print_line(draw, font, pos, disk_usage('/'))
+        pos += print_line(draw, font, pos, network('eth0'))
+        pos += print_line(draw, font, pos, network('wlan0'))
+
+def print_line(draw, font, pos, msg):
+    draw.text((0, pos), msg, font=font, fill=255)
+    return font.getsize(msg)[1]
+
+def hostname():
+    return "Host: {}".format(socket.gethostname())
+
+def cpu_usage():
+    # load average, uptime
+    return "Ld: {:.1f} {:.1f} {:.1f}".format(*os.getloadavg())
+
+def uptime():
+    uptime = datetime.datetime.now() - datetime.datetime.fromtimestamp(psutil.BOOT_TIME)
+    return 'Up: {}'.format(datetime.timedelta(uptime))
+
+def mem_usage():
+    usage = psutil.phymem_usage()
+    return "Mem: {} {:.0f}%".format(bytes2human(usage.used), 100 - usage.percent)
+
+def disk_usage(dir):
+    usage = psutil.disk_usage(dir)
+    return "SD:  {} {:.0f}%".format(bytes2human(usage.used), usage.percent)
+
+def network(iface):
+    try:
+      stat = psutil.network_io_counters(pernic=True)[iface]
+    except KeyError:
+      return "{}: <not present>".format(iface)
+    else:
+      return "{}: Tx {}, Rx {}".format(iface, bytes2human(stat.bytes_sent), bytes2human(stat.bytes_recv))
+
 def bytes2human(n):
     """
     >>> bytes2human(10000)
@@ -54,41 +105,6 @@ def bytes2human(n):
             value = int(float(n) / prefix[s])
             return '%s%s' % (value, s)
     return "%sB" % n
-
-def cpu_usage():
-    # load average, uptime
-    uptime = datetime.now() - datetime.fromtimestamp(psutil.BOOT_TIME)
-    av1, av2, av3 = os.getloadavg()
-    return "Ld:%.1f %.1f %.1f Up: %s" \
-            % (av1, av2, av3, str(uptime).split('.')[0])
-
-def mem_usage():
-    usage = psutil.phymem_usage()
-    return "Mem: %s %.0f%%" \
-            % (bytes2human(usage.used), 100 - usage.percent)
-
-
-def disk_usage(dir):
-    usage = psutil.disk_usage(dir)
-    return "SD:  %s %.0f%%" \
-            % (bytes2human(usage.used), usage.percent)
-
-def network(iface):
-    stat = psutil.network_io_counters(pernic=True)[iface]
-    return "%s: Tx%s, Rx%s" % \
-           (iface, bytes2human(stat.bytes_sent), bytes2human(stat.bytes_recv))
-
-def stats(oled):
-    font = ImageFont.load_default()
-    font2 = ImageFont.truetype('fonts/C&C Red Alert [INET].ttf', 12)
-    with canvas(oled) as draw:
-        draw.text((0, 0), cpu_usage(), font=font2, fill=255)
-        draw.text((0, 14), mem_usage(), font=font2, fill=255)
-        draw.text((0, 26), disk_usage('/'), font=font2, fill=255)
-        draw.text((0, 38), network('wlan0'), font=font2, fill=255)
-
-def main():
-    stats(device)
 
 if __name__ == "__main__":
     main()
