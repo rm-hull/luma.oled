@@ -29,17 +29,6 @@ import logging
 import struct
 import sys
 
-# 3rd party.
-try:
-    import smbus
-except ImportError:
-    pass
-
-try:
-    import wiringpi2
-except ImportError:
-    pass
-
 
 logging.basicConfig(level=logging.DEBUG)
         
@@ -48,8 +37,12 @@ class I2C(object):
     """Wrap a I2C serial interface.
     """
     def __init__(self, port=1, address=0x3C, cmd_mode=0x00, data_mode=0x40):
-        if 'smbus' not in sys.modules:
+        global smbus
+        try:
+            import smbus
+        except ImportError:
             logging.error('Need smbus for I2C serial interface. Try: sudo apt-get install python-smbus')
+            raise
         self.cmd_mode = cmd_mode
         self.data_mode = data_mode
         self.bus = smbus.SMBus(port)
@@ -81,8 +74,12 @@ class SPI(object):
     """Wrap an SPI serial interface.
     """
     def __init__(self, port=0, spi_bus_speed_hz=32000000, gpio_command_data_select=24, gpio_reset=25):
-        if 'wiringpi2' not in sys.modules:
+        global wiringpi2
+        try:
+            import wiringpi2
+        except ImportError:
             logging.error('Need wiringpi2 for SPI serial interface. Try: sudo pip install wiringpi2')
+            raise
         self._port = port
         self._gpio_command_data_select = gpio_command_data_select
         self._gpio_reset = gpio_reset
