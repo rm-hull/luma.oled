@@ -311,7 +311,7 @@ parameters, then run them.
 
 # Collaborators
 
-* Roger Dahl, https://github.com/rogerdahl, dahlsys.com: SPI support, misc refactoring.
+* Roger Dahl, https://github.com/rogerdahl, http://www.dahlsys.com: SPI support, misc refactoring.
 
 # References
 
