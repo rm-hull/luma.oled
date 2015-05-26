@@ -87,7 +87,7 @@ def network(iface):
     except KeyError:
       return "{}: <not present>".format(iface)
     else:
-      return "{}: Tx {}, Rx {}".format(iface, bytes2human(stat.bytes_sent), bytes2human(stat.bytes_recv))
+      return "{}: Tx {} Rx {}".format(iface, bytes2human(stat.bytes_sent), bytes2human(stat.bytes_recv))
 
 def bytes2human(n):
     """
