@@ -38,7 +38,7 @@ such as this:
 
 ![SPI configuration table](/doc/serial_config.jpg?raw=true)
 
-For this display, the two 0 ohm (jumper) resistors have been connected to "0"
+For this display, the two 0 Ohm (jumper) resistors have been connected to "0"
 and the table shows that "0 0" is 4-wire SPI. That is the type of connection
 that is currently supported by the SPI mode of this library.
 
@@ -138,7 +138,7 @@ Then add your user to the i2c group:
 
 Install I2C related dependencies:
 
-    $ sudo apt-get install i2c-tools python-smbus
+    $ sudo apt-get install i2c-tools
 
 Next check that the device is communicating properly (if using a rev.1 board,
 use 0 for the bus not 1):
@@ -214,16 +214,12 @@ Enable the SPI port:
 
 If raspi-config is not available, this can be done manually. Search the web.
 
-Install SPI related dependencies:
-
-    $ sudo apt-get install python-pip
-    $ sudo pip install wiringpi2
-
 # Installing the display driver
 
 Install general dependencies:
 
-    $ sudo apt-get install libfreetype6-dev pillow
+    $ sudo apt-get install python-pip libfreetype6-dev pillow
+    $ sudo pip install wiringpi2
 
 The ssd1306 package is installed directly from GitHub:
 

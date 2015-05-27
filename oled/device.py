@@ -29,6 +29,13 @@ import logging
 import struct
 import sys
 
+# 3rd party.
+try:
+    import wiringpi2
+except ImportError:
+    logging.error('Need wiringPi2. Try: sudo pip install wiringpi2')
+    raise
+
 
 logging.basicConfig(level=logging.DEBUG)
         
@@ -37,35 +44,30 @@ class I2C(object):
     """Wrap a I2C serial interface.
     """
     def __init__(self, port=1, address=0x3C, cmd_mode=0x00, data_mode=0x40):
-        global smbus
-        try:
-            import smbus
-        except ImportError:
-            logging.error('Need smbus for I2C serial interface. Try: sudo apt-get install python-smbus')
-            raise
-        self.cmd_mode = cmd_mode
-        self.data_mode = data_mode
-        self.bus = smbus.SMBus(port)
-        self.addr = address
+        self._address = address
+        self._cmd_mode = cmd_mode
+        self._data_mode = data_mode
+        self._fd = wiringpi2.wiringPiI2CSetup(port)
 
     def command(self, *cmd):
-        """
-        Sends a command or sequence of commands through to the
-        device - maximum allowed is 32 bytes in one go.
+        """Sends a command or sequence of commands through to the device -
+        maximum allowed is 32 bytes in one go.
         """
         assert(len(cmd) <= 32)
-        self.bus.write_i2c_block_data(self.addr, self.cmd_mode, list(cmd))
+        wiringpi2.wiringPiI2CWriteReg8(self._fd, self._address, self._cmd_mode)
+        buf = struct.pack('{}B'.format(len(cmd)), *cmd)
+        wiringpi2.wiringPiI2CWrite(self._fd, buf)
 
     def data(self, data):
+        """Sends a data byte or sequence of data bytes through to the device -
+        maximum allowed in one transaction is 32 bytes, so if data is larger
+        than this it is sent in chunks.
         """
-        Sends a data byte or sequence of data bytes through to the
-        device - maximum allowed in one transaction is 32 bytes, so if
-        data is larger than this it is sent in chunks.
-        """
+        wiringpi2.wiringPiI2CWriteReg8(self._fd, self._address, self._data_mode)
         for i in xrange(0, len(data), 32):
-            self.bus.write_i2c_block_data(self.addr,
-                                          self.data_mode,
-                                          list(data[i:i+32]))
+            v = data[i:i+32]
+            buf = struct.pack('{}B'.format(len(v)), *v)
+            wiringpi2.wiringPiI2CWrite(self._fd, buf)
 
     def reset(self):
         pass
@@ -74,12 +76,6 @@ class SPI(object):
     """Wrap an SPI serial interface.
     """
     def __init__(self, port=0, spi_bus_speed_hz=32000000, gpio_command_data_select=24, gpio_reset=25):
-        global wiringpi2
-        try:
-            import wiringpi2
-        except ImportError:
-            logging.error('Need wiringpi2 for SPI serial interface. Try: sudo pip install wiringpi2')
-            raise
         self._port = port
         self._gpio_command_data_select = gpio_command_data_select
         self._gpio_reset = gpio_reset
@@ -167,7 +163,7 @@ class ssd1306(object):
         self.height = 64
         self.pages = self.height / 8
 
-        self.reset()
+        self._serial_interface.reset()
         
         self._serial_interface.command(
             _Command.DISPLAYOFF,
