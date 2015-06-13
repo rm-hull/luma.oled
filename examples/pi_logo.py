@@ -1,11 +1,26 @@
 #!/usr/bin/env python
 
-from oled.device import ssd1306, sh1106
-from oled.render import canvas
-from PIL import ImageDraw, Image
+# Stdlib.
+import os
+import sys
 
-device = ssd1306(port=1, address=0x3C)
+# Allow running example without installing library.
+sys.path.append('..')
 
-with canvas(device) as draw:
-    logo = Image.open('examples/images/pi_logo.png')
+# 3rd party.
+from PIL import Image
+
+import oled.device
+import oled.render
+
+# Select serial interface to match your OLED device.
+# The defaults for the arguments are shown. No arguments are required.
+#serial_interface = oled.device.I2C(port=1, address=0x3C, cmd_mode=0x00, data_mode=0x40)
+serial_interface = oled.device.SPI(port=0, spi_bus_speed_hz=32000000, gpio_command_data_select=24, gpio_reset=25)
+# Select controller chip to match your OLED device.
+device = oled.device.sh1106(serial_interface)
+#device = oled.device.ssd1306(serial_interface)
+
+with oled.render.canvas(device) as draw:
+    logo = Image.open(os.path.join(os.path.dirname(__name__), 'images/pi_logo.png'))
     draw.bitmap((32, 0), logo, fill=1)

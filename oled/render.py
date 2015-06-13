@@ -22,33 +22,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-
-# Example usage:
-#
-#   from oled.device import ssd1306, sh1106
-#   from oled.render import canvas
-#   from PIL import ImageFont, ImageDraw
-#
-#   font = ImageFont.load_default()
-#   device = ssd1306(port=1, address=0x3C)
-#
-#   with canvas(device) as draw:
-#      draw.rectangle((0, 0, device.width, device.height), outline=0, fill=0)
-#      draw.text(30, 40, "Hello World", font=font, fill=255)
-#
-# As soon as the with-block scope level is complete, the graphics primitives
-# will be flushed to the device.
-#
-# Creating a new canvas is effectively 'carte blanche': If you want to retain
-# an existing canvas, then make a reference like:
-#
-#    c = canvas(device)
-#    for X in ...:
-#        with c as draw:
-#            draw.rectangle(...)
-#
-# As before, as soon as the with block completes, the canvas buffer is flushed
-# to the device
+# See examples directory for usage.
 
 from PIL import Image, ImageDraw
 

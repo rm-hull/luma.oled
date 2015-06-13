@@ -22,100 +22,114 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+# See examples directory for usage.
 
-# Example usage:
-#
-#   from oled.device import ssd1306, sh1106
-#   from oled.render import canvas
-#   from PIL import ImageFont, ImageDraw
-#
-#   font = ImageFont.load_default()
-#   device = ssd1306(port=1, address=0x3C)
-#
-#   with canvas(device) as draw:
-#      draw.rectangle((0, 0, device.width, device.height), outline=0, fill=0)
-#      draw.text(30, 40, "Hello World", font=font, fill=255)
-#
-# As soon as the with-block scope level is complete, the graphics primitives
-# will be flushed to the device.
-#
-# Creating a new canvas is effectively 'carte blanche': If you want to retain
-# an existing canvas, then make a reference like:
-#
-#    c = canvas(device)
-#    for X in ...:
-#        with c as draw:
-#            draw.rectangle(...)
-#
-# As before, as soon as the with block completes, the canvas buffer is flushed
-# to the device
+# Stdlib.
+import logging
+import struct
+import sys
 
-import smbus
+# 3rd party.
+try:
+    import wiringpi2
+except ImportError:
+    logging.error('Need wiringPi2. Try: sudo pip install wiringpi2')
+    raise
 
 
-class device(object):
+logging.basicConfig(level=logging.DEBUG)
+        
+
+class I2C(object):
+    """Wrap a I2C serial interface.
     """
-    Base class for OLED driver classes
-    """
-
     def __init__(self, port=1, address=0x3C, cmd_mode=0x00, data_mode=0x40):
-        self.cmd_mode = cmd_mode
-        self.data_mode = data_mode
-        self.bus = smbus.SMBus(port)
-        self.addr = address
+        self._address = address
+        self._cmd_mode = cmd_mode
+        self._data_mode = data_mode
+        self._fd = wiringpi2.wiringPiI2CSetup(port)
 
     def command(self, *cmd):
-        """
-        Sends a command or sequence of commands through to the
-        device - maximum allowed is 32 bytes in one go.
+        """Sends a command or sequence of commands through to the device -
+        maximum allowed is 32 bytes in one go.
         """
         assert(len(cmd) <= 32)
-        self.bus.write_i2c_block_data(self.addr, self.cmd_mode, list(cmd))
+        wiringpi2.wiringPiI2CWriteReg8(self._fd, self._address, self._cmd_mode)
+        buf = struct.pack('{}B'.format(len(cmd)), *cmd)
+        wiringpi2.wiringPiI2CWrite(self._fd, buf)
 
     def data(self, data):
+        """Sends a data byte or sequence of data bytes through to the device -
+        maximum allowed in one transaction is 32 bytes, so if data is larger
+        than this it is sent in chunks.
         """
-        Sends a data byte or sequence of data bytes through to the
-        device - maximum allowed in one transaction is 32 bytes, so if
-        data is larger than this it is sent in chunks.
-        """
+        wiringpi2.wiringPiI2CWriteReg8(self._fd, self._address, self._data_mode)
         for i in xrange(0, len(data), 32):
-            self.bus.write_i2c_block_data(self.addr,
-                                          self.data_mode,
-                                          list(data[i:i+32]))
+            v = data[i:i+32]
+            buf = struct.pack('{}B'.format(len(v)), *v)
+            wiringpi2.wiringPiI2CWrite(self._fd, buf)
 
+    def reset(self):
+        pass
 
-class sh1106(device):
+class SPI(object):
+    """Wrap an SPI serial interface.
     """
-    A device encapsulates the I2C connection (address/port) to the SH1106
-    OLED display hardware. The init method pumps commands to the display
-    to properly initialize it. Further control commands can then be
-    called to affect the brightness. Direct use of the command() and
-    data() methods are discouraged.
-    """
+    def __init__(self, port=0, spi_bus_speed_hz=32000000, gpio_command_data_select=24, gpio_reset=25):
+        self._port = port
+        self._gpio_command_data_select = gpio_command_data_select
+        self._gpio_reset = gpio_reset
+        wiringpi2.wiringPiSetupGpio()
+        wiringpi2.wiringPiSPISetup(port, spi_bus_speed_hz)
+        wiringpi2.pinMode(gpio_command_data_select, 1)
+        wiringpi2.pinMode(gpio_reset, 1)
+        
+    def command(self, *cmd):
+        assert(len(cmd) <= 32)
+        wiringpi2.digitalWrite(self._gpio_command_data_select, 0) 
+        buf = struct.pack('{}B'.format(len(cmd)), *cmd)
+        wiringpi2.wiringPiSPIDataRW(self._port, buf)
 
-    def __init__(self, port=1, address=0x3C):
-        super(sh1106, self).__init__(port, address)
+    def data(self, data):
+        wiringpi2.digitalWrite(self._gpio_command_data_select, 1)
+        for i in xrange(0, len(data), 32):
+            v = data[i:i+32]
+            buf = struct.pack('{}B'.format(len(v)), *v)
+            wiringpi2.wiringPiSPIDataRW(self._port, buf)
+
+    def reset(self):
+        wiringpi2.digitalWrite(self._gpio_reset, 0)
+        wiringpi2.delay(1)
+        wiringpi2.digitalWrite(self._gpio_reset, 1)
+        wiringpi2.delay(1)
+            
+
+class sh1106(object):
+    def __init__(self, serial_interface):
+        self._serial_interface = serial_interface
         self.width = 128
         self.height = 64
         self.pages = self.height / 8
+        
+        self._serial_interface.reset()
 
-        self.command(
-            const.DISPLAYOFF,
-            const.MEMORYMODE,
-            const.SETHIGHCOLUMN,      0xB0, 0xC8,
-            const.SETLOWCOLUMN,       0x10, 0x40,
-            const.SETCONTRAST,        0x7F,
-            const.SETSEGMENTREMAP,
-            const.NORMALDISPLAY,
-            const.SETMULTIPLEX,       0x3F,
-            const.DISPLAYALLON_RESUME,
-            const.SETDISPLAYOFFSET,   0x00,
-            const.SETDISPLAYCLOCKDIV, 0xF0,
-            const.SETPRECHARGE,       0x22,
-            const.SETCOMPINS,         0x12,
-            const.SETVCOMDETECT,      0x20,
-            const.CHARGEPUMP,         0x14,
-            const.DISPLAYON)
+        self._serial_interface.command(
+            _Command.DISPLAYOFF,
+            _Command.MEMORYMODE,
+            _Command.SETHIGHCOLUMN,      0xB0, 0xC8,
+            _Command.SETLOWCOLUMN,       0x10, 0x40,
+            _Command.SETCONTRAST,        0x7F,
+            _Command.SETSEGMENTREMAP,
+            _Command.NORMALDISPLAY,
+            _Command.SETMULTIPLEX,       0x3F,
+            _Command.DISPLAYALLON_RESUME,
+            _Command.SETDISPLAYOFFSET,   0x00,
+            _Command.SETDISPLAYCLOCKDIV, 0xF0,
+            _Command.SETPRECHARGE,       0x22,
+            _Command.SETCOMPINS,         0x12,
+            _Command.SETVCOMDETECT,      0x20,
+            _Command.CHARGEPUMP,         0x14,
+            _Command.DISPLAYON)
 
     def display(self, image):
         """
@@ -129,54 +143,45 @@ class sh1106(device):
         pix = list(image.getdata())
         step = self.width * 8
         for y in xrange(0, self.pages * step, step):
-
             # move to given page, then reset the column address
-            self.command(page, 0x02, 0x10)
+            self._serial_interface.command(page, 0x02, 0x10)
             page += 1
-
             buf = []
             for x in xrange(self.width):
                 byte = 0
                 for n in xrange(0, step, self.width):
                     byte |= (pix[x + y + n] & 0x01) << 8
                     byte >>= 1
-
                 buf.append(byte)
+            self._serial_interface.data(buf)
 
-            self.data(buf)
 
-
-class ssd1306(device):
-    """
-    A device encapsulates the I2C connection (address/port) to the SSD1306
-    OLED display hardware. The init method pumps commands to the display
-    to properly initialize it. Further control commands can then be
-    called to affect the brightness. Direct use of the command() and
-    data() methods are discouraged.
-    """
-    def __init__(self, port=1, address=0x3C):
-        super(ssd1306, self).__init__(port, address)
+class ssd1306(object):
+    def __init__(self, serial_interface):
+        self._serial_interface = serial_interface
         self.width = 128
         self.height = 64
         self.pages = self.height / 8
 
-        self.command(
-            const.DISPLAYOFF,
-            const.SETDISPLAYCLOCKDIV, 0x80,
-            const.SETMULTIPLEX,       0x3F,
-            const.SETDISPLAYOFFSET,   0x00,
-            const.SETSTARTLINE,
-            const.CHARGEPUMP,         0x14,
-            const.MEMORYMODE,         0x00,
-            const.SEGREMAP,
-            const.COMSCANDEC,
-            const.SETCOMPINS,         0x12,
-            const.SETCONTRAST,        0xCF,
-            const.SETPRECHARGE,       0xF1,
-            const.SETVCOMDETECT,      0x40,
-            const.DISPLAYALLON_RESUME,
-            const.NORMALDISPLAY,
-            const.DISPLAYON)
+        self._serial_interface.reset()
+        
+        self._serial_interface.command(
+            _Command.DISPLAYOFF,
+            _Command.SETDISPLAYCLOCKDIV, 0x80,
+            _Command.SETMULTIPLEX,       0x3F,
+            _Command.SETDISPLAYOFFSET,   0x00,
+            _Command.SETSTARTLINE,
+            _Command.CHARGEPUMP,         0x14,
+            _Command.MEMORYMODE,         0x00,
+            _Command.SEGREMAP,
+            _Command.COMSCANDEC,
+            _Command.SETCOMPINS,         0x12,
+            _Command.SETCONTRAST,        0xCF,
+            _Command.SETPRECHARGE,       0xF1,
+            _Command.SETVCOMDETECT,      0x40,
+            _Command.DISPLAYALLON_RESUME,
+            _Command.NORMALDISPLAY,
+            _Command.DISPLAYON)
 
     def display(self, image):
         """
@@ -186,9 +191,9 @@ class ssd1306(device):
         assert(image.size[0] == self.width)
         assert(image.size[1] == self.height)
 
-        self.command(
-            const.COLUMNADDR, 0x00, self.width-1,  # Column start/end address
-            const.PAGEADDR,   0x00, self.pages-1)  # Page start/end address
+        self._serial_interface.command(
+            _Command.COLUMNADDR, 0x00, self.width-1,  # Column start/end address
+            _Command.PAGEADDR,   0x00, self.pages-1)  # Page start/end address
 
         pix = list(image.getdata())
         step = self.width * 8
@@ -204,10 +209,10 @@ class ssd1306(device):
                 buf.append(byte)
                 i -= 1
 
-        self.data(buf)
+        self._serial_interface.data(buf)
 
 
-class const:
+class _Command:
     CHARGEPUMP = 0x8D
     COLUMNADDR = 0x21
     COMSCANDEC = 0xC8
