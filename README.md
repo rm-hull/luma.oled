@@ -78,6 +78,11 @@ And alter */etc/modprobe.d/raspi-blacklist.conf* and comment out the line:
 
    blacklist i2c-bcm2708
 
+Increase the I2C baudrate from the default of 100KHz to 400KHz by altering
+*/boot/config.txt* to include:
+
+    dtparam=i2c_arm=on,i2c_baudrate=400000
+
 Then reboot.
 
 Then add your user to the i2c group:
