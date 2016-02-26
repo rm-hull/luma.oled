@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 #
-# !!! Needs psutil installing:
+# !!! Needs psutil (+ dependencies) installing:
 #
+#    $ sudo apt-get install python-dev
 #    $ sudo pip install psutil
 #
 
