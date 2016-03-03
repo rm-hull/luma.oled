@@ -166,6 +166,10 @@ Run the demos in the example directory:
     $ python examples/pi_logo.py
     $ python examples/maze.py
 
+Note that `python-dev` (apt-get) and `psutil` (pip) are required to run the `sys_info.py`
+example. See [install instructions](https://github.com/rm-hull/ssd1306/blob/master/examples/sys_info.py#L3-L7)
+for the exact commands to use.
+
 # References
 
 * https://learn.adafruit.com/monochrome-oled-breakouts
