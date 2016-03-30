@@ -1,54 +1,13 @@
 # SSD1306 / SH1106 OLED Driver
 
+I forked the original and made some minor changes, to make it work with a BPi-M1.
+
 Interfacing OLED matrix displays with the SSD1306 (or SH1106) driver in Python using
-I2C on the Raspberry Pi. The particular kit I bought can be acquired for 
-a few pounds from eBay: http://www.ebay.co.uk/itm/191279261331. Further 
-technical details for the SSD1306 OLED display can be found in the 
-[datasheet](https://raw.githubusercontent.com/rm-hull/ssd1306/master/doc/tech-spec/SSD1306.pdf) [PDF]. 
-See also the [datasheet](https://raw.githubusercontent.com/rm-hull/ssd1306/sh1106-compat/doc/tech-spec/SH1106.pdf) [PDF] for the SH1106 chipset.
+I2C on the Banana Pi. The particular kit I bought from Amazon: http://www.amazon.de/SainSmart-Serial-128X64-Module-Arduino/dp/B00MQK264K?ie=UTF8&psc=1&redirect=true&ref_=oh_aui_detailpage_o09_s00.
 
-The SSD1306 display is 128x64 pixels, and the board is _tiny_, and will fit neatly
-inside the RPi case (the SH1106 is slightly different, in that it supports 132x64
-pixels). My intention is to solder wires directly to the underside
-of the RPi GPIO pins so that the pins are still available for other purposes.
-
-![mounted](https://raw.githubusercontent.com/rm-hull/ssd1306/master/doc/mounted_display.jpg)
-
-## GPIO pin-outs
-
-The SSD1306 device is an I2C device, so connecting to the RPi is very straightforward:
-
-### P1 Header
-
-For prototyping , the P1 header pins should be connected as follows:
-
-| Board Pin | Name  | Remarks     | RPi Pin | RPi Function | Colour |
-|----------:|:------|:------------|--------:|--------------|--------|
-| 1         | GND   | Ground      | P01-6   | GND          | Black  |
-| 2         | VCC   | +3.3V Power | P01-1   | 3V3          | White  |
-| 3         | SCL   | Clock       | P01-5   | GPIO 3 (SCL) | Purple |
-| 4         | SDA   | Data        | P01-3   | GPIO 2 (SDA) | Grey   |
-
-![GPIOS](https://raw.githubusercontent.com/rm-hull/ssd1306/master/doc/GPIOs.png)
-
-[Attribution: http://elinux.org/Rpi_Low-level_peripherals]
-
-### P5 Header
-
-On rev.2 RPi's, right next to the male pins of the P1 header, there is a bare 
-P5 header which features I2C channel 0, although this doesn't appear to be
-initially enabled and may be configured for use with the Camera module. 
-
-| Board Pin | Name  | Remarks     | RPi Pin | RPi Function  | Colour |
-|----------:|:------|:------------|--------:|---------------|--------|
-| 1         | GND   | Ground      | P5-07   | GND           | Black  |
-| 2         | VCC   | +3.3V Power | P5-02   | 3V3           | White  |
-| 3         | SCL   | Clock       | P5-04   | GPIO 29 (SCL) | Purple |
-| 4         | SDA   | Data        | P5-03   | GPIO 28 (SDA) | Grey   |
-
-![P5 Header](https://raw.githubusercontent.com/rm-hull/ssd1306/master/doc/RPi_P5_header.png)
-
-[Attribution: http://elinux.org/Rpi_Low-level_peripherals]
+The SH1106 display is 128x64 pixels, and the board is _tiny_, and will fit neatly
+inside my BPi Case.
+<img src="http://blog.gizu.de/content/images/2016/03/vorne.JPG">
 
 ## Pre-requisites
 
@@ -95,7 +54,7 @@ Install some packages:
     $ sudo pip install pillow
 
 Next check that the device is communicating properly (if using a rev.1 board, 
-use 0 for the bus not 1):
+use 0 for the bus not 1. For the Banana Pi use 2):
 
     $ i2cdetect -y 1
          0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
