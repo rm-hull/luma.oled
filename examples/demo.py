@@ -8,7 +8,7 @@ from oled.render import canvas
 from PIL import ImageFont
 
 font = ImageFont.load_default()
-device = ssd1306(port=1, address=0x3C)
+device = sh1106(port=2, address=0x3C)
 
 with canvas(device) as draw:
     # Draw some shapes.
