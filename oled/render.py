@@ -30,7 +30,7 @@
 #   from PIL import ImageFont, ImageDraw
 #
 #   font = ImageFont.load_default()
-#   device = ssd1306(port=1, address=0x3C)
+#   device = sh1106(port=2, address=0x3C)
 #
 #   with canvas(device) as draw:
 #      draw.rectangle((0, 0, device.width, device.height), outline=0, fill=0)
