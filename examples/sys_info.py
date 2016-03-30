@@ -70,7 +70,7 @@ def stats(oled):
         draw.text((0, 38), network('wlan0'), font=font2, fill=255)
 
 def main():
-    oled = ssd1306(port=1, address=0x3C)
+    oled = sh1106(port=2, address=0x3C)
     stats(oled)
 
 if __name__ == "__main__":
