@@ -1,8 +1,8 @@
-# SSD1306 / SH1106 OLED Driver (only tested with SH1106).
+# SH1106 / SSD1306 OLED Driver (only tested with SH1106).
 
 I forked the original and made some minor changes, to make it work with a BPi-M1.
 
-Interfacing OLED matrix displays with the SSD1306 (or SH1106) driver in Python using
+Interfacing OLED matrix displays with the SH1106 (or SSD1306) driver in Python using
 I2C on the Banana Pi. The particular kit I bought from Amazon: <a href="http://www.amazon.de/SainSmart-Serial-128X64-Module-Arduino/dp/B00MQK264K?ie=UTF8&psc=1&redirect=true&ref_=oh_aui_detailpage_o09_s00">SainSmart 1.3" I2C IIC Serial 128X64 OLED</a>.
 
 The SH1106 display is 128x64 pixels, and the board is _tiny_, and will fit neatly
