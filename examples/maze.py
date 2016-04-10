@@ -17,8 +17,8 @@ WEST = 2
 class Maze(object):
 
     def __init__(self, size):
-        self.width = size[0]
-        self.height = size[1]
+        self.width = int(size[0])
+        self.height = int(size[1])
         self.size = self.width * self.height
         self.generate()
 
@@ -83,7 +83,7 @@ class Maze(object):
 
         while len(stack) > 0:
             curr = stack[-1]
-            n = filter(not_visited, self.neighbours(curr))
+            n = list(filter(not_visited, self.neighbours(curr)))
             sz = len(n)
             if sz == 0:
                 stack.pop()
@@ -97,7 +97,7 @@ class Maze(object):
 
     def render(self, draw, scale=lambda a: a):
 
-        for i in xrange(self.size):
+        for i in range(self.size):
             line = []
             p1 = self.coords(i)
 
@@ -109,13 +109,13 @@ class Maze(object):
                 p3 = (p1[0], p1[1] + 1)
                 line += p1 + p3
 
-            draw.line(map(scale, line), fill=1)
+            draw.line(list(map(scale, line)), fill=1)
 
-        draw.rectangle(map(scale, [0, 0, self.width, self.height]), outline=1)
+        draw.rectangle(list(map(scale, [0, 0, self.width, self.height])), outline=1)
 
     def to_string(self):
         s = ""
-        for y in xrange(self.height):
+        for y in range(self.height):
             for x in range(self.width):
                 s += "+"
                 if self.data[self.offset(x, y)] & NORTH != 0:
@@ -140,7 +140,7 @@ def demo(iterations):
     screen = (128, 64)
     for loop in range(iterations):
         for scale in [2, 3, 4, 3]:
-            sz = map(lambda z: z / scale - 1, screen)
+            sz = list(map(lambda z: z / scale - 1, screen))
             with canvas(device) as draw:
                 Maze(sz).render(draw, lambda z: int(z * scale))
                 time.sleep(1)
