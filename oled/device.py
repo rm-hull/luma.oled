@@ -78,7 +78,7 @@ class device(object):
         device - maximum allowed in one transaction is 32 bytes, so if
         data is larger than this it is sent in chunks.
         """
-        for i in xrange(0, len(data), 32):
+        for i in range(0, len(data), 32):
             self.bus.write_i2c_block_data(self.addr,
                                           self.data_mode,
                                           list(data[i:i+32]))
@@ -97,7 +97,7 @@ class sh1106(device):
         super(sh1106, self).__init__(port, address)
         self.width = 128
         self.height = 64
-        self.pages = self.height / 8
+        self.pages = int(self.height / 8)
 
         self.command(
             const.DISPLAYOFF,
@@ -128,16 +128,16 @@ class sh1106(device):
         page = 0xB0
         pix = list(image.getdata())
         step = self.width * 8
-        for y in xrange(0, self.pages * step, step):
+        for y in range(0, self.pages * step, step):
 
             # move to given page, then reset the column address
             self.command(page, 0x02, 0x10)
             page += 1
 
             buf = []
-            for x in xrange(self.width):
+            for x in range(self.width):
                 byte = 0
-                for n in xrange(0, step, self.width):
+                for n in range(0, step, self.width):
                     byte |= (pix[x + y + n] & 0x01) << 8
                     byte >>= 1
 
@@ -158,7 +158,7 @@ class ssd1306(device):
         super(ssd1306, self).__init__(port, address)
         self.width = 128
         self.height = 64
-        self.pages = self.height / 8
+        self.pages = int(self.height / 8)
 
         self.command(
             const.DISPLAYOFF,
@@ -193,11 +193,11 @@ class ssd1306(device):
         pix = list(image.getdata())
         step = self.width * 8
         buf = []
-        for y in xrange(0, self.pages * step, step):
+        for y in range(0, self.pages * step, step):
             i = y + self.width-1
             while i >= y:
                 byte = 0
-                for n in xrange(0, step, self.width):
+                for n in range(0, step, self.width):
                     byte |= (pix[i + n] & 0x01) << 8
                     byte >>= 1
 
