@@ -6,9 +6,8 @@
 #    https://github.com/rm-hull/maze/blob/master/src/maze/generator.clj
 
 import time
-from oled.device import ssd1306, sh1106
+from demo_opts import device
 from oled.render import canvas
-from PIL import Image
 from random import randrange
 
 NORTH = 1
@@ -62,7 +61,7 @@ class Maze(object):
         if p2 - p1 == 1:
             return self.data[p2] & WEST != 0
 
-        return false;
+        return False
 
     def knockdown_wall(self, p1, p2):
         """ Knocks down the wall between the two given points in the maze.
@@ -77,8 +76,8 @@ class Maze(object):
             self.data[p2] &= NORTH
 
     def generate(self):
-        self.data = [ NORTH | WEST ] * self.size
-        visited = { 0: True }
+        self.data = [NORTH | WEST] * self.size
+        visited = {0: True}
         stack = [0]
         not_visited = lambda x: not visited.get(x, False)
 
@@ -103,11 +102,11 @@ class Maze(object):
             p1 = self.coords(i)
 
             if self.data[i] & NORTH > 0:
-                p2 = (p1[0]+1, p1[1])
+                p2 = (p1[0] + 1, p1[1])
                 line += p2 + p1
 
             if self.data[i] & WEST > 0:
-                p3 = (p1[0], p1[1]+1)
+                p3 = (p1[0], p1[1] + 1)
                 line += p1 + p3
 
             draw.line(map(scale, line), fill=1)
@@ -136,12 +135,12 @@ class Maze(object):
 
         return s
 
+
 def demo(iterations):
-    device = ssd1306(port=1, address=0x3C)
     screen = (128, 64)
     for loop in range(iterations):
-        for scale in [2,3,4,3]:
-            sz = map(lambda z: z/scale-1, screen)
+        for scale in [2, 3, 4, 3]:
+            sz = map(lambda z: z / scale - 1, screen)
             with canvas(device) as draw:
                 Maze(sz).render(draw, lambda z: int(z * scale))
                 time.sleep(1)
