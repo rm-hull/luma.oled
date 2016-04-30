@@ -137,7 +137,7 @@ class Maze(object):
         return s
 
 def demo(iterations):
-    device = sh1106(port=2, address=0x3C)
+    device = sh1106(port=1, address=0x3C)
     screen = (128, 64)
     for loop in range(iterations):
         for scale in [2,3,4,3]:
