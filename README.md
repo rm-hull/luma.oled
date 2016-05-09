@@ -12,15 +12,7 @@ inside my BPi Case.
 
 ## Pre-requisites
 
-This was tested with Armbian-Jessie on a BP1-M1, with a vanilla kernel version 4.4.3-sunxi.
-
-( Increase the I2C baudrate from the default of 100KHz to 400KHz by altering
-*/boot/config.txt* to include:
-
-    dtparam=i2c_arm=on,i2c_baudrate=400000
-)
-
-Then reboot.
+This was tested with Armbian-Jessie on a BP1-M1, with Mainline Kernel .
 
 Install some packages(most should be already installed):
 
