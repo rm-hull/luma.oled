@@ -3,7 +3,7 @@
 from distutils.core import setup,Extension
 setup(
     name = "ssd1306",
-    version = "0.1.0",
+    version = "0.2.0",
     author = "Richard Hull",
     author_email = "richard.hull@destructuring-bind.org",
     description = ("A small library to drive an OLED device with either SSD1306 or SH1106 chipset"),
