@@ -3,12 +3,13 @@
 # Ported from:
 # https://github.com/adafruit/Adafruit_Python_SSD1306/blob/master/examples/shapes.py
 
-from oled.device import ssd1306, sh1106
+from demo_opts import device
 from oled.render import canvas
 from PIL import ImageFont
+from demo_opts import args
 
 font = ImageFont.load_default()
-device = ssd1306(port=1, address=0x3C)
+
 
 with canvas(device) as draw:
     # Draw some shapes.
