@@ -93,10 +93,10 @@ class sh1106(device):
     data() methods are discouraged.
     """
 
-    def __init__(self, port=1, address=0x3C):
+    def __init__(self, port=1, address=0x3C, width=128, height=64):
         super(sh1106, self).__init__(port, address)
-        self.width = 128
-        self.height = 64
+        self.width = width
+        self.height = height
         self.pages = int(self.height / 8)
 
         self.command(
@@ -154,10 +154,10 @@ class ssd1306(device):
     called to affect the brightness. Direct use of the command() and
     data() methods are discouraged.
     """
-    def __init__(self, port=1, address=0x3C):
+    def __init__(self, port=1, address=0x3C, width=128, height=64):
         super(ssd1306, self).__init__(port, address)
-        self.width = 128
-        self.height = 64
+        self.width = width
+        self.height = height
         self.pages = int(self.height / 8)
 
         self.command(
