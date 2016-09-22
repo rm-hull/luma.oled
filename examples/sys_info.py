@@ -15,7 +15,7 @@ import psutil
 from datetime import datetime
 from oled.device import ssd1306, sh1106
 from oled.render import canvas
-from PIL import ImageDraw, ImageFont
+from PIL import ImageFont
 
 # TODO: custom font bitmaps for up/down arrows
 # TODO: Load histogram
