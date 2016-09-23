@@ -2,7 +2,7 @@
 
 from demo_opts import device
 from oled.render import canvas
-from PIL import ImageDraw, Image
+from PIL import Image
 
 
 with canvas(device) as draw:
