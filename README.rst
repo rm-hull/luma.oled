@@ -102,12 +102,12 @@ Then add your user to the i2c group::
 
 Install some packages (python2)::
 
-  $ sudo apt-get install i2c-tools python-smbus python-pip libfreetype-dev 
+  $ sudo apt-get install i2c-tools python-smbus python-pip libfreetype6-dev 
   $ sudo pip install pillow
 
 or (python3)::
 
-  $ sudo apt-get install i2c-tools python3-smbus python3-pip libfreetype-dev 
+  $ sudo apt-get install i2c-tools python3-smbus python3-pip libfreetype6-dev 
   $ sudo pip3 install pillow
 
 Next check that the device is communicating properly (if using a rev.1 board, 
