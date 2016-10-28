@@ -8,13 +8,15 @@
 
 import os
 import sys
+from datetime import datetime
 if os.name != 'posix':
     sys.exit('platform not supported')
+    
 import psutil
 
-from datetime import datetime
 from oled.device import ssd1306, sh1106
 from oled.render import canvas
+
 from PIL import ImageFont
 
 # TODO: custom font bitmaps for up/down arrows
@@ -62,12 +64,18 @@ def network(iface):
 
 def stats(oled):
     font = ImageFont.load_default()
-    font2 = ImageFont.truetype('../fonts/C&C Red Alert [INET].ttf', 12)
+    font_path = os.path.abspath(os.path.join(os.path.dirname(__file__),
+        '..', 'fonts', 'C&C Red Alert [INET].ttf'))
+    font2 = ImageFont.truetype(font_path, 12)
     with canvas(oled) as draw:
         draw.text((0, 0), cpu_usage(), font=font2, fill=255)
         draw.text((0, 14), mem_usage(), font=font2, fill=255)
         draw.text((0, 26), disk_usage('/'), font=font2, fill=255)
-        draw.text((0, 38), network('wlan0'), font=font2, fill=255)
+        try:
+            draw.text((0, 38), network('wlan0'), font=font2, fill=255)
+        except KeyError:
+            # no wifi enabled/available
+            pass
 
 def main():
     oled = ssd1306(port=1, address=0x3C)
