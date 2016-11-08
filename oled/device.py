@@ -94,28 +94,31 @@ class sh1106(device):
     """
 
     def __init__(self, port=1, address=0x3C, width=128, height=64):
-        super(sh1106, self).__init__(port, address)
-        self.width = width
-        self.height = height
-        self.pages = int(self.height / 8)
+        try:
+            super(sh1106, self).__init__(port, address)
+            self.width = width
+            self.height = height
+            self.pages = int(self.height / 8)
 
-        self.command(
-            const.DISPLAYOFF,
-            const.MEMORYMODE,
-            const.SETHIGHCOLUMN,      0xB0, 0xC8,
-            const.SETLOWCOLUMN,       0x10, 0x40,
-            const.SETCONTRAST,        0x7F,
-            const.SETSEGMENTREMAP,
-            const.NORMALDISPLAY,
-            const.SETMULTIPLEX,       0x3F,
-            const.DISPLAYALLON_RESUME,
-            const.SETDISPLAYOFFSET,   0x00,
-            const.SETDISPLAYCLOCKDIV, 0xF0,
-            const.SETPRECHARGE,       0x22,
-            const.SETCOMPINS,         0x12,
-            const.SETVCOMDETECT,      0x20,
-            const.CHARGEPUMP,         0x14,
-            const.DISPLAYON)
+            self.command(
+                const.DISPLAYOFF,
+                const.MEMORYMODE,
+                const.SETHIGHCOLUMN,      0xB0, 0xC8,
+                const.SETLOWCOLUMN,       0x10, 0x40,
+                const.SETCONTRAST,        0x7F,
+                const.SETSEGMENTREMAP,
+                const.NORMALDISPLAY,
+                const.SETMULTIPLEX,       0x3F,
+                const.DISPLAYALLON_RESUME,
+                const.SETDISPLAYOFFSET,   0x00,
+                const.SETDISPLAYCLOCKDIV, 0xF0,
+                const.SETPRECHARGE,       0x22,
+                const.SETCOMPINS,         0x12,
+                const.SETVCOMDETECT,      0x20,
+                const.CHARGEPUMP,         0x14,
+                const.DISPLAYON)
+        except IOError as e:
+            raise IOError(e.errno, "Failed to initialize SH1106 display driver")
 
     def display(self, image):
         """
@@ -155,28 +158,31 @@ class ssd1306(device):
     data() methods are discouraged.
     """
     def __init__(self, port=1, address=0x3C, width=128, height=64):
-        super(ssd1306, self).__init__(port, address)
-        self.width = width
-        self.height = height
-        self.pages = int(self.height / 8)
+        try:
+            super(ssd1306, self).__init__(port, address)
+            self.width = width
+            self.height = height
+            self.pages = int(self.height / 8)
 
-        self.command(
-            const.DISPLAYOFF,
-            const.SETDISPLAYCLOCKDIV, 0x80,
-            const.SETMULTIPLEX,       0x3F,
-            const.SETDISPLAYOFFSET,   0x00,
-            const.SETSTARTLINE,
-            const.CHARGEPUMP,         0x14,
-            const.MEMORYMODE,         0x00,
-            const.SEGREMAP,
-            const.COMSCANDEC,
-            const.SETCOMPINS,         0x12,
-            const.SETCONTRAST,        0xCF,
-            const.SETPRECHARGE,       0xF1,
-            const.SETVCOMDETECT,      0x40,
-            const.DISPLAYALLON_RESUME,
-            const.NORMALDISPLAY,
-            const.DISPLAYON)
+            self.command(
+                const.DISPLAYOFF,
+                const.SETDISPLAYCLOCKDIV, 0x80,
+                const.SETMULTIPLEX,       0x3F,
+                const.SETDISPLAYOFFSET,   0x00,
+                const.SETSTARTLINE,
+                const.CHARGEPUMP,         0x14,
+                const.MEMORYMODE,         0x00,
+                const.SEGREMAP,
+                const.COMSCANDEC,
+                const.SETCOMPINS,         0x12,
+                const.SETCONTRAST,        0xCF,
+                const.SETPRECHARGE,       0xF1,
+                const.SETVCOMDETECT,      0x40,
+                const.DISPLAYALLON_RESUME,
+                const.NORMALDISPLAY,
+                const.DISPLAYON)
+        except IOError as e:
+            raise IOError(e.errno, "Failed to initialize SSD1306 display driver")
 
     def display(self, image):
         """
