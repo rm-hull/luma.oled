@@ -3,14 +3,15 @@
 # Ported from:
 # https://github.com/adafruit/Adafruit_Python_SSD1306/blob/master/examples/shapes.py
 
+import time
+import datetime
 from demo_opts import device
 from oled.render import canvas
 from PIL import ImageFont
-from demo_opts import args
 
 font = ImageFont.load_default()
 
-
+print "Testing basic canvas graphics..."
 with canvas(device) as draw:
     # Draw some shapes.
     # First define some constants to allow easy resizing of shapes.
@@ -46,3 +47,26 @@ with canvas(device) as draw:
     # Write two lines of text.
     draw.text((x, top),    'Hello',  font=font, fill=255)
     draw.text((x, top+20), 'World!', font=font, fill=255)
+
+time.sleep(10)
+
+print "Testing display ON/OFF..."
+for _ in range(10):
+    time.sleep(0.5)
+    device.hide()
+
+    time.sleep(0.5)
+    device.show()
+
+print "Testing clear display..."
+time.sleep(2)
+device.clear()
+
+print "Testing screen updates..."
+time.sleep(2)
+for x in range(30):
+    with canvas(device) as draw:
+        now = datetime.datetime.now()
+        draw.text((x, 10), str(now.date()), fill=255)
+        draw.text((10, 24), str(now.time()), fill=255)
+        time.sleep(1)

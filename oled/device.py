@@ -51,7 +51,7 @@
 # to the device
 
 import smbus
-
+from PIL import Image
 
 class device(object):
     """
@@ -82,6 +82,26 @@ class device(object):
             self.bus.write_i2c_block_data(self.addr,
                                           self.data_mode,
                                           list(data[i:i+32]))
+
+    def show(self):
+        """
+        Sets the display mode ON, waking the device out of a prior
+        low-power sleep mode.
+        """
+        self.command(const.DISPLAYON)
+
+    def hide(self):
+        """
+        Switches the display mode OFF, putting the device in low-power
+        sleep mode.
+        """
+        self.command(const.DISPLAYOFF)
+
+    def clear(self):
+        """
+        Initializes the device memory with an empty (blank) image.
+        """
+        self.display(Image.new('1', (self.width, self.height)))
 
 
 class sh1106(device):
@@ -115,8 +135,11 @@ class sh1106(device):
                 const.SETPRECHARGE,       0x22,
                 const.SETCOMPINS,         0x12,
                 const.SETVCOMDETECT,      0x20,
-                const.CHARGEPUMP,         0x14,
-                const.DISPLAYON)
+                const.CHARGEPUMP,         0x14)
+
+            self.clear()
+            self.show()
+
         except IOError as e:
             raise IOError(e.errno, "Failed to initialize SH1106 display driver")
 
@@ -179,8 +202,11 @@ class ssd1306(device):
                 const.SETPRECHARGE,       0xF1,
                 const.SETVCOMDETECT,      0x40,
                 const.DISPLAYALLON_RESUME,
-                const.NORMALDISPLAY,
-                const.DISPLAYON)
+                const.NORMALDISPLAY)
+
+            self.clear()
+            self.show()
+
         except IOError as e:
             raise IOError(e.errno, "Failed to initialize SSD1306 display driver")
 
