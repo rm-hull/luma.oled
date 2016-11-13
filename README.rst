@@ -198,6 +198,19 @@ Notes
 #. Substitute ``python3`` for ``python`` in the above examples if you are using python3.
 #. ``python-dev`` (apt-get) and ``psutil`` (pip/pip3) are required to run the ``sys_info.py`` example. See `install instructions <https://github.com/rm-hull/ssd1306/blob/master/examples/sys_info.py#L3-L7>`_ for the exact commands to use.
 
+Contributing
+------------
+Pull requests (code changes / documentation / typos / feature requests / setup) are gladly accepted. If you are 
+intending some large-scale changes, please get in touch first to make sure we're on the same page: try and include
+a docstring for any new methods, and try and keep method bodies small, readable and PEP8-compliant.
+
+Contributors
+^^^^^^^^^^^^
+* Thijs Triemstra (@thijstriemstra)
+* Christoph Handel (@fragfutter)
+* Boeeerb (@Boeeerb)
+* xes (@xes)
+
 References
 ----------
 
