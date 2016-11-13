@@ -11,7 +11,7 @@ from PIL import ImageFont
 
 font = ImageFont.load_default()
 
-print "Testing basic canvas graphics..."
+print("Testing basic canvas graphics...")
 with canvas(device) as draw:
     # Draw some shapes.
     # First define some constants to allow easy resizing of shapes.
@@ -50,7 +50,7 @@ with canvas(device) as draw:
 
 time.sleep(10)
 
-print "Testing display ON/OFF..."
+print("Testing display ON/OFF...")
 for _ in range(10):
     time.sleep(0.5)
     device.hide()
@@ -58,11 +58,11 @@ for _ in range(10):
     time.sleep(0.5)
     device.show()
 
-print "Testing clear display..."
+print("Testing clear display...")
 time.sleep(2)
 device.clear()
 
-print "Testing screen updates..."
+print("Testing screen updates...")
 time.sleep(2)
 for x in range(30):
     with canvas(device) as draw:
