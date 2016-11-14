@@ -28,7 +28,7 @@ class Maze(object):
 
     def coords(self, offset):
         """ Converts offset to [x,y] co-ords """
-        return (offset % self.width, offset / self.width)
+        return (offset % self.width, offset // self.width)
 
     def neighbours(self, pos):
         neighbours = []
@@ -140,7 +140,7 @@ def demo(iterations):
     screen = (128, 64)
     for loop in range(iterations):
         for scale in [2, 3, 4, 3]:
-            sz = list(map(lambda z: z / scale - 1, screen))
+            sz = list(map(lambda z: z // scale - 1, screen))
             with canvas(device) as draw:
                 Maze(sz).render(draw, lambda z: int(z * scale))
                 time.sleep(1)
