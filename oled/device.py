@@ -79,10 +79,13 @@ class device(object):
         device - maximum allowed in one transaction is 32 bytes, so if
         data is larger than this it is sent in chunks.
         """
-        for i in range(0, len(data), 32):
+        i = 0
+        n = len(data)
+        while i < n:
             self.bus.write_i2c_block_data(self.addr,
                                           self.data_mode,
                                           list(data[i:i+32]))
+            i += 32
 
     def show(self):
         """
@@ -193,6 +196,7 @@ class ssd1306(device):
             self.width = width
             self.height = height
             self.pages = int(self.height / 8)
+            self.buf = [0] * self.width * self.pages
 
             self.command(
                 const.DISPLAYOFF,
@@ -231,17 +235,24 @@ class ssd1306(device):
 
         pix = list(image.getdata())
         step = self.width * 8
-        buf = []
+        buf = self.buf
+        w = self.width
+        j = 0
+        offsets = [n * w for n in range(8)]
         for y in range(0, self.pages * step, step):
-            i = y + self.width-1
+            i = y + w - 1
             while i >= y:
-                byte = 0
-                for n in range(0, step, self.width):
-                    byte |= (pix[i + n] & 0x01) << 8
-                    byte >>= 1
+                buf[j] = (pix[i] & 0x01) | \
+                         (pix[i + offsets[1]] & 0x01) << 1 | \
+                         (pix[i + offsets[2]] & 0x01) << 2 | \
+                         (pix[i + offsets[3]] & 0x01) << 3 | \
+                         (pix[i + offsets[4]] & 0x01) << 4 | \
+                         (pix[i + offsets[5]] & 0x01) << 5 | \
+                         (pix[i + offsets[6]] & 0x01) << 6 | \
+                         (pix[i + offsets[7]] & 0x01) << 7
 
-                buf.append(byte)
                 i -= 1
+                j += 1
 
         self.data(buf)
 
