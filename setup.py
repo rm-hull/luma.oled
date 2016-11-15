@@ -3,11 +3,14 @@
 import os
 from setuptools import setup
 
+import oled
+
 README = open(os.path.join(os.path.dirname(__file__), 'README.rst')).read()
+
 
 setup(
     name = "ssd1306",
-    version = "0.3.2",
+    version = oled.__version__,
     author = "Richard Hull",
     author_email = "richard.hull@destructuring-bind.org",
     description = "A small library to drive an OLED device with either SSD1306 or SH1106 chipset",
@@ -15,7 +18,7 @@ setup(
     license = "MIT",
     keywords = "raspberry pi rpi oled ssd1306 sh1106",
     url = "https://github.com/rm-hull/ssd1306",
-    download_url = "https://github.com/rm-hull/ssd1306/tarball/0.3.2",
+    download_url = "https://github.com/rm-hull/ssd1306/tarball/" + oled.__version__,
     packages=['oled'],
     install_requires = ["pillow", "smbus2"],
     classifiers = [
