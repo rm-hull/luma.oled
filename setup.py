@@ -17,7 +17,7 @@ setup(
     url = "https://github.com/rm-hull/ssd1306",
     download_url = "https://github.com/rm-hull/ssd1306/tarball/0.3.2",
     packages=['oled'],
-    install_requires = ["pillow"],
+    install_requires = ["pillow", "smbus2"],
     classifiers = [
         "License :: OSI Approved :: MIT License",
         "Development Status :: 4 - Beta",

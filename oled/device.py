@@ -50,7 +50,7 @@
 # As before, as soon as the with block completes, the canvas buffer is flushed
 # to the device
 
-import smbus
+import smbus2
 from PIL import Image
 
 
@@ -62,7 +62,7 @@ class device(object):
     def __init__(self, bus=None, port=1, address=0x3C, cmd_mode=0x00, data_mode=0x40):
         self.cmd_mode = cmd_mode
         self.data_mode = data_mode
-        self.bus = bus or smbus.SMBus(port)
+        self.bus = bus or smbus2.SMBus(port)
         self.addr = address
 
     def command(self, *cmd):
