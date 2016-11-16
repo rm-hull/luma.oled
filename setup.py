@@ -5,23 +5,24 @@ from setuptools import setup
 
 import oled
 
-README = open(os.path.join(os.path.dirname(__file__), 'README.rst')).read()
-
+README = open(os.path.join(os.path.dirname(__file__), "README.rst")).read()
+version = oled.__version__
 
 setup(
-    name = "ssd1306",
-    version = oled.__version__,
-    author = "Richard Hull",
-    author_email = "richard.hull@destructuring-bind.org",
-    description = "A small library to drive an OLED device with either SSD1306 or SH1106 chipset",
-    long_description = README,
-    license = "MIT",
-    keywords = "raspberry pi rpi oled ssd1306 sh1106",
-    url = "https://github.com/rm-hull/ssd1306",
-    download_url = "https://github.com/rm-hull/ssd1306/tarball/" + oled.__version__,
-    packages=['oled'],
-    install_requires = ["pillow", "smbus2"],
-    classifiers = [
+    name="ssd1306",
+    version=version,
+    author="Richard Hull",
+    author_email="richard.hull@destructuring-bind.org",
+    description=("A small library to drive an OLED device with either "
+        "SSD1306 or SH1106 chipset"),
+    long_description=README,
+    license="MIT",
+    keywords="raspberry pi rpi oled ssd1306 sh1106",
+    url="https://github.com/rm-hull/ssd1306",
+    download_url="https://github.com/rm-hull/ssd1306/tarball/" + version,
+    packages=["oled"],
+    install_requires=["pillow", "smbus2"],
+    classifiers=[
         "License :: OSI Approved :: MIT License",
         "Development Status :: 4 - Beta",
         "Intended Audience :: Education",

@@ -59,7 +59,8 @@ class device(object):
     Base class for OLED driver classes
     """
 
-    def __init__(self, bus=None, port=1, address=0x3C, cmd_mode=0x00, data_mode=0x40):
+    def __init__(self, bus=None, port=1, address=0x3C, cmd_mode=0x00,
+                 data_mode=0x40):
         self.cmd_mode = cmd_mode
         self.data_mode = data_mode
         self.bus = bus or smbus2.SMBus(port)
@@ -84,7 +85,7 @@ class device(object):
         while i < n:
             self.bus.write_i2c_block_data(self.addr,
                                           self.data_mode,
-                                          list(data[i:i+32]))
+                                          list(data[i:i + 32]))
             i += 32
 
     def show(self):
@@ -148,7 +149,8 @@ class sh1106(device):
             self.show()
 
         except IOError as e:
-            raise IOError(e.errno, "Failed to initialize SH1106 display driver")
+            raise IOError(e.errno,
+                "Failed to initialize SH1106 display driver")
 
     def display(self, image):
         """
@@ -219,7 +221,8 @@ class ssd1306(device):
             self.show()
 
         except IOError as e:
-            raise IOError(e.errno, "Failed to initialize SSD1306 display driver")
+            raise IOError(e.errno,
+                "Failed to initialize SSD1306 display driver")
 
     def display(self, image):
         """
@@ -230,8 +233,10 @@ class ssd1306(device):
         assert(image.size[1] == self.height)
 
         self.command(
-            const.COLUMNADDR, 0x00, self.width-1,  # Column start/end address
-            const.PAGEADDR,   0x00, self.pages-1)  # Page start/end address
+            # Column start/end address
+            const.COLUMNADDR, 0x00, self.width - 1,
+            # Page start/end address
+            const.PAGEADDR, 0x00, self.pages - 1)
 
         pix = list(image.getdata())
         step = self.width * 8
