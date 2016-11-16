@@ -145,5 +145,6 @@ def demo(iterations):
                 Maze(sz).render(draw, lambda z: int(z * scale))
                 time.sleep(1)
 
+
 if __name__ == "__main__":
     demo(20)

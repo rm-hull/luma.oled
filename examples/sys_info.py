@@ -11,16 +11,17 @@ import sys
 from datetime import datetime
 if os.name != 'posix':
     sys.exit('platform not supported')
-    
+
 import psutil
 
-from oled.device import ssd1306, sh1106
+from oled.device import ssd1306
 from oled.render import canvas
 
 from PIL import ImageFont
 
 # TODO: custom font bitmaps for up/down arrows
 # TODO: Load histogram
+
 
 def bytes2human(n):
     """
@@ -32,12 +33,13 @@ def bytes2human(n):
     symbols = ('K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y')
     prefix = {}
     for i, s in enumerate(symbols):
-        prefix[s] = 1 << (i+1)*10
+        prefix[s] = 1 << (i + 1) * 10
     for s in reversed(symbols):
         if n >= prefix[s]:
             value = int(float(n) / prefix[s])
             return '%s%s' % (value, s)
     return "%sB" % n
+
 
 def cpu_usage():
     # load average, uptime
@@ -45,6 +47,7 @@ def cpu_usage():
     av1, av2, av3 = os.getloadavg()
     return "Ld:%.1f %.1f %.1f Up: %s" \
             % (av1, av2, av3, str(uptime).split('.')[0])
+
 
 def mem_usage():
     usage = psutil.virtual_memory()
@@ -57,16 +60,19 @@ def disk_usage(dir):
     return "SD:  %s %.0f%%" \
             % (bytes2human(usage.used), usage.percent)
 
+
 def network(iface):
     stat = psutil.net_io_counters(pernic=True)[iface]
     return "%s: Tx%s, Rx%s" % \
            (iface, bytes2human(stat.bytes_sent), bytes2human(stat.bytes_recv))
 
+
 def stats(oled):
-    font = ImageFont.load_default()
+    # use custom font
     font_path = os.path.abspath(os.path.join(os.path.dirname(__file__),
         '..', 'fonts', 'C&C Red Alert [INET].ttf'))
     font2 = ImageFont.truetype(font_path, 12)
+
     with canvas(oled) as draw:
         draw.text((0, 0), cpu_usage(), font=font2, fill=255)
         draw.text((0, 14), mem_usage(), font=font2, fill=255)
@@ -77,9 +83,11 @@ def stats(oled):
             # no wifi enabled/available
             pass
 
+
 def main():
     oled = ssd1306(port=1, address=0x3C)
     stats(oled)
+
 
 if __name__ == "__main__":
     main()
