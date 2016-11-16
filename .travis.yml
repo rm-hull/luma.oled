@@ -1,5 +1,6 @@
 sudo: false
 language: python
-install: pip install -U pip tox
+install: pip install -U pip tox coveralls
 script: tox
-
+after_success:
+  - coveralls
