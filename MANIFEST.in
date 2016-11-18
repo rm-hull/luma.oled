@@ -1,4 +1,4 @@
-include README.rst LICENSE.md tox.ini setup.cfg
+include README.rst CHANGES.rst LICENSE.md tox.ini setup.cfg
 
 recursive-include oled *.py
 
