@@ -3,6 +3,9 @@ SSD1306 ChangeLog
 
 Upcoming
 --------
+* Add bouncy ball demo
+* Add bounding_box attribute to devices
+* Demote buffer & pages attributes to "internal use" only
 * Replaced SH1106 data sheet with version that is not "preliminary"
 * Add font attribution
 * Tests for SSD1306

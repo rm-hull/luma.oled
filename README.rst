@@ -26,12 +26,10 @@ of the RPi GPIO pins so that the pins are still available for other purposes.
 
 GPIO pin-outs
 -------------
-
 The SSD1306 device is an I2C device, so connecting to the RPi is very straightforward:
 
 P1 Header
 ^^^^^^^^^
-
 For prototyping, the P1 header pins should be connected as follows:
 
 ========== ====== ============ ======== ============== ========
@@ -49,7 +47,6 @@ Board Pin  Name   Remarks      RPi Pin  RPi Function   Colour
 
 P5 Header
 ^^^^^^^^^
-
 On rev.2 RPi's, right next to the male pins of the P1 header, there is a bare 
 P5 header which features I2C channel 0, although this doesn't appear to be
 initially enabled and may be configured for use with the Camera module. 
@@ -68,7 +65,6 @@ Board Pin  Name   Remarks      RPi Pin  RPi Function   Colour
 
 Pre-requisites
 --------------
-
 This was tested with Raspian on a rev.2 model B, with a vanilla kernel version 4.1.16+. 
 Ensure that the I2C kernel driver is enabled::
 
@@ -139,7 +135,6 @@ the device indicates it uses two addresses.
 
 Installing the Python Package
 -----------------------------
-
 For python2, from the bash prompt, enter::
 
   $ sudo python setup.py install
@@ -154,7 +149,6 @@ Alternatively for python3, type::
 
 Software Display Driver
 -----------------------
-
 The screen can be driven with python using the ``oled/device.py`` script.
 There are two device classes and usage is very simple if you have ever
 used `Pillow <https://pillow.readthedocs.io/en/latest/>`_ or PIL.
@@ -191,16 +185,40 @@ As soon as the with scope is ended, the resultant image is automatically
 flushed to the device's display memory and the ImageDraw object is
 garbage collected.
 
-Run the demos in the example directory::
+Examples
+^^^^^^^^
+After installing the library, enter the ``examples`` directory and try running
+the following examples:
 
-  $ python examples/demo.py
-  $ python examples/sys_info.py
-  $ python examples/pi_logo.py
-  $ python examples/maze.py
+=========== ========================================================
+Example     Description
+----------- --------------------------------------------------------
+demo.py     Use misc draw commands to create a simple image
+bounce.py   Display a bouncing ball animation and frames per second
+sys_info.py Display system information (as shown in the image above)
+pi_logo.py  Display the Raspberry Pi logo (loads image as .png)
+maze.py     Display a maze
+=========== ========================================================
+
+By default it will use port 1, address 0x3C and the ssd1306 driver. If you 
+need to use a different port, these can be specified on the command line - 
+each program can be invoked with a ``--help`` flag to show the options::
+
+  $ python demo.py --help
+  usage: demo.py [-h] [--port PORT] [--address ADDRESS] [--display DISPLAY]
+
+  oled arguments
+
+  optional arguments:
+    -h, --help            show this help message and exit
+    --port PORT, -p PORT  i2c bus number
+    --address ADDRESS, -a ADDRESS
+                          i2c display address
+    --display DISPLAY, -d DISPLAY
+                          display type, one of ssd1306 or sh1106
 
 Notes
------
-
+^^^^^
 #. Substitute ``python3`` for ``python`` in the above examples if you are using python3.
 #. ``python-dev`` (apt-get) and ``psutil`` (pip/pip3) are required to run the ``sys_info.py`` example. See `install instructions <https://github.com/rm-hull/ssd1306/blob/master/examples/sys_info.py#L3-L7>`_ for the exact commands to use.
 
@@ -220,7 +238,6 @@ Contributors
 
 References
 ----------
-
 - https://learn.adafruit.com/monochrome-oled-breakouts
 - https://github.com/adafruit/Adafruit_Python_SSD1306
 - http://www.dafont.com/bitmap.php
@@ -229,7 +246,6 @@ References
 
 License
 -------
-
 The MIT License (MIT)
 
 Copyright (c) 2016 Richard Hull
