@@ -124,9 +124,10 @@ class sh1106(device):
     def __init__(self, bus=None, port=1, address=0x3C, width=128, height=64):
         try:
             super(sh1106, self).__init__(bus, port, address)
+            self.bounding_box = (0, 0, width - 1, height - 1)
             self.width = width
             self.height = height
-            self.pages = int(self.height / 8)
+            self._pages = self.height // 8
 
             self.command(
                 const.DISPLAYOFF,
@@ -195,10 +196,12 @@ class ssd1306(device):
     def __init__(self, bus=None, port=1, address=0x3C, width=128, height=64):
         try:
             super(ssd1306, self).__init__(bus, port, address)
+            self.bounding_box = (0, 0, width - 1, height - 1)
             self.width = width
             self.height = height
-            self.pages = int(self.height / 8)
-            self.buf = [0] * self.width * self.pages
+            self._pages = self.height // 8
+            self._buffer = [0] * self.width * self._pages
+            self._offsets = [n * self.width for n in range(8)]
 
             self.command(
                 const.DISPLAYOFF,
@@ -236,15 +239,15 @@ class ssd1306(device):
             # Column start/end address
             const.COLUMNADDR, 0x00, self.width - 1,
             # Page start/end address
-            const.PAGEADDR, 0x00, self.pages - 1)
+            const.PAGEADDR, 0x00, self._pages - 1)
 
         pix = list(image.getdata())
         step = self.width * 8
-        buf = self.buf
+        buf = self._buffer
+        offsets = self._offsets
         w = self.width
         j = 0
-        offsets = [n * w for n in range(8)]
-        for y in range(0, self.pages * step, step):
+        for y in range(0, self._pages * step, step):
             i = y + w - 1
             while i >= y:
                 buf[j] = (pix[i] & 0x01) | \
