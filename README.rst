@@ -216,6 +216,7 @@ Contributors
 * Christoph Handel (@fragfutter)
 * Boeeerb (@Boeeerb)
 * xes (@xes)
+* Roger Dahl (@rogerdahl)
 
 References
 ----------
