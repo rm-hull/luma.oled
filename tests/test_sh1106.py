@@ -15,7 +15,7 @@ def teardown_function(function):
     bus.reset()
 
 
-def test_diplay():
+def test_display():
     device = sh1106(bus)
     bus.reset()
 
