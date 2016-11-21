@@ -10,16 +10,17 @@ SSD1306 / SH1106 OLED Driver
    :target: https://pypi.python.org/pypi/ssd1306
 
 Interfacing OLED matrix displays with the SSD1306 (or SH1106) driver in Python 2 or 3 using
-I2C on the Raspberry Pi. The particular kit I bought can be acquired for 
-a few pounds from `eBay <http://www.ebay.co.uk/itm/191279261331>`_. Further 
+I2C on the Raspberry Pi. The particular kit I bought can be acquired for
+a few pounds from `eBay <http://www.ebay.co.uk/itm/191279261331>`_. Further
 technical details for the SSD1306 OLED display can be found in the
 `datasheet <https://raw.githubusercontent.com/rm-hull/ssd1306/master/doc/tech-spec/SSD1306.pdf>`_.
 See also the datasheet for the `SH1106 chipset <https://raw.githubusercontent.com/rm-hull/ssd1306/sh1106-compat/doc/tech-spec/SH1106.pdf>`_.
 
-The SSD1306 display is 128x64 pixels, and the board is `tiny`, and will fit neatly
+The SSD1306 display pictured below is 128x64 pixels, and the board is `tiny`, and will fit neatly
 inside the RPi case (the SH1106 is slightly different, in that it supports 132 x 64
-pixels). My intention is to solder wires directly to the underside
-of the RPi GPIO pins so that the pins are still available for other purposes.
+pixels). My intention is to solder the wires directly to the underside
+of the RPi GPIO pins (P5 header) so that the pins are still available for other purposes, but
+the regular, top GPIO pins (P1 header) can also be used of course.
 
 .. image:: https://raw.githubusercontent.com/rm-hull/ssd1306/master/doc/mounted_display.jpg
    :alt: mounted
@@ -30,7 +31,7 @@ The SSD1306 device is an I2C device, so connecting to the RPi is very straightfo
 
 P1 Header
 ^^^^^^^^^
-For prototyping, the P1 header pins should be connected as follows:
+The P1 header pins should be connected as follows:
 
 ========== ====== ============ ======== ============== ========
 Board Pin  Name   Remarks      RPi Pin  RPi Function   Colour
@@ -47,9 +48,11 @@ Board Pin  Name   Remarks      RPi Pin  RPi Function   Colour
 
 P5 Header
 ^^^^^^^^^
-On rev.2 RPi's, right next to the male pins of the P1 header, there is a bare 
+You can also solder the wires directly to the underside of the RPi GPIO pins.
+
+On rev.2 RPi's, right next to the male pins of the P1 header, there is a bare
 P5 header which features I2C channel 0, although this doesn't appear to be
-initially enabled and may be configured for use with the Camera module. 
+initially enabled and may be configured for use with the Camera module.
 
 ========== ====== ============ ======== ============== ========
 Board Pin  Name   Remarks      RPi Pin  RPi Function   Colour
@@ -65,7 +68,7 @@ Board Pin  Name   Remarks      RPi Pin  RPi Function   Colour
 
 Pre-requisites
 --------------
-This was tested with Raspian on a rev.2 model B, with a vanilla kernel version 4.1.16+. 
+This was tested with Raspian on a rev.2 model B, with a vanilla kernel version 4.1.16+.
 Ensure that the I2C kernel driver is enabled::
 
   $ dmesg | grep i2c
@@ -75,8 +78,8 @@ Ensure that the I2C kernel driver is enabled::
 or::
 
   $ lsmod | grep i2c
-  i2c_dev                 5769  0 
-  i2c_bcm2708             4943  0 
+  i2c_dev                 5769  0
+  i2c_bcm2708             4943  0
   regmap_i2c              1661  3 snd_soc_pcm512x,snd_soc_wm8804,snd_soc_core
 
 If you have no kernel modules listed and nothing is showing using ``dmesg`` then this implies
@@ -90,10 +93,10 @@ the kernel I2C driver is not loaded. Enable the I2C as follows:
 #. Use the right arrow to select the **<Finish>** button
 #. Select **yes** when it asks to reboot
 
-After rebooting re-check that the ``dmesg | grep i2c`` command shows whether 
+After rebooting re-check that the ``dmesg | grep i2c`` command shows whether
 I2C driver is loaded before proceeding.
 
-Optionally, to improve permformance, increase the I2C baudrate from the default 
+Optionally, to improve permformance, increase the I2C baudrate from the default
 of 100KHz to 400KHz by altering ``/boot/config.txt`` to include::
 
   dtparam=i2c_arm=on,i2c_baudrate=400000
@@ -114,7 +117,7 @@ or (python3)::
   $ sudo apt-get install i2c-tools python3-dev python3-pip libfreetype6-dev libjpeg8-dev
   $ sudo pip3 install pillow
 
-Next check that the device is communicating properly (if using a rev.1 board, 
+Next check that the device is communicating properly (if using a rev.1 board,
 use 0 for the bus not 1)::
 
   $ i2cdetect -y 1
@@ -128,7 +131,7 @@ use 0 for the bus not 1)::
     60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
     70: -- -- -- -- -- -- -- --
 
-According to the manual, "UU" means that probing was skipped, 
+According to the manual, "UU" means that probing was skipped,
 because the address was in use by a driver. It suggest that
 there is a chip at that address. Indeed the documentation for
 the device indicates it uses two addresses.
@@ -164,8 +167,8 @@ First, import and initialise the device:
   # substitute sh1106(...) below if using that device
   device = ssd1306(port=1, address=0x3C)  # rev.1 users set port=0
 
-The display device should now be configured for use. The specific ``ssd1306`` or 
-``sh1106`` classes both expose a ``display()`` method which takes a 1-bit depth image. 
+The display device should now be configured for use. The specific ``ssd1306`` or
+``sh1106`` classes both expose a ``display()`` method which takes a 1-bit depth image.
 However, for most cases, for drawing text and graphics primitives, the canvas class
 should be used as follows:
 
@@ -200,8 +203,8 @@ pi_logo.py  Display the Raspberry Pi logo (loads image as .png)
 maze.py     Display a maze
 =========== ========================================================
 
-By default it will use port 1, address 0x3C and the ssd1306 driver. If you 
-need to use a different port, these can be specified on the command line - 
+By default it will use port 1, address 0x3C and the ssd1306 driver. If you
+need to use a different port, these can be specified on the command line -
 each program can be invoked with a ``--help`` flag to show the options::
 
   $ python demo.py --help
@@ -224,7 +227,7 @@ Notes
 
 Contributing
 ------------
-Pull requests (code changes / documentation / typos / feature requests / setup) are gladly accepted. If you are 
+Pull requests (code changes / documentation / typos / feature requests / setup) are gladly accepted. If you are
 intending some large-scale changes, please get in touch first to make sure we're on the same page: try and include
 a docstring for any new methods, and try and keep method bodies small, readable and PEP8-compliant.
 
