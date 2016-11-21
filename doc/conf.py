@@ -266,7 +266,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
     (master_doc, 'ssd1306.tex', 'ssd1306 Documentation',
-     'Richard Hull', 'manual'),
+     author, 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -344,5 +344,8 @@ texinfo_documents = [
 # texinfo_no_detailmenu = False
 
 
-# Example configuration for intersphinx: refer to the Python standard library.
-intersphinx_mapping = {'https://docs.python.org/2/': None}
+# Configuration for intersphinx.
+intersphinx_mapping = {
+    'python': ('https://docs.python.org/2', None),
+    'pillow': ('https://pillow.readthedocs.io/en/latest', None)
+}

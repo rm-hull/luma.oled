@@ -1,0 +1,7 @@
+# .coveragerc to control coverage.py
+[run]
+source = oled
+omit =
+    setup.py
+    .tox/*
+    doc/*
