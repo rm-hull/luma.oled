@@ -182,13 +182,12 @@ should be used as follows:
       draw.rectangle((0, 0, device.width, device.height), outline=0, fill=0)
       draw.text((30, 40), "Hello World", font=font, fill=255)
 
-The ``canvas`` class automatically creates an
-`ImageDraw <https://pillow.readthedocs.io/en/latest/reference/ImageDraw.html>`_
+The ``canvas`` class automatically creates an :mod:`PIL.ImageDraw`
 object of the correct dimensions and bit depth suitable for the device, so you
 may then call the usual Pillow methods to draw onto the canvas.
 
 As soon as the with scope is ended, the resultant image is automatically
-flushed to the device's display memory and the ImageDraw object is
+flushed to the device's display memory and the :mod:`PIL.ImageDraw` object is
 garbage collected.
 
 Examples
@@ -206,9 +205,9 @@ pi_logo.py  Display the Raspberry Pi logo (loads image as .png)
 maze.py     Display a maze
 =========== ========================================================
 
-By default it will use port 1, address 0x3C and the ssd1306 driver. If you
-need to use a different port, these can be specified on the command line -
-each program can be invoked with a ``--help`` flag to show the options::
+By default it will use port 1, address ``0x3C`` and the ``ssd1306`` driver.
+If you need to use a different port, these can be specified on the command
+line - each program can be invoked with a ``--help`` flag to show the options::
 
   $ python demo.py --help
   usage: demo.py [-h] [--port PORT] [--address ADDRESS] [--display DISPLAY]
