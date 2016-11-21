@@ -25,7 +25,7 @@ pixels). My intention is to solder the wires directly to the underside
 of the RPi GPIO pins (P5 header) so that the pins are still available for other purposes, but
 the regular, top GPIO pins (P1 header) can also be used of course.
 
-.. image:: https://raw.githubusercontent.com/rm-hull/ssd1306/master/doc/mounted_display.jpg
+.. image:: mounted_display.jpg
    :alt: mounted
 
 GPIO pin-outs
@@ -46,7 +46,7 @@ Board Pin  Name   Remarks      RPi Pin  RPi Function   Colour
 ========== ====== ============ ======== ============== ========
 
 
-.. image:: https://raw.githubusercontent.com/rm-hull/ssd1306/master/doc/GPIOs.png
+.. image:: GPIOs.png
    :alt: GPIOS
 
 P5 Header
@@ -66,7 +66,7 @@ Board Pin  Name   Remarks      RPi Pin  RPi Function   Colour
 4          SDA    Data         P5-03    GPIO 28 (SDA)  Grey
 ========== ====== ============ ======== ============== ========
 
-.. image:: https://raw.githubusercontent.com/rm-hull/ssd1306/master/doc/RPi_P5_header.png
+.. image:: RPi_P5_header.png
    :alt: P5 Header
 
 Pre-requisites
