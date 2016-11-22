@@ -4,10 +4,11 @@ ChangeLog
 +------------+---------------------------------------------------------------------+
 | Version    | Description                                                         |
 +============+=====================================================================+
-| *Upcoming* | * Improve benchmarking examples                                     |
+| *Upcoming* | * SPI support (**NOTE:** contains breaking changes)                 |
+|            | * Improve benchmarking examples                                     |
 |            | * Fix resource leakage & noops on emulated devices                  |
 |            | * Additional tests                                                  |
-+------------+---------------------------------------------------------------------+
+|------------+---------------------------------------------------------------------+
 | **0.3.5**  | * Pygame-based device emulator & screen capture device emulator     |
 |            | * Add bouncing balls demo, clock & Space Invaders examples          |
 |            | * Auto cleanup on exit                                              |
