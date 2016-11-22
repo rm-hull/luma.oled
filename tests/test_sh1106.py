@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from oled.serial import i2c
 from oled.device import sh1106
 from oled.render import canvas
 
@@ -8,6 +9,7 @@ import baseline_data
 
 port = 1
 bus = mock.smbus(port)
+serial = i2c(bus)
 addr = 0x3C
 
 
@@ -16,7 +18,7 @@ def teardown_function(function):
 
 
 def test_display():
-    device = sh1106(bus)
+    device = sh1106(serial)
     bus.reset()
 
     # Use the same drawing primitives as the demo

@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from oled.serial import i2c
 from oled.device import ssd1306
 from oled.render import canvas
 
@@ -8,6 +9,7 @@ import baseline_data
 
 port = 1
 bus = mock.smbus(port)
+serial = i2c(bus)
 addr = 0x3C
 
 
@@ -16,7 +18,7 @@ def teardown_function(function):
 
 
 def test_init():
-    ssd1306(bus)
+    ssd1306(serial)
     assert len(bus.recordings) == 35
     # Bursts 0/1 are initialization commands
     cmds = [174, 213, 128, 168, 63, 211, 0, 64, 141, 20, 32, 0,
@@ -36,7 +38,7 @@ def test_init():
 
 
 def test_hide():
-    device = ssd1306(bus)
+    device = ssd1306(serial)
     bus.reset()
     device.hide()
     assert len(bus.recordings) == 1
@@ -44,7 +46,7 @@ def test_hide():
 
 
 def test_show():
-    device = ssd1306(bus)
+    device = ssd1306(serial)
     bus.reset()
     device.show()
     assert len(bus.recordings) == 1
@@ -52,7 +54,7 @@ def test_show():
 
 
 def test_display():
-    device = ssd1306(bus)
+    device = ssd1306(serial)
     bus.reset()
 
     # Use the same drawing primitives as the demo
