@@ -11,8 +11,8 @@ parser.add_argument(
 
 parser.add_argument(
     '--address', '-a',
-    type=int,
-    default=0x3C,
+    type=str,
+    default='0x3C',
     help='i2c display address')
 
 parser.add_argument(
