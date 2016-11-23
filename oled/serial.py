@@ -41,16 +41,16 @@ class i2c(object):
 
     def command(self, *cmd):
 	"""
-	Sends a command or sequence of commands through to the
-	device - maximum allowed is 32 bytes in one go.
+	Sends a command or sequence of commands through to the I2C address
+	- maximum allowed is 32 bytes in one go.
 	"""
 	assert(len(cmd) <= 32)
 	self.bus.write_i2c_block_data(self.addr, self.cmd_mode, list(cmd))
 
     def data(self, data):
 	"""
-	Sends a data byte or sequence of data bytes through to the
-	device - maximum allowed in one transaction is 32 bytes, so if
+	Sends a data byte or sequence of data bytes through to the I2C
+	address - maximum allowed in one transaction is 32 bytes, so if
 	data is larger than this it is sent in chunks.
 	"""
 	i = 0
@@ -66,20 +66,17 @@ class spi(object):
     """
     Wraps an SPI interface to provide data and command methods.
     """
-    def __init__(self, bus=None, port=1, address=0x3C, width=128, height=64):
+    def __init__(self):
 	pass
 
     def command(self, *cmd):
 	"""
-	Sends a command or sequence of commands through to the
-	device - maximum allowed is 32 bytes in one go.
+	Sends a command or sequence of commands through the SPI
 	"""
 	raise NotImplementedError()
 
     def data(self, data):
 	"""
-	Sends a data byte or sequence of data bytes through to the
-	device - maximum allowed in one transaction is 32 bytes, so if
-	data is larger than this it is sent in chunks.
+	Sends a data byte or sequence of data bytes through the SPI
 	"""
 	raise NotImplementedError()
