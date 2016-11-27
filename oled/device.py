@@ -80,7 +80,7 @@ class device(object):
     def command(self, *cmd):
         """
         Sends a command or sequence of commands through to the delegated
-        serial interface - maximum allowed is 32 bytes in one go.
+        serial interface.
         """
         assert(len(cmd) <= 32)
         self._serial_interface.command(*cmd)
@@ -88,8 +88,7 @@ class device(object):
     def data(self, data):
         """
         Sends a data byte or sequence of data bytes through to the delegated
-        serial interface - maximum allowed in one transaction is 32 bytes,
-        so if data is larger than this it is sent in chunks.
+        serial interface.
         """
         self._serial_interface.data(data)
 
