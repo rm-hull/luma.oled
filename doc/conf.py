@@ -52,7 +52,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'Raspberry Pi SSD1306 / SH1106 OLED driver'
+project = 'SSD1306 / SH1106 OLED driver'
 copyright = u'{0}, Richard Hull'.format(datetime.now().year)
 author = 'Richard Hull'
 
@@ -323,7 +323,7 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
     (master_doc, 'ssd1306', 'ssd1306 Documentation',
-     author, 'ssd1306', 'Raspberry Pi SSD1306 / SH1106 OLED driver',
+     author, 'ssd1306', 'SSD1306 / SH1106 OLED driver',
      'Miscellaneous'),
 ]
 

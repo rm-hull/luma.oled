@@ -42,7 +42,7 @@ the following examples:
 
 =========== ========================================================
 Example     Description
------------ --------------------------------------------------------
+=========== ========================================================
 demo.py     Use misc draw commands to create a simple image
 bounce.py   Display a bouncing ball animation and frames per second
 sys_info.py Display system information (as shown in the image above)
