@@ -65,7 +65,7 @@ class device(object):
     """
 
     def __init__(self, serial_interface=None):
-	self._serial_interface = serial_interface or i2c()
+        self._serial_interface = serial_interface or i2c()
 
         def cleanup():
             self.clear()
@@ -79,19 +79,19 @@ class device(object):
 
     def command(self, *cmd):
         """
-	Sends a command or sequence of commands through to the delegated
-	serial interface - maximum allowed is 32 bytes in one go.
+        Sends a command or sequence of commands through to the delegated
+        serial interface - maximum allowed is 32 bytes in one go.
         """
         assert(len(cmd) <= 32)
-	self._serial_interface.command(*cmd)
+        self._serial_interface.command(*cmd)
 
     def data(self, data):
         """
-	Sends a data byte or sequence of data bytes through to the delegated
-	serial interface - maximum allowed in one transaction is 32 bytes,
-	so if data is larger than this it is sent in chunks.
+        Sends a data byte or sequence of data bytes through to the delegated
+        serial interface - maximum allowed in one transaction is 32 bytes,
+        so if data is larger than this it is sent in chunks.
         """
-	self._serial_interface.data(data)
+        self._serial_interface.data(data)
 
     def show(self):
         """
@@ -154,7 +154,7 @@ class sh1106(device, mixin.capabilities):
 
         except IOError as e:
             raise IOError(e.errno,
-                "Failed to initialize SH1106 display driver")
+                          "Failed to initialize SH1106 display driver")
 
     def display(self, image):
         """
@@ -195,7 +195,7 @@ class ssd1306(device, mixin.capabilities):
     """
     def __init__(self, serial_interface=None, width=128, height=64):
         try:
-	    super(ssd1306, self).__init__(serial_interface)
+            super(ssd1306, self).__init__(serial_interface)
             self.capabilities(width, height)
             self._pages = self.height // 8
             self._buffer = [0] * self.width * self._pages
@@ -223,7 +223,7 @@ class ssd1306(device, mixin.capabilities):
 
         except IOError as e:
             raise IOError(e.errno,
-                "Failed to initialize SSD1306 display driver")
+                          "Failed to initialize SSD1306 display driver")
 
     def display(self, image):
         """

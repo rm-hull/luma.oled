@@ -8,12 +8,16 @@ First, import and initialise the device:
 
 .. code:: python
 
+  from oled.serial import i2c
   from oled.device import ssd1306, sh1106
   from oled.render import canvas
   from PIL import ImageFont, ImageDraw
 
+  # rev.1 users set port=0
+  serial = i2c(port=1, address=0x3C)
+
   # substitute sh1106(...) below if using that device
-  device = ssd1306(port=1, address=0x3C)  # rev.1 users set port=0
+  device = ssd1306(serial)
 
 The display device should now be configured for use. The specific ``ssd1306`` or
 ``sh1106`` classes both expose a ``display()`` method which takes a 1-bit depth image.
@@ -62,18 +66,21 @@ By default it will use port 1, address ``0x3C`` and the ``ssd1306`` driver.
 If you need to use a different setting, these can be specified on the command
 line - each program can be invoked with a ``--help`` flag to show the options::
 
-  $ python demo.py --help
+  $ python examples/demo.py -h
   usage: demo.py [-h] [--port PORT] [--address ADDRESS] [--display DISPLAY]
+	      [--interface INTERFACE]
 
   oled arguments
 
   optional arguments:
-    -h, --help            show this help message and exit
-    --port PORT, -p PORT  i2c bus number
-    --address ADDRESS, -a ADDRESS
+  -h, --help            show this help message and exit
+  --port PORT, -p PORT  i2c bus number
+  --address ADDRESS, -a ADDRESS
                           i2c display address
-    --display DISPLAY, -d DISPLAY
+  --display DISPLAY, -d DISPLAY
                           display type, one of: ssd1306, sh1106, capture, pygame
+  --interface INTERFACE, -i INTERFACE
+			  serial interface type, one of i2c or spi
 
 .. note::
    #. Substitute ``python3`` for ``python`` in the above examples if you are using python3.

@@ -32,34 +32,33 @@ class i2c(object):
     Note: Only one of bus OR port arguments should be supplied; if both
     are, then bus takes precedence.
     """
-    def __init__(self, bus=None, port=1, address=0x3C, cmd_mode=0x00,
-		 data_mode=0x40):
-	self.cmd_mode = cmd_mode
-	self.data_mode = data_mode
-	self.bus = bus or smbus2.SMBus(port)
-	self.addr = address
+    def __init__(self, bus=None, port=1, address=0x3C, cmd_mode=0x00, data_mode=0x40):
+        self.cmd_mode = cmd_mode
+        self.data_mode = data_mode
+        self.bus = bus or smbus2.SMBus(port)
+        self.addr = address
 
     def command(self, *cmd):
-	"""
-	Sends a command or sequence of commands through to the I2C address
-	- maximum allowed is 32 bytes in one go.
-	"""
-	assert(len(cmd) <= 32)
-	self.bus.write_i2c_block_data(self.addr, self.cmd_mode, list(cmd))
+        """
+        Sends a command or sequence of commands through to the I2C address
+        - maximum allowed is 32 bytes in one go.
+        """
+        assert(len(cmd) <= 32)
+        self.bus.write_i2c_block_data(self.addr, self.cmd_mode, list(cmd))
 
     def data(self, data):
-	"""
-	Sends a data byte or sequence of data bytes through to the I2C
-	address - maximum allowed in one transaction is 32 bytes, so if
-	data is larger than this it is sent in chunks.
-	"""
-	i = 0
-	n = len(data)
-	while i < n:
-	    self.bus.write_i2c_block_data(self.addr,
-					  self.data_mode,
-					  list(data[i:i + 32]))
-	    i += 32
+        """
+        Sends a data byte or sequence of data bytes through to the I2C
+        address - maximum allowed in one transaction is 32 bytes, so if
+        data is larger than this it is sent in chunks.
+        """
+        i = 0
+        n = len(data)
+        while i < n:
+            self.bus.write_i2c_block_data(self.addr,
+                                          self.data_mode,
+                                          list(data[i:i + 32]))
+            i += 32
 
 
 class spi(object):
@@ -67,16 +66,16 @@ class spi(object):
     Wraps an SPI interface to provide data and command methods.
     """
     def __init__(self):
-	pass
+        pass
 
     def command(self, *cmd):
-	"""
-	Sends a command or sequence of commands through the SPI
-	"""
-	raise NotImplementedError()
+        """
+        Sends a command or sequence of commands through the SPI
+        """
+        raise NotImplementedError()
 
     def data(self, data):
-	"""
-	Sends a data byte or sequence of data bytes through the SPI
-	"""
-	raise NotImplementedError()
+        """
+        Sends a data byte or sequence of data bytes through the SPI
+        """
+        raise NotImplementedError()
