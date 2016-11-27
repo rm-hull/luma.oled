@@ -12,7 +12,7 @@ SSD1306 / SH1106 OLED Driver
    :target: https://pypi.python.org/pypi/ssd1306
 
 Interfacing OLED matrix displays with the SSD1306 (or SH1106) driver in Python 2 or 3 using
-I2C on the Raspberry Pi. The particular kit I bought can be acquired for
+I2C/SPI on the Raspberry Pi. The particular kit I bought can be acquired for
 a few pounds from `eBay <http://www.ebay.co.uk/itm/191279261331>`_. Further
 technical details for the SSD1306 OLED display can be found in the
 `datasheet <https://raw.githubusercontent.com/rm-hull/ssd1306/master/doc/tech-spec/SSD1306.pdf>`_.

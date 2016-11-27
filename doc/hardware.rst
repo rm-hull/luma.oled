@@ -57,7 +57,7 @@ OLED Pin   Name   Remarks      RPi Pin  RPi Function
 
 You can also solder the wires directly to the underside of the RPi GPIO pins.
 
-.. note::
+.. seealso::
 
   Alternatively, on rev.2 RPi's, right next to the male pins of the P1 header,
   there is a bare P5 header which features I2C channel 0, although this doesn't
@@ -65,7 +65,7 @@ You can also solder the wires directly to the underside of the RPi GPIO pins.
   module.
 
   +----------+------+-------------+---------+---------------+------------------------------+
-  | OLED Pin | Name | Remarks     | RPi Pin | RPi Function  |                              |
+  | OLED Pin | Name | Remarks     | RPi Pin | RPi Function  | Location                     |
   +==========+======+=============+=========+===============+==============================+
   | 1        | GND  | Ground      | P5-07   | GND           | .. image:: RPi_P5_header.png |
   +----------+------+-------------+---------+---------------+                              |
@@ -91,15 +91,10 @@ or::
 
 If you have no kernel modules listed and nothing is showing using ``dmesg``
 then this implies the kernel I2C driver is not loaded. Enable the I2C as
-follows:
+follows::
 
-#. Run ``sudo raspi-config``
-#. Use the down arrow to select ``9 Advanced Options``
-#. Arrow down to ``A7 I2C``
-#. Select **yes** when it asks you to enable I2C
-#. Also select **yes** when it asks about automatically loading the kernel module
-#. Use the right arrow to select the **<Finish>** button
-#. Select **yes** when it asks to reboot
+  $ sudo raspi-config
+  > Advanced Options > A7 I2C
 
 After rebooting re-check that the ``dmesg | grep i2c`` command shows whether
 I2C driver is loaded before proceeding.
@@ -111,16 +106,14 @@ of 100KHz to 400KHz by altering ``/boot/config.txt`` to include::
 
 Then reboot.
 
-Then add your user to the i2c group::
+Next, add your user to the *i2c* group and install ``i2c-tools``::
 
   $ sudo usermod -a G i2c pi
-
-Install some packages::
-
   $ sudo apt-get install i2c-tools
 
-Next check that the device is communicating properly (if using a rev.1 board,
-use 0 for the bus not 1)::
+Logout and in again so that the group membership permissions take effect, and
+then check that the device is communicating properly (if using a rev.1 board,
+use 0 for the bus, not 1)::
 
   $ i2cdetect -y 1
          0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
@@ -133,7 +126,7 @@ use 0 for the bus not 1)::
     60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
     70: -- -- -- -- -- -- -- --
 
-According to the manual, "UU" means that probing was skipped, because the
+According to the man-page, "UU" means that probing was skipped, because the
 address was in use by a driver. It suggest that there is a chip at that
 address. Indeed the documentation for the device indicates it uses two
 addresses.
@@ -194,9 +187,12 @@ Ensure that the SPI kernel driver is enabled::
 or::
 
   $ $ lsmod | grep spi
-  spi_bcm2835             6678  0 
+  spi_bcm2835             6678  0
 
-Then add your user to the spi and gpio groups::
+Then add your user to the *spi* and *gpio* groups::
 
   $ sudo usermod -a G spi pi
   $ sudo usermod -a G gpio pi
+
+Log out and back in again to ensure that the group permissions are applied
+successfully.

@@ -1,5 +1,9 @@
 Installation
 ------------
+.. warning::
+   Ensure that the pre-requisites from the previous section have been performed
+   and checked/tested before proceeding.
+
 .. note:: The library has been tested against Python 2.7 and 3.4.
 
    For **Python3** installation, substitute the following in the
@@ -15,10 +19,6 @@ Installation
    & model B2 (Debian Jessie) and OrangePi Zero (Armbian Jessie). There have
    been unconfirmed reports of the library **not** working on Raspberry Pi
    model B3.
-
-.. warning::
-   Ensure that the pre-requisites from the previous section have been performed
-   and checked/tested before proceeding.
 
 from PyPI
 ^^^^^^^^^
