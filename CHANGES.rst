@@ -1,8 +1,8 @@
-SSD1306 ChangeLog
-=================
+ChangeLog
+^^^^^^^^^
 
 Upcoming
---------
+""""""""
 * Add bouncy ball demo
 * Add bounding_box attribute to devices
 * Demote buffer & pages attributes to "internal use" only
@@ -14,31 +14,31 @@ Upcoming
 * Documentation updates
 
 0.3.4
------
+"""""
 * Performance improvements - render speeds ~2x faster
 * Documentation updates
 
 0.3.3
------
+"""""
 * Add PyPi badge
 * Use smbus2
 
 0.3.2
------
+"""""
 * Fix bug in maze example (integer division on python 3)
-* Use latest pip 
+* Use latest pip
 * Add tox & travis config (+ badge)
 * Add RTFD config
 * Documentation updates
 
 0.3.1
------
+"""""
 * Adjust requirements (remove smbus)
 * Default RTFD theme 
 * Documentation updates
 
 0.3.0
------
+"""""
 * Allow SMBus implementation to be supplied
 * Add show, hide and clear methods.
 * Catch & rethrow IOErrors
@@ -48,7 +48,7 @@ Upcoming
 * Documentation updates
 
 0.2.0
------
+"""""
 * Add python3 support
 * Add options to demos
 * Micro-optimizations

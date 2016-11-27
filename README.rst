@@ -6,6 +6,8 @@ SSD1306 / SH1106 OLED Driver
 .. image:: https://coveralls.io/repos/github/rm-hull/ssd1306/badge.svg?branch=master
    :target: https://coveralls.io/github/rm-hull/ssd1306?branch=master
 
+.. image:: https://img.shields.io/maintenance/yes/2016.svg?maxAge=2592000
+
 .. image:: https://img.shields.io/pypi/v/ssd1306.svg
    :target: https://pypi.python.org/pypi/ssd1306
 
@@ -25,30 +27,7 @@ pixels).
 
 Documentation
 -------------
-
 Full documentation with installation instructions and examples can be found on https://ssd1306.readthedocs.io.
-
-Contributing
-------------
-Pull requests (code changes / documentation / typos / feature requests / setup) are gladly accepted. If you are
-intending some large-scale changes, please get in touch first to make sure we're on the same page: try and include
-a docstring for any new methods, and try and keep method bodies small, readable and PEP8-compliant.
-
-Contributors
-^^^^^^^^^^^^
-* Thijs Triemstra (@thijstriemstra)
-* Christoph Handel (@fragfutter)
-* Boeeerb (@Boeeerb)
-* xes (@xes)
-* Roger Dahl (@rogerdahl)
-
-References
-----------
-- https://learn.adafruit.com/monochrome-oled-breakouts
-- https://github.com/adafruit/Adafruit_Python_SSD1306
-- http://www.dafont.com/bitmap.php
-- http://raspberrypi.znix.com/hipidocs/topic_i2cbus_2.htm
-- http://martin-jones.com/2013/08/20/how-to-get-the-second-raspberry-pi-i2c-bus-to-work/
 
 License
 -------
