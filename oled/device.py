@@ -53,6 +53,7 @@
 import atexit
 import smbus2
 from PIL import Image
+import oled.mixin as mixin
 
 
 class device(object):
@@ -120,7 +121,7 @@ class device(object):
         self.display(Image.new('1', (self.width, self.height)))
 
 
-class sh1106(device):
+class sh1106(device, mixin.capabilities):
     """
     A device encapsulates the I2C connection (address/port) to the SH1106
     OLED display hardware. The init method pumps commands to the display
@@ -135,6 +136,7 @@ class sh1106(device):
     def __init__(self, bus=None, port=1, address=0x3C, width=128, height=64):
         try:
             super(sh1106, self).__init__(bus, port, address)
+            self.capabilities(width, height)
             self.bounding_box = (0, 0, width - 1, height - 1)
             self.width = width
             self.height = height
@@ -193,7 +195,7 @@ class sh1106(device):
             self.data(buf)
 
 
-class ssd1306(device):
+class ssd1306(device, mixin.capabilities):
     """
     A device encapsulates the I2C connection (address/port) to the SSD1306
     OLED display hardware. The init method pumps commands to the display
@@ -207,9 +209,7 @@ class ssd1306(device):
     def __init__(self, bus=None, port=1, address=0x3C, width=128, height=64):
         try:
             super(ssd1306, self).__init__(bus, port, address)
-            self.bounding_box = (0, 0, width - 1, height - 1)
-            self.width = width
-            self.height = height
+            self.capabilities(width, height)
             self._pages = self.height // 8
             self._buffer = [0] * self.width * self._pages
             self._offsets = [n * self.width for n in range(8)]
@@ -276,30 +276,16 @@ class ssd1306(device):
         self.data(buf)
 
 
-class capture(device):
+class capture(device, mixin.noop, mixin.capabilities):
     """
     Pseudo-device that acts like an OLED display, except that it writes
     the image to a numbered PNG file when the :func:`display` method
     is called.
     """
     def __init__(self, width=128, height=64, file_template="oled_{0:06}.png", **kwargs):
-        self.bounding_box = (0, 0, width - 1, height - 1)
-        self.width = width
-        self.height = height
+        self.capabilities(width, height)
         self._count = 0
         self._file_template = file_template
-
-    def data(self, data):
-        """
-        No-op
-        """
-        pass
-
-    def command(self, *cmd):
-        """
-        No-op
-        """
-        pass
 
     def display(self, image):
         """
@@ -316,12 +302,10 @@ class capture(device):
             image.save(fp, "png")
 
 
-class pygame(device):
+class pygame(device, mixin.noop, mixin.capabilities):
 
     def __init__(self, width=128, height=64, **kwargs):
-        self.bounding_box = (0, 0, width - 1, height - 1)
-        self.width = width
-        self.height = height
+        self.capabilities(width, height)
 
         import pygame
         pygame.init()
@@ -331,17 +315,11 @@ class pygame(device):
         pygame.display.update()
 
         self._pygame = pygame
-        #self._background = pygame.Surface(self._screen.get_size())
-        #self._background = self._background.convert()
-        #self._background.fill((250, 250, 0))
-        #self._screen.blit(self._background, (0, 0))
-        #pygame.display.flip()
-
-    def show(self):
-        raise NotImplementedError()
-
-    def hide(self):
-        raise NotImplementedError()
+        # self._background = pygame.Surface(self._screen.get_size())
+        # self._background = self._background.convert()
+        # self._background.fill((250, 250, 0))
+        # self._screen.blit(self._background, (0, 0))
+        # pygame.display.flip()
 
     def display(self, image):
         im = image.convert("RGB")
