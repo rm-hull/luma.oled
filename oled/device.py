@@ -320,15 +320,18 @@ class pygame(device, mixin.noop, mixin.capabilities):
     def __init__(self, width=128, height=64, frame_rate=60, **kwargs):
         self.capabilities(width, height, mode="RGB")
 
-        import pygame
-        pygame.init()
-        pygame.font.init()
-        self._clock = pygame.time.Clock()
-        self._fps = frame_rate
-        self._screen = pygame.display.set_mode((width, height))
-        self._screen.fill((0, 0, 0))
-        self._pygame = pygame
-        pygame.display.flip()
+        try:
+            import pygame
+            pygame.init()
+            pygame.font.init()
+            self._clock = pygame.time.Clock()
+            self._fps = frame_rate
+            self._screen = pygame.display.set_mode((width, height))
+            self._screen.fill((0, 0, 0))
+            self._pygame = pygame
+            pygame.display.flip()
+        except ImportError:
+            raise RuntimeError("Pygame is not an explicit dependency, and must be installed separately")
 
     def _abort(self):
         keystate = self._pygame.key.get_pressed()
