@@ -37,12 +37,12 @@ def main():
                 sec_angle = 270 + (6 * now.second)
                 secs = posn(sec_angle, 18)
 
-                draw.ellipse((10, 12, 50, 52), outline=255)
-                draw.line((30, 32, 30 + hrs[0], 32 + hrs[1]), fill=255)
-                draw.line((30, 32, 30 + mins[0], 32 + mins[1]), fill=255)
-                draw.line((30, 32, 30 + secs[0], 32 + secs[1]), fill=255)
-                draw.text((60, 24), today_date, fill=255)
-                draw.text((60, 32), today_time, fill=255)
+                draw.ellipse((10, 12, 50, 52), outline="white")
+                draw.line((30, 32, 30 + hrs[0], 32 + hrs[1]), fill="white")
+                draw.line((30, 32, 30 + mins[0], 32 + mins[1]), fill="white")
+                draw.line((30, 32, 30 + secs[0], 32 + secs[1]), fill="white")
+                draw.text((60, 24), today_date, fill="white")
+                draw.text((60, 32), today_time, fill="white")
                 today_last_time = today_time
         time.sleep(0.5)
 

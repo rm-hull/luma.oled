@@ -24,8 +24,8 @@ should be used as follows:
 
   with canvas(device) as draw:
       font = ImageFont.load_default()
-      draw.rectangle((0, 0, device.width, device.height), outline=0, fill=0)
-      draw.text((30, 40), "Hello World", font=font, fill=255)
+      draw.rectangle((0, 0, device.width, device.height), outline=0, fill="black")
+      draw.text((30, 40), "Hello World", font=font, fill="white")
 
 The ``canvas`` class automatically creates an :mod:`PIL.ImageDraw`
 object of the correct dimensions and bit depth suitable for the device, so you
@@ -34,6 +34,11 @@ may then call the usual Pillow methods to draw onto the canvas.
 As soon as the with scope is ended, the resultant image is automatically
 flushed to the device's display memory and the :mod:`PIL.ImageDraw` object is
 garbage collected.
+
+.. note::
+   Any of the standard :mod:`PIL.ImageColor` color formats may be used, but since
+   the OLED is monochrome, only the HTML color names``"black"`` and ``"white"`` 
+   values should really be used. 
 
 Examples
 ^^^^^^^^

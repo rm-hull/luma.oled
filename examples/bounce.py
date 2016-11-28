@@ -41,7 +41,7 @@ class Ball(object):
 
     def draw(self, canvas):
         canvas.ellipse((self._x_pos - self._radius, self._y_pos - self._radius,
-                       self._x_pos + self._radius, self._y_pos + self._radius), fill=255)
+                       self._x_pos + self._radius, self._y_pos + self._radius), fill="white")
 
 
 def main():
@@ -59,11 +59,11 @@ def main():
     while True:
         frame_count += 1
         with canvas as c:
-            c.rectangle(device.bounding_box, outline=255, fill=0)
+            c.rectangle(device.bounding_box, outline="white", fill="black")
             for b in balls:
                 b.update_pos()
                 b.draw(c)
-                c.text((2, 0), fps, font=font, fill=255)
+                c.text((2, 0), fps, font=font, fill="white")
 
                 now = time.time()
                 if now - last_time > 1:

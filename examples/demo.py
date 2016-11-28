@@ -25,25 +25,25 @@ def primitives(draw):
     top = padding
     bottom = device.height - padding - 1
     # Draw a rectangle of the same size of screen
-    draw.rectangle(device.bounding_box, outline=255, fill=0)
+    draw.rectangle(device.bounding_box, outline="white", fill="black")
     # Move left to right keeping track of the current x position for drawing shapes.
     x = padding
     # Draw an ellipse.
-    draw.ellipse((x, top, x + shape_width, bottom), outline=255, fill=0)
+    draw.ellipse((x, top, x + shape_width, bottom), outline="white", fill="black")
     x += shape_width + padding
     # Draw a rectangle.
-    draw.rectangle((x, top, x + shape_width, bottom), outline=255, fill=0)
+    draw.rectangle((x, top, x + shape_width, bottom), outline="white", fill="black")
     x += shape_width + padding
     # Draw a triangle.
-    draw.polygon([(x, bottom), (x + shape_width / 2, top), (x + shape_width, bottom)], outline=255, fill=0)
+    draw.polygon([(x, bottom), (x + shape_width / 2, top), (x + shape_width, bottom)], outline="white", fill="black")
     x += shape_width + padding
     # Draw an X.
-    draw.line((x, bottom, x + shape_width, top), fill=255)
-    draw.line((x, top, x + shape_width, bottom), fill=255)
+    draw.line((x, bottom, x + shape_width, top), fill="white")
+    draw.line((x, top, x + shape_width, bottom), fill="white")
     x += shape_width + padding
     # Write two lines of text.
-    draw.text((x, top),    'Hello',  font=font, fill=255)
-    draw.text((x, top + 20), 'World!', font=font, fill=255)
+    draw.text((x, top),    'Hello',  font=font, fill="white")
+    draw.text((x, top + 20), 'World!', font=font, fill="white")
 
 
 def main():
@@ -70,8 +70,8 @@ def main():
     for x in range(30):
         with canvas(device) as draw:
             now = datetime.datetime.now()
-            draw.text((x, 10), str(now.date()), fill=255)
-            draw.text((10, 24), str(now.time()), fill=255)
+            draw.text((x, 10), str(now.date()), fill="white")
+            draw.text((10, 24), str(now.time()), fill="white")
             time.sleep(1)
 
 

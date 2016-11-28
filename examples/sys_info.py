@@ -74,11 +74,11 @@ def stats(oled):
     font2 = ImageFont.truetype(font_path, 12)
 
     with canvas(oled) as draw:
-        draw.text((0, 0), cpu_usage(), font=font2, fill=255)
-        draw.text((0, 14), mem_usage(), font=font2, fill=255)
-        draw.text((0, 26), disk_usage('/'), font=font2, fill=255)
+        draw.text((0, 0), cpu_usage(), font=font2, fill="white")
+        draw.text((0, 14), mem_usage(), font=font2, fill="white")
+        draw.text((0, 26), disk_usage('/'), font=font2, fill="white")
         try:
-            draw.text((0, 38), network('wlan0'), font=font2, fill=255)
+            draw.text((0, 38), network('wlan0'), font=font2, fill="white")
         except KeyError:
             # no wifi enabled/available
             pass

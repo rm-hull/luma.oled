@@ -11,19 +11,19 @@ def primitives(device, draw):
     shape_width = 20
     top = padding
     bottom = device.height - padding - 1
-    draw.rectangle(device.bounding_box, outline=255, fill=0)
+    draw.rectangle(device.bounding_box, outline="white", fill="black")
     x = padding
-    draw.ellipse((x, top, x + shape_width, bottom), outline=255, fill=0)
+    draw.ellipse((x, top, x + shape_width, bottom), outline="white", fill="black")
     x += shape_width + padding
-    draw.rectangle((x, top, x + shape_width, bottom), outline=255, fill=0)
+    draw.rectangle((x, top, x + shape_width, bottom), outline="white", fill="black")
     x += shape_width + padding
-    draw.polygon([(x, bottom), (x + shape_width / 2, top), (x + shape_width, bottom)], outline=255, fill=0)
+    draw.polygon([(x, bottom), (x + shape_width / 2, top), (x + shape_width, bottom)], outline="white", fill="black")
     x += shape_width + padding
-    draw.line((x, bottom, x + shape_width, top), fill=255)
-    draw.line((x, top, x + shape_width, bottom), fill=255)
+    draw.line((x, bottom, x + shape_width, top), fill="white")
+    draw.line((x, top, x + shape_width, bottom), fill="white")
     x += shape_width + padding
-    draw.text((x, top),    'Hello',  font=font, fill=255)
-    draw.text((x, top + 20), 'World!', font=font, fill=255)
+    draw.text((x, top),    'Hello',  font=font, fill="white")
+    draw.text((x, top + 20), 'World!', font=font, fill="white")
 
 
 # These datasets are purely to prevent regression bugs from creeping in
