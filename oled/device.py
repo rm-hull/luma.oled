@@ -312,27 +312,23 @@ class pygame(device, mixin.noop, mixin.capabilities):
         pygame.font.init()
         self._screen = pygame.display.set_mode((width, height))
         self._screen.fill((0, 0, 0))
-        pygame.display.update()
-
         self._pygame = pygame
-        # self._background = pygame.Surface(self._screen.get_size())
-        # self._background = self._background.convert()
-        # self._background.fill((250, 250, 0))
-        # self._screen.blit(self._background, (0, 0))
-        # pygame.display.flip()
 
     def display(self, image):
+        assert(image.mode == '1')
+        assert(image.size[0] == self.width)
+        assert(image.size[1] == self.height)
+
         im = image.convert("RGB")
         mode = im.mode
         size = im.size
         data = im.tobytes()
-        assert mode in "RGB", "RGBA"
+        assert(mode in "RGB", "RGBA")
 
         surface = self._pygame.image.fromstring(data, size, mode)
-        surface = self._pygame.image.load("examples/images/balloon.bmp")
 
         self._screen.blit(surface, (0, 0))
-        self._pygame.display.flip()
+        self._pygame.display.update()
         self._pygame.time.delay(10)
 
 
