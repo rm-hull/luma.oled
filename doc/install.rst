@@ -66,6 +66,10 @@ or (python3)::
   $ sudo apt-get install i2c-tools python3-dev python3-pip libfreetype6-dev libjpeg8-dev
   $ sudo pip3 install pillow
 
+.. note::
+   Some Debian-based systems do not have install candidates for *libjpeg8-dev*, and 
+   will suggest *libjpeg62-turbo-dev* - this should work equally as well.
+
 Next check that the device is communicating properly (if using a rev.1 board,
 use 0 for the bus not 1)::
 
