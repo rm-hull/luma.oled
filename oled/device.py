@@ -22,7 +22,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-
 # Example usage:
 #
 #   from oled.device import ssd1306, sh1106
@@ -49,6 +48,7 @@
 # As before, as soon as the with block completes, the canvas buffer is flushed
 # to the device
 
+import sys
 import atexit
 import smbus2
 from PIL import Image
@@ -280,15 +280,18 @@ class capture(device, mixin.noop, mixin.capabilities):
     Pseudo-device that acts like an OLED display, except that it writes
     the image to a numbered PNG file when the :func:`display` method
     is called.
+
+    While the capability of an OLED device is monochrome, there is no
+    limitation here, and hence supports 24-bit color depth.
     """
     def __init__(self, width=128, height=64, file_template="oled_{0:06}.png", **kwargs):
-        self.capabilities(width, height)
+        self.capabilities(width, height, mode="RGB")
         self._count = 0
         self._file_template = file_template
 
     def display(self, image):
         """
-        Takes a 1-bit image and dumps it to a numbered PNG file.
+        Takes an image and dumps it to a numbered PNG file.
         """
         assert(image.mode == self.mode)
         assert(image.size[0] == self.width)
@@ -302,21 +305,49 @@ class capture(device, mixin.noop, mixin.capabilities):
 
 
 class pygame(device, mixin.noop, mixin.capabilities):
+    """
+    Pseudo-device that acts like an OLED display, except that it renders
+    to an displayed window. The frame rate is limited to 60FPS (much faster
+    than a Raspberry Pi can acheive, but this can be overridden as necessary).
 
-    def __init__(self, width=128, height=64, **kwargs):
+    While the capability of an OLED device is monochrome, there is no
+    limitation here, and hence supports 24-bit color depth.
+
+    :mod:`pygame` is used to render the emulated display window, and it's
+    event loop is checked to see if the ESC key was pressed or the window
+    was dismissed: if so `sys.exit()` is called.
+    """
+    def __init__(self, width=128, height=64, frame_rate=60, **kwargs):
         self.capabilities(width, height, mode="RGB")
 
         import pygame
         pygame.init()
         pygame.font.init()
+        self._clock = pygame.time.Clock()
+        self._fps = frame_rate
         self._screen = pygame.display.set_mode((width, height))
         self._screen.fill((0, 0, 0))
         self._pygame = pygame
+        pygame.display.flip()
+
+    def _abort(self):
+        keystate = self._pygame.key.get_pressed()
+        return keystate[self._pygame.K_ESCAPE] or self._pygame.event.peek(self._pygame.QUIT)
 
     def display(self, image):
+        """
+        Takes an image and renders it to a pygame display surface.
+        """
         assert(image.mode == self.mode)
         assert(image.size[0] == self.width)
         assert(image.size[1] == self.height)
+
+        self._clock.tick(self._fps)
+        self._pygame.event.pump()
+
+        if self._abort():
+            self._pygame.quit()
+            sys.exit()
 
         im = image.convert("RGB")
         mode = im.mode
@@ -325,10 +356,8 @@ class pygame(device, mixin.noop, mixin.capabilities):
         assert(mode in ("RGB", "RGBA"))
 
         surface = self._pygame.image.fromstring(data, size, mode)
-
         self._screen.blit(surface, (0, 0))
         self._pygame.display.update()
-        self._pygame.time.delay(10)
 
 
 class const:
