@@ -15,9 +15,8 @@ if os.name != 'posix':
 
 import psutil
 
-from oled.device import ssd1306
+from demo_opts import device
 from oled.render import canvas
-
 from PIL import ImageFont
 
 # TODO: custom font bitmaps for up/down arrows
@@ -86,9 +85,8 @@ def stats(oled):
 
 
 def main():
-    oled = ssd1306(port=1, address=0x3C)
     while True:
-        stats(oled)
+        stats(device)
         time.sleep(5)
 
 
