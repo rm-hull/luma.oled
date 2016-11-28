@@ -71,7 +71,7 @@ line - each program can be invoked with a ``--help`` flag to show the options::
     --address ADDRESS, -a ADDRESS
                           i2c display address
     --display DISPLAY, -d DISPLAY
-                          display type, one of: ssd1306, sh1106, capture
+                          display type, one of: ssd1306, sh1106, capture, pygame
 
 .. note::
    #. Substitute ``python3`` for ``python`` in the above examples if you are using python3.
