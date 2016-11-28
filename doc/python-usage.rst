@@ -43,11 +43,12 @@ the following examples:
 =========== ========================================================
 Example     Description
 =========== ========================================================
-demo.py     Use misc draw commands to create a simple image
 bounce.py   Display a bouncing ball animation and frames per second
-sys_info.py Display system information (as shown in the image above)
-pi_logo.py  Display the Raspberry Pi logo (loads image as .png)
+clock.py    Display an analog clockface with date & time
+demo.py     Use misc draw commands to create a simple image
 maze.py     Display a maze
+pi_logo.py  Display the Raspberry Pi logo (loads image as .png)
+sys_info.py Display system information (as shown in the image above)
 =========== ========================================================
 
 By default it will use port 1, address ``0x3C`` and the ``ssd1306`` driver.
