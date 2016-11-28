@@ -32,7 +32,9 @@ class noop(object):
 
 
 class capabilities(object):
-    def capabilities(self, width, height):
+    def capabilities(self, width, height, mode="1"):
+        assert mode in ("1", "RGB", "RGBA")
         self.width = width
         self.height = height
+        self.mode = mode
         self.bounding_box = (0, 0, self.width - 1, self.height - 1)

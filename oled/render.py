@@ -61,7 +61,7 @@ class canvas(object):
     """
     def __init__(self, device):
         self.draw = None
-        self.image = Image.new('1', (device.width, device.height))
+        self.image = Image.new(device.mode, (device.width, device.height))
         self.device = device
 
     def __enter__(self):

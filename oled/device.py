@@ -169,7 +169,7 @@ class sh1106(device, mixin.capabilities):
         """
         Takes a 1-bit image and dumps it to the SH1106 OLED display.
         """
-        assert(image.mode == '1')
+        assert(image.mode == self.mode)
         assert(image.size[0] == self.width)
         assert(image.size[1] == self.height)
 
@@ -241,7 +241,7 @@ class ssd1306(device, mixin.capabilities):
         """
         Takes a 1-bit image and dumps it to the SSD1306 OLED display.
         """
-        assert(image.mode == '1')
+        assert(image.mode == self.mode)
         assert(image.size[0] == self.width)
         assert(image.size[1] == self.height)
 
@@ -290,7 +290,7 @@ class capture(device, mixin.noop, mixin.capabilities):
         """
         Takes a 1-bit image and dumps it to a numbered PNG file.
         """
-        assert(image.mode == '1')
+        assert(image.mode == self.mode)
         assert(image.size[0] == self.width)
         assert(image.size[1] == self.height)
 
@@ -304,7 +304,7 @@ class capture(device, mixin.noop, mixin.capabilities):
 class pygame(device, mixin.noop, mixin.capabilities):
 
     def __init__(self, width=128, height=64, **kwargs):
-        self.capabilities(width, height)
+        self.capabilities(width, height, mode="RGB")
 
         import pygame
         pygame.init()
@@ -314,7 +314,7 @@ class pygame(device, mixin.noop, mixin.capabilities):
         self._pygame = pygame
 
     def display(self, image):
-        assert(image.mode == '1')
+        assert(image.mode == self.mode)
         assert(image.size[0] == self.width)
         assert(image.size[1] == self.height)
 
@@ -322,7 +322,7 @@ class pygame(device, mixin.noop, mixin.capabilities):
         mode = im.mode
         size = im.size
         data = im.tobytes()
-        assert(mode in "RGB", "RGBA")
+        assert(mode in ("RGB", "RGBA"))
 
         surface = self._pygame.image.fromstring(data, size, mode)
 
