@@ -314,6 +314,50 @@ class capture(device):
         with open(filename, "wb") as fp:
             print("Writing: {0}".format(filename))
             image.save(fp, "png")
+
+
+class pygame(device):
+
+    def __init__(self, width=128, height=64, **kwargs):
+        self.bounding_box = (0, 0, width - 1, height - 1)
+        self.width = width
+        self.height = height
+
+        import pygame
+        pygame.init()
+        pygame.font.init()
+        self._screen = pygame.display.set_mode((width, height))
+        self._screen.fill((0, 0, 0))
+        pygame.display.update()
+
+        self._pygame = pygame
+        #self._background = pygame.Surface(self._screen.get_size())
+        #self._background = self._background.convert()
+        #self._background.fill((250, 250, 0))
+        #self._screen.blit(self._background, (0, 0))
+        #pygame.display.flip()
+
+    def show(self):
+        raise NotImplementedError()
+
+    def hide(self):
+        raise NotImplementedError()
+
+    def display(self, image):
+        im = image.convert("RGB")
+        mode = im.mode
+        size = im.size
+        data = im.tobytes()
+        assert mode in "RGB", "RGBA"
+
+        surface = self._pygame.image.fromstring(data, size, mode)
+        surface = self._pygame.image.load("examples/images/balloon.bmp")
+
+        self._screen.blit(surface, (0, 0))
+        self._pygame.display.flip()
+        self._pygame.time.delay(10)
+
+
 class const:
     CHARGEPUMP = 0x8D
     COLUMNADDR = 0x21
