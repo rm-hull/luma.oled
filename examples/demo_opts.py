@@ -17,11 +17,11 @@ parser.add_argument(
     '--display', '-d',
     type=str,
     default='ssd1306',
-    help='display type, one of ssd1306 or sh1106',
+    help='display type, one of: ssd1306, sh1106, capture',
 )
 
 args = parser.parse_args()
-if args.display not in ('ssd1306', 'sh1106'):
+if args.display not in ('ssd1306', 'sh1106', 'capture'):
     parser.error('unknown display %s' % args.display)
 try:
     args.address = int(args.address, 0)

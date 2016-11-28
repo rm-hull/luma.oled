@@ -276,6 +276,44 @@ class ssd1306(device):
         self.data(buf)
 
 
+class capture(device):
+    """
+    Pseudo-device that acts like an OLED display, except that it writes
+    the image to a numbered PNG file when the :func:`display` method
+    is called.
+    """
+    def __init__(self, width=128, height=64, file_template="oled_{0:06}.png", **kwargs):
+        self.bounding_box = (0, 0, width - 1, height - 1)
+        self.width = width
+        self.height = height
+        self._count = 0
+        self._file_template = file_template
+
+    def data(self, data):
+        """
+        No-op
+        """
+        pass
+
+    def command(self, *cmd):
+        """
+        No-op
+        """
+        pass
+
+    def display(self, image):
+        """
+        Takes a 1-bit image and dumps it to a numbered PNG file.
+        """
+        assert(image.mode == '1')
+        assert(image.size[0] == self.width)
+        assert(image.size[1] == self.height)
+
+        self._count += 1
+        filename = self._file_template.format(self._count)
+        with open(filename, "wb") as fp:
+            print("Writing: {0}".format(filename))
+            image.save(fp, "png")
 class const:
     CHARGEPUMP = 0x8D
     COLUMNADDR = 0x21
