@@ -49,9 +49,10 @@ the following examples:
 Example     Description
 =========== ========================================================
 bounce.py   Display a bouncing ball animation and frames per second
-clock.py    Display an analog clockface with date & time
+clock.py    An analog clockface with date & time
 demo.py     Use misc draw commands to create a simple image
-maze.py     Display a maze
+invaders.py Space Invaders demo
+maze.py     Maze generator
 pi_logo.py  Display the Raspberry Pi logo (loads image as .png)
 sys_info.py Display system information (as shown in the image above)
 =========== ========================================================
