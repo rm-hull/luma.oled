@@ -32,6 +32,7 @@
 #   device = ssd1306(port=1, address=0x3C)
 #
 #   with canvas(device) as draw:
+#      draw.rectangle((0, 0, device.width, device.height), outline="white", fill="black")
 #      draw.text(30, 40, "Hello World", font=font, fill="white")
 #
 # As soon as the with-block scope level is complete, the graphics primitives

@@ -4,13 +4,14 @@ ChangeLog
 +------------+---------------------------------------------------------------------+
 | Version    | Description                                                         |
 +============+=====================================================================+
-| *Upcoming* | * Auto cleanup on exit                                              |
-|            | * Add bouncy ball demo                                              |
+| *Upcoming* | * Pygame-based device emulator & screen capture device emulator     |
+|            | * Add bouncing balls demo, clock & Space Invaders examples          |
+|            | * Auto cleanup on exit                                              |
 |            | * Add bounding_box attribute to devices                             |
 |            | * Demote buffer & pages attributes to "internal use" only           |
 |            | * Replaced SH1106 data sheet with version that is not "preliminary" |
 |            | * Add font attribution                                              |
-|            | * Tests for SSD1306                                                 |
+|            | * Tests for SSD1306 & SSH1106 devices                               |
 |            | * Add code coverage & upload to coveralls.io                        |
 |            | * flake8 code compliance                                            |
 |            | * Documentation updates                                             |

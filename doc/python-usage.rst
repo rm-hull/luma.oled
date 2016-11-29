@@ -24,7 +24,7 @@ should be used as follows:
 
   with canvas(device) as draw:
       font = ImageFont.load_default()
-      draw.rectangle((0, 0, device.width, device.height), outline=0, fill="black")
+      draw.rectangle((0, 0, device.width, device.height), outline="white", fill="black")
       draw.text((30, 40), "Hello World", font=font, fill="white")
 
 The :class:`oled.render.canvas` class automatically creates an :mod:`PIL.ImageDraw`
