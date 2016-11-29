@@ -10,7 +10,7 @@ will have 6 or 7 pins.
 If you have a SPI display, check the back of your display for a configuration
 such as this:
 
-.. image:: serial_config.jpg
+.. image:: images/serial_config.jpg
    :alt: serial config
 
 For this display, the two 0 Ohm (jumper) resistors have been connected to "0"
