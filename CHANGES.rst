@@ -4,7 +4,9 @@ ChangeLog
 +------------+---------------------------------------------------------------------+
 | Version    | Description                                                         |
 +============+=====================================================================+
-| *Upcoming* | * Pygame-based device emulator & screen capture device emulator     |
+| *Upcoming* | *TBD*                                                               |
++------------+---------------------------------------------------------------------+
+| **0.3.5**  | * Pygame-based device emulator & screen capture device emulator     |
 |            | * Add bouncing balls demo, clock & Space Invaders examples          |
 |            | * Auto cleanup on exit                                              |
 |            | * Add bounding_box attribute to devices                             |
