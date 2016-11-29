@@ -117,7 +117,7 @@ class device(object):
         """
         Initializes the device memory with an empty (blank) image.
         """
-        self.display(Image.new('1', (self.width, self.height)))
+        self.display(Image.new(self.mode, (self.width, self.height)))
 
 
 class sh1106(device, mixin.capabilities):
