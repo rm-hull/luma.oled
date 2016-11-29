@@ -4,7 +4,8 @@ ChangeLog
 +------------+---------------------------------------------------------------------+
 | Version    | Description                                                         |
 +============+=====================================================================+
-| *Upcoming* | * Add bouncy ball demo                                              |
+| *Upcoming* | * Auto cleanup on exit                                              |
+|            | * Add bouncy ball demo                                              |
 |            | * Add bounding_box attribute to devices                             |
 |            | * Demote buffer & pages attributes to "internal use" only           |
 |            | * Replaced SH1106 data sheet with version that is not "preliminary" |

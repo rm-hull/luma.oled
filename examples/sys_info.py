@@ -8,6 +8,7 @@
 
 import os
 import sys
+import time
 from datetime import datetime
 if os.name != 'posix':
     sys.exit('platform not supported')
@@ -86,7 +87,9 @@ def stats(oled):
 
 def main():
     oled = ssd1306(port=1, address=0x3C)
-    stats(oled)
+    while True:
+        stats(oled)
+        time.sleep(5)
 
 
 if __name__ == "__main__":

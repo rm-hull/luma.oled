@@ -50,6 +50,7 @@
 # As before, as soon as the with block completes, the canvas buffer is flushed
 # to the device
 
+import atexit
 import smbus2
 from PIL import Image
 
@@ -65,6 +66,16 @@ class device(object):
         self.data_mode = data_mode
         self.bus = bus or smbus2.SMBus(port)
         self.addr = address
+
+        def cleanup():
+            self.clear()
+            self.hide()
+            # If the bus was not supplied (i.e. we created it in the
+            # constructor) then it should be closed.
+            if bus is None:
+                self.bus.close()
+
+        atexit.register(cleanup)
 
     def command(self, *cmd):
         """
