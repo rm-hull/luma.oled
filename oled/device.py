@@ -359,7 +359,7 @@ class pygame(device, mixin.noop, mixin.capabilities):
 
         surface = self._pygame.image.fromstring(data, size, mode)
         self._screen.blit(surface, (0, 0))
-        self._pygame.display.update()
+        self._pygame.display.flip()
 
 
 class const:
