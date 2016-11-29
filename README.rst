@@ -22,7 +22,7 @@ The SSD1306 display pictured below is 128x64 pixels, and the board is `tiny`, an
 inside the RPi case (the SH1106 is slightly different, in that it supports 132 x 64
 pixels).
 
-.. image:: https://raw.githubusercontent.com/rm-hull/ssd1306/master/doc/mounted_display.jpg
+.. image:: https://raw.githubusercontent.com/rm-hull/ssd1306/master/doc/images/mounted_display.jpg
    :alt: mounted
 
 Documentation

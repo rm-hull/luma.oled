@@ -13,5 +13,5 @@ pixels). My intention is to solder the wires directly to the underside
 of the RPi GPIO pins (P5 header) so that the pins are still available for other purposes, but
 the regular, top GPIO pins (P1 header) can also be used of course.
 
-.. image:: mounted_display.jpg
+.. image:: images/mounted_display.jpg
    :alt: mounted
