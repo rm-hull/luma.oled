@@ -356,7 +356,6 @@ class pygame(device, mixin.noop, mixin.capabilities):
         mode = im.mode
         size = im.size
         data = im.tobytes()
-        assert(mode in ("RGB", "RGBA"))
 
         surface = self._pygame.image.fromstring(data, size, mode)
         self._screen.blit(surface, (0, 0))
