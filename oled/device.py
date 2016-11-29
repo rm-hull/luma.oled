@@ -53,7 +53,6 @@
 
 import sys
 import atexit
-import smbus2
 from PIL import Image
 import oled.mixin as mixin
 from oled.serial import i2c
@@ -68,12 +67,9 @@ class device(object):
         self._serial_interface = serial_interface or i2c()
 
         def cleanup():
-            self.clear()
             self.hide()
-            # If the bus was not supplied (i.e. we created it in the
-            # constructor) then it should be closed.
-            if bus is None:
-                self.bus.close()
+            self.clear()
+            self._serial_interface.cleanup()
 
         atexit.register(cleanup)
 

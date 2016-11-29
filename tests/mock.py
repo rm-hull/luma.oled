@@ -29,5 +29,8 @@ class smbus(object):
     def write_i2c_block_data(self, addr, mode, vals):
         self.recordings.append(recording(addr, mode, vals))
 
+    def close(self):
+        pass
+
     def reset(self):
         self.recordings = []

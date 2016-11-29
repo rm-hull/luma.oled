@@ -1,5 +1,6 @@
 import argparse
 import oled.device
+import oled.serial
 
 parser = argparse.ArgumentParser(description='oled arguments')
 
@@ -39,8 +40,6 @@ try:
 except ValueError:
     parser.error('invalid address %s' % args.address)
 
-import oled.device
-import oled.serial
 Serial = getattr(oled.serial, args.interface)
 if (args.interface == 'i2c'):
     serial = oled.serial.i2c(port=args.port, address=args.address)

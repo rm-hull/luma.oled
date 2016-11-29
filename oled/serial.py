@@ -58,6 +58,12 @@ class i2c(object):
             write(self._addr, self._data_mode, list(data[i:i + 32]))
             i += 32
 
+    def cleanup(self):
+        """
+        Clean up I2C resources
+        """
+        self._bus.close()
+
 
 class spi(object):
     """
@@ -96,3 +102,10 @@ class spi(object):
         """
         self._gpio.write(self._bcm_DC, self._data_mode)
         self._spi.xfer2(list(data))
+
+    def cleanup(self):
+        """
+        Clean up SPI & GPIO resources
+        """
+        self._spi.close()
+        self._gpio.cleanup()
