@@ -182,11 +182,13 @@ if __name__ == '__main__':
     font = ImageFont.load_default()
 
     img_path = os.path.abspath(os.path.join(os.path.dirname(__file__), 'images', 'splash.bmp'))
-    logo = Image.open(img_path).transform((128, 64), Image.AFFINE, (1, 0, 0, 0, 1, 0), Image.BILINEAR)
+    splash = Image.open(img_path) \
+        .transform((128, 64), Image.AFFINE, (1, 0, 0, 0, 1, 0), Image.BILINEAR) \
+        .convert(device.mode)
 
     # Double buffering in pygame?
-    device.display(logo)
-    device.display(logo)
+    device.display(splash)
+    device.display(splash)
 
     time.sleep(3)
     device.clear()
