@@ -15,9 +15,8 @@ if os.name != 'posix':
 
 import psutil
 
-from oled.device import ssd1306
+from demo_opts import device
 from oled.render import canvas
-
 from PIL import ImageFont
 
 # TODO: custom font bitmaps for up/down arrows
@@ -75,20 +74,19 @@ def stats(oled):
     font2 = ImageFont.truetype(font_path, 12)
 
     with canvas(oled) as draw:
-        draw.text((0, 0), cpu_usage(), font=font2, fill=255)
-        draw.text((0, 14), mem_usage(), font=font2, fill=255)
-        draw.text((0, 26), disk_usage('/'), font=font2, fill=255)
+        draw.text((0, 0), cpu_usage(), font=font2, fill="white")
+        draw.text((0, 14), mem_usage(), font=font2, fill="white")
+        draw.text((0, 26), disk_usage('/'), font=font2, fill="white")
         try:
-            draw.text((0, 38), network('wlan0'), font=font2, fill=255)
+            draw.text((0, 38), network('wlan0'), font=font2, fill="white")
         except KeyError:
             # no wifi enabled/available
             pass
 
 
 def main():
-    oled = ssd1306(port=1, address=0x3C)
     while True:
-        stats(oled)
+        stats(device)
         time.sleep(5)
 
 

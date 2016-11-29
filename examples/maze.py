@@ -109,9 +109,9 @@ class Maze(object):
                 p3 = (p1[0], p1[1] + 1)
                 line += p1 + p3
 
-            draw.line(list(map(scale, line)), fill=1)
+            draw.line(list(map(scale, line)), fill="white")
 
-        draw.rectangle(list(map(scale, [0, 0, self.width, self.height])), outline=1)
+        draw.rectangle(list(map(scale, [0, 0, self.width, self.height])), outline="white")
 
     def to_string(self):
         s = ""

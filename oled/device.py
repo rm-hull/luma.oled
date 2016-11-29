@@ -22,7 +22,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-
 # Example usage:
 #
 #   from oled.device import ssd1306, sh1106
@@ -33,8 +32,8 @@
 #   device = ssd1306(port=1, address=0x3C)
 #
 #   with canvas(device) as draw:
-#      draw.rectangle((0, 0, device.width, device.height), outline=0, fill=0)
-#      draw.text(30, 40, "Hello World", font=font, fill=255)
+#      draw.rectangle((0, 0, device.width, device.height), outline="white", fill="black")
+#      draw.text(30, 40, "Hello World", font=font, fill="white")
 #
 # As soon as the with-block scope level is complete, the graphics primitives
 # will be flushed to the device.
@@ -50,9 +49,11 @@
 # As before, as soon as the with block completes, the canvas buffer is flushed
 # to the device
 
+import sys
 import atexit
 import smbus2
 from PIL import Image
+import oled.mixin as mixin
 
 
 class device(object):
@@ -117,10 +118,10 @@ class device(object):
         """
         Initializes the device memory with an empty (blank) image.
         """
-        self.display(Image.new('1', (self.width, self.height)))
+        self.display(Image.new(self.mode, (self.width, self.height)))
 
 
-class sh1106(device):
+class sh1106(device, mixin.capabilities):
     """
     A device encapsulates the I2C connection (address/port) to the SH1106
     OLED display hardware. The init method pumps commands to the display
@@ -135,6 +136,7 @@ class sh1106(device):
     def __init__(self, bus=None, port=1, address=0x3C, width=128, height=64):
         try:
             super(sh1106, self).__init__(bus, port, address)
+            self.capabilities(width, height)
             self.bounding_box = (0, 0, width - 1, height - 1)
             self.width = width
             self.height = height
@@ -168,7 +170,7 @@ class sh1106(device):
         """
         Takes a 1-bit image and dumps it to the SH1106 OLED display.
         """
-        assert(image.mode == '1')
+        assert(image.mode == self.mode)
         assert(image.size[0] == self.width)
         assert(image.size[1] == self.height)
 
@@ -193,7 +195,7 @@ class sh1106(device):
             self.data(buf)
 
 
-class ssd1306(device):
+class ssd1306(device, mixin.capabilities):
     """
     A device encapsulates the I2C connection (address/port) to the SSD1306
     OLED display hardware. The init method pumps commands to the display
@@ -207,9 +209,7 @@ class ssd1306(device):
     def __init__(self, bus=None, port=1, address=0x3C, width=128, height=64):
         try:
             super(ssd1306, self).__init__(bus, port, address)
-            self.bounding_box = (0, 0, width - 1, height - 1)
-            self.width = width
-            self.height = height
+            self.capabilities(width, height)
             self._pages = self.height // 8
             self._buffer = [0] * self.width * self._pages
             self._offsets = [n * self.width for n in range(8)]
@@ -242,7 +242,7 @@ class ssd1306(device):
         """
         Takes a 1-bit image and dumps it to the SSD1306 OLED display.
         """
-        assert(image.mode == '1')
+        assert(image.mode == self.mode)
         assert(image.size[0] == self.width)
         assert(image.size[1] == self.height)
 
@@ -274,6 +274,93 @@ class ssd1306(device):
                 j += 1
 
         self.data(buf)
+
+
+class capture(device, mixin.noop, mixin.capabilities):
+    """
+    Pseudo-device that acts like an OLED display, except that it writes
+    the image to a numbered PNG file when the :func:`display` method
+    is called.
+
+    While the capability of an OLED device is monochrome, there is no
+    limitation here, and hence supports 24-bit color depth.
+    """
+    def __init__(self, width=128, height=64, file_template="oled_{0:06}.png", **kwargs):
+        self.capabilities(width, height, mode="RGB")
+        self._count = 0
+        self._file_template = file_template
+
+    def display(self, image):
+        """
+        Takes an image and dumps it to a numbered PNG file.
+        """
+        assert(image.mode == self.mode)
+        assert(image.size[0] == self.width)
+        assert(image.size[1] == self.height)
+
+        self._count += 1
+        filename = self._file_template.format(self._count)
+        with open(filename, "wb") as fp:
+            print("Writing: {0}".format(filename))
+            image.save(fp, "png")
+
+
+class pygame(device, mixin.noop, mixin.capabilities):
+    """
+    Pseudo-device that acts like an OLED display, except that it renders
+    to an displayed window. The frame rate is limited to 60FPS (much faster
+    than a Raspberry Pi can acheive, but this can be overridden as necessary).
+
+    While the capability of an OLED device is monochrome, there is no
+    limitation here, and hence supports 24-bit color depth.
+
+    :mod:`pygame` is used to render the emulated display window, and it's
+    event loop is checked to see if the ESC key was pressed or the window
+    was dismissed: if so `sys.exit()` is called.
+    """
+    def __init__(self, width=128, height=64, frame_rate=60, **kwargs):
+        self.capabilities(width, height, mode="RGB")
+
+        try:
+            import pygame
+            pygame.init()
+            pygame.font.init()
+            self._clock = pygame.time.Clock()
+            self._fps = frame_rate
+            self._screen = pygame.display.set_mode((width, height))
+            self._screen.fill((0, 0, 0))
+            self._pygame = pygame
+            pygame.display.flip()
+        except ImportError:
+            raise RuntimeError("Pygame is not an explicit dependency, and must be installed separately")
+
+    def _abort(self):
+        keystate = self._pygame.key.get_pressed()
+        return keystate[self._pygame.K_ESCAPE] or self._pygame.event.peek(self._pygame.QUIT)
+
+    def display(self, image):
+        """
+        Takes an image and renders it to a pygame display surface.
+        """
+        assert(image.mode == self.mode)
+        assert(image.size[0] == self.width)
+        assert(image.size[1] == self.height)
+
+        self._clock.tick(self._fps)
+        self._pygame.event.pump()
+
+        if self._abort():
+            self._pygame.quit()
+            sys.exit()
+
+        im = image.convert("RGB")
+        mode = im.mode
+        size = im.size
+        data = im.tobytes()
+
+        surface = self._pygame.image.fromstring(data, size, mode)
+        self._screen.blit(surface, (0, 0))
+        self._pygame.display.flip()
 
 
 class const:
