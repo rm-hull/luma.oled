@@ -294,15 +294,17 @@ class capture(device, mixin.noop, mixin.capabilities):
         """
         Takes an image and dumps it to a numbered PNG file.
         """
-        assert(image.mode == self.mode)
         assert(image.size[0] == self.width)
         assert(image.size[1] == self.height)
 
+        im = image.convert("RGB")
         self._count += 1
         filename = self._file_template.format(self._count)
         with open(filename, "wb") as fp:
             print("Writing: {0}".format(filename))
-            image.save(fp, "png")
+            im.save(fp, "png")
+
+        del im
 
 
 class pygame(device, mixin.noop, mixin.capabilities):
