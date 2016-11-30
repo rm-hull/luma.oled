@@ -186,7 +186,7 @@ Ensure that the SPI kernel driver is enabled::
 
 or::
 
-  $ $ lsmod | grep spi
+  $ lsmod | grep spi
   spi_bcm2835             6678  0
 
 Then add your user to the *spi* and *gpio* groups::
