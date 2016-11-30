@@ -342,7 +342,6 @@ class pygame(device, mixin.noop, mixin.capabilities):
         """
         Takes an image and renders it to a pygame display surface.
         """
-        assert(image.mode == self.mode)
         assert(image.size[0] == self.width)
         assert(image.size[1] == self.height)
 
