@@ -78,29 +78,30 @@ class spi(object):
         self._gpio = gpio or RPi.GPIO
         self._spi = spi or spidev.SpiDev()
         self._spi.open(port, device)
-        self._spi.max_bus_speed = bus_speed_hz
+        self._spi.max_speed_hz = bus_speed_hz
         self._bcm_DC = bcm_DC
         self._bcm_RST = bcm_RST
         self._cmd_mode = self._gpio.LOW    # Command mode = Hold low
         self._data_mode = self._gpio.HIGH  # Data mode = Pull high
 
+        self._gpio.setwarnings(False)
         self._gpio.setmode(self._gpio.BCM)
         self._gpio.setup(self._bcm_DC, self._gpio.OUT)
         self._gpio.setup(self._bcm_RST, self._gpio.OUT)
-        self._gpio.write(self._bcm_RST, self._gpio.HIGH)  # Keep RESET pulled high
+        self._gpio.output(self._bcm_RST, self._gpio.HIGH)  # Keep RESET pulled high
 
     def command(self, *cmd):
         """
         Sends a command or sequence of commands through to the SPI device.
         """
-        self._gpio.write(self._bcm_DC, self._cmd_mode)
+        self._gpio.output(self._bcm_DC, self._cmd_mode)
         self._spi.xfer2(list(cmd))
 
     def data(self, data):
         """
         Sends a data byte or sequence of data bytes through to the SPI device.
         """
-        self._gpio.write(self._bcm_DC, self._data_mode)
+        self._gpio.output(self._bcm_DC, self._data_mode)
         self._spi.xfer2(list(data))
 
     def cleanup(self):
