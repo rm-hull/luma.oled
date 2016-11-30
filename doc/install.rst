@@ -16,9 +16,7 @@ Installation
 
    It was *originally* tested with Raspian on a rev.2 model B, with a vanilla
    kernel version 4.1.16+, and has subsequently tested on Raspberry Pi model A
-   & model B2 (Debian Jessie) and OrangePi Zero (Armbian Jessie). There have
-   been unconfirmed reports of the library **not** working on Raspberry Pi
-   model B3.
+   & model B2 (Debian Jessie) and OrangePi Zero (Armbian Jessie).
 
 from PyPI
 ^^^^^^^^^
