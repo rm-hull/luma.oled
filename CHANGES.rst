@@ -39,7 +39,7 @@ ChangeLog
 +------------+---------------------------------------------------------------------+
 | **0.3.0**  | * Allow SMBus implementation to be supplied                         |
 |            | * Add show, hide and clear methods                                  |
-|            | * Catch & rethrow ``IOError``s                                      |
+|            | * Catch & rethrow ``IOError`` exceptions                            |
 |            | * Fix error in 'hello world' example                                |
 |            | * Cleanup imports                                                   |
 |            | * Allow setting width/height                                        |
