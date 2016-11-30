@@ -45,17 +45,18 @@ Examples
 After installing the library, enter the ``examples`` directory and try running
 the following examples:
 
-=========== ========================================================
-Example     Description
-=========== ========================================================
-bounce.py   Display a bouncing ball animation and frames per second
-clock.py    An analog clockface with date & time
-demo.py     Use misc draw commands to create a simple image
-invaders.py Space Invaders demo
-maze.py     Maze generator
-pi_logo.py  Display the Raspberry Pi logo (loads image as .png)
-sys_info.py Display system information (as shown in the image above)
-=========== ========================================================
+============ ========================================================
+Example      Description
+============ ========================================================
+bounce.py    Display a bouncing ball animation and frames per second
+clock.py     An analog clockface with date & time
+demo.py      Use misc draw commands to create a simple image
+invaders.py  Space Invaders demo
+maze.py      Maze generator
+perfloop.py  Simpel benchmarking utility to measure performance
+pi_logo.py   Display the Raspberry Pi logo (loads image as .png)
+sys_info.py  Display system information (as shown in the image above)
+============ ========================================================
 
 By default it will use port 1, address ``0x3C`` and the ``ssd1306`` driver.
 If you need to use a different setting, these can be specified on the command

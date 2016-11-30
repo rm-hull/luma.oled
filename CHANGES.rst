@@ -4,7 +4,8 @@ ChangeLog
 +------------+---------------------------------------------------------------------+
 | Version    | Description                                                         |
 +============+=====================================================================+
-| *Upcoming* | *TBD*                                                               |
+| *Upcoming* | * Improve benchmarking examples                                     |
+|            | * Fix resource leakage on emulated devices                          |
 +------------+---------------------------------------------------------------------+
 | **0.3.5**  | * Pygame-based device emulator & screen capture device emulator     |
 |            | * Add bouncing balls demo, clock & Space Invaders examples          |
