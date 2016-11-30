@@ -97,9 +97,11 @@ follows::
   > Advanced Options > A7 I2C
 
 After rebooting re-check that the ``dmesg | grep i2c`` command shows whether
-I2C driver is loaded before proceeding.
+I2C driver is loaded before proceeding. You can also enable I2C
+[manually](http://elinux.org/RPiconfig#Device_Tree) if the ``raspi-config``
+utility is not available.
 
-Optionally, to improve permformance, increase the I2C baudrate from the default
+Optionally, to improve performance, increase the I2C baudrate from the default
 of 100KHz to 400KHz by altering ``/boot/config.txt`` to include::
 
   dtparam=i2c_arm=on,i2c_baudrate=400000
@@ -176,7 +178,8 @@ Enable the SPI port::
     $ sudo raspi-config
     > Advanced Options > A6 SPI
 
-If ``raspi-config`` is not available, this can be done manually. Search the web.
+If ``raspi-config`` is not available, enabling the SPI port can be done
+[manually](http://elinux.org/RPiconfig#Device_Tree).
 
 Ensure that the SPI kernel driver is enabled::
 
