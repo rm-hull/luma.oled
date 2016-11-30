@@ -44,7 +44,7 @@ Serial = getattr(oled.serial, args.interface)
 if (args.interface == 'i2c'):
     serial = oled.serial.i2c(port=args.port, address=args.address)
 if (args.interface == 'spi'):
-    raise NotImplementedError()
+    serial = oled.serial.spi()
 
 Device = getattr(oled.device, args.display)
 device = Device(serial)
