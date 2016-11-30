@@ -24,7 +24,7 @@ would be trivial but has not been implemented yet (no devices to test with).
 I2C vs. SPI
 ^^^^^^^^^^^
 If you have not yet purchased your display, you may be wondering if you should
-get I2C or SPI. The basic tradeoff is that I2C will be easier to connect
+get an I2C or SPI display. The basic tradeoff is that I2C will be easier to connect
 because it has fewer pins while SPI may have a faster display update rate due
 to running at a higher frequency and having less overhead.
 
@@ -134,7 +134,7 @@ addresses.
 SPI
 """
 The GPIO pins used for this SPI connection are the same for all versions of the
-Raspberry Pi, up to and including the Raspberry Pi 2 B.
+Raspberry Pi, up to and including the Raspberry Pi 3 B.
 
 ========== ====== ============ ======== ==============
 OLED Pin   Name   Remarks      RPi Pin  RPi Function
@@ -176,7 +176,7 @@ Enable the SPI port::
     $ sudo raspi-config
     > Advanced Options > A6 SPI
 
-If raspi-config is not available, this can be done manually. Search the web.
+If ``raspi-config`` is not available, this can be done manually. Search the web.
 
 Ensure that the SPI kernel driver is enabled::
 
