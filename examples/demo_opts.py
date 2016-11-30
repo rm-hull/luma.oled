@@ -40,11 +40,12 @@ try:
 except ValueError:
     parser.error('invalid address %s' % args.address)
 
-Serial = getattr(oled.serial, args.interface)
-if (args.interface == 'i2c'):
-    serial = oled.serial.i2c(port=args.port, address=args.address)
-if (args.interface == 'spi'):
-    serial = oled.serial.spi()
-
 Device = getattr(oled.device, args.display)
-device = Device(serial)
+if args.display in ('ssd1306', 'sh1106'):
+    if (args.interface == 'i2c'):
+        serial = oled.serial.i2c(port=args.port, address=args.address)
+    elif (args.interface == 'spi'):
+        serial = oled.serial.spi()
+    device = Device(serial)
+else:
+    device = Device()
