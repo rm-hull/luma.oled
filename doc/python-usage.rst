@@ -62,25 +62,39 @@ pi_logo.py   Display the Raspberry Pi logo (loads image as .png)
 sys_info.py  Display system information (as shown in the image above)
 ============ ========================================================
 
-By default it will use port 1, address ``0x3C`` and the ``ssd1306`` driver.
-If you need to use a different setting, these can be specified on the command
-line - each program can be invoked with a ``--help`` flag to show the options::
+By default, all the examples will asume I2C port 1, address ``0x3C`` and the
+``ssd1306`` driver.  If you need to use a different setting, these can be
+specified on the command line - each program can be invoked with a ``--help``
+flag to show the options::
 
-  $ python examples/demo.py -h
-  usage: demo.py [-h] [--port PORT] [--address ADDRESS] [--display DISPLAY]
-	      [--interface INTERFACE]
+    $ python pi_logo.py -h
+    usage: pi_logo.py [-h] [--display DISPLAY] [--interface INTERFACE]
+                    [--i2c-port I2C_PORT] [--i2c-address I2C_ADDRESS]
+                    [--spi-port SPI_PORT] [--spi-device SPI_DEVICE]
+                    [--spi-bus-speed SPI_BUS_SPEED]
+                    [--bcm-data-command BCM_DATA_COMMAND]
+                    [--bcm-reset BCM_RESET]
 
-  oled arguments
+    oled arguments
 
-  optional arguments:
-  -h, --help            show this help message and exit
-  --port PORT, -p PORT  i2c bus number
-  --address ADDRESS, -a ADDRESS
-                          i2c display address
-  --display DISPLAY, -d DISPLAY
-                          display type, one of: ssd1306, sh1106, capture, pygame
-  --interface INTERFACE, -i INTERFACE
-			  serial interface type, one of i2c or spi
+    optional arguments:
+    -h, --help            show this help message and exit
+    --display DISPLAY, -d DISPLAY
+                            display type, one of: ssd1306, sh1106, capture, pygame
+    --interface INTERFACE, -i INTERFACE
+                            serial interface type, one of: i2c, spi
+    --i2c-port I2C_PORT   I2C bus number
+    --i2c-address I2C_ADDRESS
+                            I2C display address
+    --spi-port SPI_PORT   SPI port number
+    --spi-device SPI_DEVICE
+                            SPI device
+    --spi-bus-speed SPI_BUS_SPEED
+                            SPI max bus speed (Hz)
+    --bcm-data-command BCM_DATA_COMMAND
+                            BCM pin for D/C RESET(SPI devices only)
+    --bcm-reset BCM_RESET
+                            BCM pin for RESET (SPI devices only)
 
 .. note::
    #. Substitute ``python3`` for ``python`` in the above examples if you are using python3.
