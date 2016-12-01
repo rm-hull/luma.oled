@@ -84,7 +84,6 @@ class spi(object):
         self._cmd_mode = self._gpio.LOW    # Command mode = Hold low
         self._data_mode = self._gpio.HIGH  # Data mode = Pull high
 
-        self._gpio.setwarnings(False)
         self._gpio.setmode(self._gpio.BCM)
         self._gpio.setup(self._bcm_DC, self._gpio.OUT)
         self._gpio.setup(self._bcm_RST, self._gpio.OUT)
