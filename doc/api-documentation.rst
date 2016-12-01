@@ -24,4 +24,10 @@ oled.render
 .. automodule:: oled.render
     :members:
     :undoc-members:
+
+oled.serial
+"""""""""""
+.. automodule:: oled.serial
+    :members:
+    :undoc-members:
     :show-inheritance:

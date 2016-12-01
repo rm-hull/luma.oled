@@ -16,6 +16,7 @@ SSD1306 / SH1106 OLED Driver
 
    intro
    python-usage
+   hardware
    install
    api-documentation
    references

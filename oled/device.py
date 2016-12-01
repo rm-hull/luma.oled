@@ -24,12 +24,14 @@
 
 # Example usage:
 #
+#   from oled.serial import i2c, spi
 #   from oled.device import ssd1306, sh1106
 #   from oled.render import canvas
 #   from PIL import ImageFont, ImageDraw
 #
 #   font = ImageFont.load_default()
-#   device = ssd1306(port=1, address=0x3C)
+#   serial = i2c(port=1, address=0x3C)
+#   device = ssd1306(serial)
 #
 #   with canvas(device) as draw:
 #      draw.rectangle((0, 0, device.width, device.height), outline="white", fill="black")
@@ -51,9 +53,9 @@
 
 import sys
 import atexit
-import smbus2
 from PIL import Image
 import oled.mixin as mixin
+from oled.serial import i2c
 
 
 class device(object):
@@ -61,44 +63,30 @@ class device(object):
     Base class for OLED driver classes
     """
 
-    def __init__(self, bus=None, port=1, address=0x3C, cmd_mode=0x00,
-                 data_mode=0x40):
-        self.cmd_mode = cmd_mode
-        self.data_mode = data_mode
-        self.bus = bus or smbus2.SMBus(port)
-        self.addr = address
+    def __init__(self, serial_interface=None):
+        self._serial_interface = serial_interface or i2c()
 
         def cleanup():
-            self.clear()
             self.hide()
-            # If the bus was not supplied (i.e. we created it in the
-            # constructor) then it should be closed.
-            if bus is None:
-                self.bus.close()
+            self.clear()
+            self._serial_interface.cleanup()
 
         atexit.register(cleanup)
 
     def command(self, *cmd):
         """
-        Sends a command or sequence of commands through to the
-        device - maximum allowed is 32 bytes in one go.
+        Sends a command or sequence of commands through to the delegated
+        serial interface.
         """
         assert(len(cmd) <= 32)
-        self.bus.write_i2c_block_data(self.addr, self.cmd_mode, list(cmd))
+        self._serial_interface.command(*cmd)
 
     def data(self, data):
         """
-        Sends a data byte or sequence of data bytes through to the
-        device - maximum allowed in one transaction is 32 bytes, so if
-        data is larger than this it is sent in chunks.
+        Sends a data byte or sequence of data bytes through to the delegated
+        serial interface.
         """
-        i = 0
-        n = len(data)
-        while i < n:
-            self.bus.write_i2c_block_data(self.addr,
-                                          self.data_mode,
-                                          list(data[i:i + 32]))
-            i += 32
+        self._serial_interface.data(data)
 
     def show(self):
         """
@@ -123,19 +111,16 @@ class device(object):
 
 class sh1106(device, mixin.capabilities):
     """
-    A device encapsulates the I2C connection (address/port) to the SH1106
+    A device encapsulates the serial interface to the SH1106
     OLED display hardware. The init method pumps commands to the display
     to properly initialize it. Further control commands can then be
     called to affect the brightness. Direct use of the command() and
     data() methods are discouraged.
-
-    Note: Only one of bus OR port arguments should be supplied; if both
-    are, then bus takes precedence.
     """
 
-    def __init__(self, bus=None, port=1, address=0x3C, width=128, height=64):
+    def __init__(self, serial_interface=None, width=128, height=64):
         try:
-            super(sh1106, self).__init__(bus, port, address)
+            super(sh1106, self).__init__(serial_interface)
             self.capabilities(width, height)
             self.bounding_box = (0, 0, width - 1, height - 1)
             self.width = width
@@ -164,7 +149,7 @@ class sh1106(device, mixin.capabilities):
 
         except IOError as e:
             raise IOError(e.errno,
-                "Failed to initialize SH1106 display driver")
+                          "Failed to initialize SH1106 display driver")
 
     def display(self, image):
         """
@@ -197,18 +182,15 @@ class sh1106(device, mixin.capabilities):
 
 class ssd1306(device, mixin.capabilities):
     """
-    A device encapsulates the I2C connection (address/port) to the SSD1306
+    A device encapsulates the serial interface to the SSD1306
     OLED display hardware. The init method pumps commands to the display
     to properly initialize it. Further control commands can then be
     called to affect the brightness. Direct use of the command() and
     data() methods are discouraged.
-
-    Note: Only one of bus OR port arguments should be supplied; if both
-    are, then bus takes precedence.
     """
-    def __init__(self, bus=None, port=1, address=0x3C, width=128, height=64):
+    def __init__(self, serial_interface=None, width=128, height=64):
         try:
-            super(ssd1306, self).__init__(bus, port, address)
+            super(ssd1306, self).__init__(serial_interface)
             self.capabilities(width, height)
             self._pages = self.height // 8
             self._buffer = [0] * self.width * self._pages
@@ -236,7 +218,7 @@ class ssd1306(device, mixin.capabilities):
 
         except IOError as e:
             raise IOError(e.errno,
-                "Failed to initialize SSD1306 display driver")
+                          "Failed to initialize SSD1306 display driver")
 
     def display(self, image):
         """

@@ -54,7 +54,7 @@ def main():
     time.sleep(10)
 
     print("Testing display ON/OFF...")
-    for _ in range(10):
+    for _ in range(5):
         time.sleep(0.5)
         device.hide()
 
@@ -67,12 +67,12 @@ def main():
 
     print("Testing screen updates...")
     time.sleep(2)
-    for x in range(30):
+    for x in range(40):
         with canvas(device) as draw:
             now = datetime.datetime.now()
             draw.text((x, 10), str(now.date()), fill="white")
             draw.text((10, 24), str(now.time()), fill="white")
-            time.sleep(1)
+            time.sleep(0.1)
 
 
 if __name__ == "__main__":
