@@ -7,3 +7,4 @@ References
 - http://martin-jones.com/2013/08/20/how-to-get-the-second-raspberry-pi-i2c-bus-to-work/
 - https://projects.drogon.net/understanding-spi-on-the-raspberry-pi/
 - https://pinout.xyz/
+- https://learn.sparkfun.com/tutorials/serial-peripheral-interface-spi
