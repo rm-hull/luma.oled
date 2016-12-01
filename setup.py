@@ -22,8 +22,8 @@ setup(
     download_url="https://github.com/rm-hull/ssd1306/tarball/" + version,
     packages=["oled"],
     install_requires=["pillow", "smbus2", "spidev", "RPi.GPIO"],
-    setup_requires=["pytest-runner"],
-    tests_require=["pytest", "pytest-cov", "python-coveralls"],
+    setup_requires=["mock", "pytest-runner"],
+    tests_require=["mock", "pytest", "pytest-cov", "python-coveralls"],
     classifiers=[
         "License :: OSI Approved :: MIT License",
         "Development Status :: 4 - Beta",
