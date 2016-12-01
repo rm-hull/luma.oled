@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 
-from mock import patch, call, Mock
+try:
+    from unittest.mock import patch, call, Mock
+except ImportError:
+    from mock import patch, call, Mock
+
 import smbus2
 from oled.serial import i2c, spi
 

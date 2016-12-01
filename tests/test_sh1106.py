@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 
-from mock import Mock
+try:
+    from unittest.mock import Mock
+except ImportError:
+    from mock import Mock
+
 from oled.device import sh1106
 from oled.render import canvas
 

@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 
-from mock import call, Mock
+try:
+    from unittest.mock import call, Mock
+except ImportError:
+    from mock import call, Mock
+
 from oled.device import ssd1306
 from oled.render import canvas
 import baseline_data
