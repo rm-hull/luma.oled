@@ -51,7 +51,7 @@ def test_show():
     assert bus.recordings[0] == mock.recording(60, 0, [175])
 
 
-def test_diplay():
+def test_display():
     device = ssd1306(bus)
     bus.reset()
 
