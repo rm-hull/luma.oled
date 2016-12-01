@@ -276,7 +276,7 @@ class ssd1306(device, mixin.capabilities):
         self.data(buf)
 
 
-class capture(device, mixin.noop, mixin.capabilities):
+class capture(mixin.noop, mixin.capabilities, device):
     """
     Pseudo-device that acts like an OLED display, except that it writes
     the image to a numbered PNG file when the :func:`display` method
@@ -307,7 +307,7 @@ class capture(device, mixin.noop, mixin.capabilities):
         del im
 
 
-class pygame(device, mixin.noop, mixin.capabilities):
+class pygame(mixin.noop, mixin.capabilities, device):
     """
     Pseudo-device that acts like an OLED display, except that it renders
     to an displayed window. The frame rate is limited to 60FPS (much faster
