@@ -4,7 +4,7 @@ from oled.serial import i2c
 from oled.device import sh1106
 from oled.render import canvas
 
-import mock
+import harness as mock
 import baseline_data
 
 port = 1
