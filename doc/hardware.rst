@@ -17,10 +17,6 @@ For this display, the two 0 Ohm (jumper) resistors have been connected to "0"
 and the table shows that "0 0" is 4-wire SPI. That is the type of connection
 that is currently supported by the SPI mode of this library.
 
-3-wire SPI eliminates the separate Data/Command line by sending an extra bit
-with each byte, which causes a small amount of overhead. Supporting 3-wire SPI
-would be trivial but has not been implemented yet (no devices to test with).
-
 I2C vs. SPI
 ^^^^^^^^^^^
 If you have not yet purchased your display, you may be wondering if you should
