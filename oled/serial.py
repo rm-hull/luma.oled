@@ -27,8 +27,11 @@ class i2c(object):
     """
     Wrap an I2C interface to provide data and command methods
 
-    Note: Only one of bus OR port arguments should be supplied; if both
-    are, then bus takes precedence.
+    Notes:
+     1. Only one of bus OR port arguments should be supplied;
+        if both are, then bus takes precedence.
+     2. If bus is provided, there is an implicit expectation
+        that it has already been opened.
     """
     def __init__(self, bus=None, port=1, address=0x3C):
         import smbus2
@@ -72,10 +75,8 @@ class spi(object):
     The RST pin (Reset) defaults to GPIO 25 (BCM).
     """
     def __init__(self, spi=None, gpio=None, port=0, device=0, bus_speed_hz=8000000, bcm_DC=24, bcm_RST=25):
-        import RPi.GPIO
         import spidev
-
-        self._gpio = gpio or RPi.GPIO
+        self._gpio = gpio or self.__rpi_gpio__()
         self._spi = spi or spidev.SpiDev()
         self._spi.open(port, device)
         self._spi.max_speed_hz = bus_speed_hz
@@ -88,6 +89,13 @@ class spi(object):
         self._gpio.setup(self._bcm_DC, self._gpio.OUT)
         self._gpio.setup(self._bcm_RST, self._gpio.OUT)
         self._gpio.output(self._bcm_RST, self._gpio.HIGH)  # Keep RESET pulled high
+
+    def __rpi_gpio__(self):
+        # RPi.GPIO _really_ doesn't like being run on anything other than
+        # a Raspberry Pi... this is imported here so we can swap out the
+        # implementation for a mock
+        import RPi.GPIO
+        return RPi.GPIO
 
     def command(self, *cmd):
         """
