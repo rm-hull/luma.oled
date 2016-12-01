@@ -1,31 +1,35 @@
 #!/usr/bin/env python
 
-from oled.serial import i2c
+from mock import Mock
 from oled.device import sh1106
 from oled.render import canvas
 
-import harness as mock
 import baseline_data
 
-port = 1
-bus = mock.smbus(port)
-serial = i2c(bus)
-addr = 0x3C
-
-
-def teardown_function(function):
-    bus.reset()
+serial = Mock()
 
 
 def test_display():
     device = sh1106(serial)
-    bus.reset()
+    serial.reset_mock()
+
+    recordings = []
+
+    def data(data):
+        recordings.append({'data': data})
+
+    def command(*cmd):
+        recordings.append({'command': list(cmd)})
+
+    serial.command = Mock(side_effect=command)
+    serial.data = Mock(side_effect=data)
 
     # Use the same drawing primitives as the demo
     with canvas(device) as draw:
         baseline_data.primitives(device, draw)
 
-    assert len(bus.recordings) == 40
+    serial.data.assert_called()
+    serial.command.assert_called()
 
-    for i in range(40):
-        assert bus.recordings[i] == baseline_data.demo_sh1106[i]
+    print(recordings)
+    assert recordings == baseline_data.demo_sh1106
