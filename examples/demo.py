@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 # Ported from:
 # https://github.com/adafruit/Adafruit_Python_SSD1306/blob/master/examples/shapes.py
@@ -21,21 +22,21 @@ def primitives(draw):
     # Move left to right keeping track of the current x position for drawing shapes.
     x = padding
     # Draw an ellipse.
-    draw.ellipse((x, top, x + shape_width, bottom), outline="white", fill="black")
+    draw.ellipse((x, top, x + shape_width, bottom), outline="red", fill="black")
     x += shape_width + padding
     # Draw a rectangle.
-    draw.rectangle((x, top, x + shape_width, bottom), outline="white", fill="black")
+    draw.rectangle((x, top, x + shape_width, bottom), outline="blue", fill="black")
     x += shape_width + padding
     # Draw a triangle.
-    draw.polygon([(x, bottom), (x + shape_width / 2, top), (x + shape_width, bottom)], outline="white", fill="black")
+    draw.polygon([(x, bottom), (x + shape_width / 2, top), (x + shape_width, bottom)], outline="green", fill="black")
     x += shape_width + padding
     # Draw an X.
-    draw.line((x, bottom, x + shape_width, top), fill="white")
-    draw.line((x, top, x + shape_width, bottom), fill="white")
+    draw.line((x, bottom, x + shape_width, top), fill="yellow")
+    draw.line((x, top, x + shape_width, bottom), fill="yellow")
     x += shape_width + padding
     # Write two lines of text.
-    draw.text((x, top), 'Hello', fill="white")
-    draw.text((x, top + 16), 'World!', fill="white")
+    draw.text((x, top), 'Hello', fill="cyan")
+    draw.text((x, top + 16), 'World!', fill="purple")
 
 
 def main():

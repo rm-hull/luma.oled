@@ -51,13 +51,15 @@ the following examples:
 Example      Description
 ============ ========================================================
 bounce.py    Display a bouncing ball animation and frames per second
+carousel.py  Showcase viewport and hotspot functionality
 clock.py     An analog clockface with date & time
+crawl.py     A vertical scrolling demo, which should be familiar
 demo.py      Use misc draw commands to create a simple image
 invaders.py  Space Invaders demo
 maze.py      Maze generator
 perfloop.py  Simpel benchmarking utility to measure performance
 pi_logo.py   Display the Raspberry Pi logo (loads image as .png)
-sys_info.py  Display system information (as shown in the image above)
+sys_info.py  Display basic system information
 ============ ========================================================
 
 By default, all the examples will asume I2C port 1, address ``0x3C`` and the
@@ -142,6 +144,6 @@ or::
   $ python examples/clock.py -d pygame
   
 .. note::
-   *pygame* is **NOT** installed as a dependency by default, and so must be manually
-   installed before using any of these devices.
-
+   *Pygame* is required to use any of the emulated devices, but it is **NOT**
+   installed as a dependency by default, and so must be manually installed
+   before using any of these emulation devices.

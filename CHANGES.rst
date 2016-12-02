@@ -4,7 +4,8 @@ ChangeLog
 +------------+---------------------------------------------------------------------+------------+
 | Version    | Description                                                         | Date       |
 +============+=====================================================================+============+
-| *Upcoming* | * Remove pygame as an install dependency in setup                   |            |
+| *Upcoming* | * Viewport/scrolling support                                        |            |
+|            | * Remove pygame as an install dependency in setup                   |            |
 |            | * Ensure SH1106 device collapses color images to monochrome         |            |
 |            | * Documentation updates                                             |            |
 +------------+---------------------------------------------------------------------+------------+

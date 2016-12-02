@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 # The MIT License (MIT)
 #
@@ -34,7 +35,7 @@ import oled.mixin as mixin
 logger = logging.getLogger(__name__)
 
 
-class emulator(mixin.noop, mixin.capabilities, device):
+class emulator(mixin.noop, device):
     """
     Base class for emulated OLED driver classes
     """
@@ -49,8 +50,13 @@ class emulator(mixin.noop, mixin.capabilities, device):
         self._transform = getattr(transformer(pygame, width, height, scale),
                                   "none" if scale == 1 else transform)
 
-    def to_surface(self, im):
-        im = im.convert("RGB")
+    def to_surface(self, image):
+        """
+        Converts a :py:mod:`PIL.Image` into a :class:`pygame.Surface`,
+        transforming it according to the ``transform`` and ``scale``
+        constructor arguments.
+        """
+        im = image.convert("RGB")
         mode = im.mode
         size = im.size
         data = im.tobytes()
@@ -77,7 +83,7 @@ class capture(emulator):
 
     def display(self, image):
         """
-        Takes an image and dumps it to a numbered PNG file.
+        Takes a :py:mod:`PIL.Image` and dumps it to a numbered PNG file.
         """
         assert(image.size[0] == self.width)
         assert(image.size[1] == self.height)
@@ -153,7 +159,7 @@ class pygame(emulator):
 
     :mod:`pygame` is used to render the emulated display window, and it's
     event loop is checked to see if the ESC key was pressed or the window
-    was dismissed: if so `sys.exit()` is called.
+    was dismissed: if so :func:`sys.exit()` is called.
     """
     def __init__(self, width=128, height=64, mode="RGB", transform="scale2x",
                  scale=2, frame_rate=60, **kwargs):
@@ -173,7 +179,7 @@ class pygame(emulator):
 
     def display(self, image):
         """
-        Takes an image and renders it to a pygame display surface.
+        Takes a :py:mod:`PIL.Image` and renders it to a pygame display surface.
         """
         assert(image.size[0] == self.width)
         assert(image.size[1] == self.height)
@@ -201,7 +207,7 @@ class transformer(object):
 
     def none(self, surface):
         """
-        No-op transform - used when scale = 1
+        No-op transform - used when ``scale`` = 1
         """
         return surface
 

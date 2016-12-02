@@ -8,3 +8,4 @@ References
 - https://projects.drogon.net/understanding-spi-on-the-raspberry-pi/
 - https://pinout.xyz/
 - https://learn.sparkfun.com/tutorials/serial-peripheral-interface-spi
+- http://code.activestate.com/recipes/577187-python-thread-pool/

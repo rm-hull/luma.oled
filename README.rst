@@ -36,11 +36,14 @@ emulators that run in real-time (with pygame) and others that can take screensho
 or assemble animated GIFs, as per the examples below (source code for these is 
 available in the `examples <https://github.com/rm-hull/ssd1306/tree/master/examples>`_ directory:
 
-.. image:: https://raw.githubusercontent.com/rm-hull/ssd1306/master/doc/images/clock_anim.gif
+.. image:: https://raw.githubusercontent.com/rm-hull/ssd1306/master/doc/images/clock_anim.gif?raw=true
    :alt: clock
 
-.. image:: https://raw.githubusercontent.com/rm-hull/ssd1306/master/doc/images/invaders_anim.gif
+.. image:: https://raw.githubusercontent.com/rm-hull/ssd1306/master/doc/images/invaders_anim.gif?raw=true
    :alt: invaders
+
+.. image:: https://raw.githubusercontent.com/rm-hull/ssd1306/master/doc/images/crawl_anim.gif?raw=true
+   :alt: crawl
 
 Documentation
 -------------

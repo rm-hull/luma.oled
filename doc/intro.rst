@@ -30,4 +30,5 @@ available in the `examples <https://github.com/rm-hull/ssd1306/tree/master/examp
 .. image:: images/invaders_anim.gif
    :alt: invaders
 
-
+.. image:: images/crawl_anim.gif
+   :alt: crawl
