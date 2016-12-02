@@ -44,7 +44,7 @@ def main():
                 draw.text((60, 24), today_date, fill="white")
                 draw.text((60, 32), today_time, fill="white")
                 today_last_time = today_time
-        time.sleep(0.5)
+        time.sleep(0.1)
 
 
 if __name__ == "__main__":
