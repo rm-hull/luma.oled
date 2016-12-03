@@ -1,5 +1,6 @@
 import argparse
 import oled.device
+import oled.emulator
 import oled.serial
 
 parser = argparse.ArgumentParser(description='oled arguments')
@@ -13,19 +14,20 @@ parser.add_argument('--spi-device', type=int, default=0, help='SPI device')
 parser.add_argument('--spi-bus-speed', type=int, default=8000000, help='SPI max bus speed (Hz)')
 parser.add_argument('--bcm-data-command', type=int, default=24, help='BCM pin for D/C RESET (SPI devices only)')
 parser.add_argument('--bcm-reset', type=int, default=25, help='BCM pin for RESET (SPI devices only)')
+parser.add_argument('--transform', type=str, default="scale2x", help='Scaling transform to apply, one of: none, scale, scale2x, smoothscale (emulator only)')
+parser.add_argument('--scale', type=int, default=2, help='Scaling factor to apply (emulator only)')
 
 args = parser.parse_args()
-if args.display not in ('ssd1306', 'sh1106', 'capture', 'pygame'):
-    parser.error('unknown display %s' % args.display)
-if args.interface not in ('i2c', 'spi'):
-    parser.error('unknown interface %s' % args.interface)
-try:
-    args.i2c_address = int(args.i2c_address, 0)
-except ValueError:
-    parser.error('invalid address %s' % args.i2c_address)
-
-Device = getattr(oled.device, args.display)
 if args.display in ('ssd1306', 'sh1106'):
+    if args.interface not in ('i2c', 'spi'):
+        parser.error('unknown interface %s' % args.interface)
+
+    try:
+        args.i2c_address = int(args.i2c_address, 0)
+    except ValueError:
+        parser.error('invalid address %s' % args.i2c_address)
+
+    Device = getattr(oled.device, args.display)
     if (args.interface == 'i2c'):
         serial = oled.serial.i2c(port=args.i2c_port, address=args.i2c_address)
     elif (args.interface == 'spi'):
@@ -35,5 +37,10 @@ if args.display in ('ssd1306', 'sh1106'):
                                  bcm_DC=args.bcm_data_command,
                                  bcm_RST=args.bcm_reset)
     device = Device(serial)
+
+elif args.display in ('capture', 'pygame'):
+    Emulator = getattr(oled.emulator, args.display)
+    device = Emulator(transform=args.transform, scale=args.scale)
+
 else:
-    device = Device()
+    parser.error('unknown display %s' % args.display)

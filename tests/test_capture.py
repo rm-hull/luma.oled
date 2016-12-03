@@ -4,7 +4,7 @@ import hashlib
 import os.path
 from tempfile import NamedTemporaryFile
 
-from oled.device import capture
+from oled.emulator import capture
 from oled.render import canvas
 
 import baseline_data

@@ -12,6 +12,13 @@ oled.device
     :undoc-members:
     :show-inheritance:
 
+oled.emulator
+"""""""""""""
+.. automodule:: oled.emulator
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 oled.mixin
 """"""""""
 .. automodule:: oled.mixin
