@@ -21,7 +21,7 @@ setup(
     url="https://github.com/rm-hull/ssd1306",
     download_url="https://github.com/rm-hull/ssd1306/tarball/" + version,
     packages=["oled"],
-    install_requires=["pillow", "smbus2", "spidev", "RPi.GPIO"],
+    install_requires=["pillow", "smbus2", "spidev", "RPi.GPIO", "pygame"],
     setup_requires=["pytest-runner"],
     tests_require=["mock", "pytest", "pytest-cov", "python-coveralls"],
     classifiers=[

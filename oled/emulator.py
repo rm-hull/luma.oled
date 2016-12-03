@@ -32,14 +32,11 @@ class emulator(mixin.noop, mixin.capabilities, device):
     Base class for emulated OLED driver classes
     """
     def __init__(self, width, height, transform="scale2x", scale=2):
-        try:
-            import pygame
-            self._pygame = pygame
-            self.capabilities(width, height, mode="RGB")
-            self._transform = getattr(transformer(pygame, width, height, scale),
-                                      "none" if scale == 1 else transform)
-        except ImportError:
-            raise RuntimeError("Pygame is not an explicit dependency, and must be installed separately")
+        import pygame
+        self._pygame = pygame
+        self.capabilities(width, height, mode="RGB")
+        self._transform = getattr(transformer(pygame, width, height, scale),
+                                  "none" if scale == 1 else transform)
 
     def to_surface(self, im):
         im = im.convert("RGB")
