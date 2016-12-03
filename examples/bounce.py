@@ -16,10 +16,11 @@ import oled.render
 
 
 class Ball(object):
-    def __init__(self, w, h, radius):
+    def __init__(self, w, h, radius, color):
         self._w = w
         self._h = h
         self._radius = radius
+        self._color = color
         self._x_speed = (random.random() - 0.5) * 10
         self._y_speed = (random.random() - 0.5) * 10
         self._x_pos = self._w / 2.0
@@ -41,17 +42,15 @@ class Ball(object):
 
     def draw(self, canvas):
         canvas.ellipse((self._x_pos - self._radius, self._y_pos - self._radius,
-                       self._x_pos + self._radius, self._y_pos + self._radius), fill="white")
+                       self._x_pos + self._radius, self._y_pos + self._radius), fill=self._color)
 
 
 def main():
     font = ImageFont.load_default()
 
-    start_time = time.time()
+    colors = ["red", "orange", "yellow", "green", "blue", "magenta"]
+    balls = [Ball(device.width, device.height, i * 1.5, colors[i % 6]) for i in range(10)]
 
-    balls = []
-    for i in range(10):
-        balls.append(Ball(device.width, device.height, i * 1.5))
     frame_count = 0
     last_time = time.time()
     fps = ""
