@@ -11,7 +11,7 @@ parser.add_argument('--i2c-address', type=str, default='0x3C', help='I2C display
 parser.add_argument('--spi-port', type=int, default=0, help='SPI port number')
 parser.add_argument('--spi-device', type=int, default=0, help='SPI device')
 parser.add_argument('--spi-bus-speed', type=int, default=8000000, help='SPI max bus speed (Hz)')
-parser.add_argument('--bcm-data-command', type=int, default=24, help='BCM pin for D/C RESET(SPI devices only)')
+parser.add_argument('--bcm-data-command', type=int, default=24, help='BCM pin for D/C RESET (SPI devices only)')
 parser.add_argument('--bcm-reset', type=int, default=25, help='BCM pin for RESET (SPI devices only)')
 
 args = parser.parse_args()
