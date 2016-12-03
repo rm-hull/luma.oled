@@ -1,0 +1,7 @@
+# Needed by https://readthedocs.io since when it runs easy_install, it 
+# doesnt find a proper install candidate for pygame.
+pillow
+smbus2
+spidev
+RPi.GPIO
+pygame
