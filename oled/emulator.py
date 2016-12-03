@@ -35,6 +35,7 @@ class emulator(mixin.noop, mixin.capabilities, device):
         import pygame
         self._pygame = pygame
         self.capabilities(width, height, mode="RGB")
+        self._scale = 1 if transform == "none" else scale
         self._transform = getattr(transformer(pygame, width, height, scale),
                                   "none" if scale == 1 else transform)
 
@@ -97,7 +98,7 @@ class pygame(emulator):
         self._pygame.display.set_caption("OLED Emulator")
         self._clock = self._pygame.time.Clock()
         self._fps = frame_rate
-        self._screen = self._pygame.display.set_mode((width * scale, height * scale))
+        self._screen = self._pygame.display.set_mode((width * self._scale, height * self._scale))
         self._screen.fill((0, 0, 0))
         self._pygame.display.flip()
 
