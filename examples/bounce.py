@@ -52,9 +52,12 @@ def main():
     balls = [Ball(device.width, device.height, i * 1.5, colors[i % 6]) for i in range(10)]
 
     frame_count = 0
-    last_time = time.time()
     fps = ""
     canvas = oled.render.canvas(device)
+
+    start_time = time.time()
+    last_time = time.time()
+
     while True:
         frame_count += 1
         with canvas as c:
