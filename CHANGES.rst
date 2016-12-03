@@ -4,7 +4,9 @@ ChangeLog
 +------------+---------------------------------------------------------------------+------------+
 | Version    | Description                                                         | Date       |
 +============+=====================================================================+============+
-| *Upcoming* | * Add HQX scaling to capture and pygame emulators                   |            |
+| *Upcoming* | *TBD*                                                               |            |
++------------+---------------------------------------------------------------------+------------+
+| **1.0.0**  | * Add HQX scaling to capture and pygame emulators                   | 2016/12/03 |
 |            | * SPI support (**NOTE:** contains breaking changes)                 |            |
 |            | * Improve benchmarking examples                                     |            |
 |            | * Fix resource leakage & noops on emulated devices                  |            |
