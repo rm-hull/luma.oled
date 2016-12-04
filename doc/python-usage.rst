@@ -11,7 +11,6 @@ First, import and initialise the device:
   from oled.serial import i2c
   from oled.device import ssd1306, sh1106
   from oled.render import canvas
-  from PIL import ImageFont, ImageDraw
 
   # rev.1 users set port=0
   serial = i2c(port=1, address=0x3C)
@@ -27,9 +26,8 @@ should be used as follows:
 .. code:: python
 
   with canvas(device) as draw:
-      font = ImageFont.load_default()
       draw.rectangle((0, 0, device.width, device.height), outline="white", fill="black")
-      draw.text((30, 40), "Hello World", font=font, fill="white")
+      draw.text((30, 40), "Hello World", fill="white")
 
 The :class:`oled.render.canvas` class automatically creates an :mod:`PIL.ImageDraw`
 object of the correct dimensions and bit depth suitable for the device, so you

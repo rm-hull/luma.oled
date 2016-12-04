@@ -7,9 +7,6 @@
 import time
 import random
 
-# 3rd party.
-from PIL import ImageFont
-
 from demo_opts import device
 import oled.device
 import oled.render
@@ -46,8 +43,6 @@ class Ball(object):
 
 
 def main():
-    font = ImageFont.load_default()
-
     colors = ["red", "orange", "yellow", "green", "blue", "magenta"]
     balls = [Ball(device.width, device.height, i * 1.5, colors[i % 6]) for i in range(10)]
 
@@ -65,7 +60,7 @@ def main():
             for b in balls:
                 b.update_pos()
                 b.draw(c)
-                c.text((2, 0), fps, font=font, fill="white")
+                c.text((2, 0), fps, fill="white")
 
                 now = time.time()
                 if now - last_time > 1:

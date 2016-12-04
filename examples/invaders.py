@@ -8,7 +8,7 @@ import time
 import random
 from demo_opts import device
 from oled.render import canvas
-from PIL import ImageFont, Image
+from PIL import Image
 
 arrow = [0x04, 0x02, 0x01, 0x02, 0x04]
 alien1 = [0x4C, 0x1A, 0xB6, 0x5F, 0x5F, 0xB6, 0x1A, 0x4C]
@@ -179,8 +179,6 @@ if __name__ == '__main__':
     army = army()
     rows = random.sample(range(12), 12)
 
-    font = ImageFont.load_default()
-
     img_path = os.path.abspath(os.path.join(os.path.dirname(__file__), 'images', 'splash.bmp'))
     splash = Image.open(img_path) \
         .transform((128, 64), Image.AFFINE, (1, 0, 0, 0, 1, 0), Image.BILINEAR) \
@@ -206,14 +204,14 @@ if __name__ == '__main__':
             army.render(draw)
             plyr.render(draw)
 
-            draw.text((8, 0), text="Score: {0}".format(army.score()), font=font, fill="blue")
+            draw.text((8, 0), text="Score: {0}".format(army.score()), fill="blue")
 
     # Double buffering in pygame?
     for i in range(2):
         with canvas(device) as draw:
             if army.size() == 0:
-                draw.text((27, 28), text="Victory", font=font, fill="blue")
+                draw.text((27, 28), text="Victory", fill="blue")
             else:
-                draw.text((30, 28), text="Defeat", font=font, fill="red")
+                draw.text((30, 28), text="Defeat", fill="red")
 
     time.sleep(10)

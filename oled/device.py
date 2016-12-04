@@ -27,15 +27,14 @@
 #   from oled.serial import i2c, spi
 #   from oled.device import ssd1306, sh1106
 #   from oled.render import canvas
-#   from PIL import ImageFont, ImageDraw
+#   from PIL import ImageDraw
 #
-#   font = ImageFont.load_default()
 #   serial = i2c(port=1, address=0x3C)
 #   device = ssd1306(serial)
 #
 #   with canvas(device) as draw:
-#      draw.rectangle((0, 0, device.width, device.height), outline="white", fill="black")
-#      draw.text(30, 40, "Hello World", font=font, fill="white")
+#      draw.rectangle(device.bounding_box, outline="white", fill="black")
+#      draw.text(30, 40, "Hello World", fill="white")
 #
 # As soon as the with-block scope level is complete, the graphics primitives
 # will be flushed to the device.

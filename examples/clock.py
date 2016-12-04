@@ -8,10 +8,6 @@ import time
 import datetime
 from demo_opts import device
 from oled.render import canvas
-from PIL import ImageFont
-
-# Load default font.
-font = ImageFont.load_default()
 
 
 def posn(angle, arm_length):

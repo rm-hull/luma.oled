@@ -1,10 +1,7 @@
 #!/usr/bin/env python
 
-from PIL import ImageFont
-
 
 def primitives(device, draw):
-    font = ImageFont.load_default()
     padding = 2
     shape_width = 20
     top = padding
@@ -20,8 +17,8 @@ def primitives(device, draw):
     draw.line((x, bottom, x + shape_width, top), fill="white")
     draw.line((x, top, x + shape_width, bottom), fill="white")
     x += shape_width + padding
-    draw.text((x, top),    'Hello',  font=font, fill="white")
-    draw.text((x, top + 20), 'World!', font=font, fill="white")
+    draw.text((x, top), 'Hello', fill="white")
+    draw.text((x, top + 20), 'World!', fill="white")
 
 
 # These datasets are purely to prevent regression bugs from creeping in

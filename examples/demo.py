@@ -7,14 +7,6 @@ import time
 import datetime
 from demo_opts import device
 from oled.render import canvas
-from PIL import ImageFont
-
-# Load default font.
-font = ImageFont.load_default()
-
-# Alternatively load a TTF font.
-# Some other nice fonts to try: http://www.dafont.com/bitmap.php
-# font = ImageFont.truetype('Minecraftia.ttf', 8)
 
 
 def primitives(draw):
@@ -42,8 +34,8 @@ def primitives(draw):
     draw.line((x, top, x + shape_width, bottom), fill="white")
     x += shape_width + padding
     # Write two lines of text.
-    draw.text((x, top),    'Hello',  font=font, fill="white")
-    draw.text((x, top + 20), 'World!', font=font, fill="white")
+    draw.text((x, top),    'Hello', fill="white")
+    draw.text((x, top + 20), 'World!', fill="white")
 
 
 def main():
