@@ -75,9 +75,8 @@ class spi(object):
     The RST pin (Reset) defaults to GPIO 25 (BCM).
     """
     def __init__(self, spi=None, gpio=None, port=0, device=0, bus_speed_hz=8000000, bcm_DC=24, bcm_RST=25):
-        import spidev
         self._gpio = gpio or self.__rpi_gpio__()
-        self._spi = spi or spidev.SpiDev()
+        self._spi = spi or self.__spidev__()
         self._spi.open(port, device)
         self._spi.max_speed_hz = bus_speed_hz
         self._bcm_DC = bcm_DC
@@ -96,6 +95,12 @@ class spi(object):
         # implementation for a mock
         import RPi.GPIO
         return RPi.GPIO
+
+    def __spidev__(self):
+        # spidev cant compile on macOS, so use a similar technique to
+        # initialize (mainly so the tests run unhindered)
+        import spidev
+        return spidev
 
     def command(self, *cmd):
         """
