@@ -4,7 +4,9 @@ ChangeLog
 +------------+---------------------------------------------------------------------+------------+
 | Version    | Description                                                         | Date       |
 +============+=====================================================================+============+
-| *Upcoming* | * Add animated-GIF emulator                                         |            |
+| *Upcoming* | *TBD*                                                               |            |
++------------+---------------------------------------------------------------------+------------+
+| **1.1.0**  | * Add animated-GIF emulator                                         | 2016/12/05 |
 |            | * Add color-mode flag to emulator                                   |            |
 |            | * Fix regression in SPI interface                                   |            |
 |            | * Rename emulator transform option 'scale' to 'identity'            |            |
