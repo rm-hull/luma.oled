@@ -211,7 +211,7 @@ class transformer(object):
         """
         return self._pygame.transform.smoothscale(surface, self._output_size)
 
-    def scale(self, surface):
+    def identity(self, surface):
         """
         Fast scale operation that does not sample the results
         """

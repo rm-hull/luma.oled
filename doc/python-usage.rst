@@ -97,7 +97,7 @@ flag to show the options::
       --bcm-reset BCM_RESET
                             BCM pin for RESET (SPI devices only)
       --transform TRANSFORM
-                            Scaling transform to apply, one of: none, scale,
+                            Scaling transform to apply, one of: none, identity,
                             scale2x, smoothscale (emulator only)
       --scale SCALE         Scaling factor to apply (emulator only)
       --duration DURATION   Animation frame duration (gifanim emulator only)
