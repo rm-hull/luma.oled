@@ -34,10 +34,10 @@ class emulator(mixin.noop, mixin.capabilities, device):
     """
     Base class for emulated OLED driver classes
     """
-    def __init__(self, width, height, transform="scale2x", scale=2):
+    def __init__(self, width, height, mode, transform, scale):
         import pygame
         self._pygame = pygame
-        self.capabilities(width, height, mode="RGB")
+        self.capabilities(width, height, mode)
         self.scale = 1 if transform == "none" else scale
         self._transform = getattr(transformer(pygame, width, height, scale),
                                   "none" if scale == 1 else transform)
@@ -62,8 +62,9 @@ class capture(emulator):
     While the capability of an OLED device is monochrome, there is no
     limitation here, and hence supports 24-bit color depth.
     """
-    def __init__(self, width=128, height=64, file_template="oled_{0:06}.png", transform="scale2x", scale=2, **kwargs):
-        super(capture, self).__init__(width, height, transform, scale)
+    def __init__(self, width=128, height=64, mode="RGB", transform="scale2x",
+                 scale=2, file_template="oled_{0:06}.png", **kwargs):
+        super(capture, self).__init__(width, height, mode, transform, scale)
         self._count = 0
         self._file_template = file_template
 
@@ -91,10 +92,10 @@ class gifanim(emulator):
     limitation here, and hence supports 24-bit color depth, albeit with
     an indexed color palette.
     """
-    def __init__(self, width=128, height=64, filename="oled_anim.gif",
-                 transform="scale2x", scale=2, duration=0.01, loop=0,
+    def __init__(self, width=128, height=64, mode="RGB", transform="scale2x",
+                 scale=2, filename="oled_anim.gif", duration=0.01, loop=0,
                  max_frames=None, **kwargs):
-        super(gifanim, self).__init__(width, height, transform, scale)
+        super(gifanim, self).__init__(width, height, mode, transform, scale)
         self._images = []
         self._count = 0
         self._max_frames = max_frames
@@ -148,8 +149,9 @@ class pygame(emulator):
     event loop is checked to see if the ESC key was pressed or the window
     was dismissed: if so `sys.exit()` is called.
     """
-    def __init__(self, width=128, height=64, frame_rate=60, transform="scale2x", scale=2, **kwargs):
-        super(pygame, self).__init__(width, height, transform, scale)
+    def __init__(self, width=128, height=64, mode="RGB", transform="scale2x",
+                 scale=2, frame_rate=60, **kwargs):
+        super(pygame, self).__init__(width, height, mode, transform, scale)
         self._pygame.init()
         self._pygame.font.init()
         self._pygame.display.set_caption("OLED Emulator")

@@ -72,8 +72,8 @@ flag to show the options::
                       [--spi-bus-speed SPI_BUS_SPEED]
                       [--bcm-data-command BCM_DATA_COMMAND]
                       [--bcm-reset BCM_RESET] [--transform TRANSFORM]
-                      [--scale SCALE] [--duration DURATION] [--loop LOOP]
-                      [--max-frames MAX_FRAMES]
+                      [--scale SCALE] [--mode MODE] [--duration DURATION]
+                      [--loop LOOP] [--max-frames MAX_FRAMES]
 
     oled arguments
 
@@ -100,6 +100,7 @@ flag to show the options::
                             Scaling transform to apply, one of: none, identity,
                             scale2x, smoothscale (emulator only)
       --scale SCALE         Scaling factor to apply (emulator only)
+      --mode MODE           Colour mode, one of: 1, RGB, RGBA (emulator only)
       --duration DURATION   Animation frame duration (gifanim emulator only)
       --loop LOOP           Repeat loop, zero=forever (gifanim emulator only)
       --max-frames MAX_FRAMES

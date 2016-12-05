@@ -16,6 +16,7 @@ parser.add_argument('--bcm-data-command', type=int, default=24, help='BCM pin fo
 parser.add_argument('--bcm-reset', type=int, default=25, help='BCM pin for RESET (SPI devices only)')
 parser.add_argument('--transform', type=str, default="scale2x", help='Scaling transform to apply, one of: none, identity, scale2x, smoothscale (emulator only)')
 parser.add_argument('--scale', type=int, default=2, help='Scaling factor to apply (emulator only)')
+parser.add_argument('--mode', type=str, default="RGB", help='Colour mode, one of: 1, RGB, RGBA (emulator only)')
 parser.add_argument('--duration', type=float, default=0.01, help='Animation frame duration (gifanim emulator only)')
 parser.add_argument('--loop', type=int, default=0, help='Repeat loop, zero=forever (gifanim emulator only)')
 parser.add_argument('--max-frames', type=int, help='Maximum frames to record (gifanim emulator only)')
