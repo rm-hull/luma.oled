@@ -72,32 +72,38 @@ flag to show the options::
                       [--spi-bus-speed SPI_BUS_SPEED]
                       [--bcm-data-command BCM_DATA_COMMAND]
                       [--bcm-reset BCM_RESET] [--transform TRANSFORM]
-                      [--scale SCALE]
+                      [--scale SCALE] [--duration DURATION] [--loop LOOP]
+                      [--max-frames MAX_FRAMES]
 
     oled arguments
 
     optional arguments:
-    -h, --help            show this help message and exit
-    --display DISPLAY, -d DISPLAY
-                          display type, one of: ssd1306, sh1106, capture, pygame
-    --interface INTERFACE, -i INTERFACE
-                          serial interface type, one of: i2c, spi
-    --i2c-port I2C_PORT   I2C bus number
-    --i2c-address I2C_ADDRESS
-                          I2C display address
-    --spi-port SPI_PORT   SPI port number
-    --spi-device SPI_DEVICE
-                          SPI device
-    --spi-bus-speed SPI_BUS_SPEED
-                          SPI max bus speed (Hz)
-    --bcm-data-command BCM_DATA_COMMAND
-                          BCM pin for D/C RESET (SPI devices only)
-    --bcm-reset BCM_RESET
-                          BCM pin for RESET (SPI devices only)
-    --transform TRANSFORM
-                          Scaling transform to apply, one of: none, scale,
-                          scale2x, smoothscale (emulator only)
-    --scale SCALE         Scaling factor to apply (emulator only)
+      -h, --help            show this help message and exit
+      --display DISPLAY, -d DISPLAY
+                            display type, one of: ssd1306, sh1106, capture,
+                            pygame, gifanim
+      --interface INTERFACE, -i INTERFACE
+                            serial interface type, one of: i2c, spi
+      --i2c-port I2C_PORT   I2C bus number
+      --i2c-address I2C_ADDRESS
+                            I2C display address
+      --spi-port SPI_PORT   SPI port number
+      --spi-device SPI_DEVICE
+                            SPI device
+      --spi-bus-speed SPI_BUS_SPEED
+                            SPI max bus speed (Hz)
+      --bcm-data-command BCM_DATA_COMMAND
+                            BCM pin for D/C RESET (SPI devices only)
+      --bcm-reset BCM_RESET
+                            BCM pin for RESET (SPI devices only)
+      --transform TRANSFORM
+                            Scaling transform to apply, one of: none, scale,
+                            scale2x, smoothscale (emulator only)
+      --scale SCALE         Scaling factor to apply (emulator only)
+      --duration DURATION   Animation frame duration (gifanim emulator only)
+      --loop LOOP           Repeat loop, zero=forever (gifanim emulator only)
+      --max-frames MAX_FRAMES
+                            Maximum frames to record (gifanim emulator only)
 
 .. note::
    #. Substitute ``python3`` for ``python`` in the above examples if you are using python3.
