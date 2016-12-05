@@ -18,16 +18,28 @@ technical details for the SSD1306 OLED display can be found in the
 `datasheet <https://raw.githubusercontent.com/rm-hull/ssd1306/master/doc/tech-spec/SSD1306.pdf>`_.
 See also the datasheet for the `SH1106 chipset <https://raw.githubusercontent.com/rm-hull/ssd1306/sh1106-compat/doc/tech-spec/SH1106.pdf>`_.
 
-The SSD1306 display pictured below is 128 x 64 pixels, and the board is `tiny`, and will fit neatly
-inside the RPi case (the SH1106 is slightly different, in that it supports 132 x 64
-pixels).
+The SSD1306 display pictured below is 128 x 64 pixels, and the board is `tiny`,
+and will fit neatly inside the RPi case (the SH1106 is slightly different, in
+that it supports 132 x 64 pixels).
 
 .. image:: https://raw.githubusercontent.com/rm-hull/ssd1306/master/doc/images/mounted_display.jpg
    :alt: mounted
 
+As well as display drivers for SSD1306- and SH1106-class OLED devices there are
+emulators that run in real-time (with pygame) and others that can take screenshots,
+or assemble animated GIFs, as per the examples below (source code for these is 
+available in the `examples <https://github.com/rm-hull/ssd1306/tree/master/examples>`_ directory:
+
+.. image:: https://raw.githubusercontent.com/rm-hull/ssd1306/master/doc/images/clock_anim.gif
+   :alt: clock
+
+.. image:: https://raw.githubusercontent.com/rm-hull/ssd1306/master/doc/images/invaders_anim.gif
+   :alt: invaders
+
 Documentation
 -------------
-Full documentation with installation instructions and examples can be found on https://ssd1306.readthedocs.io.
+Full documentation with installation instructions and examples can be found on
+https://ssd1306.readthedocs.io.
 
 License
 -------

@@ -18,3 +18,15 @@ the regular, top GPIO pins (P1 header) can also be used of course.
    :download:`datasheet <tech-spec/SSD1306.pdf>`.
    See also the datasheet for the :download:`SH1106 chipset <tech-spec/SH1106.pdf>`.
 
+As well as display drivers for SSD1306- and SH1106-class OLED devices there are
+emulators that run in real-time (with pygame) and others that can take screenshots,
+or assemble animated GIFs, as per the examples below (source code for these is 
+available in the `examples <https://github.com/rm-hull/ssd1306/tree/master/examples>`_ directory:
+
+.. image:: images/clock_anim.gif
+   :alt: clock
+
+.. image:: images/invaders_anim.gif
+   :alt: invaders
+
+

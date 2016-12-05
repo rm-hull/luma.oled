@@ -5,7 +5,7 @@ import oled.serial
 
 parser = argparse.ArgumentParser(description='oled arguments')
 
-parser.add_argument('--display', '-d', type=str, default='ssd1306', help='display type, one of: ssd1306, sh1106, capture, pygame')
+parser.add_argument('--display', '-d', type=str, default='ssd1306', help='display type, one of: ssd1306, sh1106, capture, pygame, gifanim')
 parser.add_argument('--interface', '-i', type=str, default='i2c', help='serial interface type, one of: i2c, spi')
 parser.add_argument('--i2c-port', type=int, default=1, help='I2C bus number')
 parser.add_argument('--i2c-address', type=str, default='0x3C', help='I2C display address')
@@ -16,6 +16,9 @@ parser.add_argument('--bcm-data-command', type=int, default=24, help='BCM pin fo
 parser.add_argument('--bcm-reset', type=int, default=25, help='BCM pin for RESET (SPI devices only)')
 parser.add_argument('--transform', type=str, default="scale2x", help='Scaling transform to apply, one of: none, scale, scale2x, smoothscale (emulator only)')
 parser.add_argument('--scale', type=int, default=2, help='Scaling factor to apply (emulator only)')
+parser.add_argument('--duration', type=float, default=0.01, help='Animation frame duration (gifanim emulator only)')
+parser.add_argument('--loop', type=int, default=0, help='Repeat loop, zero=forever (gifanim emulator only)')
+parser.add_argument('--max-frames', type=int, help='Maximum frames to record (gifanim emulator only)')
 
 args = parser.parse_args()
 if args.display in ('ssd1306', 'sh1106'):
@@ -38,9 +41,9 @@ if args.display in ('ssd1306', 'sh1106'):
                                  bcm_RST=args.bcm_reset)
     device = Device(serial)
 
-elif args.display in ('capture', 'pygame'):
+elif args.display in ('capture', 'pygame', 'gifanim'):
     Emulator = getattr(oled.emulator, args.display)
-    device = Emulator(transform=args.transform, scale=args.scale)
+    device = Emulator(**vars(args))
 
 else:
     parser.error('unknown display %s' % args.display)

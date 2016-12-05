@@ -22,8 +22,11 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import os
 import sys
+import atexit
 from oled.device import device
+from PIL import Image
 import oled.mixin as mixin
 
 
@@ -35,7 +38,7 @@ class emulator(mixin.noop, mixin.capabilities, device):
         import pygame
         self._pygame = pygame
         self.capabilities(width, height, mode="RGB")
-        self._scale = 1 if transform == "none" else scale
+        self.scale = 1 if transform == "none" else scale
         self._transform = getattr(transformer(pygame, width, height, scale),
                                   "none" if scale == 1 else transform)
 
@@ -78,6 +81,60 @@ class capture(emulator):
         self._pygame.image.save(surface, filename)
 
 
+class gifanim(emulator):
+    """
+    Pseudo-device that acts like an OLED display, except that it collects
+    the images when the :func:`display` method is called, and on exit,
+    assembles them into an animated GIF image.
+
+    While the capability of an OLED device is monochrome, there is no
+    limitation here, and hence supports 24-bit color depth, albeit with
+    an indexed color palette.
+    """
+    def __init__(self, width=128, height=64, filename="oled_anim.gif",
+                 transform="scale2x", scale=2, duration=0.01, loop=0,
+                 max_frames=None, **kwargs):
+        super(gifanim, self).__init__(width, height, transform, scale)
+        self._images = []
+        self._count = 0
+        self._max_frames = max_frames
+        self._filename = filename
+        self._loop = loop
+        self._duration = duration
+        atexit.register(self.write_animation)
+
+    def display(self, image):
+        """
+        Takes an image, scales it according to the nominated transform, and
+        stores it for later building into an animated GIF.
+        """
+        assert(image.size[0] == self.width)
+        assert(image.size[1] == self.height)
+
+        surface = self.to_surface(image)
+        rawbytes = self._pygame.image.tostring(surface, "RGB", False)
+        im = Image.frombytes(self.mode, (self.width * self.scale, self.height * self.scale), rawbytes)
+        self._images.append(im)
+
+        self._count += 1
+        sys.stdout.write("Recording frame: {0}\r".format(self._count))
+        sys.stdout.flush()
+
+        if self._max_frames and self._count > self._max_frames:
+            sys.exit(0)
+
+    def write_animation(self):
+        sys.stdout.write("Please wait... building animated GIF\r")
+        sys.stdout.flush()
+        with open(self._filename, "w+b") as fp:
+            self._images[0].save(fp, save_all=True, loop=self._loop,
+                                 duration=int(self._duration * 1000),
+                                 append_images=self._images[1:])
+
+        print("Wrote {0} frames to file: {1} ({2} bytes)".format(
+            len(self._images), self._filename, os.stat(self._filename).st_size))
+
+
 class pygame(emulator):
     """
     Pseudo-device that acts like an OLED display, except that it renders
@@ -98,7 +155,7 @@ class pygame(emulator):
         self._pygame.display.set_caption("OLED Emulator")
         self._clock = self._pygame.time.Clock()
         self._fps = frame_rate
-        self._screen = self._pygame.display.set_mode((width * self._scale, height * self._scale))
+        self._screen = self._pygame.display.set_mode((width * self.scale, height * self.scale))
         self._screen.fill((0, 0, 0))
         self._pygame.display.flip()
 
@@ -132,7 +189,7 @@ class transformer(object):
     def __init__(self, pygame, width, height, scale):
         self._pygame = pygame
         self._output_size = (width * scale, height * scale)
-        self._scale = scale
+        self.scale = scale
 
     def none(self, surface):
         """
@@ -145,7 +202,7 @@ class transformer(object):
         Scales using the AdvanceMAME Scale2X algorithm which does a
         'jaggie-less' scale of bitmap graphics.
         """
-        assert(self._scale == 2)
+        assert(self.scale == 2)
         return self._pygame.transform.scale2x(surface)
 
     def smoothscale(self, surface):
