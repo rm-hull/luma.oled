@@ -6,6 +6,7 @@ ChangeLog
 +============+=====================================================================+============+
 | *Upcoming* | * Add animated-GIF emulator                                         |            |
 |            | * Add color-mode flag to emulator                                   |            |
+|            | * Fix regression in SPI interface                                   |            |
 |            | * Rename emulator transform option 'scale' to 'identity'            |            |
 +------------+---------------------------------------------------------------------+------------+
 | **1.0.0**  | * Add HQX scaling to capture and pygame emulators                   | 2016/12/03 |

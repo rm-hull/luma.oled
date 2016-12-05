@@ -100,7 +100,7 @@ class spi(object):
         # spidev cant compile on macOS, so use a similar technique to
         # initialize (mainly so the tests run unhindered)
         import spidev
-        return spidev
+        return spidev.SpiDev()
 
     def command(self, *cmd):
         """
