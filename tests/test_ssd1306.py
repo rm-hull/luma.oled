@@ -9,7 +9,7 @@ from oled.device import ssd1306
 from oled.render import canvas
 import baseline_data
 
-serial = Mock()
+serial = Mock(unsafe=True)
 
 
 def setup_function(function):
