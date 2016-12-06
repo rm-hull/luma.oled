@@ -15,3 +15,4 @@ Contributors
 * Boeeerb (@Boeeerb)
 * xes (@xes)
 * Roger Dahl (@rogerdahl)
+* Václav Šmilauer (@eudoxos)
