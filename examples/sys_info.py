@@ -11,7 +11,7 @@ import sys
 import time
 from datetime import datetime
 if os.name != 'posix':
-    sys.exit('platform not supported')
+    sys.exit('{} platform not supported'.format(os.name))
 
 import psutil
 
@@ -91,4 +91,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        pass

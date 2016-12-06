@@ -13,4 +13,7 @@ with canvas(device) as draw:
     logo = Image.open(img_path)
     draw.bitmap((32, 0), logo, fill="white")
 
-time.sleep(5)
+try:
+    time.sleep(5)
+except KeyboardInterrupt:
+    pass

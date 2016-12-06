@@ -147,4 +147,7 @@ def demo(iterations):
 
 
 if __name__ == "__main__":
-    demo(20)
+    try:
+        demo(20)
+    except KeyboardInterrupt:
+        pass
