@@ -14,7 +14,7 @@ Installation
    * ``python-dev`` ⇒ ``python3-dev``,
    * ``python-pip`` ⇒ ``python3-pip``.
 
-   It was *originally* tested with Raspian on a rev.2 model B, with a vanilla
+   It was *originally* tested with Raspbian on a rev.2 model B, with a vanilla
    kernel version 4.1.16+, and has subsequently tested on Raspberry Pi model A
    & model B2 (Debian Jessie) and OrangePi Zero (Armbian Jessie).
 
@@ -30,7 +30,7 @@ Install the latest version of the library directly from
 
 from source
 ^^^^^^^^^^^
-For python2, from the bash prompt, enter::
+For Python 2, from the bash prompt, enter::
 
   $ sudo apt-get install python-dev python-pip libfreetype6-dev libjpeg8-dev
   $ sudo python setup.py install
