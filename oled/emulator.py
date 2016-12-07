@@ -130,7 +130,8 @@ class gifanim(emulator):
         with open(self._filename, "w+b") as fp:
             self._images[0].save(fp, save_all=True, loop=self._loop,
                                  duration=int(self._duration * 1000),
-                                 append_images=self._images[1:])
+                                 append_images=self._images[1:],
+                                 format="GIF")
 
         print("Wrote {0} frames to file: {1} ({2} bytes)".format(
             len(self._images), self._filename, os.stat(self._filename).st_size))
