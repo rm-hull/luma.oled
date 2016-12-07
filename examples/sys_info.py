@@ -46,19 +46,19 @@ def cpu_usage():
     uptime = datetime.now() - datetime.fromtimestamp(psutil.boot_time())
     av1, av2, av3 = os.getloadavg()
     return "Ld:%.1f %.1f %.1f Up: %s" \
-            % (av1, av2, av3, str(uptime).split('.')[0])
+        % (av1, av2, av3, str(uptime).split('.')[0])
 
 
 def mem_usage():
     usage = psutil.virtual_memory()
     return "Mem: %s %.0f%%" \
-            % (bytes2human(usage.used), 100 - usage.percent)
+        % (bytes2human(usage.used), 100 - usage.percent)
 
 
 def disk_usage(dir):
     usage = psutil.disk_usage(dir)
     return "SD:  %s %.0f%%" \
-            % (bytes2human(usage.used), usage.percent)
+        % (bytes2human(usage.used), usage.percent)
 
 
 def network(iface):
@@ -70,18 +70,21 @@ def network(iface):
 def stats(oled):
     # use custom font
     font_path = os.path.abspath(os.path.join(os.path.dirname(__file__),
-        'fonts', 'C&C Red Alert [INET].ttf'))
+                                'fonts', 'C&C Red Alert [INET].ttf'))
     font2 = ImageFont.truetype(font_path, 12)
 
     with canvas(oled) as draw:
         draw.text((0, 0), cpu_usage(), font=font2, fill="white")
-        draw.text((0, 14), mem_usage(), font=font2, fill="white")
-        draw.text((0, 26), disk_usage('/'), font=font2, fill="white")
-        try:
-            draw.text((0, 38), network('wlan0'), font=font2, fill="white")
-        except KeyError:
-            # no wifi enabled/available
-            pass
+        if device.height >= 32:
+            draw.text((0, 14), mem_usage(), font=font2, fill="white")
+
+        if device.height >= 64:
+            draw.text((0, 26), disk_usage('/'), font=font2, fill="white")
+            try:
+                draw.text((0, 38), network('wlan0'), font=font2, fill="white")
+            except KeyError:
+                # no wifi enabled/available
+                pass
 
 
 def main():

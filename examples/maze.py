@@ -137,7 +137,7 @@ class Maze(object):
 
 
 def demo(iterations):
-    screen = (128, 64)
+    screen = (device.width, device.height)
     for loop in range(iterations):
         for scale in [2, 3, 4, 3]:
             sz = list(map(lambda z: z // scale - 1, screen))

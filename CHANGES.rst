@@ -4,7 +4,8 @@ ChangeLog
 +------------+---------------------------------------------------------------------+------------+
 | Version    | Description                                                         | Date       |
 +============+=====================================================================+============+
-| *Upcoming* | * Fix boundary condition error when supplying max-frames to gifanim |            |
+| *Upcoming* | * Add support for 128x32, 96x16 OLED screens (SSD1306 chipset only) |            |
+|            | * Fix boundary condition error when supplying max-frames to gifanim |            |
 |            | * Bit pattern calc rework when conveting color -> monochrome        |            |
 |            | * Approx 20% performance improvement in ``display`` method          |            |
 +------------+---------------------------------------------------------------------+------------+

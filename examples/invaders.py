@@ -175,13 +175,17 @@ def ai_logic_move(army, plyr, rows):
 
 
 if __name__ == '__main__':
+
+    if (device.width, device.height) not in ((128, 64), (96, 64)):
+        raise ValueError("Unsupported mode: {0}x{1}".format(device.width, device.height))
+
     plyr = player()
     army = army()
     rows = random.sample(range(12), 12)
 
     img_path = os.path.abspath(os.path.join(os.path.dirname(__file__), 'images', 'splash.bmp'))
     splash = Image.open(img_path) \
-        .transform((128, 64), Image.AFFINE, (1, 0, 0, 0, 1, 0), Image.BILINEAR) \
+        .transform((device.width, device.height), Image.AFFINE, (1, 0, 0, 0, 1, 0), Image.BILINEAR) \
         .convert(device.mode)
 
     # Double buffering in pygame?
