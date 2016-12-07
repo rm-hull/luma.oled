@@ -8,9 +8,9 @@ except ImportError:
 import smbus2
 from oled.serial import i2c, spi
 
-smbus = Mock()
-spidev = Mock()
-gpio = Mock()
+smbus = Mock(unsafe=True)
+spidev = Mock(unsafe=True)
+gpio = Mock(unsafe=True)
 
 
 def setup_function(function):

@@ -10,7 +10,7 @@ from oled.render import canvas
 
 import baseline_data
 
-serial = Mock()
+serial = Mock(unsafe=True)
 
 
 def test_display():
@@ -25,8 +25,8 @@ def test_display():
     def command(*cmd):
         recordings.append({'command': list(cmd)})
 
-    serial.command = Mock(side_effect=command)
-    serial.data = Mock(side_effect=data)
+    serial.command = Mock(side_effect=command, unsafe=True)
+    serial.data = Mock(side_effect=data, unsafe=True)
 
     # Use the same drawing primitives as the demo
     with canvas(device) as draw:
