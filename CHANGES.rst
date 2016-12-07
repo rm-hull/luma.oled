@@ -4,7 +4,7 @@ ChangeLog
 +------------+---------------------------------------------------------------------+------------+
 | Version    | Description                                                         | Date       |
 +============+=====================================================================+============+
-| *Upcoming* | *TBD*                                                               |            |
+| *Upcoming* | Fix boundary condition error when supplying max-frames to GIF Anim  |            |
 +------------+---------------------------------------------------------------------+------------+
 | **1.1.0**  | * Add animated-GIF emulator                                         | 2016/12/05 |
 |            | * Add color-mode flag to emulator                                   |            |

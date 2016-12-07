@@ -121,7 +121,7 @@ class gifanim(emulator):
         sys.stdout.write("Recording frame: {0}\r".format(self._count))
         sys.stdout.flush()
 
-        if self._max_frames and self._count > self._max_frames:
+        if self._max_frames and self._count >= self._max_frames:
             sys.exit(0)
 
     def write_animation(self):
