@@ -8,6 +8,9 @@ SSD1306 / SH1106 OLED Driver
 
 .. image:: https://img.shields.io/maintenance/yes/2016.svg?maxAge=2592000
 
+.. image:: https://img.shields.io/pypi/pyversions/ssd1306.svg
+    :target: https://pypi.python.org/pypi/ssd1306
+
 .. image:: https://img.shields.io/pypi/v/ssd1306.svg
    :target: https://pypi.python.org/pypi/ssd1306
 
