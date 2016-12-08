@@ -17,7 +17,7 @@ setup(
                  "SSD1306 or SH1106 chipset"),
     long_description=README,
     license="MIT",
-    keywords="raspberry pi rpi oled display screen ssd1306 sh1106 spi i2c",
+    keywords="raspberry pi rpi oled display screen ssd1306 sh1106 spi i2c 128x64 128x32 96x16",
     url="https://github.com/rm-hull/ssd1306",
     download_url="https://github.com/rm-hull/ssd1306/tarball/" + version,
     packages=["oled"],
