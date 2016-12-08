@@ -3,7 +3,8 @@ import oled.device
 import oled.emulator
 import oled.serial
 
-parser = argparse.ArgumentParser(description='oled arguments')
+parser = argparse.ArgumentParser(description='oled arguments',
+    formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
 parser.add_argument('--display', '-d', type=str, default='ssd1306', help='display type, one of: ssd1306, sh1106, capture, pygame, gifanim')
 parser.add_argument('--width', type=int, default=128, help='width of the device in pixels')
