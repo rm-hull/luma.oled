@@ -25,9 +25,13 @@
 import os
 import sys
 import atexit
+import logging
 from oled.device import device
 from PIL import Image
 import oled.mixin as mixin
+
+
+logger = logging.getLogger(__name__)
 
 
 class emulator(mixin.noop, mixin.capabilities, device):
@@ -78,7 +82,7 @@ class capture(emulator):
         self._count += 1
         filename = self._file_template.format(self._count)
         surface = self.to_surface(image)
-        print("Writing: {0}".format(filename))
+        logger.debug("Writing: {0}".format(filename))
         self._pygame.image.save(surface, filename)
 
 
@@ -118,22 +122,20 @@ class gifanim(emulator):
         self._images.append(im)
 
         self._count += 1
-        sys.stdout.write("Recording frame: {0}\r".format(self._count))
-        sys.stdout.flush()
+        logger.debug("Recording frame: {0}".format(self._count))
 
         if self._max_frames and self._count >= self._max_frames:
             sys.exit(0)
 
     def write_animation(self):
-        sys.stdout.write("Please wait... building animated GIF\r")
-        sys.stdout.flush()
+        logger.debug("Please wait... building animated GIF")
         with open(self._filename, "w+b") as fp:
             self._images[0].save(fp, save_all=True, loop=self._loop,
                                  duration=int(self._duration * 1000),
                                  append_images=self._images[1:],
                                  format="GIF")
 
-        print("Wrote {0} frames to file: {1} ({2} bytes)".format(
+        logger.debug("Wrote {0} frames to file: {1} ({2} bytes)".format(
             len(self._images), self._filename, os.stat(self._filename).st_size))
 
 

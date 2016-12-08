@@ -1,7 +1,10 @@
+import logging
 import argparse
+
 import oled.device
 import oled.emulator
 import oled.serial
+
 
 parser = argparse.ArgumentParser(description='oled arguments',
     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
@@ -23,6 +26,14 @@ parser.add_argument('--mode', type=str, default='RGB', help='Colour mode, one of
 parser.add_argument('--duration', type=float, default=0.01, help='Animation frame duration (gifanim emulator only)')
 parser.add_argument('--loop', type=int, default=0, help='Repeat loop, zero=forever (gifanim emulator only)')
 parser.add_argument('--max-frames', type=int, help='Maximum frames to record (gifanim emulator only)')
+
+# logging
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)-15s - %(message)s'
+)
+# ignore PIL debug messages
+logging.getLogger('PIL').setLevel(logging.ERROR)
 
 args = parser.parse_args()
 if args.display in ('ssd1306', 'sh1106'):
