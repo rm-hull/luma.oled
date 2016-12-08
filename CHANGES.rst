@@ -4,7 +4,9 @@ ChangeLog
 +------------+---------------------------------------------------------------------+------------+
 | Version    | Description                                                         | Date       |
 +============+=====================================================================+============+
-| *Upcoming* | * Add support for 128x32, 96x16 OLED screens (SSD1306 chipset only) |            |
+| *Upcoming* | *TBD*                                                               |            |
++------------+---------------------------------------------------------------------+------------+
+| **1.2.0**  | * Add support for 128x32, 96x16 OLED screens (SSD1306 chipset only) | 2016/12/08 |
 |            | * Fix boundary condition error when supplying max-frames to gifanim |            |
 |            | * Bit pattern calc rework when conveting color -> monochrome        |            |
 |            | * Approx 20% performance improvement in ``display`` method          |            |
