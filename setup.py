@@ -26,7 +26,7 @@ setup(
     tests_require=["mock", "pytest", "pytest-cov", "python-coveralls"],
     classifiers=[
         "License :: OSI Approved :: MIT License",
-        "Development Status :: 4 - Beta",
+        "Development Status :: 5 - Stable",
         "Intended Audience :: Education",
         "Intended Audience :: Developers",
         "Topic :: Education",
