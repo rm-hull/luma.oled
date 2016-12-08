@@ -1,8 +1,8 @@
 Installation
 ------------
 .. warning::
-   Ensure that the pre-requisites from the previous section have been performed
-   and checked/tested before proceeding.
+   Ensure that the :ref:`pre-requisites` from the previous section
+   have been performed, checked and tested before proceeding.
 
 .. note:: The library has been tested against Python 2.7, 3.4 and 3.5.
 
@@ -15,10 +15,10 @@ Installation
    * ``python-pip`` ⇒ ``python3-pip``.
 
    It was *originally* tested with Raspbian on a rev.2 model B, with a vanilla
-   kernel version 4.1.16+, and has subsequently tested on Raspberry Pi model A
-   & model B2 (Debian Jessie) and OrangePi Zero (Armbian Jessie).
+   kernel version 4.1.16+, and has subsequently been tested on Raspberry Pi
+   model A, model B2 and 3B (Debian Jessie) and OrangePi Zero (Armbian Jessie).
 
-from PyPI
+From PyPI
 ^^^^^^^^^
 .. note:: This is the preferred installation mechanism.
 
@@ -28,7 +28,7 @@ Install the latest version of the library directly from
   $ sudo apt-get install python-dev python-pip libfreetype6-dev libjpeg8-dev
   $ sudo pip install --upgrade ssd1306
 
-from source
+From source
 ^^^^^^^^^^^
 For Python 2, from the bash prompt, enter::
 
