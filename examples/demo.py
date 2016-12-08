@@ -34,14 +34,15 @@ def primitives(draw):
     draw.line((x, top, x + shape_width, bottom), fill="white")
     x += shape_width + padding
     # Write two lines of text.
-    draw.text((x, top),    'Hello', fill="white")
-    draw.text((x, top + 20), 'World!', fill="white")
+    draw.text((x, top), 'Hello', fill="white")
+    draw.text((x, top + 16), 'World!', fill="white")
 
 
 def main():
     print("Testing basic canvas graphics...")
-    with canvas(device) as draw:
-        primitives(draw)
+    for _ in range(2):
+        with canvas(device) as draw:
+            primitives(draw)
 
     time.sleep(10)
 
@@ -62,8 +63,8 @@ def main():
     for x in range(40):
         with canvas(device) as draw:
             now = datetime.datetime.now()
-            draw.text((x, 10), str(now.date()), fill="white")
-            draw.text((10, 24), str(now.time()), fill="white")
+            draw.text((x, 4), str(now.date()), fill="white")
+            draw.text((10, 16), str(now.time()), fill="white")
             time.sleep(0.1)
 
 

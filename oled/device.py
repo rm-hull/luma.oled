@@ -124,6 +124,11 @@ class sh1106(device, mixin.capabilities):
             self.height = height
             self._pages = self.height // 8
 
+            # FIXME: Delay doing anything here with alternate screen sizes
+            # until we are able to get a device to test with.
+            if width != 128 and height != 64:
+                raise ValueError("Unsupported mode: {0}x{1}".format(width, height))
+
             self.command(
                 const.DISPLAYOFF,
                 const.MEMORYMODE,
@@ -193,17 +198,27 @@ class ssd1306(device, mixin.capabilities):
             self._buffer = [0] * self.width * self._pages
             self._offsets = [n * self.width for n in range(8)]
 
+            # Supported modes
+            settings = {
+                (128, 64): dict(multiplex=0x3F, displayclockdiv=0x80, compins=0x12),
+                (128, 32): dict(multiplex=0x1F, displayclockdiv=0x80, compins=0x02),
+                (96, 16): dict(multiplex=0x0F, displayclockdiv=0x60, compins=0x02)
+            }.get((width, height))
+
+            if settings is None:
+                raise ValueError("Unsupported mode: {0}x{1}".format(width, height))
+
             self.command(
                 const.DISPLAYOFF,
-                const.SETDISPLAYCLOCKDIV, 0x80,
-                const.SETMULTIPLEX,       0x3F,
+                const.SETDISPLAYCLOCKDIV, settings['displayclockdiv'],
+                const.SETMULTIPLEX,       settings['multiplex'],
                 const.SETDISPLAYOFFSET,   0x00,
                 const.SETSTARTLINE,
                 const.CHARGEPUMP,         0x14,
                 const.MEMORYMODE,         0x00,
                 const.SEGREMAP,
                 const.COMSCANDEC,
-                const.SETCOMPINS,         0x12,
+                const.SETCOMPINS,         settings['compins'],
                 const.SETCONTRAST,        0xCF,
                 const.SETPRECHARGE,       0xF1,
                 const.SETVCOMDETECT,      0x40,
