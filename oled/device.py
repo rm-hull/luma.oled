@@ -234,20 +234,21 @@ class ssd1306(device, mixin.capabilities):
         pix = list(image.getdata())
         step = self.width * 8
         buf = self._buffer
-        offsets = self._offsets
+        os0, os1, os2, os3, os4, os5, os6, os7 = self._offsets
         w = self.width
         j = 0
         for y in range(0, self._pages * step, step):
             i = y + w - 1
             while i >= y:
-                buf[j] = (pix[i] & 0x01) | \
-                         (pix[i + offsets[1]] & 0x01) << 1 | \
-                         (pix[i + offsets[2]] & 0x01) << 2 | \
-                         (pix[i + offsets[3]] & 0x01) << 3 | \
-                         (pix[i + offsets[4]] & 0x01) << 4 | \
-                         (pix[i + offsets[5]] & 0x01) << 5 | \
-                         (pix[i + offsets[6]] & 0x01) << 6 | \
-                         (pix[i + offsets[7]] & 0x01) << 7
+                buf[j] = \
+                    (0x01 if pix[i] > 0 else 0) | \
+                    (0x02 if pix[i + os1] > 0 else 0) | \
+                    (0x04 if pix[i + os2] > 0 else 0) | \
+                    (0x08 if pix[i + os3] > 0 else 0) | \
+                    (0x10 if pix[i + os4] > 0 else 0) | \
+                    (0x20 if pix[i + os5] > 0 else 0) | \
+                    (0x40 if pix[i + os6] > 0 else 0) | \
+                    (0x80 if pix[i + os7] > 0 else 0)
 
                 i -= 1
                 j += 1
