@@ -66,10 +66,10 @@ specified on the command line - each program can be invoked with a ``--help``
 flag to show the options::
 
     $ python pi_logo.py -h
-    usage: pi_logo.py [-h] [--display DISPLAY] [--interface INTERFACE]
-                      [--i2c-port I2C_PORT] [--i2c-address I2C_ADDRESS]
-                      [--spi-port SPI_PORT] [--spi-device SPI_DEVICE]
-                      [--spi-bus-speed SPI_BUS_SPEED]
+    usage: pi_logo.py [-h] [--display DISPLAY] [--width WIDTH] [--height HEIGHT]
+                      [--interface INTERFACE] [--i2c-port I2C_PORT]
+                      [--i2c-address I2C_ADDRESS] [--spi-port SPI_PORT]
+                      [--spi-device SPI_DEVICE] [--spi-bus-speed SPI_BUS_SPEED]
                       [--bcm-data-command BCM_DATA_COMMAND]
                       [--bcm-reset BCM_RESET] [--transform TRANSFORM]
                       [--scale SCALE] [--mode MODE] [--duration DURATION]
@@ -80,31 +80,38 @@ flag to show the options::
     optional arguments:
       -h, --help            show this help message and exit
       --display DISPLAY, -d DISPLAY
-                            display type, one of: ssd1306, sh1106, capture,
-                            pygame, gifanim
+                            Display type, one of: ssd1306, sh1106, capture,
+                            pygame, gifanim (default: ssd1306)
+      --width WIDTH         Width of the device in pixels (default: 128)
+      --height HEIGHT       Height of the device in pixels (default: 64)
       --interface INTERFACE, -i INTERFACE
-                            serial interface type, one of: i2c, spi
-      --i2c-port I2C_PORT   I2C bus number
+                            Serial interface type, one of: i2c, spi (default: i2c)
+      --i2c-port I2C_PORT   I2C bus number (default: 1)
       --i2c-address I2C_ADDRESS
-                            I2C display address
-      --spi-port SPI_PORT   SPI port number
+                            I2C display address (default: 0x3C)
+      --spi-port SPI_PORT   SPI port number (default: 0)
       --spi-device SPI_DEVICE
-                            SPI device
+                            SPI device (default: 0)
       --spi-bus-speed SPI_BUS_SPEED
-                            SPI max bus speed (Hz)
+                            SPI max bus speed (Hz) (default: 8000000)
       --bcm-data-command BCM_DATA_COMMAND
-                            BCM pin for D/C RESET (SPI devices only)
+                            BCM pin for D/C RESET (SPI devices only) (default: 24)
       --bcm-reset BCM_RESET
-                            BCM pin for RESET (SPI devices only)
+                            BCM pin for RESET (SPI devices only) (default: 25)
       --transform TRANSFORM
                             Scaling transform to apply, one of: none, identity,
-                            scale2x, smoothscale (emulator only)
-      --scale SCALE         Scaling factor to apply (emulator only)
+                            scale2x, smoothscale (emulator only) (default:
+                            scale2x)
+      --scale SCALE         Scaling factor to apply (emulator only) (default: 2)
       --mode MODE           Colour mode, one of: 1, RGB, RGBA (emulator only)
+                            (default: RGB)
       --duration DURATION   Animation frame duration (gifanim emulator only)
+                            (default: 0.01)
       --loop LOOP           Repeat loop, zero=forever (gifanim emulator only)
+                            (default: 0)
       --max-frames MAX_FRAMES
                             Maximum frames to record (gifanim emulator only)
+                            (default: None)
 
 .. note::
    #. Substitute ``python3`` for ``python`` in the above examples if you are using python3.
