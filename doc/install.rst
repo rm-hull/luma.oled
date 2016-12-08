@@ -4,7 +4,7 @@ Installation
    Ensure that the pre-requisites from the previous section have been performed
    and checked/tested before proceeding.
 
-.. note:: The library has been tested against Python 2.7 and 3.4.
+.. note:: The library has been tested against Python 2.7, 3.4 and 3.5.
 
    For **Python3** installation, substitute the following in the
    instructions below.
