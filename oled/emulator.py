@@ -39,7 +39,10 @@ class emulator(mixin.noop, mixin.capabilities, device):
     Base class for emulated OLED driver classes
     """
     def __init__(self, width, height, mode, transform, scale):
-        import pygame
+        try:
+            import pygame
+        except:
+            raise RuntimeError("Emulator requires pygame to be installed")
         self._pygame = pygame
         self.capabilities(width, height, mode)
         self.scale = 1 if transform == "none" else scale

@@ -120,16 +120,18 @@ flag to show the options::
 
 Emulators
 ^^^^^^^^^
-There are two display emulators available for running code against, for debugging
+There are three display emulators available for running code against, for debugging
 and screen capture functionality:
 
 * The :class:`oled.device.capture` device will persist a numbered PNG file to
   disk every time its ``display`` method is called.
 
+* The :class:`oled.device.gifanim` device will record every image when its ``display``
+  method is called, and on program exit (or Ctrl-C), will assemble the images into an
+  animated GIF.
+
 * The :class:`oled.device.pygame` device uses the :py:mod:`pygame` library to
-  render the displayed image to a pygame display surface. Note however that
-  pygame is NOT installed as a dependency, and so must be manually installed
-  before using this device.
+  render the displayed image to a pygame display surface. 
 
 Invoke the demos with::
 
@@ -138,3 +140,8 @@ Invoke the demos with::
 or::
 
   $ python examples/clock.py -d pygame
+  
+.. note::
+   *pygame* is **NOT** installed as a dependency by default, and so must be manually
+   installed before using any of these devices.
+
