@@ -32,8 +32,15 @@ needs_sphinx = '1.5'
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
+    'sphinx.ext.doctest',
     'sphinx.ext.intersphinx',
     'sphinx.ext.autosectionlabel',
+    'sphinx.ext.todo',
+    'sphinx.ext.coverage',
+    'sphinx.ext.ifconfig',
+    'sphinx.ext.viewcode',
+    'sphinx.ext.inheritance_diagram',
+    'sphinx.ext.extlinks'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -348,5 +355,6 @@ texinfo_documents = [
 # Configuration for intersphinx.
 intersphinx_mapping = {
     'python': ('https://docs.python.org/2', None),
-    'pillow': ('https://pillow.readthedocs.io/en/latest', None)
+    'pillow': ('https://pillow.readthedocs.io/en/latest', None),
+    'pygame': ('http://pygame.org/docs/ref', None)
 }

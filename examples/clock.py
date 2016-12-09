@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 # Ported from:
 # https://gist.github.com/TheRayTracer/dd12c498e3ecb9b8b47f#file-clock-py

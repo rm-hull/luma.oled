@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 # The MIT License (MIT)
 #
@@ -27,9 +28,9 @@ from PIL import Image, ImageDraw
 
 class canvas(object):
     """
-    A canvas returns a properly-sized `ImageDraw` object onto which the caller
-    can draw upon. As soon as the with-block completes, the resultant image is
-    flushed onto the device.
+    A canvas returns a properly-sized :py:mod:`PIL.ImageDraw` object onto
+    which the caller can draw upon. As soon as the with-block completes, the
+    resultant image is flushed onto the device.
     """
     def __init__(self, device):
         self.draw = None

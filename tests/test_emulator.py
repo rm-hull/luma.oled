@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 import hashlib
 import os.path
@@ -27,7 +28,8 @@ def test_capture_noops():
 def test_capture_display():
     reference = os.path.abspath(os.path.join(
         os.path.dirname(__file__),
-        'reference.png'))
+        'reference',
+        'capture.png'))
 
     fname = NamedTemporaryFile(suffix=".png").name
     device = capture(file_template=fname, transform="none")
@@ -42,7 +44,8 @@ def test_capture_display():
 def test_gifanim_write():
     reference = os.path.abspath(os.path.join(
         os.path.dirname(__file__),
-        'reference_anim.gif'))
+        'reference',
+        'anim.gif'))
 
     fname = NamedTemporaryFile(suffix=".gif").name
     device = gifanim(filename=fname)

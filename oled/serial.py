@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 # The MIT License (MIT)
 #
@@ -25,14 +26,15 @@
 
 class i2c(object):
     """
-    Wrap an I2C interface to provide data and command methods
+    Wrap an `I2C <https://en.wikipedia.org/wiki/I%C2%B2C>`_ interface to
+    provide data and command methods.
 
-    Notes:
-     1. Only one of bus OR port arguments should be supplied;
-        if both are, then bus takes precedence.
-     2. If bus is provided, there is an implicit expectation
-        that it has already been opened.
-    """
+    .. note::
+       1. Only one of ``bus`` OR ``port`` arguments should be supplied;
+          if both are, then ``bus`` takes precedence.
+       2. If ``bus`` is provided, there is an implicit expectation
+          that it has already been opened.
+          """
     def __init__(self, bus=None, port=1, address=0x3C):
         import smbus2
         self._cmd_mode = 0x00
@@ -70,9 +72,11 @@ class i2c(object):
 
 class spi(object):
     """
-    Wraps an SPI interface to provide data and command methods.
-    The DC pin (Data/Command select) defaults to GPIO 24 (BCM).
-    The RST pin (Reset) defaults to GPIO 25 (BCM).
+    Wraps an `SPI <https://en.wikipedia.org/wiki/Serial_Peripheral_Interface_Bus>`_
+    interface to provide data and command methods.
+
+     * The DC pin (Data/Command select) defaults to GPIO 24 (BCM).
+     * The RST pin (Reset) defaults to GPIO 25 (BCM).
     """
     def __init__(self, spi=None, gpio=None, port=0, device=0, bus_speed_hz=8000000, bcm_DC=24, bcm_RST=25):
         self._gpio = gpio or self.__rpi_gpio__()

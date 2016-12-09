@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 # The MIT License (MIT)
 #
@@ -56,7 +57,7 @@ from oled.serial import i2c
 import oled.mixin as mixin
 
 
-class device(object):
+class device(mixin.capabilities):
     """
     Base class for OLED driver classes
     """
@@ -106,13 +107,18 @@ class device(object):
         self.display(Image.new(self.mode, (self.width, self.height)))
 
 
-class sh1106(device, mixin.capabilities):
+class sh1106(device):
     """
-    A device encapsulates the serial interface to the SH1106
-    OLED display hardware. The init method pumps commands to the display
-    to properly initialize it. Further control commands can then be
-    called to affect the brightness. Direct use of the command() and
-    data() methods are discouraged.
+    Encapsulates the serial interface to the SH1106 OLED display hardware. On
+    creation, an initialization sequence is pumped to the display to properly
+    configure it. Further control commands can then be called to affect the
+    brightness and other settings.
+
+    .. warning::
+        Direct use of the :func:`command` and :func:`data` methods are
+        discouraged: Screen updates should be effected through the
+        :func:`display` method, or preferably with the
+        :class:`oled.render.canvas` context manager.
     """
 
     def __init__(self, serial_interface=None, width=128, height=64):
@@ -155,7 +161,8 @@ class sh1106(device, mixin.capabilities):
 
     def display(self, image):
         """
-        Takes a 1-bit image and dumps it to the SH1106 OLED display.
+        Takes a 1-bit :py:mod:`PIL.Image` and dumps it to the SH1106
+        OLED display.
         """
         assert(image.mode == self.mode)
         assert(image.size[0] == self.width)
@@ -183,13 +190,18 @@ class sh1106(device, mixin.capabilities):
             self.data(buf)
 
 
-class ssd1306(device, mixin.capabilities):
+class ssd1306(device):
     """
-    A device encapsulates the serial interface to the SSD1306
-    OLED display hardware. The init method pumps commands to the display
-    to properly initialize it. Further control commands can then be
-    called to affect the brightness. Direct use of the command() and
-    data() methods are discouraged.
+    Encapsulates the serial interface to the SSD1306 OLED display hardware. On
+    creation, an initialization sequence is pumped to the display to properly
+    configure it. Further control commands can then be called to affect the
+    brightness and other settings.
+
+    .. warning::
+        Direct use of the :func:`command` and :func:`data` methods are
+        discouraged: Screen updates should be effected through the
+        :func:`display` method, or preferably with the
+        :class:`oled.render.canvas` context manager.
     """
     def __init__(self, serial_interface=None, width=128, height=64):
         try:
@@ -235,7 +247,8 @@ class ssd1306(device, mixin.capabilities):
 
     def display(self, image):
         """
-        Takes a 1-bit image and dumps it to the SSD1306 OLED display.
+        Takes a 1-bit :py:mod:`PIL.Image` and dumps it to the SSD1306
+        OLED display.
         """
         assert(image.mode == self.mode)
         assert(image.size[0] == self.width)

@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 # Ported from:
 # https://github.com/adafruit/Adafruit_Python_SSD1306/blob/master/examples/shapes.py

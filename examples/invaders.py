@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 # Ported from:
 # https://gist.github.com/rm-hull/f18a92207960f250e1d2adcba36a5926#file-invaders-py
