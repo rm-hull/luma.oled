@@ -38,7 +38,7 @@ def main():
                 right = cx + cy
 
                 hrs_angle = 270 + (30 * (now.hour + (now.minute / 60.0)))
-                hrs = posn(hrs_angle, cy - margin - 4)
+                hrs = posn(hrs_angle, cy - margin - 7)
 
                 min_angle = 270 + (6 * now.minute)
                 mins = posn(min_angle, cy - margin - 2)
@@ -50,7 +50,7 @@ def main():
                 draw.line((cx, cy, cx + hrs[0], cy + hrs[1]), fill="white")
                 draw.line((cx, cy, cx + mins[0], cy + mins[1]), fill="white")
                 draw.line((cx, cy, cx + secs[0], cy + secs[1]), fill="red")
-                draw.ellipse((cx - 1, cy - 1, cx + 1, cy + 1), fill="white", outline="white")
+                draw.ellipse((cx - 2, cy - 2, cx + 2, cy + 2), fill="white", outline="white")
                 draw.text((2 * (cx + margin), cy - 8), today_date, fill="yellow")
                 draw.text((2 * (cx + margin), cy), today_time, fill="yellow")
 

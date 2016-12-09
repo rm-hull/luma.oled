@@ -27,19 +27,19 @@ import os
 import sys
 import atexit
 import logging
-from oled.device import device
 from PIL import Image
-import oled.mixin as mixin
-
+from oled.device import device
+from oled.serial import noop
 
 logger = logging.getLogger(__name__)
 
 
-class emulator(mixin.noop, device):
+class emulator(device):
     """
     Base class for emulated OLED driver classes
     """
     def __init__(self, width, height, mode, transform, scale):
+        super(emulator, self).__init__(serial_interface=noop())
         try:
             import pygame
         except:

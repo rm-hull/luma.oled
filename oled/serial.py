@@ -116,9 +116,15 @@ class spi(object):
     def data(self, data):
         """
         Sends a data byte or sequence of data bytes through to the SPI device.
+        If the data is more than 4Kb in size, it is sent in chunks.
         """
         self._gpio.output(self._bcm_DC, self._data_mode)
-        self._spi.xfer2(list(data))
+        i = 0
+        n = len(data)
+        write = self._spi.xfer2
+        while i < n:
+            write(data[i:i + 4096])
+            i += 4096
 
     def cleanup(self):
         """
@@ -126,3 +132,18 @@ class spi(object):
         """
         self._spi.close()
         self._gpio.cleanup()
+
+
+class noop(object):
+    """
+    Does nothing, used for pseudo-devices / emulators, which dont have a serial
+    interface.
+    """
+    def command(self, *cmd):
+        pass
+
+    def data(self, data):
+        pass
+
+    def cleanup(self):
+        pass

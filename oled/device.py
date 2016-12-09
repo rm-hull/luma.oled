@@ -55,13 +55,15 @@ import atexit
 from PIL import Image
 from oled.serial import i2c
 import oled.mixin as mixin
+import oled.const
 
 
 class device(mixin.capabilities):
     """
     Base class for OLED driver classes
     """
-    def __init__(self, serial_interface=None):
+    def __init__(self, const=None, serial_interface=None):
+        self._const = const or oled.const.common
         self._serial_interface = serial_interface or i2c()
 
         def cleanup():
@@ -76,7 +78,6 @@ class device(mixin.capabilities):
         Sends a command or sequence of commands through to the delegated
         serial interface.
         """
-        assert(len(cmd) <= 32)
         self._serial_interface.command(*cmd)
 
     def data(self, data):
@@ -91,14 +92,14 @@ class device(mixin.capabilities):
         Sets the display mode ON, waking the device out of a prior
         low-power sleep mode.
         """
-        self.command(const.DISPLAYON)
+        self.command(self._const.DISPLAYON)
 
     def hide(self):
         """
         Switches the display mode OFF, putting the device in low-power
         sleep mode.
         """
-        self.command(const.DISPLAYOFF)
+        self.command(self._const.DISPLAYOFF)
 
     def clear(self):
         """
@@ -109,10 +110,10 @@ class device(mixin.capabilities):
 
 class sh1106(device):
     """
-    Encapsulates the serial interface to the SH1106 OLED display hardware. On
-    creation, an initialization sequence is pumped to the display to properly
-    configure it. Further control commands can then be called to affect the
-    brightness and other settings.
+    Encapsulates the serial interface to the monochrome SH1106 OLED display
+    hardware. On creation, an initialization sequence is pumped to the display
+    to properly configure it. Further control commands can then be called to
+    affect the brightness and other settings.
 
     .. warning::
         Direct use of the :func:`command` and :func:`data` methods are
@@ -123,7 +124,7 @@ class sh1106(device):
 
     def __init__(self, serial_interface=None, width=128, height=64):
         try:
-            super(sh1106, self).__init__(serial_interface)
+            super(sh1106, self).__init__(oled.const.sh1106, serial_interface)
             self.capabilities(width, height)
             self.bounding_box = (0, 0, width - 1, height - 1)
             self.width = width
@@ -132,25 +133,25 @@ class sh1106(device):
 
             # FIXME: Delay doing anything here with alternate screen sizes
             # until we are able to get a device to test with.
-            if width != 128 and height != 64:
-                raise ValueError("Unsupported mode: {0}x{1}".format(width, height))
+            if width != 128 or height != 64:
+                raise ValueError("Unsupported display mode: {0}x{1}".format(width, height))
 
             self.command(
-                const.DISPLAYOFF,
-                const.MEMORYMODE,
-                const.SETHIGHCOLUMN,      0xB0, 0xC8,
-                const.SETLOWCOLUMN,       0x10, 0x40,
-                const.SETCONTRAST,        0x7F,
-                const.SETSEGMENTREMAP,
-                const.NORMALDISPLAY,
-                const.SETMULTIPLEX,       0x3F,
-                const.DISPLAYALLON_RESUME,
-                const.SETDISPLAYOFFSET,   0x00,
-                const.SETDISPLAYCLOCKDIV, 0xF0,
-                const.SETPRECHARGE,       0x22,
-                const.SETCOMPINS,         0x12,
-                const.SETVCOMDETECT,      0x20,
-                const.CHARGEPUMP,         0x14)
+                self._const.DISPLAYOFF,
+                self._const.MEMORYMODE,
+                self._const.SETHIGHCOLUMN,      0xB0, 0xC8,
+                self._const.SETLOWCOLUMN,       0x10, 0x40,
+                self._const.SETCONTRAST,        0x7F,
+                self._const.SETSEGMENTREMAP,
+                self._const.NORMALDISPLAY,
+                self._const.SETMULTIPLEX,       0x3F,
+                self._const.DISPLAYALLON_RESUME,
+                self._const.SETDISPLAYOFFSET,   0x00,
+                self._const.SETDISPLAYCLOCKDIV, 0xF0,
+                self._const.SETPRECHARGE,       0x22,
+                self._const.SETCOMPINS,         0x12,
+                self._const.SETVCOMDETECT,      0x20,
+                self._const.CHARGEPUMP,         0x14)
 
             self.clear()
             self.show()
@@ -192,10 +193,10 @@ class sh1106(device):
 
 class ssd1306(device):
     """
-    Encapsulates the serial interface to the SSD1306 OLED display hardware. On
-    creation, an initialization sequence is pumped to the display to properly
-    configure it. Further control commands can then be called to affect the
-    brightness and other settings.
+    Encapsulates the serial interface to the monochrome SSD1306 OLED display
+    hardware. On creation, an initialization sequence is pumped to the display
+    to properly configure it. Further control commands can then be called to
+    affect the brightness and other settings.
 
     .. warning::
         Direct use of the :func:`command` and :func:`data` methods are
@@ -205,7 +206,7 @@ class ssd1306(device):
     """
     def __init__(self, serial_interface=None, width=128, height=64):
         try:
-            super(ssd1306, self).__init__(serial_interface)
+            super(ssd1306, self).__init__(oled.const.ssd1306, serial_interface)
             self.capabilities(width, height)
             self._pages = self.height // 8
             self._buffer = [0] * self.width * self._pages
@@ -219,24 +220,24 @@ class ssd1306(device):
             }.get((width, height))
 
             if settings is None:
-                raise ValueError("Unsupported mode: {0}x{1}".format(width, height))
+                raise ValueError("Unsupported display mode: {0}x{1}".format(width, height))
 
             self.command(
-                const.DISPLAYOFF,
-                const.SETDISPLAYCLOCKDIV, settings['displayclockdiv'],
-                const.SETMULTIPLEX,       settings['multiplex'],
-                const.SETDISPLAYOFFSET,   0x00,
-                const.SETSTARTLINE,
-                const.CHARGEPUMP,         0x14,
-                const.MEMORYMODE,         0x00,
-                const.SEGREMAP,
-                const.COMSCANDEC,
-                const.SETCOMPINS,         settings['compins'],
-                const.SETCONTRAST,        0xCF,
-                const.SETPRECHARGE,       0xF1,
-                const.SETVCOMDETECT,      0x40,
-                const.DISPLAYALLON_RESUME,
-                const.NORMALDISPLAY)
+                self._const.DISPLAYOFF,
+                self._const.SETDISPLAYCLOCKDIV, settings['displayclockdiv'],
+                self._const.SETMULTIPLEX,       settings['multiplex'],
+                self._const.SETDISPLAYOFFSET,   0x00,
+                self._const.SETSTARTLINE,
+                self._const.CHARGEPUMP,         0x14,
+                self._const.MEMORYMODE,         0x00,
+                self._const.SETREMAP,
+                self._const.COMSCANDEC,
+                self._const.SETCOMPINS,         settings['compins'],
+                self._const.SETCONTRAST,        0xCF,
+                self._const.SETPRECHARGE,       0xF1,
+                self._const.SETVCOMDETECT,      0x40,
+                self._const.DISPLAYALLON_RESUME,
+                self._const.NORMALDISPLAY)
 
             self.clear()
             self.show()
@@ -256,9 +257,9 @@ class ssd1306(device):
 
         self.command(
             # Column start/end address
-            const.COLUMNADDR, 0x00, self.width - 1,
+            self._const.COLUMNADDR, 0x00, self.width - 1,
             # Page start/end address
-            const.PAGEADDR, 0x00, self._pages - 1)
+            self._const.PAGEADDR, 0x00, self._pages - 1)
 
         pix = list(image.getdata())
         step = self.width * 8
@@ -285,30 +286,75 @@ class ssd1306(device):
         self.data(buf)
 
 
-class const:
-    CHARGEPUMP = 0x8D
-    COLUMNADDR = 0x21
-    COMSCANDEC = 0xC8
-    COMSCANINC = 0xC0
-    DISPLAYALLON = 0xA5
-    DISPLAYALLON_RESUME = 0xA4
-    DISPLAYOFF = 0xAE
-    DISPLAYON = 0xAF
-    EXTERNALVCC = 0x1
-    INVERTDISPLAY = 0xA7
-    MEMORYMODE = 0x20
-    NORMALDISPLAY = 0xA6
-    PAGEADDR = 0x22
-    SEGREMAP = 0xA0
-    SETCOMPINS = 0xDA
-    SETCONTRAST = 0x81
-    SETDISPLAYCLOCKDIV = 0xD5
-    SETDISPLAYOFFSET = 0xD3
-    SETHIGHCOLUMN = 0x10
-    SETLOWCOLUMN = 0x00
-    SETMULTIPLEX = 0xA8
-    SETPRECHARGE = 0xD9
-    SETSEGMENTREMAP = 0xA1
-    SETSTARTLINE = 0x40
-    SETVCOMDETECT = 0xDB
-    SWITCHCAPVCC = 0x2
+class ssd1331(device):
+    """
+    Encapsulates the serial interface to the 16-bit color (5-6-5 RGB) SSD1331
+    OLED display hardware. On creation, an initialization sequence is pumped to
+    the display to properly configure it. Further control commands can then be
+    called to affect the brightness and other settings.
+
+    .. warning::
+        Direct use of the :func:`command` and :func:`data` methods are
+        discouraged: Screen updates should be effected through the
+        :func:`display` method, or preferably with the
+        :class:`oled.render.canvas` context manager.
+    """
+    def __init__(self, serial_interface=None, width=96, height=64):
+        try:
+            super(ssd1331, self).__init__(oled.const.ssd1331, serial_interface)
+            self.capabilities(width, height, mode="RGB")
+            self._buffer = [0] * self.width * self.height * 2
+
+            if width != 96 or height != 64:
+                raise ValueError("Unsupported display mode: {0}x{1}".format(width, height))
+
+            self.command(
+                self._const.DISPLAYOFF,
+                self._const.SETREMAP,             0x72,
+                self._const.SETDISPLAYSTARTLINE,  0x00,
+                self._const.SETDISPLAYOFFSET,     0x00,
+                self._const.NORMALDISPLAY,
+                self._const.SETMULTIPLEX,         0x3F,
+                self._const.SETMASTERCONFIGURE,   0x8E,
+                self._const.POWERSAVEMODE,        0x0B,
+                self._const.PHASE12PERIOD,        0x74,
+                self._const.CLOCKDIVIDER,         0xD0,
+                self._const.SETPRECHARGESPEEDA,   0x80,
+                self._const.SETPRECHARGESPEEDB,   0x80,
+                self._const.SETPRECHARGESPEEDC,   0x80,
+                self._const.SETPRECHARGEVOLTAGE,  0x3E,
+                self._const.SETVVOLTAGE,          0x3E,
+                self._const.MASTERCURRENTCONTROL, 0x0F,
+                self._const.SETCONTRASTA,         0xFF,
+                self._const.SETCONTRASTB,         0xFF,
+                self._const.SETCONTRASTC,         0xFF)
+
+            self.clear()
+            self.show()
+
+        except IOError as e:
+            raise IOError(e.errno,
+                          "Failed to initialize SSD1331 display driver")
+
+    def display(self, image):
+        """
+        Takes a 24-bit RGB :py:mod:`PIL.Image` and dumps it to the SSD1331 OLED
+        display.
+        """
+        assert(image.mode == self.mode)
+        assert(image.size[0] == self.width)
+        assert(image.size[1] == self.height)
+
+        self.command(
+            self._const.SETCOLUMNADDR, 0x00, self.width - 1,
+            self._const.SETROWADDR, 0x00, self.height - 1)
+
+        i = 0
+        buf = self._buffer
+        for r, g, b in image.getdata():
+            # 65K format 1
+            buf[i] = r & 0xF8 | g >> 5
+            buf[i + 1] = g << 5 & 0xE0 | b >> 3
+            i += 2
+
+        self.data(buf)

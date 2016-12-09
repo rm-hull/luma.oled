@@ -4,7 +4,8 @@ ChangeLog
 +------------+---------------------------------------------------------------------+------------+
 | Version    | Description                                                         | Date       |
 +============+=====================================================================+============+
-| *Upcoming* | * Viewport/scrolling support                                        |            |
+| *Upcoming* | * Support for 16-bit color OLED (SSD1331)                           |            |
+|            | * Viewport/scrolling support                                        |            |
 |            | * Remove pygame as an install dependency in setup                   |            |
 |            | * Ensure SH1106 device collapses color images to monochrome         |            |
 |            | * Documentation updates                                             |            |
