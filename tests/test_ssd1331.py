@@ -34,7 +34,7 @@ def test_init_96x64():
     ])
 
     # Next 1024 are all data: zero's to clear the RAM
-    # (12280 = 96 * 64 * 2)
+    # (12288 = 96 * 64 * 2)
     serial.data.assert_called_once_with([0] * 96 * 64 * 2)
 
 

@@ -2,16 +2,57 @@
 # -*- coding: utf-8 -*-
 
 try:
-    from unittest.mock import Mock
+    from unittest.mock import call, Mock
 except ImportError:
-    from mock import Mock
+    from mock import call, Mock
 
+import pytest
 from oled.device import sh1106
 from oled.render import canvas
 
 import baseline_data
 
 serial = Mock(unsafe=True)
+
+
+def setup_function(function):
+    serial.reset_mock()
+    serial.command.side_effect = None
+
+
+def test_init_128x64():
+    sh1106(serial)
+    serial.command.assert_has_calls([
+        # Initial burst are initialization commands
+        call(174, 32, 16, 176, 200, 0, 16, 64, 129, 127, 161, 166, 168,
+             63, 164, 211, 0, 213, 240, 217, 34, 218, 18, 219, 32, 141, 20),
+        # reset the display
+        call(176, 2, 16),
+        call(177, 2, 16),
+        call(178, 2, 16),
+        call(179, 2, 16),
+        call(180, 2, 16),
+        call(181, 2, 16),
+        call(182, 2, 16),
+        call(183, 2, 16)
+    ])
+
+    # Next 1024 are all data: zero's to clear the RAM
+    # (1024 = 128 * 64 / 8)
+    serial.data.assert_has_calls([call([0] * 128)] * 8)
+
+
+def test_init_invalid_dimensions():
+    with pytest.raises(ValueError) as ex:
+        sh1106(serial, width=77, height=105)
+    assert "Unsupported display mode: 77x105" in str(ex.value)
+
+
+def test_init_handle_ioerror():
+    serial.command.side_effect = IOError(-99, "Test exception")
+    with pytest.raises(IOError) as ex:
+        sh1106(serial)
+    assert "Failed to initialize SH1106 display driver" in str(ex.value)
 
 
 def test_display():

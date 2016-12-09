@@ -6,6 +6,7 @@ try:
 except ImportError:
     from mock import call, Mock
 
+import pytest
 from oled.device import ssd1306
 from oled.render import canvas
 import baseline_data
@@ -15,9 +16,10 @@ serial = Mock(unsafe=True)
 
 def setup_function(function):
     serial.reset_mock()
+    serial.command.side_effect = None
 
 
-def test_init():
+def test_init_128x64():
     ssd1306(serial)
     serial.command.assert_has_calls([
         # Initial burst are initialization commands
@@ -31,7 +33,54 @@ def test_init():
 
     # Next 1024 are all data: zero's to clear the RAM
     # (1024 = 128 * 64 / 8)
-    serial.data.assert_called_once_with([0] * 1024)
+    serial.data.assert_called_once_with([0] * (128 * 64 // 8))
+
+
+def test_init_128x32():
+    ssd1306(serial, width=128, height=32)
+    serial.command.assert_has_calls([
+        # Initial burst are initialization commands
+        call(174, 213, 128, 168, 31, 211, 0, 64, 141, 20, 32, 0, 160,
+             200, 218, 2, 129, 207, 217, 241, 219, 64, 164, 166),
+        # reset the display
+        call(33, 0, 127, 34, 0, 3),
+        # called last, is a command to show the screen
+        call(175)
+    ])
+
+    # Next 512 are all data: zero's to clear the RAM
+    # (512 = 128 * 32 / 8)
+    serial.data.assert_called_once_with([0] * (128 * 32 // 8))
+
+
+def test_init_96x16():
+    ssd1306(serial, width=96, height=16)
+    serial.command.assert_has_calls([
+        # Initial burst are initialization commands
+        call(174, 213, 96, 168, 15, 211, 0, 64, 141, 20, 32, 0, 160,
+             200, 218, 2, 129, 207, 217, 241, 219, 64, 164, 166),
+        # reset the display
+        call(33, 0, 95, 34, 0, 1),
+        # called last, is a command to show the screen
+        call(175)
+    ])
+
+    # Next 192 are all data: zero's to clear the RAM
+    # (192 = 96 * 16 / 8)
+    serial.data.assert_called_once_with([0] * (96 * 16 // 8))
+
+
+def test_init_invalid_dimensions():
+    with pytest.raises(ValueError) as ex:
+        ssd1306(serial, width=59, height=22)
+    assert "Unsupported display mode: 59x22" in str(ex.value)
+
+
+def test_init_handle_ioerror():
+    serial.command.side_effect = IOError(-99, "Test exception")
+    with pytest.raises(IOError) as ex:
+        ssd1306(serial)
+    assert "Failed to initialize SSD1306 display driver" in str(ex.value)
 
 
 def test_hide():
