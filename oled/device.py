@@ -174,7 +174,8 @@ class sh1106(device, mixin.capabilities):
             for x in range(self.width):
                 byte = 0
                 for n in range(0, step, self.width):
-                    byte |= (pix[x + y + n] & 0x01) << 8
+                    bit = 1 if pix[x + y + n] > 0 else 0
+                    byte |= bit << 8
                     byte >>= 1
 
                 buf.append(byte)
