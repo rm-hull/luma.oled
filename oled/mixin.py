@@ -24,14 +24,6 @@
 # SOFTWARE.
 
 
-class noop(object):
-    def data(self, data):
-        pass
-
-    def command(self, *cmd):
-        pass
-
-
 class capabilities(object):
     def capabilities(self, width, height, mode="1"):
         assert mode in ("1", "RGB", "RGBA")

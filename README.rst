@@ -1,5 +1,5 @@
-SSD1306 / SH1106 OLED Driver
-============================
+SSD1306 / SSD1331 / SH1106 OLED Driver
+======================================
 .. image:: https://travis-ci.org/rm-hull/ssd1306.svg?branch=master
    :target: https://travis-ci.org/rm-hull/ssd1306
 
@@ -14,8 +14,8 @@ SSD1306 / SH1106 OLED Driver
 .. image:: https://img.shields.io/pypi/v/ssd1306.svg
    :target: https://pypi.python.org/pypi/ssd1306
 
-Python library interfacing OLED matrix displays with the SSD1306 (or SH1106) driver using
-I2C/SPI on the Raspberry Pi.
+Python library interfacing OLED matrix displays with the SSD1306, SSD1331 or
+SH1106 driver using I2C/SPI on the Raspberry Pi.
 
 Further technical details for the SSD1306 OLED display can be found in the
 `datasheet <https://raw.githubusercontent.com/rm-hull/ssd1306/master/doc/tech-spec/SSD1306.pdf>`_.
@@ -31,10 +31,10 @@ that it supports 132 x 64 pixels).
 .. image:: https://raw.githubusercontent.com/rm-hull/ssd1306/master/doc/images/mounted_display.jpg
    :alt: mounted
 
-As well as display drivers for SSD1306- and SH1106-class OLED devices there are
-emulators that run in real-time (with pygame) and others that can take screenshots,
-or assemble animated GIFs, as per the examples below (source code for these is 
-available in the `examples <https://github.com/rm-hull/ssd1306/tree/master/examples>`_ directory:
+As well as display drivers for SSD1306-, SSD1331- and SH1106-class OLED devices
+there are emulators that run in real-time (with pygame) and others that can
+take screenshots, or assemble animated GIFs, as per the examples below (source
+code for these is available in the `examples <https://github.com/rm-hull/ssd1306/tree/master/examples>`_ directory:
 
 .. image:: https://raw.githubusercontent.com/rm-hull/ssd1306/master/doc/images/clock_anim.gif?raw=true
    :alt: clock
@@ -54,7 +54,7 @@ License
 -------
 The MIT License (MIT)
 
-Copyright (c) 2016 Richard Hull
+Copyright (c) 2016 Richard Hull & Contributors
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

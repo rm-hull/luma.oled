@@ -17,7 +17,8 @@ def md5(fname):
 
 
 def test_capture_noops():
-    device = capture()
+    fname = NamedTemporaryFile(suffix=".png").name
+    device = capture(file_template=fname, transform="none")
     # All these should have no effect
     device.hide()
     device.show()

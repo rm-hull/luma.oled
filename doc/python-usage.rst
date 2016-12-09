@@ -9,19 +9,21 @@ First, import and initialise the device:
 .. code:: python
 
   from oled.serial import i2c
-  from oled.device import ssd1306, sh1106
+  from oled.device import ssd1306, ssd1331, sh1106
   from oled.render import canvas
 
   # rev.1 users set port=0
+  # substitute spi(device=0, port=0) below if using that interface
   serial = i2c(port=1, address=0x3C)
 
-  # substitute sh1106(...) below if using that device
+  # substitute ssd1331(...) or sh1106(...) below if using that device
   device = ssd1306(serial)
 
-The display device should now be configured for use. The specific ``ssd1306`` or
-``sh1106`` classes both expose a ``display()`` method which takes a 1-bit depth image.
-However, for most cases, for drawing text and graphics primitives, the canvas class
-should be used as follows:
+The display device should now be configured for use. The specific ``ssd1306``,
+``ssd1331`` or ``sh1106`` classes all expose a ``display()`` method which takes
+an image with attributes consistent with the capabilities of the device.
+However, for most cases, for drawing text and graphics primitives, the canvas
+class should be used as follows:
 
 .. code:: python
 
@@ -38,9 +40,13 @@ flushed to the device's display memory and the :mod:`PIL.ImageDraw` object is
 garbage collected.
 
 .. note::
-   Any of the standard :mod:`PIL.ImageColor` color formats may be used, but since
-   the OLED is monochrome, only the HTML color names ``"black"`` and ``"white"`` 
-   values should really be used. 
+   Any of the standard :mod:`PIL.ImageColor` color formats may be used, but
+   since the SSD1306 and SH1106 OLEDs are monochrome, only the HTML color names
+   ``"black"`` and ``"white"`` values should really be used; in fact, any value
+   *other* than black is treated as white.
+
+   There is no such constraint on the SSD1331 OLED which features 16-bit RGB
+   colors.
 
 Examples
 ^^^^^^^^
@@ -53,6 +59,7 @@ Example      Description
 bounce.py    Display a bouncing ball animation and frames per second
 carousel.py  Showcase viewport and hotspot functionality
 clock.py     An analog clockface with date & time
+colors.py    Color rendering demonstration
 crawl.py     A vertical scrolling demo, which should be familiar
 demo.py      Use misc draw commands to create a simple image
 invaders.py  Space Invaders demo
@@ -82,8 +89,8 @@ flag to show the options::
     optional arguments:
       -h, --help            show this help message and exit
       --display DISPLAY, -d DISPLAY
-                            Display type, one of: ssd1306, sh1106, capture,
-                            pygame, gifanim (default: ssd1306)
+                            Display type, one of: ssd1306, ssd1331, sh1106,
+                            capture, pygame, gifanim (default: ssd1306)
       --width WIDTH         Width of the device in pixels (default: 128)
       --height HEIGHT       Height of the device in pixels (default: 64)
       --interface INTERFACE, -i INTERFACE

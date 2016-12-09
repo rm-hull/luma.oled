@@ -35,8 +35,12 @@ def primitives(draw):
     draw.line((x, top, x + shape_width, bottom), fill="yellow")
     x += shape_width + padding
     # Write two lines of text.
-    draw.text((x, top), 'Hello', fill="cyan")
-    draw.text((x, top + 16), 'World!', fill="purple")
+    size = draw.textsize('World!')
+    x = device.width - padding - size[0]
+    draw.rectangle((x, top + 4, x + size[0], top + size[1]), fill="black")
+    draw.rectangle((x, top + 16, x + size[0], top + 16 + size[1]), fill="black")
+    draw.text((device.width - padding - size[0], top + 4), 'Hello', fill="cyan")
+    draw.text((device.width - padding - size[0], top + 16), 'World!', fill="purple")
 
 
 def main():
