@@ -25,12 +25,12 @@ From PyPI
 Install the latest version of the library directly from
 `PyPI <https://pypi.python.org/pypi?:action=display&name=ssd1306>`_::
 
-  $ sudo apt-get install python-dev python-pip libfreetype6-dev libjpeg8-dev
+  $ sudo apt-get install python-dev python-pip libfreetype6-dev libjpeg8-dev libsdl1.2-dev
   $ sudo pip install --upgrade ssd1306
 
 From source
 ^^^^^^^^^^^
 For Python 2, from the bash prompt, enter::
 
-  $ sudo apt-get install python-dev python-pip libfreetype6-dev libjpeg8-dev
+  $ sudo apt-get install python-dev python-pip libfreetype6-dev libjpeg8-dev libsdl1.2-dev
   $ sudo python setup.py install
