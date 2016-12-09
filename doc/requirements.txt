@@ -1,5 +1,6 @@
 # Needed by https://readthedocs.io since when it runs easy_install, it 
 # doesnt find a proper install candidate for pygame.
+sphinx>=1.5.0
 pillow
 smbus2
 spidev
