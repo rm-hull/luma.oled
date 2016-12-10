@@ -67,6 +67,7 @@ maze.py      Maze generator
 perfloop.py  Simpel benchmarking utility to measure performance
 pi_logo.py   Display the Raspberry Pi logo (loads image as .png)
 sys_info.py  Display basic system information
+welcome.py   Unicode font rendering & scrolling
 ============ ========================================================
 
 By default, all the examples will asume I2C port 1, address ``0x3C`` and the
