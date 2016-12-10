@@ -153,10 +153,9 @@ def overlapping(pt_a, pt_b, w, h):
 def main():
     font = make_font("code2000.ttf", 20)
     w, h = 256, 256
+    virtual = viewport(device, w, h)
+
     for welcome_a, welcome_b in pairs(infinite_shuffle(welcome)):
-
-        virtual = viewport(device, w, h)
-
         widget_a = make_snapshot(device.width, device.height, welcome_a, font=font)
         widget_b = make_snapshot(device.width, device.height, welcome_b, font=font)
 
@@ -175,6 +174,9 @@ def main():
 
         for posn in lerp_2d(posn_a, posn_b, 30):
             virtual.set_position(posn)
+
+        virtual.remove_hotspot(widget_a, posn_a)
+        virtual.remove_hotspot(widget_b, posn_b)
 
 
 if __name__ == "__main__":

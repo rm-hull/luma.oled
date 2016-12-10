@@ -69,6 +69,10 @@ class viewport(mixin.capabilities):
         self.refresh()
 
     def add_hotspot(self, hotspot, xy):
+        """
+        Add the hotspot at (x, y). The hotspot must fit inside the bounds
+        of the virtual device. If it does not then an AssertError is raised.
+        """
         (x, y) = xy
         assert(x >= 0)
         assert(y >= 0)
@@ -77,8 +81,18 @@ class viewport(mixin.capabilities):
 
         # TODO: should it check to see whether hotspots overlap each other?
         # Is sensible to _allow_ them to overlap?
-
         self._hotspots.append((hotspot, xy))
+
+    def remove_hotspot(self, hotspot, xy):
+        """
+        Remove the hotspot at (x, y): Any previously rendered image where the
+        hotspot was placed is erased from the backing image, and will be
+        "undrawn" the next time the virtual device is refreshed. If the
+        specified hotspot is not found (x, y), a ValueError is raised.
+        """
+        self._hotspots.remove((hotspot, xy))
+        eraser = Image.new(self.mode, hotspot.size)
+        self._backing_image.paste(eraser, xy)
 
     def is_overlapping_viewport(self, hotspot, xy):
         """
