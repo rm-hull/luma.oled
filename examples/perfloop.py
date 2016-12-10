@@ -27,7 +27,7 @@ def main():
     print("Testing OLED dislay rendering performance")
     print("Press Ctrl-C to abort test\n")
 
-    image = Image.new(device.mode, (device.width, device.height))
+    image = Image.new(device.mode, device.size)
     draw = ImageDraw.Draw(image)
     demo.primitives(draw)
 

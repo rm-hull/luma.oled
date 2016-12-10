@@ -13,7 +13,7 @@ from PIL import Image
 def main():
     img_path = os.path.abspath(os.path.join(os.path.dirname(__file__), 'images', 'balloon.png'))
     balloon = Image.open(img_path) \
-        .transform((device.width, device.height), Image.AFFINE, (1, 0, 0, 0, 1, 0), Image.BILINEAR) \
+        .transform(device.size, Image.AFFINE, (1, 0, 0, 0, 1, 0), Image.BILINEAR) \
         .convert(device.mode)
 
     while True:

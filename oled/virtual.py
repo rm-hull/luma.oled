@@ -140,7 +140,7 @@ class hotspot(mixin.capabilities):
 
     def paste_into(self, image, xy):
         # print("fn={0} pos={1} size=({2}, {3})".format(self._fn, xy, self.width, self.height))
-        im = Image.new(image.mode, (self.width, self.height))
+        im = Image.new(image.mode, self.size)
         draw = ImageDraw.Draw(im)
         self.update(draw)
         image.paste(im, xy)

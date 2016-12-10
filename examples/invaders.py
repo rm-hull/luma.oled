@@ -177,7 +177,7 @@ def ai_logic_move(army, plyr, rows):
 
 if __name__ == '__main__':
 
-    if (device.width, device.height) not in ((128, 64), (96, 64)):
+    if device.size not in ((128, 64), (96, 64)):
         raise ValueError("Unsupported mode: {0}x{1}".format(device.width, device.height))
 
     plyr = player()

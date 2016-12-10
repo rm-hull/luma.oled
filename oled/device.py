@@ -52,7 +52,6 @@
 # to the device
 
 import atexit
-from PIL import Image
 from oled.serial import i2c
 import oled.mixin as mixin
 import oled.const
@@ -94,12 +93,6 @@ class device(mixin.capabilities):
         sleep mode.
         """
         self.command(self._const.DISPLAYOFF)
-
-    def clear(self):
-        """
-        Initializes the device memory with an empty (blank) image.
-        """
-        self.display(Image.new(self.mode, (self.width, self.height)))
 
     def cleanup(self):
         self.hide()
@@ -216,7 +209,7 @@ class ssd1306(device):
                 (128, 64): dict(multiplex=0x3F, displayclockdiv=0x80, compins=0x12),
                 (128, 32): dict(multiplex=0x1F, displayclockdiv=0x80, compins=0x02),
                 (96, 16): dict(multiplex=0x0F, displayclockdiv=0x60, compins=0x02)
-            }.get((width, height))
+            }.get(self.size)
 
             if settings is None:
                 raise ValueError("Unsupported display mode: {0}x{1}".format(width, height))
