@@ -30,6 +30,7 @@ from oled.threadpool import threadpool
 
 pool = threadpool(4)
 
+
 def calc_bounds(xy, entity):
     """
     For an entity with width and height attributes, determine
