@@ -28,6 +28,7 @@ from PIL import Image, ImageDraw
 import oled.mixin as mixin
 from oled.threadpool import threadpool
 
+pool = threadpool(4)
 
 def calc_bounds(xy, entity):
     """
@@ -54,7 +55,6 @@ class viewport(mixin.capabilities):
         self._backing_image = Image.new(self.mode, self.size)
         self._position = (0, 0)
         self._hotspots = []
-        self._threadpool = threadpool(4)
 
     def display(self, image):
         assert(image.mode == self.mode)
@@ -105,11 +105,14 @@ class viewport(mixin.capabilities):
         return range_overlap(l1, r1, l2, r2) and range_overlap(t1, b1, t2, b2)
 
     def refresh(self):
+        should_wait = False
         for hotspot, xy in self._hotspots:
             if hotspot.should_redraw() and self.is_overlapping_viewport(hotspot, xy):
-                self._threadpool.add_task(hotspot.paste_into, self._backing_image, xy)
-                # hotspot.paste_into(self._backing_image, xy)
-            self._threadpool.wait_completion()
+                pool.add_task(hotspot.paste_into, self._backing_image, xy)
+                should_wait = True
+
+        if should_wait:
+            pool.wait_completion()
 
         im = self._backing_image.crop(box=self._crop_box())
         self._device.display(im)
@@ -153,7 +156,6 @@ class hotspot(mixin.capabilities):
         self._fn = draw_fn
 
     def paste_into(self, image, xy):
-        # print("fn={0} pos={1} size=({2}, {3})".format(self._fn, xy, self.width, self.height))
         im = Image.new(image.mode, self.size)
         draw = ImageDraw.Draw(im)
         self.update(draw)
