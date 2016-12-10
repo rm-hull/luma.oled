@@ -65,13 +65,7 @@ class device(mixin.capabilities):
     def __init__(self, const=None, serial_interface=None):
         self._const = const or oled.const.common
         self._serial_interface = serial_interface or i2c()
-
-        def cleanup():
-            self.hide()
-            self.clear()
-            self._serial_interface.cleanup()
-
-        atexit.register(cleanup)
+        atexit.register(self.cleanup)
 
     def command(self, *cmd):
         """
@@ -106,6 +100,11 @@ class device(mixin.capabilities):
         Initializes the device memory with an empty (blank) image.
         """
         self.display(Image.new(self.mode, (self.width, self.height)))
+
+    def cleanup(self):
+        self.hide()
+        self.clear()
+        self._serial_interface.cleanup()
 
 
 class sh1106(device):

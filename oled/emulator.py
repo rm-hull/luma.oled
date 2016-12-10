@@ -50,6 +50,9 @@ class emulator(device):
         self._transform = getattr(transformer(pygame, width, height, scale),
                                   "none" if scale == 1 else transform)
 
+    def cleanup(self):
+        pass
+
     def to_surface(self, image):
         """
         Converts a :py:mod:`PIL.Image` into a :class:`pygame.Surface`,
