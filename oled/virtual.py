@@ -51,7 +51,7 @@ class viewport(mixin.capabilities):
     def __init__(self, device, width, height):
         self.capabilities(width, height, mode=device.mode)
         self._device = device
-        self._image = Image.new(self.mode, (self.width, self.height))
+        self._backing_image = Image.new(self.mode, self.size)
         self._position = (0, 0)
         self._hotspots = []
         self._threadpool = threadpool(4)
@@ -61,7 +61,7 @@ class viewport(mixin.capabilities):
         assert(image.size[0] == self.width)
         assert(image.size[1] == self.height)
 
-        self._image.paste(image)
+        self._backing_image.paste(image)
         self.refresh()
 
     def set_position(self, xy):
@@ -93,11 +93,11 @@ class viewport(mixin.capabilities):
     def refresh(self):
         for hotspot, xy in self._hotspots:
             if hotspot.should_redraw() and self.is_overlapping_viewport(hotspot, xy):
-                self._threadpool.add_task(hotspot.paste_into, self._image, xy)
-                # hotspot.paste_into(self._image, xy)
+                self._threadpool.add_task(hotspot.paste_into, self._backing_image, xy)
+                # hotspot.paste_into(self._backing_image, xy)
             self._threadpool.wait_completion()
 
-        im = self._image.crop(box=self._crop_box())
+        im = self._backing_image.crop(box=self._crop_box())
         self._device.display(im)
         del im
 
