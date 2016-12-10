@@ -9,6 +9,7 @@ ChangeLog
 |            | * Remove pygame as an install dependency in setup                   |            |
 |            | * Ensure SH1106 device collapses color images to monochrome         |            |
 |            | * Fix for emulated devices: do not need cleanup                     |            |
+|            | * Fix to allow gifanim emulator to process 1-bit images             |            |
 |            | * Documentation updates                                             |            |
 +------------+---------------------------------------------------------------------+------------+
 | **1.2.0**  | * Add support for 128x32, 96x16 OLED screens (SSD1306 chipset only) | 2016/12/08 |

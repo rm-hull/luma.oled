@@ -130,7 +130,7 @@ class gifanim(emulator):
 
         surface = self.to_surface(image)
         rawbytes = self._pygame.image.tostring(surface, "RGB", False)
-        im = Image.frombytes(self.mode, (self.width * self.scale, self.height * self.scale), rawbytes)
+        im = Image.frombytes("RGB", (self.width * self.scale, self.height * self.scale), rawbytes)
         self._images.append(im)
 
         self._count += 1
