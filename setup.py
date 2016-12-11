@@ -18,7 +18,7 @@ setup(
     author_email="richard.hull@destructuring-bind.org",
     description=("A small library to drive an OLED device with either "
                  "SSD1306 or SH1106 chipset"),
-    long_description="\n\n".join(README, CONTRIB, CHANGES),
+    long_description="\n\n".join([README, CONTRIB, CHANGES]),
     license="MIT",
     keywords="raspberry pi rpi oled display screen ssd1306 sh1106 spi i2c 128x64 128x32 96x16",
     url="https://github.com/rm-hull/ssd1306",
