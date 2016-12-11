@@ -1,4 +1,4 @@
-include README.rst CHANGES.rst LICENSE.rst tox.ini setup.cfg .coveragerc
+include README.rst CHANGES.rst CONTRIBUTING.rst LICENSE.rst tox.ini setup.cfg .coveragerc
 
 recursive-include oled *.py
 
