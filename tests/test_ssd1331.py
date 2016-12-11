@@ -23,7 +23,7 @@ def test_init_96x64():
     ssd1331(serial)
     serial.command.assert_has_calls([
         # Initial burst are initialization commands
-        call(174, 160, 114, 161, 0, 162, 0, 166, 168, 63, 173,
+        call(174, 160, 114, 161, 0, 162, 0, 164, 168, 63, 173,
              142, 176, 11, 177, 116, 179, 208, 138, 128, 139,
              128, 140, 128, 187, 62, 190, 62, 135, 15),
         # set contrast
