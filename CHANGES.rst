@@ -4,7 +4,9 @@ ChangeLog
 +------------+---------------------------------------------------------------------+------------+
 | Version    | Description                                                         | Date       |
 +============+=====================================================================+============+
-| *Upcoming* | * Support for 16-bit color OLED (SSD1331)                           |            |
+| *Upcoming* | *TBD*                                                               |            |
++------------+---------------------------------------------------------------------+------------+
+| **1.3.0**  | * Support for 16-bit color OLED (SSD1331)                           | 2016/12/11 |
 |            | * Viewport/scrolling support                                        |            |
 |            | * Remove pygame as an install dependency in setup                   |            |
 |            | * Ensure SH1106 device collapses color images to monochrome         |            |

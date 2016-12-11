@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-OLED display driver for SSD1306 and SH1106 devices.
+OLED display driver for SSD1306, SSD1331 and SH1106 devices.
 """
 
-__version__ = '1.2.0'
+__version__ = '1.3.0'
