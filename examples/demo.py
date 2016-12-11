@@ -48,8 +48,20 @@ def main():
     for _ in range(2):
         with canvas(device) as draw:
             primitives(draw)
+    time.sleep(5)
 
-    time.sleep(10)
+    print("Testing contrast (dim/bright cycles)...")
+    for _ in range(5):
+        for level in range(255, -1, -10):
+            device.contrast(level)
+            time.sleep(0.1)
+        time.sleep(0.5)
+
+        for level in range(0, 255, 10):
+            device.contrast(level)
+            time.sleep(0.1)
+
+        time.sleep(1)
 
     print("Testing display ON/OFF...")
     for _ in range(5):

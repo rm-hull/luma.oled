@@ -94,6 +94,17 @@ class device(mixin.capabilities):
         """
         self.command(self._const.DISPLAYOFF)
 
+    def contrast(self, level):
+        """
+        Switches the display contrast to the desired level, in the range
+        0-255. Note that setting the level to a low (or zero) value will
+        not necessarily dim the display to nearly off. In other words,
+        this method is **NOT** suitable for fade-in/out animation
+        """
+        assert(level >= 0)
+        assert(level <= 255)
+        self.command(self._const.SETCONTRAST, level)
+
     def cleanup(self):
         self.hide()
         self.clear()
@@ -133,7 +144,6 @@ class sh1106(device):
                 self._const.MEMORYMODE,
                 self._const.SETHIGHCOLUMN,      0xB0, 0xC8,
                 self._const.SETLOWCOLUMN,       0x10, 0x40,
-                self._const.SETCONTRAST,        0x7F,
                 self._const.SETSEGMENTREMAP,
                 self._const.NORMALDISPLAY,
                 self._const.SETMULTIPLEX,       0x3F,
@@ -145,6 +155,7 @@ class sh1106(device):
                 self._const.SETVCOMDETECT,      0x20,
                 self._const.CHARGEPUMP,         0x14)
 
+            self.contrast(0x7F)
             self.clear()
             self.show()
 
@@ -225,12 +236,12 @@ class ssd1306(device):
                 self._const.SETREMAP,
                 self._const.COMSCANDEC,
                 self._const.SETCOMPINS,         settings['compins'],
-                self._const.SETCONTRAST,        0xCF,
                 self._const.SETPRECHARGE,       0xF1,
                 self._const.SETVCOMDETECT,      0x40,
                 self._const.DISPLAYALLON_RESUME,
                 self._const.NORMALDISPLAY)
 
+            self.contrast(0xCF)
             self.clear()
             self.show()
 
@@ -316,11 +327,9 @@ class ssd1331(device):
                 self._const.SETPRECHARGESPEEDC,   0x80,
                 self._const.SETPRECHARGEVOLTAGE,  0x3E,
                 self._const.SETVVOLTAGE,          0x3E,
-                self._const.MASTERCURRENTCONTROL, 0x0F,
-                self._const.SETCONTRASTA,         0xFF,
-                self._const.SETCONTRASTB,         0xFF,
-                self._const.SETCONTRASTC,         0xFF)
+                self._const.MASTERCURRENTCONTROL, 0x0F)
 
+            self.contrast(0xFF)
             self.clear()
             self.show()
 
@@ -350,3 +359,16 @@ class ssd1331(device):
             i += 2
 
         self.data(buf)
+
+    def contrast(self, level):
+        """
+        Switches the display contrast to the desired level, in the range
+        0-255. Note that setting the level to a low (or zero) value will
+        not necessarily dim the display to nearly off. In other words,
+        this method is **NOT** suitable for fade-in/out animation
+        """
+        assert(level >= 0)
+        assert(level <= 255)
+        self.command(self._const.SETCONTRASTA, level,
+                     self._const.SETCONTRASTB, level,
+                     self._const.SETCONTRASTC, level)

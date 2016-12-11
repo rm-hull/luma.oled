@@ -25,8 +25,9 @@ def test_init_96x64():
         # Initial burst are initialization commands
         call(174, 160, 114, 161, 0, 162, 0, 166, 168, 63, 173,
              142, 176, 11, 177, 116, 179, 208, 138, 128, 139,
-             128, 140, 128, 187, 62, 190, 62, 135, 15, 129,
-             255, 130, 255, 131, 255),
+             128, 140, 128, 187, 62, 190, 62, 135, 15),
+        # set contrast
+        call(129, 255, 130, 255, 131, 255),
         # reset the display
         call(21, 0, 95, 117, 0, 63),
         # called last, is a command to show the screen

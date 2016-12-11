@@ -23,8 +23,10 @@ def test_init_128x64():
     ssd1306(serial)
     serial.command.assert_has_calls([
         # Initial burst are initialization commands
-        call(174, 213, 128, 168, 63, 211, 0, 64, 141, 20, 32, 0, 160,
-             200, 218, 18, 129, 207, 217, 241, 219, 64, 164, 166),
+        call(174, 213, 128, 168, 63, 211, 0, 64, 141, 20, 32, 0,
+             160, 200, 218, 18, 217, 241, 219, 64, 164, 166),
+        # set contrast
+        call(129, 207),
         # reset the display
         call(33, 0, 127, 34, 0, 7),
         # called last, is a command to show the screen
@@ -40,8 +42,10 @@ def test_init_128x32():
     ssd1306(serial, width=128, height=32)
     serial.command.assert_has_calls([
         # Initial burst are initialization commands
-        call(174, 213, 128, 168, 31, 211, 0, 64, 141, 20, 32, 0, 160,
-             200, 218, 2, 129, 207, 217, 241, 219, 64, 164, 166),
+        call(174, 213, 128, 168, 31, 211, 0, 64, 141, 20, 32, 0,
+             160, 200, 218, 2, 217, 241, 219, 64, 164, 166),
+        # set contrast
+        call(129, 207),
         # reset the display
         call(33, 0, 127, 34, 0, 3),
         # called last, is a command to show the screen
@@ -57,8 +61,10 @@ def test_init_96x16():
     ssd1306(serial, width=96, height=16)
     serial.command.assert_has_calls([
         # Initial burst are initialization commands
-        call(174, 213, 96, 168, 15, 211, 0, 64, 141, 20, 32, 0, 160,
-             200, 218, 2, 129, 207, 217, 241, 219, 64, 164, 166),
+        call(174, 213, 96, 168, 15, 211, 0, 64, 141, 20, 32, 0,
+             160, 200, 218, 2, 217, 241, 219, 64, 164, 166),
+        # set contrast
+        call(129, 207),
         # reset the display
         call(33, 0, 95, 34, 0, 1),
         # called last, is a command to show the screen

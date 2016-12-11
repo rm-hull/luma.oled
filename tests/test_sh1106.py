@@ -24,8 +24,10 @@ def test_init_128x64():
     sh1106(serial)
     serial.command.assert_has_calls([
         # Initial burst are initialization commands
-        call(174, 32, 16, 176, 200, 0, 16, 64, 129, 127, 161, 166, 168,
-             63, 164, 211, 0, 213, 240, 217, 34, 218, 18, 219, 32, 141, 20),
+        call(174, 32, 16, 176, 200, 0, 16, 64, 161, 166, 168, 63, 164,
+             211, 0, 213, 240, 217, 34, 218, 18, 219, 32, 141, 20),
+        # set contrast
+        call(129, 127),
         # reset the display
         call(176, 2, 16),
         call(177, 2, 16),
