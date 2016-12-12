@@ -14,7 +14,8 @@ matrix:
           env: TOXENV=py36
         - python: 2.7
           env: TOXENV=qa
-
+    allow_failures:
+        - python: 3.6-dev
 addons:
   apt:
     packages:
