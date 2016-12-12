@@ -15,6 +15,11 @@ matrix:
         - python: 2.7
           env: TOXENV=qa
 
+addons:
+  apt:
+    packages:
+    - libsdl1.2-dev
+
 install: pip install -U pip tox coveralls
 script: tox
 after_success:
