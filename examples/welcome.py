@@ -121,14 +121,18 @@ def infinite_shuffle(arr):
             yield elem
 
 
-def make_snapshot(width, height, text, font=None, color="white"):
+def make_snapshot(width, height, text, fonts, color="white"):
 
     def render(draw, width, height):
         t = text
-        size = draw.multiline_textsize(t, font)
-        if size[0] > width:
-            t = text.replace(" ", "\n")
+
+        for font in fonts:
             size = draw.multiline_textsize(t, font)
+            if size[0] > width:
+                t = text.replace(" ", "\n")
+                size = draw.multiline_textsize(t, font)
+            else:
+                break
 
         left = (width - size[0]) // 2
         top = (height - size[1]) // 2
@@ -151,13 +155,13 @@ def overlapping(pt_a, pt_b, w, h):
 
 
 def main():
-    font = make_font("code2000.ttf", 20)
+    fonts = [make_font("code2000.ttf", sz) for sz in range(24, 8, -2)]
     w, h = 256, 256
     virtual = viewport(device, w, h)
 
     for welcome_a, welcome_b in pairs(infinite_shuffle(welcome)):
-        widget_a = make_snapshot(device.width, device.height, welcome_a, font=font)
-        widget_b = make_snapshot(device.width, device.height, welcome_b, font=font)
+        widget_a = make_snapshot(device.width, device.height, welcome_a, fonts)
+        widget_b = make_snapshot(device.width, device.height, welcome_b, fonts)
 
         posn_a = random_point(w - device.width, h - device.height)
         posn_b = random_point(w - device.width, h - device.height)
