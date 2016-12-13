@@ -39,7 +39,6 @@ welcome = [
     u"Ongi etorri",
     u"Menjuah-juah!",
     u"স্বাগতম",
-    u"සාදරයෙන් පිලිගන්නවා",
     u"Добре дошли",
     u"வாருங்கள்",
     u"Kíimak 'oolal",
