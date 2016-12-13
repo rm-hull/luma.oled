@@ -1,5 +1,6 @@
 sudo: false
 language: python
+cache: pip
 
 matrix:
     include:
@@ -9,10 +10,24 @@ matrix:
           env: TOXENV=py34
         - python: 3.5
           env: TOXENV=py35
+        - python: 3.6-dev
+          env: TOXENV=py36
         - python: 2.7
           env: TOXENV=qa
+    allow_failures:
+        - python: 3.6-dev
+addons:
+  apt:
+    packages:
+    - libsdl1.2-dev
+    - libsdl-image1.2-dev
+    - libsdl-mixer1.2-dev
+    - libsdl-ttf2.0-dev
+    - libportmidi-dev
+    - libfreetype6-dev
+    - libjpeg8-dev
 
 install: pip install -U pip tox coveralls
-script: tox
+script: tox -vv
 after_success:
   - coveralls
