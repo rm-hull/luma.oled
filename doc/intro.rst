@@ -5,7 +5,7 @@ Interfacing `OLED matrix displays
 SSD1306, SSD1331 or SH1106 driver in Python 2 or 3 using I2C/SPI on the
 Raspberry Pi.
 
-The SSD1306 display pictured below is 128x64 pixels, and the board is `tiny`,
+The SSD1306 display pictured below is 128 x 64 pixels, and the board is `tiny`,
 and will fit neatly inside the RPi case (the SH1106 is slightly different, in
 that it supports 132 x 64 pixels). My intention is to solder the wires directly
 to the underside of the RPi GPIO pins (P5 header) so that the pins are still
@@ -17,10 +17,9 @@ also be used of course.
 
 .. seealso::
    Further technical information for the specific devices can be found in the
-   datasheets below:
-     * :download:`SSD1306 <tech-spec/SSD1306.pdf>`
-     * :download:`SSD1331 <tech-spec/SSD1331.pdf>`
-     * :download:`SH1106 <tech-spec/SH1106.pdf>`
+   datasheet: :download:`SSD1306 <tech-spec/SSD1306.pdf>`,
+   :download:`SSD1331 <tech-spec/SSD1331.pdf>` or
+   :download:`SH1106 <tech-spec/SH1106.pdf>`
 
    Benchmarks for tested devices can be found in the
    `wiki <https://github.com/rm-hull/ssd1306/wiki/Usage-&-Benchmarking>`_.

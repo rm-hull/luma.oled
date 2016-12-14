@@ -23,14 +23,14 @@ A list of tested devices can be found in the
 I2C vs. SPI
 ^^^^^^^^^^^
 If you have not yet purchased your display, you may be wondering if you should
-get an I2C or SPI display. The basic tradeoff is that I2C will be easier to connect
+get an I2C or SPI display. The basic trade-off is that I2C will be easier to connect
 because it has fewer pins while SPI may have a faster display update rate due
 to running at a higher frequency and having less overhead (see
 `benchmarks <https://github.com/rm-hull/ssd1306/wiki/Usage-&-Benchmarking>`_).
 
 Tips for connecting the display
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-* If you don't want to solder directly on the Pi, get 2.54mm 40 pin female 
+* If you don't want to solder directly on the Pi, get 2.54mm 40 pin female
   single row headers, cut them to length, push them onto the Pi pins, then
   solder wires to the headers.
 
@@ -164,7 +164,7 @@ OLED Pin   Name   Remarks      RPi Pin  RPi Function
 
   * The use of the terms 4-wire and 3-wire SPI are a bit confusing because, in
     most SPI documentation, the terms are used to describe the regular 4-wire
-    configuration of SPI and a 3-wire mode where the input and ouput lines, MOSI
+    configuration of SPI and a 3-wire mode where the input and output lines, MOSI
     and MISO, have been combined into a single line called SISO. However, in the
     context of these OLED controllers, 4-wire means MOSI + Data/Command and 3-wire
     means Data/Command sent as an extra bit over MOSI.

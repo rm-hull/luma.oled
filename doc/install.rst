@@ -9,8 +9,8 @@ Installation
    For **Python3** installation, substitute the following in the
    instructions below.
 
-   * ``pip`` ⇒ ``pip3``, 
-   * ``python`` ⇒ ``python3``, 
+   * ``pip`` ⇒ ``pip3``,
+   * ``python`` ⇒ ``python3``,
    * ``python-dev`` ⇒ ``python3-dev``,
    * ``python-pip`` ⇒ ``python3-pip``.
 
@@ -22,8 +22,7 @@ From PyPI
 ^^^^^^^^^
 .. note:: This is the preferred installation mechanism.
 
-Install the latest version of the library directly from
-`PyPI <https://pypi.python.org/pypi?:action=display&name=ssd1306>`_::
+Install the latest version of the library directly from PyPI_::
 
   $ sudo apt-get install python-dev python-pip libfreetype6-dev libjpeg8-dev libsdl1.2-dev
   $ sudo pip install --upgrade ssd1306
@@ -34,3 +33,6 @@ For Python 2, from the bash prompt, enter::
 
   $ sudo apt-get install python-dev python-pip libfreetype6-dev libjpeg8-dev libsdl1.2-dev
   $ sudo python setup.py install
+
+
+.. _PyPI: https://pypi.python.org/pypi?:action=display&name=ssd1306
