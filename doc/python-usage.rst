@@ -130,17 +130,17 @@ flag to show the options::
 
 Emulators
 ^^^^^^^^^
-There are three display emulators available for running code against, for debugging
+There are various display emulators available for running code against, for debugging
 and screen capture functionality:
 
-* The :class:`oled.device.capture` device will persist a numbered PNG file to
+* The :class:`oled.emulator.capture` device will persist a numbered PNG file to
   disk every time its ``display`` method is called.
 
-* The :class:`oled.device.gifanim` device will record every image when its ``display``
+* The :class:`oled.emulator.gifanim` device will record every image when its ``display``
   method is called, and on program exit (or Ctrl-C), will assemble the images into an
   animated GIF.
 
-* The :class:`oled.device.pygame` device uses the :py:mod:`pygame` library to
+* The :class:`oled.emulator.pygame` device uses the :py:mod:`pygame` library to
   render the displayed image to a pygame display surface. 
 
 Invoke the demos with::
