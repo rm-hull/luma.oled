@@ -32,6 +32,7 @@ class common(object):
     INVERTDISPLAY = 0xA7
     SETREMAP = 0xA0
     SETMULTIPLEX = 0xA8
+    SETCONTRAST = 0x81
 
 
 class ssd1306(common):
@@ -43,7 +44,6 @@ class ssd1306(common):
     MEMORYMODE = 0x20
     PAGEADDR = 0x22
     SETCOMPINS = 0xDA
-    SETCONTRAST = 0x81
     SETDISPLAYCLOCKDIV = 0xD5
     SETDISPLAYOFFSET = 0xD3
     SETHIGHCOLUMN = 0x10

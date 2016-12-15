@@ -8,17 +8,19 @@ from common import bytes2human, right_text, title_text, tiny_font
 def stats(interface):
 
     def render(draw, width, height):
-        address = psutil.net_if_addrs()[interface][0].address
-        counters = psutil.net_io_counters(pernic=True)[interface]
-
         margin = 3
-
         title_text(draw, margin, width, text="Net:{0}".format(interface))
-        draw.text((margin, 20), text=address, font=tiny_font, fill="white")
-        draw.text((margin, 35), text="Rx:", font=tiny_font, fill="white")
-        draw.text((margin, 45), text="Tx:", font=tiny_font, fill="white")
+        try:
+            address = psutil.net_if_addrs()[interface][0].address
+            counters = psutil.net_io_counters(pernic=True)[interface]
 
-        right_text(draw, 35, width, margin, text=bytes2human(counters.bytes_recv))
-        right_text(draw, 45, width, margin, text=bytes2human(counters.bytes_sent))
+            draw.text((margin, 20), text=address, font=tiny_font, fill="white")
+            draw.text((margin, 35), text="Rx:", font=tiny_font, fill="white")
+            draw.text((margin, 45), text="Tx:", font=tiny_font, fill="white")
+
+            right_text(draw, 35, width, margin, text=bytes2human(counters.bytes_recv))
+            right_text(draw, 45, width, margin, text=bytes2human(counters.bytes_sent))
+        except:
+            draw.text((margin, 20), text="n/a", font=tiny_font, fill="white")
 
     return render
