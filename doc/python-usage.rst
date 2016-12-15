@@ -2,7 +2,7 @@ Python usage
 ------------
 The screen can be driven with python using the ``oled/device.py`` script.
 There are two device classes and usage is very simple if you have ever
-used `Pillow <https://pillow.readthedocs.io/en/latest/>`_ or PIL.
+used Pillow_ or PIL.
 
 First, import and initialise the device:
 
@@ -64,13 +64,13 @@ crawl.py     A vertical scrolling demo, which should be familiar
 demo.py      Use misc draw commands to create a simple image
 invaders.py  Space Invaders demo
 maze.py      Maze generator
-perfloop.py  Simpel benchmarking utility to measure performance
+perfloop.py  Simple benchmarking utility to measure performance
 pi_logo.py   Display the Raspberry Pi logo (loads image as .png)
 sys_info.py  Display basic system information
 welcome.py   Unicode font rendering & scrolling
 ============ ========================================================
 
-By default, all the examples will asume I2C port 1, address ``0x3C`` and the
+By default, all the examples will assume I2C port 1, address ``0x3C`` and the
 ``ssd1306`` driver.  If you need to use a different setting, these can be
 specified on the command line - each program can be invoked with a ``--help``
 flag to show the options::
@@ -125,33 +125,39 @@ flag to show the options::
 
 .. note::
    #. Substitute ``python3`` for ``python`` in the above examples if you are using python3.
-   #. ``python-dev`` (apt-get) and ``psutil`` (pip/pip3) are required to run the ``sys_info.py`` 
-      example. See `install instructions <https://github.com/rm-hull/ssd1306/blob/master/examples/sys_info.py#L3-L7>`_ for the exact commands to use.
+   #. ``python-dev`` (apt-get) and ``psutil`` (pip/pip3) are required to run the ``sys_info.py``
+      example. See `install instructions`_ for the exact commands to use.
 
 Emulators
 ^^^^^^^^^
-There are three display emulators available for running code against, for debugging
-and screen capture functionality:
+There are various display emulators available for debugging and screen capture
+functionality:
 
-* The :class:`oled.device.capture` device will persist a numbered PNG file to
+* The :class:`oled.emulator.capture` device will persist a numbered PNG file to
   disk every time its ``display`` method is called.
 
-* The :class:`oled.device.gifanim` device will record every image when its ``display``
+* The :class:`oled.emulator.gifanim` device will record every image when its ``display``
   method is called, and on program exit (or Ctrl-C), will assemble the images into an
   animated GIF.
 
-* The :class:`oled.device.pygame` device uses the :py:mod:`pygame` library to
-  render the displayed image to a pygame display surface. 
+* The :class:`oled.emulator.pygame` device uses the :py:mod:`pygame` library to
+  render the displayed image to a pygame display surface.
 
-Invoke the demos with::
+* The :class:`oled.emulator.qt.qt` device uses the :py:mod:`PyQt5` library to
+  render the displayed image to a :class:`PyQt5.QtWidgets.QWidget` component.
+
+Invoke the demos with the ``-d`` option to test a specific emulator, e.g.::
 
   $ python examples/clock.py -d capture
 
-or::
+Use the ``--help`` command to display all available emulators.
 
-  $ python examples/clock.py -d pygame
-  
 .. note::
-   *Pygame* is required to use any of the emulated devices, but it is **NOT**
+   Pygame_ is required to use any of the emulated devices, but it is **NOT**
    installed as a dependency by default, and so must be manually installed
-   before using any of these emulation devices.
+   before using any of these emulation devices (e.g. ``pip install pygame``).
+
+
+.. _Pillow: https://pillow.readthedocs.io/en/latest/
+.. _install instructions: https://github.com/rm-hull/ssd1306/blob/master/examples/sys_info.py#L4-L7
+.. _Pygame: http://www.pygame.org

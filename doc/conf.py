@@ -356,5 +356,5 @@ texinfo_documents = [
 intersphinx_mapping = {
     'python': ('https://docs.python.org/2', None),
     'pillow': ('https://pillow.readthedocs.io/en/latest', None),
-    'pygame': ('http://pygame.org/docs/ref', None)
+    'PyQt5': ('http://pyqt.sourceforge.net/Docs/PyQt5', None)
 }

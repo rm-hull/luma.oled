@@ -1,3 +1,4 @@
+import sys
 import logging
 import argparse
 
@@ -9,7 +10,7 @@ import oled.serial
 parser = argparse.ArgumentParser(description='oled arguments',
     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
-parser.add_argument('--display', '-d', type=str, default='ssd1306', help='Display type, one of: ssd1306, ssd1331, sh1106, capture, pygame, gifanim')
+parser.add_argument('--display', '-d', type=str, default='ssd1306', help='Display type, one of: ssd1306, ssd1331, sh1106, capture, pygame, qt, gifanim')
 parser.add_argument('--width', type=int, default=128, help='Width of the device in pixels')
 parser.add_argument('--height', type=int, default=64, help='Height of the device in pixels')
 parser.add_argument('--interface', '-i', type=str, default='i2c', help='Serial interface type, one of: i2c, spi')
@@ -59,6 +60,25 @@ if args.display in ('ssd1306', 'ssd1331', 'sh1106'):
 elif args.display in ('capture', 'pygame', 'gifanim'):
     Emulator = getattr(oled.emulator, args.display)
     device = Emulator(**vars(args))
+
+elif args.display in ('qt',):
+    from oled.emulator.qt import QtEmulator
+    from PyQt5.QtWidgets import QApplication
+
+    app = QApplication(sys.argv)
+
+    """
+    window = QtWidgets.QMainWindow()
+
+    button = QtWidgets.QPushButton("Hello SSD1306!")
+    button.clicked.connect(on_click)
+
+    window.setCentralWidget(button)
+    window.show()
+
+    app.exec_()
+    """
+    device = QtEmulator(**vars(args))
 
 else:
     parser.error('unknown display %s' % args.display)
