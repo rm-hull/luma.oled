@@ -50,7 +50,7 @@ class i2c(object):
         self._data_mode = 0x40
         try:
             self._bus = bus or smbus2.SMBus(port)
-        except FileNotFoundError as e:
+        except (FileNotFoundError, IOError) as e:
             raise oled.error.DeviceNotFoundError(
                 'I2C device not found: {}'.format(e.filename))
         self._addr = address
