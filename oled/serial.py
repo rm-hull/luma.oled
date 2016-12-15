@@ -22,6 +22,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import errno
+
 import oled.error
 
 
@@ -48,12 +50,15 @@ class i2c(object):
         import smbus2
         self._cmd_mode = 0x00
         self._data_mode = 0x40
+        self._addr = address
         try:
             self._bus = bus or smbus2.SMBus(port)
-        except (FileNotFoundError, IOError) as e:
-            raise oled.error.DeviceNotFoundError(
-                'I2C device not found: {}'.format(e.filename))
-        self._addr = address
+        except IOError as e:
+            if e.errno == errno.ENOENT:
+                raise oled.error.DeviceNotFoundError(
+                    'I2C device not found: {}'.format(e.filename))
+            else:
+                raise
 
     def command(self, *cmd):
         """
