@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
 # ssd1306 documentation build configuration file, created by
@@ -355,6 +355,5 @@ texinfo_documents = [
 # Configuration for intersphinx.
 intersphinx_mapping = {
     'python': ('https://docs.python.org/2', None),
-    'pillow': ('https://pillow.readthedocs.io/en/latest', None),
-    'pygame': ('http://pygame.org/docs/ref', None)
+    'pillow': ('https://pillow.readthedocs.io/en/latest', None)
 }
