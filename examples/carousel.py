@@ -43,6 +43,14 @@ def pause_every(interval, generator):
 def intersect(a, b):
     return list(set(a) & set(b))
 
+
+def first(iterable, default=None):
+    if iterable:
+        for item in iterable:
+            return item
+    return default
+
+
 def main():
     widget_width = device.width / 2
     widget_height = device.height
@@ -57,9 +65,9 @@ def main():
     clk = snapshot(widget_width, widget_height, clock.render, interval=1.0)
 
     network_ifs = psutil.net_if_stats().keys()
-    wlan = intersect(network_ifs, ["wlan0", "wl0"])[0]
-    eth = intersect(network_ifs, ["eth0", "en0"])[0]
-    lo = intersect(network_ifs, ["lo", "lo0"])[0]
+    wlan = first(intersect(network_ifs, ["wlan0", "wl0"]), "wlan0")
+    eth = first(intersect(network_ifs, ["eth0", "en0"]), "eth0")
+    lo = first(intersect(network_ifs, ["lo", "lo0"]), "lo")
 
     net_wlan = snapshot(widget_width, widget_height, network.stats(wlan), interval=2.0)
     net_eth = snapshot(widget_width, widget_height, network.stats(eth), interval=2.0)
