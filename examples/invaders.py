@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+# PYTHON_ARGCOMPLETE_OK
 
 # Ported from:
-# https://gist.github.com/rm-hull/f18a92207960f250e1d2adcba36a5926#file-invaders-py
+# https://gist.github.com/TheRayTracer/dd12c498e3ecb9b8b47f#file-invaders-py
 
 import os.path
 import time

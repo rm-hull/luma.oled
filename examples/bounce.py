@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+# PYTHON_ARGCOMPLETE_OK
+
 
 # Display a bouncing ball animation and frames per second.
 # Attribution: https://github.com/rogerdahl/ssd1306/blob/master/examples/bounce.py
