@@ -3,6 +3,7 @@
 # Copyright (c) 2016 Richard Hull and contributors
 # See LICENSE.rst for details.
 
+
 def primitives(device, draw):
     padding = 2
     shape_width = 20
