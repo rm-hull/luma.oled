@@ -1,9 +1,6 @@
-<<<<<<< HEAD
-import sys
-=======
 # -*- coding: utf-8 -*-
 
->>>>>>> 7e2d0166e40da5251ff4136e457e60d91a18d31a
+import sys
 import logging
 import argparse
 
