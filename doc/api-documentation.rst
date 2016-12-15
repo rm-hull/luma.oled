@@ -14,6 +14,13 @@ API Documentation
     :undoc-members:
     :show-inheritance:
 
+:mod:`oled.error`
+"""""""""""""""""""
+.. automodule:: oled.error
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 :mod:`oled.emulator`
 """"""""""""""""""""
 .. automodule:: oled.emulator
@@ -51,13 +58,6 @@ API Documentation
 :mod:`oled.virtual`
 """""""""""""""""""
 .. automodule:: oled.virtual
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-:mod:`oled.error`
-"""""""""""""""""""
-.. automodule:: oled.error
     :members:
     :undoc-members:
     :show-inheritance:

@@ -50,13 +50,6 @@ def test_init_invalid_dimensions():
     assert "Unsupported display mode: 77x105" in str(ex.value)
 
 
-def test_init_handle_ioerror():
-    serial.command.side_effect = IOError(-99, "Test exception")
-    with pytest.raises(IOError) as ex:
-        sh1106(serial)
-    assert "Failed to initialize SH1106 display driver" in str(ex.value)
-
-
 def test_display():
     device = sh1106(serial)
     serial.reset_mock()
