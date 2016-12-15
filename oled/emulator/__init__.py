@@ -23,6 +23,7 @@ class emulator(device):
     """
     def __init__(self, width, height, mode, transform, scale):
         super(emulator, self).__init__(serial_interface=noop())
+
         try:
             import pygame
         except:

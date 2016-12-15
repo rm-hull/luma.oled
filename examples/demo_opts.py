@@ -81,22 +81,18 @@ elif args.display in ('capture', 'pygame', 'gifanim'):
 
 elif args.display in ('qt',):
     from oled.emulator.qt import QtEmulator
-    from PyQt5.QtWidgets import QApplication
+    from PyQt5.QtWidgets import QApplication, QMainWindow
 
     app = QApplication(sys.argv)
+    device = QtEmulator(**vars(args))
 
-    """
-    window = QtWidgets.QMainWindow()
+    window = QMainWindow()
+    window.setWindowTitle("OLED Emulator")
 
-    button = QtWidgets.QPushButton("Hello SSD1306!")
-    button.clicked.connect(on_click)
-
-    window.setCentralWidget(button)
+    window.setCentralWidget(device.widget)
     window.show()
 
     app.exec_()
-    """
-    device = QtEmulator(**vars(args))
 
 else:
     parser.error('unknown display %s' % args.display)
