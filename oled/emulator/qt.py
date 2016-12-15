@@ -6,8 +6,6 @@
 Qt device emulator.
 """
 
-import sys
-
 from PyQt5.QtGui import QPalette
 from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtWidgets import QWidget
@@ -63,16 +61,16 @@ class QtEmulator(emulator):
         assert(image.size[0] == self.width)
         assert(image.size[1] == self.height)
 
-        #self._clock.tick(self._fps)
-        #self._pygame.event.pump()
+        # self._clock.tick(self._fps)
+        # self._pygame.event.pump()
 
-        #if self._abort():
-        #self._pygame.quit()
-        #sys.exit()
+        # if self._abort():
+        # self._pygame.quit()
+        # sys.exit()
 
-        surface = self.to_surface(image)
-        #self._screen.blit(surface, (0, 0))
-        #self._pygame.display.flip()
+        # surface = self.to_surface(image)
+        # self._screen.blit(surface, (0, 0))
+        # self._pygame.display.flip()
 
     def to_surface(self, image):
         """
