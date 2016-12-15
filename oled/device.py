@@ -98,7 +98,10 @@ class device(mixin.capabilities):
         Switches the display contrast to the desired level, in the range
         0-255. Note that setting the level to a low (or zero) value will
         not necessarily dim the display to nearly off. In other words,
-        this method is **NOT** suitable for fade-in/out animation
+        this method is **NOT** suitable for fade-in/out animation.
+
+        :param level: Desired contrast level in the range of 0-255.
+        :type level: int
         """
         assert(level >= 0)
         assert(level <= 255)
@@ -364,7 +367,10 @@ class ssd1331(device):
         Switches the display contrast to the desired level, in the range
         0-255. Note that setting the level to a low (or zero) value will
         not necessarily dim the display to nearly off. In other words,
-        this method is **NOT** suitable for fade-in/out animation
+        this method is **NOT** suitable for fade-in/out animation.
+
+        :param level: Desired contrast level in the range of 0-255.
+        :type level: int
         """
         assert(level >= 0)
         assert(level <= 255)

@@ -34,7 +34,7 @@ logging.basicConfig(
 )
 # ignore PIL debug messages
 logging.getLogger('PIL').setLevel(logging.ERROR)
-
+logger = logging.getLogger(__name__)
 args = parser.parse_args()
 if args.display in ('ssd1306', 'ssd1331', 'sh1106'):
     if args.interface not in ('i2c', 'spi'):
@@ -46,15 +46,18 @@ if args.display in ('ssd1306', 'ssd1331', 'sh1106'):
         parser.error('invalid address %s' % args.i2c_address)
 
     Device = getattr(oled.device, args.display)
-    if (args.interface == 'i2c'):
-        serial = oled.serial.i2c(port=args.i2c_port, address=args.i2c_address)
-    elif (args.interface == 'spi'):
-        serial = oled.serial.spi(port=args.spi_port,
-                                 device=args.spi_device,
-                                 bus_speed_hz=args.spi_bus_speed,
-                                 bcm_DC=args.bcm_data_command,
-                                 bcm_RST=args.bcm_reset)
-    device = Device(serial, width=args.width, height=args.height)
+    try:
+        if (args.interface == 'i2c'):
+            serial = oled.serial.i2c(port=args.i2c_port, address=args.i2c_address)
+        elif (args.interface == 'spi'):
+            serial = oled.serial.spi(port=args.spi_port,
+                                     device=args.spi_device,
+                                     bus_speed_hz=args.spi_bus_speed,
+                                     bcm_DC=args.bcm_data_command,
+                                     bcm_RST=args.bcm_reset)
+        device = Device(serial, width=args.width, height=args.height)
+    except Exception as e:
+        parser.error(e)
 
 elif args.display in ('capture', 'pygame', 'gifanim'):
     Emulator = getattr(oled.emulator, args.display)

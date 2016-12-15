@@ -54,3 +54,10 @@ API Documentation
     :members:
     :undoc-members:
     :show-inheritance:
+
+:mod:`oled.error`
+"""""""""""""""""""
+.. automodule:: oled.error
+    :members:
+    :undoc-members:
+    :show-inheritance:
