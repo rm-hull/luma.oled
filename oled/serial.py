@@ -1,27 +1,10 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
+# Copyright (c) 2016 Richard Hull and contributors
+# See LICENSE.rst for details.
 
-# The MIT License (MIT)
-#
-# Copyright (c) 2016 Richard Hull
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in
-# all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
+import errno
+
+import oled.error
 
 
 class i2c(object):
@@ -29,18 +12,33 @@ class i2c(object):
     Wrap an `I2C <https://en.wikipedia.org/wiki/I%C2%B2C>`_ interface to
     provide data and command methods.
 
+    :param bus: I2C bus instance.
+    :type bus:
+    :param port: I2C port number.
+    :type port: int
+    :param address: I2C address.
+    :type address:
+    :raises oled.error.DeviceNotFoundError: I2C device could not be found.
+
     .. note::
        1. Only one of ``bus`` OR ``port`` arguments should be supplied;
           if both are, then ``bus`` takes precedence.
        2. If ``bus`` is provided, there is an implicit expectation
           that it has already been opened.
-          """
+    """
     def __init__(self, bus=None, port=1, address=0x3C):
         import smbus2
         self._cmd_mode = 0x00
         self._data_mode = 0x40
-        self._bus = bus or smbus2.SMBus(port)
         self._addr = address
+        try:
+            self._bus = bus or smbus2.SMBus(port)
+        except OSError as e:
+            if e.errno == errno.ENOENT:
+                raise oled.error.DeviceNotFoundError(
+                    'I2C device not found: {}'.format(e.filename))
+            else:
+                raise
 
     def command(self, *cmd):
         """

@@ -1,6 +1,8 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-#
+# Copyright (c) 2016 Richard Hull and contributors
+# See LICENSE.rst for details.
+
 # ssd1306 documentation build configuration file, created by
 # sphinx-quickstart on Wed Oct  5 00:14:54 2016.
 #

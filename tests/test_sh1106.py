@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+# Copyright (c) 2016 Richard Hull and contributors
+# See LICENSE.rst for details.
 
 try:
     from unittest.mock import call, Mock
@@ -48,13 +50,6 @@ def test_init_invalid_dimensions():
     with pytest.raises(ValueError) as ex:
         sh1106(serial, width=77, height=105)
     assert "Unsupported display mode: 77x105" in str(ex.value)
-
-
-def test_init_handle_ioerror():
-    serial.command.side_effect = IOError(-99, "Test exception")
-    with pytest.raises(IOError) as ex:
-        sh1106(serial)
-    assert "Failed to initialize SH1106 display driver" in str(ex.value)
 
 
 def test_display():

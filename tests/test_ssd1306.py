@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+# Copyright (c) 2016 Richard Hull and contributors
+# See LICENSE.rst for details.
 
 try:
     from unittest.mock import call, Mock
@@ -80,13 +82,6 @@ def test_init_invalid_dimensions():
     with pytest.raises(ValueError) as ex:
         ssd1306(serial, width=59, height=22)
     assert "Unsupported display mode: 59x22" in str(ex.value)
-
-
-def test_init_handle_ioerror():
-    serial.command.side_effect = IOError(-99, "Test exception")
-    with pytest.raises(IOError) as ex:
-        ssd1306(serial)
-    assert "Failed to initialize SSD1306 display driver" in str(ex.value)
 
 
 def test_hide():
