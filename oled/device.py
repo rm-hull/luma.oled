@@ -98,7 +98,10 @@ class device(mixin.capabilities):
         Switches the display contrast to the desired level, in the range
         0-255. Note that setting the level to a low (or zero) value will
         not necessarily dim the display to nearly off. In other words,
-        this method is **NOT** suitable for fade-in/out animation
+        this method is **NOT** suitable for fade-in/out animation.
+
+        :param level: Desired contrast level in the range of 0-255.
+        :type level: int
         """
         assert(level >= 0)
         assert(level <= 255)
@@ -125,42 +128,38 @@ class sh1106(device):
     """
 
     def __init__(self, serial_interface=None, width=128, height=64):
-        try:
-            super(sh1106, self).__init__(oled.const.sh1106, serial_interface)
-            self.capabilities(width, height)
-            self.bounding_box = (0, 0, width - 1, height - 1)
-            self.width = width
-            self.height = height
-            self._pages = self.height // 8
+        super(sh1106, self).__init__(oled.const.sh1106, serial_interface)
+        self.capabilities(width, height)
+        self.bounding_box = (0, 0, width - 1, height - 1)
+        self.width = width
+        self.height = height
+        self._pages = self.height // 8
 
-            # FIXME: Delay doing anything here with alternate screen sizes
-            # until we are able to get a device to test with.
-            if width != 128 or height != 64:
-                raise ValueError("Unsupported display mode: {0}x{1}".format(width, height))
+        # FIXME: Delay doing anything here with alternate screen sizes
+        # until we are able to get a device to test with.
+        if width != 128 or height != 64:
+            raise ValueError("Unsupported display mode: {0}x{1}".format(
+                width, height))
 
-            self.command(
-                self._const.DISPLAYOFF,
-                self._const.MEMORYMODE,
-                self._const.SETHIGHCOLUMN,      0xB0, 0xC8,
-                self._const.SETLOWCOLUMN,       0x10, 0x40,
-                self._const.SETSEGMENTREMAP,
-                self._const.NORMALDISPLAY,
-                self._const.SETMULTIPLEX,       0x3F,
-                self._const.DISPLAYALLON_RESUME,
-                self._const.SETDISPLAYOFFSET,   0x00,
-                self._const.SETDISPLAYCLOCKDIV, 0xF0,
-                self._const.SETPRECHARGE,       0x22,
-                self._const.SETCOMPINS,         0x12,
-                self._const.SETVCOMDETECT,      0x20,
-                self._const.CHARGEPUMP,         0x14)
+        self.command(
+            self._const.DISPLAYOFF,
+            self._const.MEMORYMODE,
+            self._const.SETHIGHCOLUMN,      0xB0, 0xC8,
+            self._const.SETLOWCOLUMN,       0x10, 0x40,
+            self._const.SETSEGMENTREMAP,
+            self._const.NORMALDISPLAY,
+            self._const.SETMULTIPLEX,       0x3F,
+            self._const.DISPLAYALLON_RESUME,
+            self._const.SETDISPLAYOFFSET,   0x00,
+            self._const.SETDISPLAYCLOCKDIV, 0xF0,
+            self._const.SETPRECHARGE,       0x22,
+            self._const.SETCOMPINS,         0x12,
+            self._const.SETVCOMDETECT,      0x20,
+            self._const.CHARGEPUMP,         0x14)
 
-            self.contrast(0x7F)
-            self.clear()
-            self.show()
-
-        except IOError as e:
-            raise IOError(e.errno,
-                          "Failed to initialize SH1106 display driver")
+        self.contrast(0x7F)
+        self.clear()
+        self.show()
 
     def display(self, image):
         """
@@ -207,46 +206,42 @@ class ssd1306(device):
         :class:`oled.render.canvas` context manager.
     """
     def __init__(self, serial_interface=None, width=128, height=64):
-        try:
-            super(ssd1306, self).__init__(oled.const.ssd1306, serial_interface)
-            self.capabilities(width, height)
-            self._pages = self.height // 8
-            self._buffer = [0] * self.width * self._pages
-            self._offsets = [n * self.width for n in range(8)]
+        super(ssd1306, self).__init__(oled.const.ssd1306, serial_interface)
+        self.capabilities(width, height)
+        self._pages = self.height // 8
+        self._buffer = [0] * self.width * self._pages
+        self._offsets = [n * self.width for n in range(8)]
 
-            # Supported modes
-            settings = {
-                (128, 64): dict(multiplex=0x3F, displayclockdiv=0x80, compins=0x12),
-                (128, 32): dict(multiplex=0x1F, displayclockdiv=0x80, compins=0x02),
-                (96, 16): dict(multiplex=0x0F, displayclockdiv=0x60, compins=0x02)
-            }.get(self.size)
+        # Supported modes
+        settings = {
+            (128, 64): dict(multiplex=0x3F, displayclockdiv=0x80, compins=0x12),
+            (128, 32): dict(multiplex=0x1F, displayclockdiv=0x80, compins=0x02),
+            (96, 16): dict(multiplex=0x0F, displayclockdiv=0x60, compins=0x02)
+        }.get(self.size)
 
-            if settings is None:
-                raise ValueError("Unsupported display mode: {0}x{1}".format(width, height))
+        if settings is None:
+            raise ValueError("Unsupported display mode: {0}x{1}".format(
+                width, height))
 
-            self.command(
-                self._const.DISPLAYOFF,
-                self._const.SETDISPLAYCLOCKDIV, settings['displayclockdiv'],
-                self._const.SETMULTIPLEX,       settings['multiplex'],
-                self._const.SETDISPLAYOFFSET,   0x00,
-                self._const.SETSTARTLINE,
-                self._const.CHARGEPUMP,         0x14,
-                self._const.MEMORYMODE,         0x00,
-                self._const.SETREMAP,
-                self._const.COMSCANDEC,
-                self._const.SETCOMPINS,         settings['compins'],
-                self._const.SETPRECHARGE,       0xF1,
-                self._const.SETVCOMDETECT,      0x40,
-                self._const.DISPLAYALLON_RESUME,
-                self._const.NORMALDISPLAY)
+        self.command(
+            self._const.DISPLAYOFF,
+            self._const.SETDISPLAYCLOCKDIV, settings['displayclockdiv'],
+            self._const.SETMULTIPLEX,       settings['multiplex'],
+            self._const.SETDISPLAYOFFSET,   0x00,
+            self._const.SETSTARTLINE,
+            self._const.CHARGEPUMP,         0x14,
+            self._const.MEMORYMODE,         0x00,
+            self._const.SETREMAP,
+            self._const.COMSCANDEC,
+            self._const.SETCOMPINS,         settings['compins'],
+            self._const.SETPRECHARGE,       0xF1,
+            self._const.SETVCOMDETECT,      0x40,
+            self._const.DISPLAYALLON_RESUME,
+            self._const.NORMALDISPLAY)
 
-            self.contrast(0xCF)
-            self.clear()
-            self.show()
-
-        except IOError as e:
-            raise IOError(e.errno,
-                          "Failed to initialize SSD1306 display driver")
+        self.contrast(0xCF)
+        self.clear()
+        self.show()
 
     def display(self, image):
         """
@@ -302,39 +297,35 @@ class ssd1331(device):
         :class:`oled.render.canvas` context manager.
     """
     def __init__(self, serial_interface=None, width=96, height=64):
-        try:
-            super(ssd1331, self).__init__(oled.const.ssd1331, serial_interface)
-            self.capabilities(width, height, mode="RGB")
-            self._buffer = [0] * self.width * self.height * 2
+        super(ssd1331, self).__init__(oled.const.ssd1331, serial_interface)
+        self.capabilities(width, height, mode="RGB")
+        self._buffer = [0] * self.width * self.height * 2
 
-            if width != 96 or height != 64:
-                raise ValueError("Unsupported display mode: {0}x{1}".format(width, height))
+        if width != 96 or height != 64:
+            raise ValueError("Unsupported display mode: {0}x{1}".format(
+                width, height))
 
-            self.command(
-                self._const.DISPLAYOFF,
-                self._const.SETREMAP,             0x72,
-                self._const.SETDISPLAYSTARTLINE,  0x00,
-                self._const.SETDISPLAYOFFSET,     0x00,
-                self._const.NORMALDISPLAY,
-                self._const.SETMULTIPLEX,         0x3F,
-                self._const.SETMASTERCONFIGURE,   0x8E,
-                self._const.POWERSAVEMODE,        0x0B,
-                self._const.PHASE12PERIOD,        0x74,
-                self._const.CLOCKDIVIDER,         0xD0,
-                self._const.SETPRECHARGESPEEDA,   0x80,
-                self._const.SETPRECHARGESPEEDB,   0x80,
-                self._const.SETPRECHARGESPEEDC,   0x80,
-                self._const.SETPRECHARGEVOLTAGE,  0x3E,
-                self._const.SETVVOLTAGE,          0x3E,
-                self._const.MASTERCURRENTCONTROL, 0x0F)
+        self.command(
+            self._const.DISPLAYOFF,
+            self._const.SETREMAP,             0x72,
+            self._const.SETDISPLAYSTARTLINE,  0x00,
+            self._const.SETDISPLAYOFFSET,     0x00,
+            self._const.NORMALDISPLAY,
+            self._const.SETMULTIPLEX,         0x3F,
+            self._const.SETMASTERCONFIGURE,   0x8E,
+            self._const.POWERSAVEMODE,        0x0B,
+            self._const.PHASE12PERIOD,        0x74,
+            self._const.CLOCKDIVIDER,         0xD0,
+            self._const.SETPRECHARGESPEEDA,   0x80,
+            self._const.SETPRECHARGESPEEDB,   0x80,
+            self._const.SETPRECHARGESPEEDC,   0x80,
+            self._const.SETPRECHARGEVOLTAGE,  0x3E,
+            self._const.SETVVOLTAGE,          0x3E,
+            self._const.MASTERCURRENTCONTROL, 0x0F)
 
-            self.contrast(0xFF)
-            self.clear()
-            self.show()
-
-        except IOError as e:
-            raise IOError(e.errno,
-                          "Failed to initialize SSD1331 display driver")
+        self.contrast(0xFF)
+        self.clear()
+        self.show()
 
     def display(self, image):
         """
@@ -364,7 +355,10 @@ class ssd1331(device):
         Switches the display contrast to the desired level, in the range
         0-255. Note that setting the level to a low (or zero) value will
         not necessarily dim the display to nearly off. In other words,
-        this method is **NOT** suitable for fade-in/out animation
+        this method is **NOT** suitable for fade-in/out animation.
+
+        :param level: Desired contrast level in the range of 0-255.
+        :type level: int
         """
         assert(level >= 0)
         assert(level <= 255)

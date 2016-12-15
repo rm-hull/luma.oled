@@ -6,8 +6,10 @@ try:
 except ImportError:
     from mock import patch, call, Mock
 
+import pytest
 import smbus2
 from oled.serial import i2c, spi
+import oled.error
 
 smbus = Mock(unsafe=True)
 spidev = Mock(unsafe=True)
@@ -31,6 +33,13 @@ def fib(n):
     for _ in range(n):
         yield a
         a, b = b, a + b
+
+
+def test_i2c_init_device_not_found():
+    port = 200
+    with pytest.raises(oled.error.DeviceNotFoundError) as ex:
+        i2c(port=port, address=0x710)
+    assert str(ex.value) == 'I2C device not found: /dev/i2c-{}'.format(port)
 
 
 def test_i2c_init_no_bus():

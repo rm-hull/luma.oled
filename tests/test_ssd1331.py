@@ -45,13 +45,6 @@ def test_init_invalid_dimensions():
     assert "Unsupported display mode: 23x57" in str(ex.value)
 
 
-def test_init_handle_ioerror():
-    serial.command.side_effect = IOError(-99, "Test exception")
-    with pytest.raises(IOError) as ex:
-        ssd1331(serial)
-    assert "Failed to initialize SSD1331 display driver" in str(ex.value)
-
-
 def test_hide():
     device = ssd1331(serial)
     serial.reset_mock()
