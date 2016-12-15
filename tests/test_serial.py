@@ -41,6 +41,7 @@ def test_i2c_init_device_not_found():
         i2c(port=port, address=0x710)
     assert str(ex.value) == 'I2C device not found: /dev/i2c-{}'.format(port)
 
+
 def test_i2c_init_no_bus():
     with patch.object(smbus2.SMBus, 'open') as mock:
         i2c(port=2, address=0x71)
