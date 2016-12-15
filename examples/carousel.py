@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+# PYTHON_ARGCOMPLETE_OK
 
 # Loosely based on poster_demo by @bjerrep
 # https://github.com/bjerrep/ssd1306/blob/master/examples/poster_demo.py
+
 
 from demo_opts import device
 from oled.virtual import viewport, snapshot

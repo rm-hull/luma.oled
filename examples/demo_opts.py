@@ -30,6 +30,12 @@ parser.add_argument('--duration', type=float, default=0.01, help='Animation fram
 parser.add_argument('--loop', type=int, default=0, help='Repeat loop, zero=forever (gifanim emulator only)')
 parser.add_argument('--max-frames', type=int, help='Maximum frames to record (gifanim emulator only)')
 
+try:
+    import argcomplete
+    argcomplete.autocomplete(parser)
+except ImportError:
+    pass
+
 # logging
 logging.basicConfig(
     level=logging.DEBUG,
@@ -37,6 +43,7 @@ logging.basicConfig(
 )
 # ignore PIL debug messages
 logging.getLogger('PIL').setLevel(logging.ERROR)
+
 
 args = parser.parse_args()
 
