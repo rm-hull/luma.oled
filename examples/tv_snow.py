@@ -5,6 +5,7 @@
 import struct
 import random
 from demo_opts import device
+from oled.render import canvas
 from PIL import Image, ImageDraw
 
 size = (60, 30)
@@ -27,7 +28,10 @@ def snow():
 
 
 def main():
-    images = [snow() for _ in range(50)]
+    with canvas(device) as draw:
+        draw.multiline_text(offset, "Please do\nnot adjust\nyour set", fill="white", align="center", spacing=-1)
+
+    images = [snow() for _ in range(20)]
     while True:
         random.shuffle(images)
         for background in images:
