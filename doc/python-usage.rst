@@ -64,9 +64,10 @@ crawl.py     A vertical scrolling demo, which should be familiar
 demo.py      Use misc draw commands to create a simple image
 invaders.py  Space Invaders demo
 maze.py      Maze generator
-perfloop.py  Simpel benchmarking utility to measure performance
+perfloop.py  Simple benchmarking utility to measure performance
 pi_logo.py   Display the Raspberry Pi logo (loads image as .png)
 sys_info.py  Display basic system information
+tv_snow.py   Example image-blitting
 welcome.py   Unicode font rendering & scrolling
 ============ ========================================================
 
