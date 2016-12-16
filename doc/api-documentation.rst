@@ -14,16 +14,16 @@ API Documentation
     :undoc-members:
     :show-inheritance:
 
-:mod:`oled.error`
-"""""""""""""""""""
-.. automodule:: oled.error
+:mod:`oled.emulator`
+""""""""""""""""""""
+.. automodule:: oled.emulator
     :members:
     :undoc-members:
     :show-inheritance:
 
-:mod:`oled.emulator`
-""""""""""""""""""""
-.. automodule:: oled.emulator
+:mod:`oled.error`
+"""""""""""""""""""
+.. automodule:: oled.error
     :members:
     :undoc-members:
     :show-inheritance:
