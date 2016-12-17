@@ -15,22 +15,22 @@ def make_font(name, size):
     return ImageFont.truetype(font_path, size)
 
 
+
 def main():
 
     while True:
-        for fontname in ["miscfs_.ttf", "FreePixel.ttf"]:
-            font = make_font(fontname, 12)
-
+        for fontname, size in [(None, None), ("tiny.ttf", 6), ("ProggyTiny.ttf", 16), ("creep.bdf", 16), ("miscfs_.ttf", 12), ("FreePixel.ttf", 12)]:
+            font = make_font(fontname, size) if fontname else None
             term = terminal(device, font)
 
             term.println("Terminal mode demo")
             term.println("------------------")
-            term.println("Uses a fixed-width font to output text using a number of output methods.")
+            term.println("Uses any font to output text using a number of different print methods.")
             term.println()
             time.sleep(2)
             term.println("The '{0}' font supports a terminal size of {1}x{2} characters.".format(fontname, term.width, term.height))
-            time.sleep(2)
             term.println()
+            time.sleep(2)
             term.println("An animation effect is defaulted to give the appearance of spooling to a teletype device.")
             term.println()
             time.sleep(2)
@@ -54,7 +54,7 @@ def main():
 
             time.sleep(2)
             term.clear()
-            term.puts("Backspace test...")
+            term.puts("Backspace test.")
             term.flush()
             time.sleep(2)
             for _ in range(17):
@@ -63,11 +63,13 @@ def main():
 
             time.sleep(2)
             term.clear()
+            term.animate = True
             term.println("Tabs test")
             term.println("|...|...|...|...|...|")
             term.println("1\t2\t4\t11")
             term.println("992\t43\t9\t12")
             term.println("\t3\t99\t1")
+            term.flush()
             time.sleep(2)
 
 
