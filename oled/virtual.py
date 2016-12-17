@@ -193,6 +193,7 @@ class terminal(object):
         self.bgcolor = bgcolor
         self.animate = animate
         self.tabstop = tabstop
+
         def inflate(a, b):
             ax, ay = a
             bx, by = b

@@ -15,9 +15,7 @@ def make_font(name, size):
     return ImageFont.truetype(font_path, size)
 
 
-
 def main():
-
     while True:
         for fontname, size in [(None, None), ("tiny.ttf", 6), ("ProggyTiny.ttf", 16), ("creep.bdf", 16), ("miscfs_.ttf", 12), ("FreePixel.ttf", 12)]:
             font = make_font(fontname, size) if fontname else None
@@ -76,5 +74,5 @@ def main():
 if __name__ == "__main__":
     try:
         main()
-    except ImportError:
+    except KeyboardInterrupt:
         pass
