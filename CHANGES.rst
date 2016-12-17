@@ -4,7 +4,8 @@ ChangeLog
 +------------+---------------------------------------------------------------------+------------+
 | Version    | Description                                                         | Date       |
 +============+=====================================================================+============+
-| *Upcoming* | * Canvas image dithering                                            |            |
+| *Upcoming* | * Add terminal functionality                                        |            |
+|            | * Canvas image dithering                                            |            |
 |            | * Additional & improved examples                                    |            |
 |            | * Load config settings from file (for examples)                     |            |
 |            | * Universal wheel distribution                                      |            |

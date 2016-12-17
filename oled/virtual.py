@@ -4,7 +4,7 @@
 
 import time
 
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFont
 
 import oled.mixin as mixin
 from oled.threadpool import threadpool
@@ -179,3 +179,150 @@ class snapshot(hotspot):
     def paste_into(self, image, xy):
         super(snapshot, self).paste_into(image, xy)
         self.last_updated = time.time()
+
+
+class terminal(object):
+    """
+    Provides a terminal-like interface to a device (or a device-like object
+    that has :class:`mixin.capabilities` characteristics).
+    """
+    def __init__(self, device, font=None, color="white", bgcolor="black", tabstop=4, line_height=None, animate=True):
+        self._device = device
+        self.font = font or ImageFont.load_default()
+        self.color = color
+        self.bgcolor = bgcolor
+        self.animate = animate
+        self.tabstop = tabstop
+        def inflate(a, b):
+            ax, ay = a
+            bx, by = b
+            return max(ax, bx), max(ay, by)
+
+        self._cw, self._ch = reduce(inflate, (self.font.getsize(chr(i)) for i in range(32, 128)), (0, 0))
+        self._ch = line_height or self._ch
+        self.width = device.width // self._cw
+        self.height = device.height // self._ch
+        self.size = (self.width, self.height)
+        self._backing_image = Image.new(self._device.mode, self._device.size, self.bgcolor)
+        self._canvas = ImageDraw.Draw(self._backing_image)
+        self.clear()
+
+    def clear(self):
+        """
+        Clears the display and resets the cursor position to (0, 0).
+        """
+        self._cx, self._cy = (0, 0)
+        self._canvas.rectangle(self._device.bounding_box, fill=self.bgcolor)
+        self.flush()
+
+    def println(self, text=""):
+        """
+        Prints the supplied text to the device, scrolling where necessary.
+        The text is always followed by a newline.
+        """
+        self.puts(text)
+        self.newline()
+
+    def puts(self, text):
+        """
+        Prints the supplied text, handling special character codes for carriage
+        return (\\r), newline (\\n), backspace (\\b) and tab (\\t).
+
+        If the ``animate`` flag was set to True (default), then each character
+        is flushed to the device, giving the effect of 1970's teletype device.
+        """
+        for line in str(text).split("\n"):
+            for char in line:
+                if char == '\r':
+                    self.carriage_return()
+
+                elif char == '\n':
+                    self.newline()
+
+                elif char == '\b':
+                    self.backspace()
+
+                elif char == '\t':
+                    self.tab()
+
+                else:
+                    self.putch(char, flush=self.animate)
+
+    def putch(self, ch, flush=True):
+        """
+        Prints the specific character, which must be a valid printable ASCII
+        value in the range 32..127 only.
+        """
+        assert(ord(ch) >= 32)
+        assert(ord(ch) <= 127)
+
+        w = self.font.getsize(ch)[0]
+        if self._cx + w >= self._device.width:
+            self.newline()
+
+        self.erase()
+        self._canvas.text((self._cx, self._cy), text=ch, font=self.font, fill=self.color)
+
+        self._cx += w
+        if flush:
+            self.flush()
+
+    def carriage_return(self):
+        """
+        Returns the cursor position to the left-hand side without advancing
+        downwards.
+        """
+        self._cx = 0
+
+    def tab(self):
+        """
+        Advances the cursor position to the next (soft) tabstop.
+        """
+        soft_tabs = self.tabstop - ((self._cx // self._cw) % self.tabstop)
+        for _ in range(soft_tabs):
+            self.putch(" ", flush=False)
+
+    def newline(self):
+        """
+        Advances the cursor position ot the left hand side, and to the next
+        line. If the cursor is on the lowest line, the displayed contents are
+        scrolled, causing the top line to be lost.
+        """
+        self.carriage_return()
+
+        if self._cy + (2 * self._ch) >= self._device.height:
+            # Simulate a vertical scroll
+            copy = self._backing_image.crop((0, self._ch, self._device.width, self._device.height))
+            self._backing_image.paste(copy, (0, 0))
+            self._canvas.rectangle((0, copy.height, self._device.width, self._device.height), fill=self.bgcolor)
+        else:
+            self._cy += self._ch
+
+        self.flush()
+        if self.animate:
+            time.sleep(0.2)
+
+    def backspace(self):
+        """
+        Moves the cursor one place to the left, erasing the character at the
+        current position. Cannot move beyound column zero, nor onto the
+        previous line
+        """
+        if self._cx + self._cw >= 0:
+            self.erase()
+            self._cx -= self._cw
+
+        self.flush()
+
+    def erase(self):
+        """
+        Erase the contents of the cursor's current postion without moving the
+        cursor's position.
+        """
+        self._canvas.rectangle((self._cx, self._cy, self._cx + self._cw, self._cy + self._ch), fill=self.bgcolor)
+
+    def flush(self):
+        """
+        Cause the current backing store to be rendered on the nominated device.
+        """
+        self._device.display(self._backing_image)
