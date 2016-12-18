@@ -58,5 +58,10 @@ target/
 .ropeproject
 *~
 
+# PyDev
+.project
+.pydevproject
+.settings/
+
 # OSX
 .DS_Store
