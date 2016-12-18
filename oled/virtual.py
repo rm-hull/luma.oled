@@ -194,12 +194,12 @@ class terminal(object):
         self.animate = animate
         self.tabstop = tabstop
 
-        def inflate(a, b):
-            ax, ay = a
-            bx, by = b
-            return max(ax, bx), max(ay, by)
+        self._cw, self._ch = (0, 0)
+        for i in range(32, 128):
+            w, h = self.font.getsize(chr(i))
+            self._cw = max(w, self._cw)
+            self._ch = max(h, self._ch)
 
-        self._cw, self._ch = reduce(inflate, (self.font.getsize(chr(i)) for i in range(32, 128)), (0, 0))
         self._ch = line_height or self._ch
         self.width = device.width // self._cw
         self.height = device.height // self._ch
