@@ -67,6 +67,7 @@ invaders.py  Space Invaders demo
 maze.py      Maze generator
 perfloop.py  Simple benchmarking utility to measure performance
 pi_logo.py   Display the Raspberry Pi logo (loads image as .png)
+starfield.py 3D starfield simulation
 sys_info.py  Display basic system information
 tv_snow.py   Example image-blitting
 welcome.py   Unicode font rendering & scrolling
