@@ -4,7 +4,12 @@ ChangeLog
 +------------+---------------------------------------------------------------------+------------+
 | Version    | Description                                                         | Date       |
 +============+=====================================================================+============+
-| *Upcoming* | *TBD*                                                               |            |
+| *Upcoming* | * Canvas image dithering                                            |            |
+|            | * Additional & improved examples                                    |            |
+|            | * Load config settings from file (for examples)                     |            |
+|            | * Universal wheel distribution                                      |            |
+|            | * Improved/simplified error reporting                               |            |
+|            | * Documentation updates                                             |            |
 +------------+---------------------------------------------------------------------+------------+
 | **1.3.1**  | * Add ability to adjust brightness of screen                        | 2016/12/11 |
 |            | * Fix for wrong value NORMALDISPLAY for SSD1331 device              |            |

@@ -56,6 +56,7 @@ the following examples:
 ============ ========================================================
 Example      Description
 ============ ========================================================
+3d_box.py    Rotating 3D box wireframe & color dithering
 bounce.py    Display a bouncing ball animation and frames per second
 carousel.py  Showcase viewport and hotspot functionality
 clock.py     An analog clockface with date & time
