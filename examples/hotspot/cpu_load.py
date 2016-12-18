@@ -4,7 +4,7 @@
 import time
 import psutil
 from oled.virtual import hotspot
-from common import title_text
+from hotspot.common import title_text
 
 
 def vertical_bar(draw, x1, y1, x2, y2, yh):

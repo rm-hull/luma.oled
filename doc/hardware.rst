@@ -110,7 +110,7 @@ Then reboot.
 
 Next, add your user to the *i2c* group and install ``i2c-tools``::
 
-  $ sudo usermod -a G i2c pi
+  $ sudo usermod -a -G i2c pi
   $ sudo apt-get install i2c-tools
 
 Logout and in again so that the group membership permissions take effect, and

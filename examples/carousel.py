@@ -30,7 +30,7 @@ def position(max):
 def pause_every(interval, generator):
     try:
         while True:
-            x = generator.next()
+            x = next(generator)
             if x % interval == 0:
                 for _ in range(20):
                     yield x
@@ -52,7 +52,7 @@ def first(iterable, default=None):
 
 
 def main():
-    widget_width = device.width / 2
+    widget_width = device.width // 2
     widget_height = device.height
 
     # Either function or subclass

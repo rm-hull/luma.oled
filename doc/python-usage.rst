@@ -67,6 +67,7 @@ maze.py      Maze generator
 perfloop.py  Simple benchmarking utility to measure performance
 pi_logo.py   Display the Raspberry Pi logo (loads image as .png)
 sys_info.py  Display basic system information
+tv_snow.py   Example image-blitting
 welcome.py   Unicode font rendering & scrolling
 ============ ========================================================
 

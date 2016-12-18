@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import psutil
-from common import bytes2human, right_text, title_text, tiny_font
+from hotspot.common import bytes2human, right_text, title_text, tiny_font
 
 
 def stats(interface):

@@ -4,7 +4,7 @@
 import math
 import datetime
 
-from common import title_text, tiny_font
+from hotspot.common import title_text, tiny_font
 
 
 def posn(angle, arm_length):

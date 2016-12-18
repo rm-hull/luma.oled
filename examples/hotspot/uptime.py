@@ -3,7 +3,7 @@
 
 from datetime import datetime
 import psutil
-from common import title_text, right_text
+from hotspot.common import title_text, right_text
 
 
 def render(draw, width, height):

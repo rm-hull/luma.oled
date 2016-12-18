@@ -97,16 +97,16 @@ def lerp_2d(start, end, n):
 
     try:
         while True:
-            yield x.next(), y.next()
+            yield next(x), next(y)
     except StopIteration:
         pass
 
 
 def pairs(generator):
     try:
-        last = generator.next()
+        last = next(generator)
         while True:
-            curr = generator.next()
+            curr = next(generator)
             yield last, curr
             last = curr
     except StopIteration:
