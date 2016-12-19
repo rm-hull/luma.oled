@@ -82,11 +82,23 @@ class spi(object):
 
      * The DC pin (Data/Command select) defaults to GPIO 24 (BCM).
      * The RST pin (Reset) defaults to GPIO 25 (BCM).
+
+    :raises oled.error.DeviceNotFoundError: SPI device could not be found.
     """
-    def __init__(self, spi=None, gpio=None, port=0, device=0, bus_speed_hz=8000000, bcm_DC=24, bcm_RST=25):
+    def __init__(self, spi=None, gpio=None, port=0, device=0,
+                 bus_speed_hz=8000000, bcm_DC=24, bcm_RST=25):
         self._gpio = gpio or self.__rpi_gpio__()
         self._spi = spi or self.__spidev__()
-        self._spi.open(port, device)
+
+        try:
+            self._spi.open(port, device)
+        except (IOError, OSError) as e:
+            if e.errno == errno.ENOENT:
+                # FileNotFoundError
+                raise oled.error.DeviceNotFoundError('SPI device not found')
+            else:
+                raise
+
         self._spi.max_speed_hz = bus_speed_hz
         self._bcm_DC = bcm_DC
         self._bcm_RST = bcm_RST

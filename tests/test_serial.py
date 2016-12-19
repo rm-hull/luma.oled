@@ -37,6 +37,8 @@ def fib(n):
         a, b = b, a + b
 
 
+# I2C
+
 def test_i2c_init_device_not_found():
     port = 200
     with pytest.raises(oled.error.DeviceNotFoundError) as ex:
@@ -89,6 +91,8 @@ def test_i2c_cleanup():
     smbus.close.assert_called_once_with()
 
 
+# SPI
+
 def verify_spi_init(port, device, bus_speed=8000000, dc=24, rst=25):
     spidev.open.assert_called_once_with(port, device)
     assert spidev.max_speed_hz == bus_speed
@@ -126,3 +130,10 @@ def test_spi_cleanup():
     verify_spi_init(9, 1)
     spidev.close.assert_called_once_with()
     gpio.cleanup.assert_called_once_with()
+
+
+def test_spi_init_device_not_found():
+    import spidev
+    with pytest.raises(oled.error.DeviceNotFoundError) as ex:
+        spi(gpio=gpio, spi=spidev.SpiDev())
+    assert str(ex.value) == 'SPI device not found'
