@@ -33,10 +33,15 @@ class i2c(object):
         self._addr = address
         try:
             self._bus = bus or smbus2.SMBus(port)
-        except OSError as e:
+        except (IOError, OSError) as e:
             if e.errno == errno.ENOENT:
+                # FileNotFoundError
                 raise oled.error.DeviceNotFoundError(
                     'I2C device not found: {}'.format(e.filename))
+            elif e.errno == errno.EPERM or e.errno == errno.EACCES:
+                # PermissionError
+                raise oled.error.DevicePermissionError(
+                    'I2C device permission denied: {}'.format(e.filename))
             else:
                 raise
 

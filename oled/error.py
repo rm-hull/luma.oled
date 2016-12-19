@@ -18,3 +18,9 @@ class DeviceNotFoundError(Error):
     """
     Exception raised when a device cannot be found.
     """
+
+
+class DevicePermissionError(Error):
+    """
+    Exception raised when permission to access the device is denied.
+    """
