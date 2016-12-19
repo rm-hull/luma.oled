@@ -18,7 +18,10 @@ class i2c(object):
     :type port: int
     :param address: I2C address.
     :type address:
+    :raises oled.error.DeviceAddressError: I2C device address is invalid.
     :raises oled.error.DeviceNotFoundError: I2C device could not be found.
+    :raises oled.error.DevicePermissionError: Permission to access I2C device
+        denied.
 
     .. note::
        1. Only one of ``bus`` OR ``port`` arguments should be supplied;
@@ -30,13 +33,24 @@ class i2c(object):
         import smbus2
         self._cmd_mode = 0x00
         self._data_mode = 0x40
-        self._addr = address
+
+        try:
+            self._addr = int(str(address), 0)
+        except ValueError:
+            raise oled.error.DeviceAddressError(
+                'I2C device address invalid: {}'.format(address))
+
         try:
             self._bus = bus or smbus2.SMBus(port)
-        except OSError as e:
+        except (IOError, OSError) as e:
             if e.errno == errno.ENOENT:
+                # FileNotFoundError
                 raise oled.error.DeviceNotFoundError(
                     'I2C device not found: {}'.format(e.filename))
+            elif e.errno == errno.EPERM or e.errno == errno.EACCES:
+                # PermissionError
+                raise oled.error.DevicePermissionError(
+                    'I2C device permission denied: {}'.format(e.filename))
             else:
                 raise
 
@@ -75,11 +89,23 @@ class spi(object):
 
      * The DC pin (Data/Command select) defaults to GPIO 24 (BCM).
      * The RST pin (Reset) defaults to GPIO 25 (BCM).
+
+    :raises oled.error.DeviceNotFoundError: SPI device could not be found.
     """
-    def __init__(self, spi=None, gpio=None, port=0, device=0, bus_speed_hz=8000000, bcm_DC=24, bcm_RST=25):
+    def __init__(self, spi=None, gpio=None, port=0, device=0,
+                 bus_speed_hz=8000000, bcm_DC=24, bcm_RST=25):
         self._gpio = gpio or self.__rpi_gpio__()
         self._spi = spi or self.__spidev__()
-        self._spi.open(port, device)
+
+        try:
+            self._spi.open(port, device)
+        except (IOError, OSError) as e:
+            if e.errno == errno.ENOENT:
+                # FileNotFoundError
+                raise oled.error.DeviceNotFoundError('SPI device not found')
+            else:
+                raise
+
         self._spi.max_speed_hz = bus_speed_hz
         self._bcm_DC = bcm_DC
         self._bcm_RST = bcm_RST

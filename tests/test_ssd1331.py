@@ -9,6 +9,7 @@ except ImportError:
     from mock import call, Mock
 
 import pytest
+import oled.error
 from oled.device import ssd1331
 from oled.render import canvas
 import baseline_data
@@ -42,9 +43,9 @@ def test_init_96x64():
 
 
 def test_init_invalid_dimensions():
-    with pytest.raises(ValueError) as ex:
+    with pytest.raises(oled.error.DeviceDisplayModeError) as ex:
         ssd1331(serial, width=23, height=57)
-    assert "Unsupported display mode: 23x57" in str(ex.value)
+    assert "Unsupported display mode: 23 x 57" in str(ex.value)
 
 
 def test_hide():

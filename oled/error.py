@@ -18,3 +18,21 @@ class DeviceNotFoundError(Error):
     """
     Exception raised when a device cannot be found.
     """
+
+
+class DevicePermissionError(Error):
+    """
+    Exception raised when permission to access the device is denied.
+    """
+
+
+class DeviceAddressError(Error):
+    """
+    Exception raised when an invalid device address is detected.
+    """
+
+
+class DeviceDisplayModeError(Error):
+    """
+    Exception raised when an invalid device display mode is detected.
+    """

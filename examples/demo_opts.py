@@ -55,11 +55,6 @@ if args.display in ('ssd1306', 'ssd1331', 'sh1106'):
     if args.interface not in ('i2c', 'spi'):
         parser.error('unknown interface %s' % args.interface)
 
-    try:
-        args.i2c_address = int(args.i2c_address, 0)
-    except ValueError:
-        parser.error('invalid address %s' % args.i2c_address)
-
     Device = getattr(oled.device, args.display)
     try:
         if (args.interface == 'i2c'):
