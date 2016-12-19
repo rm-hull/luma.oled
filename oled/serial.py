@@ -18,6 +18,7 @@ class i2c(object):
     :type port: int
     :param address: I2C address.
     :type address:
+    :raises oled.error.DeviceAddressError: I2C device address is invalid.
     :raises oled.error.DeviceNotFoundError: I2C device could not be found.
     :raises oled.error.DevicePermissionError: Permission to access I2C device
         denied.
@@ -32,7 +33,13 @@ class i2c(object):
         import smbus2
         self._cmd_mode = 0x00
         self._data_mode = 0x40
-        self._addr = address
+
+        try:
+            self._addr = int(str(address), 0)
+        except ValueError:
+            raise oled.error.DeviceAddressError(
+                'I2C device address invalid: {}'.format(address))
+
         try:
             self._bus = bus or smbus2.SMBus(port)
         except (IOError, OSError) as e:

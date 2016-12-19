@@ -24,3 +24,9 @@ class DevicePermissionError(Error):
     """
     Exception raised when permission to access the device is denied.
     """
+
+
+class DeviceAddressError(Error):
+    """
+    Exception raised when an invalid device address is detected.
+    """

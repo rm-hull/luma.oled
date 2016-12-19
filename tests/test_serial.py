@@ -52,6 +52,12 @@ def test_i2c_init_device_permission_error():
     assert str(ex.value) == 'I2C device permission denied: /dev/i2c-1'
 
 
+def test_i2c_init_device_address_error():
+    with pytest.raises(oled.error.DeviceAddressError) as ex:
+        i2c(address='foo')
+    assert str(ex.value) == 'I2C device address invalid: foo'
+
+
 def test_i2c_init_no_bus():
     with patch.object(smbus2.SMBus, 'open') as mock:
         i2c(port=2, address=0x71)
