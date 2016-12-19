@@ -31,8 +31,10 @@
 # to the device
 
 import atexit
+
 from oled.serial import i2c
 import oled.mixin as mixin
+import oled.error
 import oled.const
 
 
@@ -118,8 +120,8 @@ class sh1106(device):
         # FIXME: Delay doing anything here with alternate screen sizes
         # until we are able to get a device to test with.
         if width != 128 or height != 64:
-            raise ValueError("Unsupported display mode: {0}x{1}".format(
-                width, height))
+            raise oled.error.DeviceDisplayModeError(
+                "Unsupported display mode: {0} x {1}".format(width, height))
 
         self.command(
             self._const.DISPLAYOFF,
@@ -200,8 +202,8 @@ class ssd1306(device):
         }.get(self.size)
 
         if settings is None:
-            raise ValueError("Unsupported display mode: {0}x{1}".format(
-                width, height))
+            raise oled.error.DeviceDisplayModeError(
+                "Unsupported display mode: {0} x {1}".format(width, height))
 
         self.command(
             self._const.DISPLAYOFF,
@@ -282,8 +284,8 @@ class ssd1331(device):
         self._buffer = [0] * self.width * self.height * 2
 
         if width != 96 or height != 64:
-            raise ValueError("Unsupported display mode: {0}x{1}".format(
-                width, height))
+            raise oled.error.DeviceDisplayModeError(
+                "Unsupported display mode: {0} x {1}".format(width, height))
 
         self.command(
             self._const.DISPLAYOFF,
