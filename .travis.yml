@@ -26,6 +26,7 @@ addons:
     - libportmidi-dev
     - libfreetype6-dev
     - libjpeg8-dev
+    - i2c-tools
 
 install: pip install -U pip tox coveralls
 script: tox -vv
