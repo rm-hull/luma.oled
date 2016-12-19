@@ -19,6 +19,8 @@ class i2c(object):
     :param address: I2C address.
     :type address:
     :raises oled.error.DeviceNotFoundError: I2C device could not be found.
+    :raises oled.error.DevicePermissionError: Permission to access I2C device
+        denied.
 
     .. note::
        1. Only one of ``bus`` OR ``port`` arguments should be supplied;
