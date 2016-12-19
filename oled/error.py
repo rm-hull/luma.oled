@@ -31,6 +31,7 @@ class DeviceAddressError(Error):
     Exception raised when an invalid device address is detected.
     """
 
+
 class DeviceDisplayModeError(Error):
     """
     Exception raised when an invalid device display mode is detected.
