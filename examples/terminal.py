@@ -46,7 +46,7 @@ def main():
 
             term.println("Progress bar")
             term.println("------------")
-            for mill in range(0, 10000, 31):
+            for mill in range(0, 10001, 25):
                 term.puts("\rPercent: {0:0.1f} %".format(mill / 100.0))
                 term.flush()
 
