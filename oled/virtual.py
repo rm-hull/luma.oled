@@ -57,10 +57,8 @@ class viewport(mixin.capabilities):
         of the virtual device. If it does not then an AssertError is raised.
         """
         (x, y) = xy
-        assert(x >= 0)
-        assert(y >= 0)
-        assert(x <= self.width - hotspot.width)
-        assert(y <= self.height - hotspot.height)
+        assert(0 <= x <= self.width - hotspot.width)
+        assert(0 <= y <= self.height - hotspot.height)
 
         # TODO: should it check to see whether hotspots overlap each other?
         # Is sensible to _allow_ them to overlap?
@@ -106,10 +104,8 @@ class viewport(mixin.capabilities):
         right = left + self._device.width
         bottom = top + self._device.height
 
-        assert(left >= 0)
-        assert(top >= 0)
-        assert(right <= self.width)
-        assert(bottom <= self.height)
+        assert(0 <= left <= right <= self.width)
+        assert(0 <= top <= bottom <= self.height)
 
         return (left, top, right, bottom)
 
@@ -254,8 +250,7 @@ class terminal(object):
         Prints the specific character, which must be a valid printable ASCII
         value in the range 32..127 only.
         """
-        assert(ord(ch) >= 32)
-        assert(ord(ch) <= 127)
+        assert(32 <= ord(ch) <= 127)
 
         w = self.font.getsize(ch)[0]
         if self._cx + w >= self._device.width:
