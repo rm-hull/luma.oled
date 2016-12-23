@@ -53,26 +53,27 @@ Examples
 After installing the library, enter the ``examples`` directory and try running
 the following examples:
 
-============ ========================================================
-Example      Description
-============ ========================================================
-3d_box.py    Rotating 3D box wireframe & color dithering
-bounce.py    Display a bouncing ball animation and frames per second
-carousel.py  Showcase viewport and hotspot functionality
-clock.py     An analog clockface with date & time
-colors.py    Color rendering demonstration
-crawl.py     A vertical scrolling demo, which should be familiar
-demo.py      Use misc draw commands to create a simple image
-invaders.py  Space Invaders demo
-maze.py      Maze generator
-perfloop.py  Simple benchmarking utility to measure performance
-pi_logo.py   Display the Raspberry Pi logo (loads image as .png)
-starfield.py 3D starfield simulation
-sys_info.py  Display basic system information
-terminal.py  Simple println capabilities
-tv_snow.py   Example image-blitting
-welcome.py   Unicode font rendering & scrolling
-============ ========================================================
+=============== ========================================================
+Example         Description
+=============== ========================================================
+3d_box.py       Rotating 3D box wireframe & color dithering
+bounce.py       Display a bouncing ball animation and frames per second
+carousel.py     Showcase viewport and hotspot functionality
+clock.py        An analog clockface with date & time
+colors.py       Color rendering demonstration
+crawl.py        A vertical scrolling demo, which should be familiar
+demo.py         Use misc draw commands to create a simple image
+game_of_life.py Conway's game of life
+invaders.py     Space Invaders demo
+maze.py         Maze generator
+perfloop.py     Simple benchmarking utility to measure performance
+pi_logo.py      Display the Raspberry Pi logo (loads image as .png)
+starfield.py    3D starfield simulation
+sys_info.py     Display basic system information
+terminal.py     Simple println capabilities
+tv_snow.py      Example image-blitting
+welcome.py      Unicode font rendering & scrolling
+=============== ========================================================
 
 By default, all the examples will asume I2C port 1, address ``0x3C`` and the
 ``ssd1306`` driver.  If you need to use a different setting, these can be
