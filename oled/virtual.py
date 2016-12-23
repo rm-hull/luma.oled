@@ -322,3 +322,51 @@ class terminal(object):
         Cause the current backing store to be rendered on the nominated device.
         """
         self._device.display(self._backing_image)
+
+
+class history(mixin.capabilities):
+    """
+    Wraps a device (or emulator) to provide a facility to be able to make a
+    savepoint (a point at which the screen display can be "rolled-back" to).
+
+    This is mostly useful for displaying transient error/dialog messages
+    which could be subsequently dismissed, reverting back to the previous
+    display.
+    """
+    def __init__(self, device):
+        self.capabilities(device.width, device.height, device.mode)
+        self._savepoints = []
+        self._device = device
+        self._last_image = None
+
+    def display(self, image):
+        self._last_image = image.copy()
+        self._device.display(image)
+
+    def savepoint(self):
+        """
+        Copies the last displayed image.
+        """
+        if self._last_image:
+            self._savepoints.append(self._last_image)
+            self._last_image = None
+
+    def restore(self, drop=0):
+        """
+        Restores the last savepoint. If ``drop`` is supplied and greater than
+        zero, then that many savepoints are dropped, and the next savepoint is
+        restored.
+        """
+        assert(drop >= 0)
+        while drop > 0:
+            self._savepoints.pop()
+            drop -= 1
+
+        img = self._savepoints.pop()
+        self.display(img)
+
+    def __len__(self):
+        """
+        Indication of the number of savepoints retained.
+        """
+        return len(self._savepoints)

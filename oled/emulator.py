@@ -178,6 +178,29 @@ class pygame(emulator):
         self._pygame.display.flip()
 
 
+class dummy(emulator):
+    """
+    Pseudo-device that acts like an OLED display, except that it does nothing
+    other than retain a copy of the displayed image. It is mostly useful for
+    testing. While the capability of an OLED device is monochrome, there is no
+    limitation here, and hence supports 24-bit color depth.
+    """
+    def __init__(self, width=128, height=64, mode="RGB", transform="scale2x",
+                 scale=2, **kwargs):
+        super(dummy, self).__init__(width, height, mode, transform, scale)
+        self.image = None
+
+    def display(self, image):
+        """
+        Takes a :py:mod:`PIL.Image` and makes a copy of it for later
+        use/inspection.
+        """
+        assert(image.size[0] == self.width)
+        assert(image.size[1] == self.height)
+
+        self.image = image.copy()
+
+
 class transformer(object):
     """
     Helper class used to dispatch transformation operations.

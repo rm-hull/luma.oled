@@ -68,6 +68,7 @@ invaders.py     Space Invaders demo
 maze.py         Maze generator
 perfloop.py     Simple benchmarking utility to measure performance
 pi_logo.py      Display the Raspberry Pi logo (loads image as .png)
+savepoint.py    Example of savepoint/restore functionality
 starfield.py    3D starfield simulation
 sys_info.py     Display basic system information
 terminal.py     Simple println capabilities

@@ -4,7 +4,8 @@ ChangeLog
 +------------+---------------------------------------------------------------------+------------+
 | Version    | Description                                                         | Date       |
 +============+=====================================================================+============+
-| *Upcoming* | * Add terminal functionality                                        |            |
+| *Upcoming* | * Add savepoint/restore functionality                               |            |
+|            | * Add terminal functionality                                        |            |
 |            | * Canvas image dithering                                            |            |
 |            | * Additional & improved examples                                    |            |
 |            | * Load config settings from file (for examples)                     |            |

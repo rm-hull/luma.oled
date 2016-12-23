@@ -7,7 +7,7 @@ import hashlib
 import os.path
 from tempfile import NamedTemporaryFile
 
-from oled.emulator import capture, gifanim
+from oled.emulator import capture, gifanim, dummy
 from oled.render import canvas
 
 import baseline_data
@@ -19,8 +19,7 @@ def md5(fname):
 
 
 def test_capture_noops():
-    fname = NamedTemporaryFile(suffix=".png").name
-    device = capture(file_template=fname, transform="none")
+    device = dummy()
     # All these should have no effect
     device.hide()
     device.show()
