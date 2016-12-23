@@ -4,7 +4,9 @@ ChangeLog
 +------------+---------------------------------------------------------------------+------------+
 | Version    | Description                                                         | Date       |
 +============+=====================================================================+============+
-| *Upcoming* | * Add savepoint/restore functionality                               |            |
+| *Upcoming* | *TBD*                                                               |            |
++------------+---------------------------------------------------------------------+------------+
+| **1.4.0**  | * Add savepoint/restore functionality                               | 2016/12/23 |
 |            | * Add terminal functionality                                        |            |
 |            | * Canvas image dithering                                            |            |
 |            | * Additional & improved examples                                    |            |
