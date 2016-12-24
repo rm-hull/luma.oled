@@ -347,3 +347,79 @@ class ssd1331(device):
         self.command(self._const.SETCONTRASTA, level,
                      self._const.SETCONTRASTB, level,
                      self._const.SETCONTRASTC, level)
+
+
+class ssd1325(device):
+    """
+    Encapsulates the serial interface to the 4-bit greyscale SSD1325 OLED
+    display hardware. On creation, an initialization sequence is pumped to the
+    display to properly configure it. Further control commands can then be
+    called to affect the brightness and other settings.
+
+    .. warning::
+        Direct use of the :func:`command` and :func:`data` methods are
+        discouraged: Screen updates should be effected through the
+        :func:`display` method, or preferably with the
+        :class:`oled.render.canvas` context manager.
+    """
+    def __init__(self, serial_interface=None, width=96, height=64):
+        super(ssd1325, self).__init__(oled.const.ssd1325, serial_interface)
+        self.capabilities(width, height, mode="RGB")
+        self._buffer = [0] * (self.width * self.height // 2)
+
+        if width != 128 or height != 64:
+            raise oled.error.DeviceDisplayModeError(
+                "Unsupported display mode: {0} x {1}".format(width, height))
+
+        self.command(
+            self._const.DISPLAYOFF,
+            self._const.SETCLOCK,     0xF1,
+            self._const.SETMULTIPLEX, 0x3F,
+            self._const.SETOFFSET,    0x4C,
+            self._const.SETSTARTLINE, 0x00,
+            self._const.MASTERCONFIG, 0x02,
+            self._const.SETREMAP,     0xF0,
+            self._const.SETCURRENT + 2,
+            self._const.SETGRAYTABLE, 0x01, 0x11, 0x22, 0x32, 0x43, 0x54, 0x65, 0x76)
+
+        self.contrast(0xFF)
+
+        self.command(
+            self._const.SETROWPERIOD, 0x51,
+            self._const.SETPHASELEN, 0x55,
+            self._const.SETPRECHARGECOMP, 0x02,
+            self._const.SETPRECHARGECOMPENABLE, 0x28,
+            self._const.SETVCOMLEVEL, 0x1C,
+            self._const.SETVSL, 0x0D | 0x02,
+            self._const.NORMALDISPLAY)
+
+        self.clear()
+        self.show()
+
+    def display(self, image):
+        """
+        Takes a 24-bit RGB :py:mod:`PIL.Image` and dumps it to the SSD1325 OLED
+        display, converting the image pixels to 4-bit greyscale using a simple
+        RGB averaging (quicker than Luma calculations).
+        """
+        assert(image.mode == self.mode)
+        assert(image.size[0] == self.width)
+        assert(image.size[1] == self.height)
+
+        self.command(
+            self._const.SETCOLUMNADDR, 0x00, self.width - 1,
+            self._const.SETROWADDR, 0x00, self.height - 1)
+
+        i = 0
+        buf = self._buffer
+        for r, g, b in image.getdata():
+            grey = (r + g + b) // 3
+
+            if i % 2 == 0:
+                buf[i // 2] = grey >> 4
+            else:
+                buf[i // 2] |= (grey & 0xF0)
+
+            i += 1
+
+        self.data(buf)
