@@ -362,7 +362,7 @@ class ssd1325(device):
         :func:`display` method, or preferably with the
         :class:`oled.render.canvas` context manager.
     """
-    def __init__(self, serial_interface=None, width=96, height=64):
+    def __init__(self, serial_interface=None, width=128, height=64):
         super(ssd1325, self).__init__(oled.const.ssd1325, serial_interface)
         self.capabilities(width, height, mode="RGB")
         self._buffer = [0] * (self.width * self.height // 2)
