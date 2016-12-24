@@ -60,10 +60,11 @@ Example         Description
 bounce.py       Display a bouncing ball animation and frames per second
 carousel.py     Showcase viewport and hotspot functionality
 clock.py        An analog clockface with date & time
-colors.py       Color rendering demonstration
+colors.py       Color rendering demo
 crawl.py        A vertical scrolling demo, which should be familiar
 demo.py         Use misc draw commands to create a simple image
 game_of_life.py Conway's game of life
+grayscale.py    Greyscale rendering demo
 invaders.py     Space Invaders demo
 maze.py         Maze generator
 perfloop.py     Simple benchmarking utility to measure performance
