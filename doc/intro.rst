@@ -18,6 +18,7 @@ also be used of course.
 .. seealso::
    Further technical information for the specific devices can be found in the
    datasheet: :download:`SSD1306 <tech-spec/SSD1306.pdf>`,
+   :download:`SSD1325 <tech-spec/SSD1325.pdf>`,
    :download:`SSD1331 <tech-spec/SSD1331.pdf>` or
    :download:`SH1106 <tech-spec/SH1106.pdf>`
 
