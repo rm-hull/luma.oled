@@ -33,7 +33,7 @@ def range_overlap(a_min, a_max, b_min, b_max):
 class viewport(mixin.capabilities):
 
     def __init__(self, device, width, height):
-        self.capabilities(width, height, mode=device.mode)
+        self.capabilities(width, height, rotate=0, mode=device.mode)
         self._device = device
         self._backing_image = Image.new(self.mode, self.size)
         self._position = (0, 0)
@@ -41,8 +41,7 @@ class viewport(mixin.capabilities):
 
     def display(self, image):
         assert(image.mode == self.mode)
-        assert(image.size[0] == self.width)
-        assert(image.size[1] == self.height)
+        assert(image.size == self.size)
 
         self._backing_image.paste(image)
         self.refresh()
@@ -131,7 +130,7 @@ class hotspot(mixin.capabilities):
           your implementation is stateful.
     """
     def __init__(self, width, height, draw_fn=None):
-        self.capabilities(width, height)  # TODO: set mode?
+        self.capabilities(width, height, rotate=0)  # TODO: set mode?
         self._fn = draw_fn
 
     def paste_into(self, image, xy):
@@ -334,7 +333,7 @@ class history(mixin.capabilities):
     display.
     """
     def __init__(self, device):
-        self.capabilities(device.width, device.height, device.mode)
+        self.capabilities(device.width, device.height, rotate=0, mode=device.mode)
         self._savepoints = []
         self._device = device
         self._last_image = None

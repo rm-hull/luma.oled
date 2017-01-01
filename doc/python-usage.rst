@@ -28,7 +28,7 @@ class should be used as follows:
 .. code:: python
 
   with canvas(device) as draw:
-      draw.rectangle((0, 0, device.width, device.height), outline="white", fill="black")
+      draw.rectangle(device.bounding_box, outline="white", fill="black")
       draw.text((30, 40), "Hello World", fill="white")
 
 The :class:`oled.render.canvas` class automatically creates an :mod:`PIL.ImageDraw`
@@ -39,14 +39,49 @@ As soon as the with scope is ended, the resultant image is automatically
 flushed to the device's display memory and the :mod:`PIL.ImageDraw` object is
 garbage collected.
 
-.. note::
-   Any of the standard :mod:`PIL.ImageColor` color formats may be used, but
-   since the SSD1306 and SH1106 OLEDs are monochrome, only the HTML color names
-   ``"black"`` and ``"white"`` values should really be used; in fact, any value
-   *other* than black is treated as white.
+Color Model
+^^^^^^^^^^^
+Any of the standard :mod:`PIL.ImageColor` color formats may be used, but since
+the SSD1306 and SH1106 OLEDs are monochrome, only the HTML color names
+``"black"`` and ``"white"`` values should really be used; in fact, by default,
+any value *other* than black is treated as white. The :py:class:`canvas` object
+does have a ``dither`` flag which if set to True, will convert color drawings
+to a dithered monochrome effect (see the *3d_box.py* example, below).
 
-   There is no such constraint on the SSD1331 OLED which features 16-bit RGB
-   colors.
+.. code:: python
+
+  with canvas(device, dither=True) as draw:
+      draw.rectangle((10, 10, 30, 30), outline="white", fill="red")
+
+There is no such constraint on the SSD1331 OLED which features 16-bit RGB
+colors: 24-bit RGB images are downsized to 16-bit using a 565 scheme.
+
+Landscape / Portrait Orientation
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+By default the display will be oriented in landscape mode (128x64 pixels for
+the SSD1306, for example). Should you have an application that requires the
+display to be mounted in a portrait aspect, then add a ``rotate=N`` parameter
+when creating the device:
+
+.. code:: python
+
+  from oled.serial import i2c
+  from oled.device import ssd1306, ssd1331, sh1106
+  from oled.render import canvas
+
+  serial = i2c(port=1, address=0x3C)
+  device = ssd1306(serial, rotate=1)
+
+  # Box and text rendered in portrait mode
+  with canvas(device) as draw:
+      draw.rectangle(device.bounding_box, outline="white", fill="black")
+      draw.text((10, 40), "Hello World", fill="white")
+
+*N* should be a value of 0, 1, 2 or 3 only, where 0 is no rotation, 1 is
+rotate 90° clockwise, 2 is 180° rotation and 3 represents 270° rotation.
+
+The ``device.size``, ``device.width`` and ``device.height`` properties reflect
+the rotated dimensions rather than the physical dimensions.
 
 Examples
 ^^^^^^^^
@@ -83,26 +118,34 @@ specified on the command line - each program can be invoked with a ``--help``
 flag to show the options::
 
     $ python pi_logo.py -h
-    usage: pi_logo.py [-h] [--display DISPLAY] [--width WIDTH] [--height HEIGHT]
-                      [--interface INTERFACE] [--i2c-port I2C_PORT]
+    usage: pi_logo.py [-h] [--config CONFIG]
+                      [--display {ssd1306,ssd1331,sh1106,capture,pygame,gifanim}]
+                      [--width WIDTH] [--height HEIGHT] [--rotate {0,1,2,3}]
+                      [--interface {i2c,spi}] [--i2c-port I2C_PORT]
                       [--i2c-address I2C_ADDRESS] [--spi-port SPI_PORT]
                       [--spi-device SPI_DEVICE] [--spi-bus-speed SPI_BUS_SPEED]
                       [--bcm-data-command BCM_DATA_COMMAND]
-                      [--bcm-reset BCM_RESET] [--transform TRANSFORM]
-                      [--scale SCALE] [--mode MODE] [--duration DURATION]
+                      [--bcm-reset BCM_RESET]
+                      [--transform {none,identity,scale2x,smoothscale}]
+                      [--scale SCALE] [--mode {1,RGB,RGBA}] [--duration DURATION]
                       [--loop LOOP] [--max-frames MAX_FRAMES]
 
     oled arguments
 
     optional arguments:
       -h, --help            show this help message and exit
-      --display DISPLAY, -d DISPLAY
-                            Display type, one of: ssd1306, ssd1331, sh1106,
-                            capture, pygame, gifanim (default: ssd1306)
+      --config CONFIG, -f CONFIG
+                            Load configuration settings from a file (default:
+                            None)
+      --display {ssd1306,ssd1331,sh1106,capture,pygame,gifanim}, -d {ssd1306,ssd1331,sh1106,capture,pygame,gifanim}
+                            Display type, supports real devices or emulators
+                            (default: ssd1306)
       --width WIDTH         Width of the device in pixels (default: 128)
       --height HEIGHT       Height of the device in pixels (default: 64)
-      --interface INTERFACE, -i INTERFACE
-                            Serial interface type, one of: i2c, spi (default: i2c)
+      --rotate {0,1,2,3}, -r {0,1,2,3}
+                            Rotation factor (default: 0)
+      --interface {i2c,spi}, -i {i2c,spi}
+                            Serial interface type (default: i2c)
       --i2c-port I2C_PORT   I2C bus number (default: 1)
       --i2c-address I2C_ADDRESS
                             I2C display address (default: 0x3C)
@@ -115,13 +158,11 @@ flag to show the options::
                             BCM pin for D/C RESET (SPI devices only) (default: 24)
       --bcm-reset BCM_RESET
                             BCM pin for RESET (SPI devices only) (default: 25)
-      --transform TRANSFORM
-                            Scaling transform to apply, one of: none, identity,
-                            scale2x, smoothscale (emulator only) (default:
+      --transform {none,identity,scale2x,smoothscale}
+                            Scaling transform to apply (emulator only) (default:
                             scale2x)
       --scale SCALE         Scaling factor to apply (emulator only) (default: 2)
-      --mode MODE           Colour mode, one of: 1, RGB, RGBA (emulator only)
-                            (default: RGB)
+      --mode {1,RGB,RGBA}   Colour mode (emulator only) (default: RGB)
       --duration DURATION   Animation frame duration (gifanim emulator only)
                             (default: 0.01)
       --loop LOOP           Repeat loop, zero=forever (gifanim emulator only)
@@ -129,7 +170,6 @@ flag to show the options::
       --max-frames MAX_FRAMES
                             Maximum frames to record (gifanim emulator only)
                             (default: None)
-
 .. note::
    #. Substitute ``python3`` for ``python`` in the above examples if you are using python3.
    #. ``python-dev`` (apt-get) and ``psutil`` (pip/pip3) are required to run the ``sys_info.py`` 

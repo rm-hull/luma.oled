@@ -15,6 +15,7 @@ parser.add_argument('--config', '-f', type=str, help='Load configuration setting
 parser.add_argument('--display', '-d', type=str, default='ssd1306', help='Display type, supports real devices or emulators', choices=["ssd1306", "ssd1325", "ssd1331", "sh1106", "capture", "pygame", "gifanim"])
 parser.add_argument('--width', type=int, default=128, help='Width of the device in pixels')
 parser.add_argument('--height', type=int, default=64, help='Height of the device in pixels')
+parser.add_argument('--rotate', '-r', type=int, default=0, help='Rotation factor', choices=[0, 1, 2, 3])
 parser.add_argument('--interface', '-i', type=str, default='i2c', help='Serial interface type', choices=["i2c", "spi"])
 parser.add_argument('--i2c-port', type=int, default=1, help='I2C bus number')
 parser.add_argument('--i2c-address', type=str, default='0x3C', help='I2C display address')
@@ -65,7 +66,8 @@ if args.display in ('ssd1306', 'ssd1325', 'ssd1331', 'sh1106'):
                                      bus_speed_hz=args.spi_bus_speed,
                                      bcm_DC=args.bcm_data_command,
                                      bcm_RST=args.bcm_reset)
-        device = Device(serial, width=args.width, height=args.height)
+        device = Device(serial, width=args.width, height=args.height,
+                        rotate=args.rotate)
     except Exception as e:
         parser.error(e)
 
