@@ -43,6 +43,7 @@ def primitives(draw):
     # Draw a rectangle of the same size of screen
     draw.rectangle(device.bounding_box, outline="white")
 
+
 def main():
     print("Testing basic canvas graphics...")
     for _ in range(2):
