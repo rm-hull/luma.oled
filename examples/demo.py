@@ -18,8 +18,6 @@ def primitives(draw):
     shape_width = 20
     top = padding
     bottom = device.height - padding - 1
-    # Draw a rectangle of the same size of screen
-    draw.rectangle(device.bounding_box, outline="white", fill="black")
     # Move left to right keeping track of the current x position for drawing shapes.
     x = padding
     # Draw an ellipse.
@@ -42,7 +40,8 @@ def primitives(draw):
     draw.rectangle((x, top + 16, x + size[0], top + 16 + size[1]), fill="black")
     draw.text((device.width - padding - size[0], top + 4), 'Hello', fill="cyan")
     draw.text((device.width - padding - size[0], top + 16), 'World!', fill="purple")
-
+    # Draw a rectangle of the same size of screen
+    draw.rectangle(device.bounding_box, outline="white")
 
 def main():
     print("Testing basic canvas graphics...")
