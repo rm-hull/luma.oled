@@ -413,12 +413,13 @@ class ssd1325(device):
         i = 0
         buf = self._buffer
         for r, g, b in image.getdata():
-            grey = (r + g + b) // 3
+            # RGB->Greyscale luma calculation into 4-bits
+            grey = (r * 306 + g * 601 + b * 117) >> 14
 
             if i % 2 == 0:
-                buf[i // 2] = grey >> 4
+                buf[i // 2] = grey
             else:
-                buf[i // 2] |= (grey & 0xF0)
+                buf[i // 2] |= (grey << 4)
 
             i += 1
 
