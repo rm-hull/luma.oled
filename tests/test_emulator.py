@@ -43,6 +43,22 @@ def test_capture_display():
     assert md5(reference) == md5(fname)
 
 
+def test_portrait():
+    reference = os.path.abspath(os.path.join(
+        os.path.dirname(__file__),
+        'reference',
+        'portrait.png'))
+
+    fname = NamedTemporaryFile(suffix=".png").name
+    device = capture(rotate=1, file_template=fname, transform="none")
+
+    # Use the same drawing primitives as the demo
+    with canvas(device) as draw:
+        baseline_data.primitives(device, draw)
+
+    assert md5(reference) == md5(fname)
+
+
 def test_gifanim_write():
     reference = os.path.abspath(os.path.join(
         os.path.dirname(__file__),
