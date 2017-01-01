@@ -18,7 +18,7 @@ def main():
 
     while True:
         for angle in range(360):
-            rot = logo.rotate(angle)
+            rot = logo.rotate(angle, resample=Image.BILINEAR)
             img = Image.composite(rot, fff, rot)
             background.paste(img, posn)
             device.display(background.convert(device.mode))
