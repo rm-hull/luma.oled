@@ -41,6 +41,12 @@ import oled.const
 class device(mixin.capabilities):
     """
     Base class for OLED driver classes
+
+    .. warning::
+        Direct use of the :func:`command` and :func:`data` methods are
+        discouraged: Screen updates should be effected through the
+        :func:`display` method, or preferably with the
+        :class:`oled.render.canvas` context manager.
     """
     def __init__(self, const=None, serial_interface=None):
         self._const = const or oled.const.common
@@ -101,14 +107,7 @@ class sh1106(device):
     hardware. On creation, an initialization sequence is pumped to the display
     to properly configure it. Further control commands can then be called to
     affect the brightness and other settings.
-
-    .. warning::
-        Direct use of the :func:`command` and :func:`data` methods are
-        discouraged: Screen updates should be effected through the
-        :func:`display` method, or preferably with the
-        :class:`oled.render.canvas` context manager.
     """
-
     def __init__(self, serial_interface=None, width=128, height=64):
         super(sh1106, self).__init__(oled.const.sh1106, serial_interface)
         self.capabilities(width, height)
@@ -180,12 +179,6 @@ class ssd1306(device):
     hardware. On creation, an initialization sequence is pumped to the display
     to properly configure it. Further control commands can then be called to
     affect the brightness and other settings.
-
-    .. warning::
-        Direct use of the :func:`command` and :func:`data` methods are
-        discouraged: Screen updates should be effected through the
-        :func:`display` method, or preferably with the
-        :class:`oled.render.canvas` context manager.
     """
     def __init__(self, serial_interface=None, width=128, height=64):
         super(ssd1306, self).__init__(oled.const.ssd1306, serial_interface)
@@ -271,12 +264,6 @@ class ssd1331(device):
     OLED display hardware. On creation, an initialization sequence is pumped to
     the display to properly configure it. Further control commands can then be
     called to affect the brightness and other settings.
-
-    .. warning::
-        Direct use of the :func:`command` and :func:`data` methods are
-        discouraged: Screen updates should be effected through the
-        :func:`display` method, or preferably with the
-        :class:`oled.render.canvas` context manager.
     """
     def __init__(self, serial_interface=None, width=96, height=64):
         super(ssd1331, self).__init__(oled.const.ssd1331, serial_interface)
@@ -355,12 +342,6 @@ class ssd1325(device):
     display hardware. On creation, an initialization sequence is pumped to the
     display to properly configure it. Further control commands can then be
     called to affect the brightness and other settings.
-
-    .. warning::
-        Direct use of the :func:`command` and :func:`data` methods are
-        discouraged: Screen updates should be effected through the
-        :func:`display` method, or preferably with the
-        :class:`oled.render.canvas` context manager.
     """
     def __init__(self, serial_interface=None, width=128, height=64):
         super(ssd1325, self).__init__(oled.const.ssd1325, serial_interface)
@@ -373,24 +354,24 @@ class ssd1325(device):
 
         self.command(
             self._const.DISPLAYOFF,
-            self._const.SETCLOCK,     0xF1,
-            self._const.SETMULTIPLEX, 0x3F,
-            self._const.SETOFFSET,    0x4C,
-            self._const.SETSTARTLINE, 0x00,
-            self._const.MASTERCONFIG, 0x02,
-            self._const.SETREMAP,     0xF0,
+            self._const.SETCLOCK,               0xF1,
+            self._const.SETMULTIPLEX,           0x3F,
+            self._const.SETOFFSET,              0x4C,
+            self._const.SETSTARTLINE,           0x00,
+            self._const.MASTERCONFIG,           0x02,
+            self._const.SETREMAP,               0x50,
             self._const.SETCURRENT + 2,
-            self._const.SETGRAYTABLE, 0x01, 0x11, 0x22, 0x32, 0x43, 0x54, 0x65, 0x76)
+            self._const.SETGRAYTABLE,           0x01, 0x11, 0x22, 0x32, 0x43, 0x54, 0x65, 0x76)
 
         self.contrast(0xFF)
 
         self.command(
-            self._const.SETROWPERIOD, 0x51,
-            self._const.SETPHASELEN, 0x55,
-            self._const.SETPRECHARGECOMP, 0x02,
+            self._const.SETROWPERIOD,           0x51,
+            self._const.SETPHASELEN,            0x55,
+            self._const.SETPRECHARGECOMP,       0x02,
             self._const.SETPRECHARGECOMPENABLE, 0x28,
-            self._const.SETVCOMLEVEL, 0x1C,
-            self._const.SETVSL, 0x0D | 0x02,
+            self._const.SETVCOMLEVEL,           0x1C,
+            self._const.SETVSL,                 0x0F,
             self._const.NORMALDISPLAY)
 
         self.clear()
