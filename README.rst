@@ -1,5 +1,5 @@
-SSD1306 / SSD1331 / SH1106 OLED Driver
-======================================
+SSD1306 / SSD1325 / SSD1331 / SH1106 OLED Driver
+================================================
 .. image:: https://travis-ci.org/rm-hull/ssd1306.svg?branch=master
    :target: https://travis-ci.org/rm-hull/ssd1306
 
