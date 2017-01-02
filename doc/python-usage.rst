@@ -56,6 +56,12 @@ to a dithered monochrome effect (see the *3d_box.py* example, below).
 There is no such constraint on the SSD1331 OLED which features 16-bit RGB
 colors: 24-bit RGB images are downsized to 16-bit using a 565 scheme.
 
+The SSD1325 OLED supports 16 greyscale graduations: 24-bit RGB images are
+downsized to 4-bit using a Luma conversion which is approximately calculated
+as follows:
+
+*Y'=0.299R'+0.587G'+0.114B'*
+
 Landscape / Portrait Orientation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 By default the display will be oriented in landscape mode (128x64 pixels for
