@@ -13,7 +13,8 @@ def main():
     img_path = os.path.abspath(os.path.join(os.path.dirname(__file__), 'images', 'balloon.png'))
     balloon = Image.open(img_path) \
         .transform(device.size, Image.AFFINE, (1, 0, 0, 0, 1, 0), Image.BILINEAR) \
-        .convert("L")
+        .convert("L") \
+        .convert(device.mode)
 
     while True:
         # Image display
@@ -25,7 +26,7 @@ def main():
         shades = 16
         w = device.width / shades
         for _ in range(2):
-            with canvas(device) as draw:
+            with canvas(device, dither=True) as draw:
                 for i, color in enumerate(range(0, 256, shades)):
                     rgb = (color << 16) | (color << 8) | color
                     draw.rectangle((i * w, 0, (i + 1) * w, device.height), fill=rgb)
