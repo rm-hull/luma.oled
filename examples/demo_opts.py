@@ -12,7 +12,7 @@ parser = argparse.ArgumentParser(description='oled arguments',
     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
 parser.add_argument('--config', '-f', type=str, help='Load configuration settings from a file')
-parser.add_argument('--display', '-d', type=str, default='ssd1306', help='Display type, supports real devices or emulators', choices=["ssd1306", "ssd1331", "sh1106", "capture", "pygame", "gifanim"])
+parser.add_argument('--display', '-d', type=str, default='ssd1306', help='Display type, supports real devices or emulators', choices=["ssd1306", "ssd1325", "ssd1331", "sh1106", "capture", "pygame", "gifanim"])
 parser.add_argument('--width', type=int, default=128, help='Width of the device in pixels')
 parser.add_argument('--height', type=int, default=64, help='Height of the device in pixels')
 parser.add_argument('--interface', '-i', type=str, default='i2c', help='Serial interface type', choices=["i2c", "spi"])
@@ -51,7 +51,7 @@ if args.config:
         config = fp.read().replace("\n", " ").split()
         args = parser.parse_args(config)
 
-if args.display in ('ssd1306', 'ssd1331', 'sh1106'):
+if args.display in ('ssd1306', 'ssd1325', 'ssd1331', 'sh1106'):
     if args.interface not in ('i2c', 'spi'):
         parser.error('unknown interface %s' % args.interface)
 

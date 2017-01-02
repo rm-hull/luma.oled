@@ -62,7 +62,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'SSD1306 / SSD1331 / SH1106 OLED driver'
+project = 'SSD1306 / SSD1325 / SSD1331 / SH1106 OLED driver'
 copyright = u'{0}, Richard Hull'.format(datetime.now().year)
 author = 'Richard Hull'
 
