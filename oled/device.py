@@ -343,10 +343,10 @@ class ssd1325(device):
     display to properly configure it. Further control commands can then be
     called to affect the brightness and other settings.
     """
-    def __init__(self, serial_interface=None, width=128, height=64):
+    def __init__(self, serial_interface=None, width=128, height=64, rotate=0):
         super(ssd1325, self).__init__(oled.const.ssd1325, serial_interface)
-        self.capabilities(width, height, mode="RGB")
-        self._buffer = [0] * (self.width * self.height // 2)
+        self.capabilities(width, height, rotate, mode="RGB")
+        self._buffer = [0] * (self._w * self._h // 2)
 
         if width != 128 or height != 64:
             raise oled.error.DeviceDisplayModeError(
@@ -380,16 +380,17 @@ class ssd1325(device):
     def display(self, image):
         """
         Takes a 24-bit RGB :py:mod:`PIL.Image` and dumps it to the SSD1325 OLED
-        display, converting the image pixels to 4-bit greyscale using a simple
-        RGB averaging (quicker than Luma calculations).
+        display, converting the image pixels to 4-bit greyscale using a
+        simplified Luma calculation, based on *Y'=0.299R'+0.587G'+0.114B'*.
         """
         assert(image.mode == self.mode)
-        assert(image.size[0] == self.width)
-        assert(image.size[1] == self.height)
+        assert(image.size == self.size)
+
+        image = self.preprocess(image)
 
         self.command(
-            self._const.SETCOLUMNADDR, 0x00, self.width - 1,
-            self._const.SETROWADDR, 0x00, self.height - 1)
+            self._const.SETCOLUMNADDR, 0x00, self._w - 1,
+            self._const.SETROWADDR, 0x00, self._h - 1)
 
         i = 0
         buf = self._buffer
