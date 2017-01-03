@@ -11,14 +11,14 @@ def main():
     img_path = os.path.abspath(os.path.join(os.path.dirname(__file__),
                                             'images', 'pi_logo.png'))
     logo = Image.open(img_path).convert("RGBA")
-    fff = Image.new(logo.mode, (logo.width, logo.height), (255,) * 4)
+    fff = Image.new(logo.mode, logo.size, (255,) * 4)
 
     background = Image.new("RGBA", device.size, "white")
     posn = ((device.width - logo.width) // 2, 0)
 
     while True:
-        for angle in range(360):
-            rot = logo.rotate(angle)
+        for angle in range(0, 360, 2):
+            rot = logo.rotate(angle, resample=Image.BILINEAR)
             img = Image.composite(rot, fff, rot)
             background.paste(img, posn)
             device.display(background.convert(device.mode))

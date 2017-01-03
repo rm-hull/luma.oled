@@ -108,13 +108,10 @@ class sh1106(device):
     to properly configure it. Further control commands can then be called to
     affect the brightness and other settings.
     """
-    def __init__(self, serial_interface=None, width=128, height=64):
+    def __init__(self, serial_interface=None, width=128, height=64, rotate=0):
         super(sh1106, self).__init__(oled.const.sh1106, serial_interface)
-        self.capabilities(width, height)
-        self.bounding_box = (0, 0, width - 1, height - 1)
-        self.width = width
-        self.height = height
-        self._pages = self.height // 8
+        self.capabilities(width, height, rotate)
+        self._pages = self._h // 8
 
         # FIXME: Delay doing anything here with alternate screen sizes
         # until we are able to get a device to test with.
@@ -148,12 +145,13 @@ class sh1106(device):
         OLED display.
         """
         assert(image.mode == self.mode)
-        assert(image.size[0] == self.width)
-        assert(image.size[1] == self.height)
+        assert(image.size == self.size)
+
+        image = self.preprocess(image)
 
         page = 0xB0
         pix = list(image.getdata())
-        step = self.width * 8
+        step = self._w * 8
         for y in range(0, self._pages * step, step):
 
             # move to given page, then reset the column address
@@ -161,9 +159,9 @@ class sh1106(device):
             page += 1
 
             buf = []
-            for x in range(self.width):
+            for x in range(self._w):
                 byte = 0
-                for n in range(0, step, self.width):
+                for n in range(0, step, self._w):
                     bit = 1 if pix[x + y + n] > 0 else 0
                     byte |= bit << 8
                     byte >>= 1
@@ -180,19 +178,19 @@ class ssd1306(device):
     to properly configure it. Further control commands can then be called to
     affect the brightness and other settings.
     """
-    def __init__(self, serial_interface=None, width=128, height=64):
+    def __init__(self, serial_interface=None, width=128, height=64, rotate=0):
         super(ssd1306, self).__init__(oled.const.ssd1306, serial_interface)
-        self.capabilities(width, height)
-        self._pages = self.height // 8
-        self._buffer = [0] * self.width * self._pages
-        self._offsets = [n * self.width for n in range(8)]
+        self.capabilities(width, height, rotate)
+        self._pages = self._h // 8
+        self._buffer = [0] * self._w * self._pages
+        self._offsets = [n * self._w for n in range(8)]
 
         # Supported modes
         settings = {
             (128, 64): dict(multiplex=0x3F, displayclockdiv=0x80, compins=0x12),
             (128, 32): dict(multiplex=0x1F, displayclockdiv=0x80, compins=0x02),
             (96, 16): dict(multiplex=0x0F, displayclockdiv=0x60, compins=0x02)
-        }.get(self.size)
+        }.get((width, height))
 
         if settings is None:
             raise oled.error.DeviceDisplayModeError(
@@ -224,20 +222,21 @@ class ssd1306(device):
         OLED display.
         """
         assert(image.mode == self.mode)
-        assert(image.size[0] == self.width)
-        assert(image.size[1] == self.height)
+        assert(image.size == self.size)
+
+        image = self.preprocess(image)
 
         self.command(
             # Column start/end address
-            self._const.COLUMNADDR, 0x00, self.width - 1,
+            self._const.COLUMNADDR, 0x00, self._w - 1,
             # Page start/end address
             self._const.PAGEADDR, 0x00, self._pages - 1)
 
+        w = self._w
         pix = list(image.getdata())
-        step = self.width * 8
+        step = w * 8
         buf = self._buffer
         os0, os1, os2, os3, os4, os5, os6, os7 = self._offsets
-        w = self.width
         j = 0
         for y in range(0, self._pages * step, step):
             i = y + w - 1
@@ -265,10 +264,10 @@ class ssd1331(device):
     the display to properly configure it. Further control commands can then be
     called to affect the brightness and other settings.
     """
-    def __init__(self, serial_interface=None, width=96, height=64):
+    def __init__(self, serial_interface=None, width=96, height=64, rotate=0):
         super(ssd1331, self).__init__(oled.const.ssd1331, serial_interface)
-        self.capabilities(width, height, mode="RGB")
-        self._buffer = [0] * self.width * self.height * 2
+        self.capabilities(width, height, rotate, mode="RGB")
+        self._buffer = [0] * self._w * self._h * 2
 
         if width != 96 or height != 64:
             raise oled.error.DeviceDisplayModeError(
@@ -302,12 +301,13 @@ class ssd1331(device):
         display.
         """
         assert(image.mode == self.mode)
-        assert(image.size[0] == self.width)
-        assert(image.size[1] == self.height)
+        assert(image.size == self.size)
+
+        image = self.preprocess(image)
 
         self.command(
-            self._const.SETCOLUMNADDR, 0x00, self.width - 1,
-            self._const.SETROWADDR, 0x00, self.height - 1)
+            self._const.SETCOLUMNADDR, 0x00, self._w - 1,
+            self._const.SETROWADDR, 0x00, self._h - 1)
 
         i = 0
         buf = self._buffer
@@ -343,10 +343,10 @@ class ssd1325(device):
     display to properly configure it. Further control commands can then be
     called to affect the brightness and other settings.
     """
-    def __init__(self, serial_interface=None, width=128, height=64):
+    def __init__(self, serial_interface=None, width=128, height=64, rotate=0):
         super(ssd1325, self).__init__(oled.const.ssd1325, serial_interface)
-        self.capabilities(width, height, mode="RGB")
-        self._buffer = [0] * (self.width * self.height // 2)
+        self.capabilities(width, height, rotate, mode="RGB")
+        self._buffer = [0] * (self._w * self._h // 2)
 
         if width != 128 or height != 64:
             raise oled.error.DeviceDisplayModeError(
@@ -380,16 +380,17 @@ class ssd1325(device):
     def display(self, image):
         """
         Takes a 24-bit RGB :py:mod:`PIL.Image` and dumps it to the SSD1325 OLED
-        display, converting the image pixels to 4-bit greyscale using a simple
-        RGB averaging (quicker than Luma calculations).
+        display, converting the image pixels to 4-bit greyscale using a
+        simplified Luma calculation, based on *Y'=0.299R'+0.587G'+0.114B'*.
         """
         assert(image.mode == self.mode)
-        assert(image.size[0] == self.width)
-        assert(image.size[1] == self.height)
+        assert(image.size == self.size)
+
+        image = self.preprocess(image)
 
         self.command(
-            self._const.SETCOLUMNADDR, 0x00, self.width - 1,
-            self._const.SETROWADDR, 0x00, self.height - 1)
+            self._const.SETCOLUMNADDR, 0x00, self._w - 1,
+            self._const.SETROWADDR, 0x00, self._h - 1)
 
         i = 0
         buf = self._buffer

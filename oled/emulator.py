@@ -17,14 +17,14 @@ class emulator(device):
     """
     Base class for emulated OLED driver classes
     """
-    def __init__(self, width, height, mode, transform, scale):
+    def __init__(self, width, height, rotate, mode, transform, scale):
         super(emulator, self).__init__(serial_interface=noop())
         try:
             import pygame
         except:
             raise RuntimeError("Emulator requires pygame to be installed")
         self._pygame = pygame
-        self.capabilities(width, height, mode)
+        self.capabilities(width, height, rotate, mode)
         self.scale = 1 if transform == "none" else scale
         self._transform = getattr(transformer(pygame, width, height, scale),
                                   "none" if scale == 1 else transform)
@@ -57,9 +57,10 @@ class capture(emulator):
     While the capability of an OLED device is monochrome, there is no
     limitation here, and hence supports 24-bit color depth.
     """
-    def __init__(self, width=128, height=64, mode="RGB", transform="scale2x",
-                 scale=2, file_template="oled_{0:06}.png", **kwargs):
-        super(capture, self).__init__(width, height, mode, transform, scale)
+    def __init__(self, width=128, height=64, rotate=0, mode="RGB",
+                 transform="scale2x", scale=2, file_template="oled_{0:06}.png",
+                 **kwargs):
+        super(capture, self).__init__(width, height, rotate, mode, transform, scale)
         self._count = 0
         self._file_template = file_template
 
@@ -67,11 +68,11 @@ class capture(emulator):
         """
         Takes a :py:mod:`PIL.Image` and dumps it to a numbered PNG file.
         """
-        assert(image.size[0] == self.width)
-        assert(image.size[1] == self.height)
+        assert(image.size == self.size)
 
         self._count += 1
         filename = self._file_template.format(self._count)
+        image = self.preprocess(image)
         surface = self.to_surface(image)
         logger.debug("Writing: {0}".format(filename))
         self._pygame.image.save(surface, filename)
@@ -87,10 +88,10 @@ class gifanim(emulator):
     limitation here, and hence supports 24-bit color depth, albeit with
     an indexed color palette.
     """
-    def __init__(self, width=128, height=64, mode="RGB", transform="scale2x",
-                 scale=2, filename="oled_anim.gif", duration=0.01, loop=0,
-                 max_frames=None, **kwargs):
-        super(gifanim, self).__init__(width, height, mode, transform, scale)
+    def __init__(self, width=128, height=64, rotate=0, mode="RGB",
+                 transform="scale2x", scale=2, filename="oled_anim.gif",
+                 duration=0.01, loop=0, max_frames=None, **kwargs):
+        super(gifanim, self).__init__(width, height, rotate, mode, transform, scale)
         self._images = []
         self._count = 0
         self._max_frames = max_frames
@@ -104,12 +105,12 @@ class gifanim(emulator):
         Takes an image, scales it according to the nominated transform, and
         stores it for later building into an animated GIF.
         """
-        assert(image.size[0] == self.width)
-        assert(image.size[1] == self.height)
+        assert(image.size == self.size)
 
+        image = self.preprocess(image)
         surface = self.to_surface(image)
         rawbytes = self._pygame.image.tostring(surface, "RGB", False)
-        im = Image.frombytes("RGB", (self.width * self.scale, self.height * self.scale), rawbytes)
+        im = Image.frombytes("RGB", (self._w * self.scale, self._h * self.scale), rawbytes)
         self._images.append(im)
 
         self._count += 1
@@ -143,9 +144,9 @@ class pygame(emulator):
     event loop is checked to see if the ESC key was pressed or the window
     was dismissed: if so :func:`sys.exit()` is called.
     """
-    def __init__(self, width=128, height=64, mode="RGB", transform="scale2x",
+    def __init__(self, width=128, height=64, rotate=0, mode="RGB", transform="scale2x",
                  scale=2, frame_rate=60, **kwargs):
-        super(pygame, self).__init__(width, height, mode, transform, scale)
+        super(pygame, self).__init__(width, height, rotate, mode, transform, scale)
         self._pygame.init()
         self._pygame.font.init()
         self._pygame.display.set_caption("OLED Emulator")
@@ -163,9 +164,9 @@ class pygame(emulator):
         """
         Takes a :py:mod:`PIL.Image` and renders it to a pygame display surface.
         """
-        assert(image.size[0] == self.width)
-        assert(image.size[1] == self.height)
+        assert(image.size == self.size)
 
+        image = self.preprocess(image)
         self._clock.tick(self._fps)
         self._pygame.event.pump()
 
@@ -185,9 +186,9 @@ class dummy(emulator):
     testing. While the capability of an OLED device is monochrome, there is no
     limitation here, and hence supports 24-bit color depth.
     """
-    def __init__(self, width=128, height=64, mode="RGB", transform="scale2x",
+    def __init__(self, width=128, height=64, rotate=0, mode="RGB", transform="scale2x",
                  scale=2, **kwargs):
-        super(dummy, self).__init__(width, height, mode, transform, scale)
+        super(dummy, self).__init__(width, height, rotate, mode, transform, scale)
         self.image = None
 
     def display(self, image):
@@ -195,10 +196,9 @@ class dummy(emulator):
         Takes a :py:mod:`PIL.Image` and makes a copy of it for later
         use/inspection.
         """
-        assert(image.size[0] == self.width)
-        assert(image.size[1] == self.height)
+        assert(image.size == self.size)
 
-        self.image = image.copy()
+        self.image = self.preprocess(image).copy()
 
 
 class transformer(object):
