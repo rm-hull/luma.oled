@@ -9,18 +9,14 @@ SSD1306 / SSD1325 / SSD1331 / SH1106 OLED Driver
 .. image:: https://img.shields.io/maintenance/yes/2016.svg?maxAge=2592000
 
 .. image:: https://img.shields.io/pypi/pyversions/ssd1306.svg
-    :target: https://pypi.python.org/pypi/ssd1306
+   :target: https://pypi.python.org/pypi/ssd1306
 
 .. image:: https://img.shields.io/pypi/v/ssd1306.svg
    :target: https://pypi.python.org/pypi/ssd1306
 
-Python library interfacing OLED matrix displays with the SSD1306, SSD1331 or
-SH1106 driver using I2C/SPI on the Raspberry Pi.
+Python library interfacing OLED matrix displays with the SSD1306, SSD1325, SSD1331 or
+SH1106 driver using I2C/SPI on the Raspberry Pi, and other single-board computers.
 
-Further technical details for the SSD1306 OLED display can be found in the
-`datasheet <https://raw.githubusercontent.com/rm-hull/ssd1306/master/doc/tech-spec/SSD1306.pdf>`_.
-See also the datasheet for the
-`SH1106 chipset <https://raw.githubusercontent.com/rm-hull/ssd1306/sh1106-compat/doc/tech-spec/SH1106.pdf>`_.
 A list of tested devices can be found in the
 `wiki <https://github.com/rm-hull/ssd1306/wiki/Usage-&-Benchmarking>`_.
 
@@ -31,9 +27,8 @@ that it supports 132 x 64 pixels).
 .. image:: https://raw.githubusercontent.com/rm-hull/ssd1306/master/doc/images/mounted_display.jpg
    :alt: mounted
 
-As well as display drivers for SSD1306-, SSD1331- and SH1106-class OLED devices
-there are emulators that run in real-time (with pygame) and others that can
-take screenshots, or assemble animated GIFs, as per the examples below (source
+As well as display drivers for various physical OLED devices, there are emulators that run in real-time 
+(with pygame) and others that can take screenshots, or assemble animated GIFs, as per the examples below (source
 code for these is available in the `examples <https://github.com/rm-hull/ssd1306/tree/master/examples>`_ directory:
 
 .. image:: https://raw.githubusercontent.com/rm-hull/ssd1306/master/doc/images/clock_anim.gif?raw=true
