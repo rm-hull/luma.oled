@@ -14,15 +14,21 @@ SSD1306 / SSD1325 / SSD1331 / SH1106 OLED Driver
 .. image:: https://img.shields.io/pypi/v/ssd1306.svg
    :target: https://pypi.python.org/pypi/ssd1306
 
-Python library interfacing OLED matrix displays with the SSD1306, SSD1325, SSD1331 or
-SH1106 driver using I2C/SPI on the Raspberry Pi, and other single-board computers.
+Python library interfacing OLED matrix displays with the SSD1306, SSD1325, SSD1331 or 
+SH1106 driver using I2C/SPI on the Raspberry Pi and other linux-based single-board computers - 
+it provides a Pillow-compatible drawing canvas, and other functionality to support:
+
+* scrolling/panning capability,
+* terminal-style printing,
+* state management,
+* color/greyscale (where supported),
+* dithering to monochrome
 
 A list of tested devices can be found in the
 `wiki <https://github.com/rm-hull/ssd1306/wiki/Usage-&-Benchmarking>`_.
 
 The SSD1306 display pictured below is 128 x 64 pixels, and the board is `tiny`,
-and will fit neatly inside the RPi case (the SH1106 is slightly different, in
-that it supports 132 x 64 pixels).
+and will fit neatly inside the RPi case.
 
 .. image:: https://raw.githubusercontent.com/rm-hull/ssd1306/master/doc/images/mounted_display.jpg
    :alt: mounted
