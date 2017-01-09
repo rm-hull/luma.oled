@@ -20,3 +20,4 @@ Contributors
 * xes (@xes)
 * Roger Dahl (@rogerdahl)
 * Václav Šmilauer (@eudoxos)
+* Claus Bjerre (@bjerrep)

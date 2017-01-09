@@ -4,7 +4,8 @@ ChangeLog
 +------------+---------------------------------------------------------------------+------------+
 | Version    | Description                                                         | Date       |
 +============+=====================================================================+============+
-| *Upcoming* | * Support for 4-bit greyscale OLED (SSD1325)                        |            |
+| *Upcoming* | * Performance improvements for SH1106 driver (2x frame rate!)       |            |
+|            | * Support for 4-bit greyscale OLED (SSD1325)                        |            |
 |            | * Landscape/portrait orientation with rotate=N parameter            |            |
 +------------+---------------------------------------------------------------------+------------+
 | **1.4.0**  | * Add savepoint/restore functionality                               | 2016/12/23 |
