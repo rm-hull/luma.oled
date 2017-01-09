@@ -140,6 +140,15 @@ class sh1106(device):
         self.show()
 
     def display(self, image):
+        """
+        Takes a 1-bit :py:mod:`PIL.Image` and dumps it to the SH1106
+        OLED display.
+        """
+        assert(image.mode == self.mode)
+        assert(image.size == self.size)
+
+        image = self.preprocess(image)
+
         set_page_address = 0xB0
         image_data = image.getdata()
         pixels_per_page = self.width * 8
