@@ -6,7 +6,7 @@ SSD1306 / SSD1325 / SSD1331 / SH1106 OLED Driver
 .. image:: https://coveralls.io/repos/github/rm-hull/ssd1306/badge.svg?branch=master
    :target: https://coveralls.io/github/rm-hull/ssd1306?branch=master
 
-.. image:: https://img.shields.io/maintenance/yes/2016.svg?maxAge=2592000
+.. image:: https://img.shields.io/maintenance/yes/2017.svg?maxAge=2592000
 
 .. image:: https://img.shields.io/pypi/pyversions/ssd1306.svg
    :target: https://pypi.python.org/pypi/ssd1306

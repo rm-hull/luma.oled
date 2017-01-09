@@ -140,35 +140,28 @@ class sh1106(device):
         self.show()
 
     def display(self, image):
-        """
-        Takes a 1-bit :py:mod:`PIL.Image` and dumps it to the SH1106
-        OLED display.
-        """
-        assert(image.mode == self.mode)
-        assert(image.size == self.size)
+        set_page_address = 0xB0
+        image_data = image.getdata()
+        pixels_per_page = self.width * 8
+        buf = bytearray(self.width)
 
-        image = self.preprocess(image)
+        for y in range(0, int(self._pages * pixels_per_page), pixels_per_page):
+            self.command(set_page_address, 0x02, 0x10)
+            set_page_address += 1
+            offsets = [y + self.width * i for i in range(8)]
 
-        page = 0xB0
-        pix = list(image.getdata())
-        step = self._w * 8
-        for y in range(0, self._pages * step, step):
+            for x in range(self.width):
+                buf[x] = \
+                    (image_data[x + offsets[0]] and 0x01) | \
+                    (image_data[x + offsets[1]] and 0x02) | \
+                    (image_data[x + offsets[2]] and 0x04) | \
+                    (image_data[x + offsets[3]] and 0x08) | \
+                    (image_data[x + offsets[4]] and 0x10) | \
+                    (image_data[x + offsets[5]] and 0x20) | \
+                    (image_data[x + offsets[6]] and 0x40) | \
+                    (image_data[x + offsets[7]] and 0x80)
 
-            # move to given page, then reset the column address
-            self.command(page, 0x02, 0x10)
-            page += 1
-
-            buf = []
-            for x in range(self._w):
-                byte = 0
-                for n in range(0, step, self._w):
-                    bit = 1 if pix[x + y + n] > 0 else 0
-                    byte |= bit << 8
-                    byte >>= 1
-
-                buf.append(byte)
-
-            self.data(buf)
+            self.data(list(buf))
 
 
 class ssd1306(device):
