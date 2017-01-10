@@ -8,9 +8,9 @@ First, import and initialise the device:
 
 .. code:: python
 
-  from oled.serial import i2c
+  from luma.core.serial import i2c
+  from luma.core.render import canvas
   from oled.device import ssd1306, ssd1331, sh1106
-  from oled.render import canvas
 
   # rev.1 users set port=0
   # substitute spi(device=0, port=0) below if using that interface
@@ -31,7 +31,7 @@ class should be used as follows:
       draw.rectangle(device.bounding_box, outline="white", fill="black")
       draw.text((30, 40), "Hello World", fill="white")
 
-The :class:`oled.render.canvas` class automatically creates an :mod:`PIL.ImageDraw`
+The :class:`luma.core.render.canvas` class automatically creates an :mod:`PIL.ImageDraw`
 object of the correct dimensions and bit depth suitable for the device, so you
 may then call the usual Pillow methods to draw onto the canvas.
 
@@ -71,9 +71,9 @@ when creating the device:
 
 .. code:: python
 
-  from oled.serial import i2c
-  from oled.device import ssd1306, ssd1331, sh1106
-  from oled.render import canvas
+  from luma.core.serial import i2c
+  from luma.core.render import canvas
+  from luma.oled.device import ssd1306, ssd1331, sh1106
 
   serial = i2c(port=1, address=0x3C)
   device = ssd1306(serial, rotate=1)
@@ -179,7 +179,7 @@ flag to show the options::
 .. note::
    #. Substitute ``python3`` for ``python`` in the above examples if you are using python3.
    #. ``python-dev`` (apt-get) and ``psutil`` (pip/pip3) are required to run the ``sys_info.py`` 
-      example. See `install instructions <https://github.com/rm-hull/ssd1306/blob/master/examples/sys_info.py#L3-L7>`_ for the exact commands to use.
+      example. See `install instructions <https://github.com/rm-hull/luma.oled/blob/master/examples/sys_info.py#L3-L7>`_ for the exact commands to use.
 
 Emulators
 ^^^^^^^^^

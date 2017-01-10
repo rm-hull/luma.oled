@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# Copyright (c) 2016 Richard Hull and contributors
+# Copyright (c) 2017 Richard Hull and contributors
 # See LICENSE.rst for details.
 
 # ssd1306 documentation build configuration file, created by
@@ -62,7 +62,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'SSD1306 / SSD1325 / SSD1331 / SH1106 OLED driver'
+project = 'Luma.OLED: SSD1306 / SSD1325 / SSD1331 / SH1106 display driver'
 copyright = u'{0}, Richard Hull'.format(datetime.now().year)
 author = 'Richard Hull'
 
@@ -149,7 +149,7 @@ html_theme = 'default'
 # The name for this set of Sphinx documents.
 # "<project> v<release> documentation" by default.
 #
-# html_title = 'ssd1306 v1.0.0'
+# html_title = 'luma.oled'
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
 #
@@ -249,7 +249,7 @@ html_static_path = ['_static']
 # html_search_scorer = 'scorer.js'
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'ssd1306doc'
+htmlhelp_basename = 'luma.oled_doc'
 
 # -- Options for LaTeX output ---------------------------------------------
 
@@ -275,7 +275,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'ssd1306.tex', 'ssd1306 Documentation',
+    (master_doc, 'luma.oled.tex', 'luma.oled Documentation',
      author, 'manual'),
 ]
 
@@ -317,7 +317,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'ssd1306', 'ssd1306 Documentation',
+    (master_doc, 'luma.oled', 'luma.oled Documentation',
      [author], 1)
 ]
 
@@ -332,8 +332,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'ssd1306', 'ssd1306 Documentation',
-     author, 'ssd1306', project,
+    (master_doc, 'luma.oled', 'luma.oled Documentation',
+     author, 'luma.oled', project,
      'Miscellaneous'),
 ]
 

@@ -1,7 +1,7 @@
 Introduction
 ------------
 Interfacing `OLED matrix displays
-<https://github.com/rm-hull/ssd1306/wiki/Usage-&-Benchmarking>`_ with the
+<https://github.com/rm-hull/luma.oled/wiki/Usage-&-Benchmarking>`_ with the
 SSD1306, SSD1325, SSD1331 or SH1106 driver in Python 2 or 3 using I2C/SPI on
 the Raspberry Pi and other linux-based single-board computers: the library 
 provides a Pillow-compatible drawing canvas, and other functionality to support:
@@ -28,12 +28,12 @@ and will fit neatly inside the RPi case.
    - :download:`SH1106 <tech-spec/SH1106.pdf>`
 
    Benchmarks for tested devices can be found in the
-   `wiki <https://github.com/rm-hull/ssd1306/wiki/Usage-&-Benchmarking>`_.
+   `wiki <https://github.com/rm-hull/luma.oled/wiki/Usage-&-Benchmarking>`_.
 
 As well as display drivers for various physical OLED devices
 there are emulators that run in real-time (with pygame) and others that can
 take screenshots, or assemble animated GIFs, as per the examples below (source
-code for these is available in the `examples <https://github.com/rm-hull/ssd1306/tree/master/examples>`_ directory:
+code for these is available in the `examples <https://github.com/rm-hull/luma.oled/tree/master/examples>`_ directory:
 
 .. image:: images/clock_anim.gif
    :alt: clock

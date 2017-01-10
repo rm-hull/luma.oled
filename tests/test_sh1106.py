@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# Copyright (c) 2016 Richard Hull and contributors
+# Copyright (c) 2017 Richard Hull and contributors
 # See LICENSE.rst for details.
 
 try:
@@ -9,9 +9,9 @@ except ImportError:
     from mock import call, Mock
 
 import pytest
-import oled.error
-from oled.device import sh1106
-from oled.render import canvas
+import luma.core.error
+from luma.oled.device import sh1106
+from luma.core.render import canvas
 
 import baseline_data
 
@@ -48,7 +48,7 @@ def test_init_128x64():
 
 
 def test_init_invalid_dimensions():
-    with pytest.raises(oled.error.DeviceDisplayModeError) as ex:
+    with pytest.raises(luma.core.error.DeviceDisplayModeError) as ex:
         sh1106(serial, width=77, height=105)
     assert "Unsupported display mode: 77 x 105" in str(ex.value)
 

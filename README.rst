@@ -1,18 +1,18 @@
-SSD1306 / SSD1325 / SSD1331 / SH1106 OLED Driver
-================================================
-.. image:: https://travis-ci.org/rm-hull/ssd1306.svg?branch=master
-   :target: https://travis-ci.org/rm-hull/ssd1306
+Luma.OLED: SSD1306 / SSD1325 / SSD1331 / SH1106 Display Driver
+==============================================================
+.. image:: https://travis-ci.org/rm-hull/luma.oled.svg?branch=master
+   :target: https://travis-ci.org/rm-hull/luma.oled
 
-.. image:: https://coveralls.io/repos/github/rm-hull/ssd1306/badge.svg?branch=master
-   :target: https://coveralls.io/github/rm-hull/ssd1306?branch=master
+.. image:: https://coveralls.io/repos/github/rm-hull/luma.oled/badge.svg?branch=master
+   :target: https://coveralls.io/github/rm-hull/luma.oled?branch=master
 
 .. image:: https://img.shields.io/maintenance/yes/2017.svg?maxAge=2592000
 
-.. image:: https://img.shields.io/pypi/pyversions/ssd1306.svg
-   :target: https://pypi.python.org/pypi/ssd1306
+.. image:: https://img.shields.io/pypi/pyversions/luma.oled.svg
+   :target: https://pypi.python.org/pypi/luma.oled
 
-.. image:: https://img.shields.io/pypi/v/ssd1306.svg
-   :target: https://pypi.python.org/pypi/ssd1306
+.. image:: https://img.shields.io/pypi/v/luma.oled.svg
+   :target: https://pypi.python.org/pypi/luma.oled
 
 Python library interfacing OLED matrix displays with the SSD1306, SSD1325, SSD1331 or 
 SH1106 driver using I2C/SPI on the Raspberry Pi and other linux-based single-board computers - 
@@ -25,25 +25,25 @@ it provides a Pillow-compatible drawing canvas, and other functionality to suppo
 * dithering to monochrome
 
 A list of tested devices can be found in the
-`wiki <https://github.com/rm-hull/ssd1306/wiki/Usage-&-Benchmarking>`_.
+`wiki <https://github.com/rm-hull/luma.oled/wiki/Usage-&-Benchmarking>`_.
 
 The SSD1306 display pictured below is 128 x 64 pixels, and the board is `tiny`,
 and will fit neatly inside the RPi case.
 
-.. image:: https://raw.githubusercontent.com/rm-hull/ssd1306/master/doc/images/mounted_display.jpg
+.. image:: https://raw.githubusercontent.com/rm-hull/luma.oled/master/doc/images/mounted_display.jpg
    :alt: mounted
 
 As well as display drivers for various physical OLED devices, there are emulators that run in real-time 
 (with pygame) and others that can take screenshots, or assemble animated GIFs, as per the examples below (source
-code for these is available in the `examples <https://github.com/rm-hull/ssd1306/tree/master/examples>`_ directory:
+code for these is available in the `examples <https://github.com/rm-hull/luma.oled/tree/master/examples>`_ directory:
 
-.. image:: https://raw.githubusercontent.com/rm-hull/ssd1306/master/doc/images/clock_anim.gif?raw=true
+.. image:: https://raw.githubusercontent.com/rm-hull/luma.oled/master/doc/images/clock_anim.gif?raw=true
    :alt: clock
 
-.. image:: https://raw.githubusercontent.com/rm-hull/ssd1306/master/doc/images/invaders_anim.gif?raw=true
+.. image:: https://raw.githubusercontent.com/rm-hull/luma.oled/master/doc/images/invaders_anim.gif?raw=true
    :alt: invaders
 
-.. image:: https://raw.githubusercontent.com/rm-hull/ssd1306/master/doc/images/crawl_anim.gif?raw=true
+.. image:: https://raw.githubusercontent.com/rm-hull/luma.oled/master/doc/images/crawl_anim.gif?raw=true
    :alt: crawl
 
 Documentation
@@ -55,7 +55,7 @@ License
 -------
 The MIT License (MIT)
 
-Copyright (c) 2016 Richard Hull & Contributors
+Copyright (c) 2017 Richard Hull & Contributors
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

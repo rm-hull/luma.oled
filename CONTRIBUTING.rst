@@ -10,7 +10,7 @@ levels high.
 
 GitHub
 ^^^^^^
-The source code is available to clone at: https://github.com/rm-hull/ssd1306.git
+The source code is available to clone at: https://github.com/rm-hull/luma.oled.git
 
 Contributors
 ^^^^^^^^^^^^

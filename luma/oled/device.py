@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2016 Richard Hull and contributors
+# Copyright (c) 2017 Richard Hull and contributors
 # See LICENSE.rst for details.
 
 # Example usage:
 #
-#   from oled.serial import i2c, spi
-#   from oled.device import ssd1306, sh1106
-#   from oled.render import canvas
+#   from luma.core.serial import i2c, spi
+#   from luma.core.render import canvas
+#   from luma.oled.device import ssd1306, sh1106
 #   from PIL import ImageDraw
 #
 #   serial = i2c(port=1, address=0x3C)
@@ -32,73 +32,11 @@
 
 import atexit
 
-from oled.serial import i2c
-import oled.mixin as mixin
-import oled.error
-import oled.const
-
-
-class device(mixin.capabilities):
-    """
-    Base class for OLED driver classes
-
-    .. warning::
-        Direct use of the :func:`command` and :func:`data` methods are
-        discouraged: Screen updates should be effected through the
-        :func:`display` method, or preferably with the
-        :class:`oled.render.canvas` context manager.
-    """
-    def __init__(self, const=None, serial_interface=None):
-        self._const = const or oled.const.common
-        self._serial_interface = serial_interface or i2c()
-        atexit.register(self.cleanup)
-
-    def command(self, *cmd):
-        """
-        Sends a command or sequence of commands through to the delegated
-        serial interface.
-        """
-        self._serial_interface.command(*cmd)
-
-    def data(self, data):
-        """
-        Sends a data byte or sequence of data bytes through to the delegated
-        serial interface.
-        """
-        self._serial_interface.data(data)
-
-    def show(self):
-        """
-        Sets the display mode ON, waking the device out of a prior
-        low-power sleep mode.
-        """
-        self.command(self._const.DISPLAYON)
-
-    def hide(self):
-        """
-        Switches the display mode OFF, putting the device in low-power
-        sleep mode.
-        """
-        self.command(self._const.DISPLAYOFF)
-
-    def contrast(self, level):
-        """
-        Switches the display contrast to the desired level, in the range
-        0-255. Note that setting the level to a low (or zero) value will
-        not necessarily dim the display to nearly off. In other words,
-        this method is **NOT** suitable for fade-in/out animation.
-
-        :param level: Desired contrast level in the range of 0-255.
-        :type level: int
-        """
-        assert(level >= 0)
-        assert(level <= 255)
-        self.command(self._const.SETCONTRAST, level)
-
-    def cleanup(self):
-        self.hide()
-        self.clear()
-        self._serial_interface.cleanup()
+from luma.core.device import device
+from luma.core.serial import i2c
+import luma.core.mixin as mixin
+import luma.core.error
+import luma.oled.const
 
 
 class sh1106(device):
@@ -109,14 +47,14 @@ class sh1106(device):
     affect the brightness and other settings.
     """
     def __init__(self, serial_interface=None, width=128, height=64, rotate=0):
-        super(sh1106, self).__init__(oled.const.sh1106, serial_interface)
+        super(sh1106, self).__init__(luma.oled.const.sh1106, serial_interface)
         self.capabilities(width, height, rotate)
         self._pages = self._h // 8
 
         # FIXME: Delay doing anything here with alternate screen sizes
         # until we are able to get a device to test with.
         if width != 128 or height != 64:
-            raise oled.error.DeviceDisplayModeError(
+            raise luma.core.error.DeviceDisplayModeError(
                 "Unsupported display mode: {0} x {1}".format(width, height))
 
         self.command(
@@ -181,7 +119,7 @@ class ssd1306(device):
     affect the brightness and other settings.
     """
     def __init__(self, serial_interface=None, width=128, height=64, rotate=0):
-        super(ssd1306, self).__init__(oled.const.ssd1306, serial_interface)
+        super(ssd1306, self).__init__(luma.oled.const.ssd1306, serial_interface)
         self.capabilities(width, height, rotate)
         self._pages = self._h // 8
         self._buffer = [0] * self._w * self._pages
@@ -195,7 +133,7 @@ class ssd1306(device):
         }.get((width, height))
 
         if settings is None:
-            raise oled.error.DeviceDisplayModeError(
+            raise luma.core.error.DeviceDisplayModeError(
                 "Unsupported display mode: {0} x {1}".format(width, height))
 
         self.command(
@@ -267,12 +205,12 @@ class ssd1331(device):
     called to affect the brightness and other settings.
     """
     def __init__(self, serial_interface=None, width=96, height=64, rotate=0):
-        super(ssd1331, self).__init__(oled.const.ssd1331, serial_interface)
+        super(ssd1331, self).__init__(luma.oled.const.ssd1331, serial_interface)
         self.capabilities(width, height, rotate, mode="RGB")
         self._buffer = [0] * self._w * self._h * 2
 
         if width != 96 or height != 64:
-            raise oled.error.DeviceDisplayModeError(
+            raise luma.core.error.DeviceDisplayModeError(
                 "Unsupported display mode: {0} x {1}".format(width, height))
 
         self.command(
@@ -346,12 +284,12 @@ class ssd1325(device):
     called to affect the brightness and other settings.
     """
     def __init__(self, serial_interface=None, width=128, height=64, rotate=0):
-        super(ssd1325, self).__init__(oled.const.ssd1325, serial_interface)
+        super(ssd1325, self).__init__(luma.oled.const.ssd1325, serial_interface)
         self.capabilities(width, height, rotate, mode="RGB")
         self._buffer = [0] * (self._w * self._h // 2)
 
         if width != 128 or height != 64:
-            raise oled.error.DeviceDisplayModeError(
+            raise luma.core.error.DeviceDisplayModeError(
                 "Unsupported display mode: {0} x {1}".format(width, height))
 
         self.command(
@@ -381,7 +319,7 @@ class ssd1325(device):
 
     def display(self, image):
         """
-        Takes a 24-bit RGB :py:mod:`PIL.Image` and dumps it to the SSD1325 OLED
+        Takes a 24-bit RGB :py:mod:`PIL.Image` and dumps it to the SSD1325 OoledLED
         display, converting the image pixels to 4-bit greyscale using a
         simplified Luma calculation, based on *Y'=0.299R'+0.587G'+0.114B'*.
         """
