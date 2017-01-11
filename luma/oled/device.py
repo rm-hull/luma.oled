@@ -30,11 +30,7 @@
 # As before, as soon as the with block completes, the canvas buffer is flushed
 # to the device
 
-import atexit
-
 from luma.core.device import device
-from luma.core.serial import i2c
-import luma.core.mixin as mixin
 import luma.core.error
 import luma.oled.const
 
