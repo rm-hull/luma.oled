@@ -9,7 +9,7 @@ import os.path
 import time
 import random
 from demo_opts import device
-from oled.render import canvas
+from luma.core.render import canvas
 from PIL import Image
 
 arrow = [0x04, 0x02, 0x01, 0x02, 0x04]

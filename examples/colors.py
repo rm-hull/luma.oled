@@ -7,7 +7,7 @@ import time
 import random
 import os.path
 from demo_opts import device
-from oled.render import canvas
+from luma.core.render import canvas
 from PIL import Image
 
 

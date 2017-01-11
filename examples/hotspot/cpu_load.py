@@ -3,7 +3,7 @@
 
 import time
 import psutil
-from oled.virtual import hotspot
+from luma.core.virtual import hotspot
 from hotspot.common import title_text
 
 

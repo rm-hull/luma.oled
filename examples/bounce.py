@@ -11,8 +11,7 @@ import time
 import random
 
 from demo_opts import device
-import oled.device
-import oled.render
+import luma.core.render
 
 
 class Ball(object):
@@ -51,7 +50,7 @@ def main():
 
     frame_count = 0
     fps = ""
-    canvas = oled.render.canvas(device)
+    canvas = luma.core.render.canvas(device)
 
     start_time = time.time()
     last_time = time.time()

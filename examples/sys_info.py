@@ -18,7 +18,7 @@ if os.name != 'posix':
 import psutil
 
 from demo_opts import device
-from oled.render import canvas
+from luma.core.render import canvas
 from PIL import ImageFont
 
 # TODO: custom font bitmaps for up/down arrows
@@ -69,13 +69,13 @@ def network(iface):
            (iface, bytes2human(stat.bytes_sent), bytes2human(stat.bytes_recv))
 
 
-def stats(oled):
+def stats(device):
     # use custom font
     font_path = os.path.abspath(os.path.join(os.path.dirname(__file__),
                                 'fonts', 'C&C Red Alert [INET].ttf'))
     font2 = ImageFont.truetype(font_path, 12)
 
-    with canvas(oled) as draw:
+    with canvas(device) as draw:
         draw.text((0, 0), cpu_usage(), font=font2, fill="white")
         if device.height >= 32:
             draw.text((0, 14), mem_usage(), font=font2, fill="white")

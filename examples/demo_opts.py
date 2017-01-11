@@ -3,12 +3,12 @@
 import logging
 import argparse
 
-import oled.device
-import oled.emulator
-import oled.serial
+import luma.oled.device
+import luma.core.emulator
+import luma.core.serial
 
 
-parser = argparse.ArgumentParser(description='oled arguments',
+parser = argparse.ArgumentParser(description='luma.oled arguments',
     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
 parser.add_argument('--config', '-f', type=str, help='Load configuration settings from a file')
@@ -56,23 +56,23 @@ if args.display in ('ssd1306', 'ssd1325', 'ssd1331', 'sh1106'):
     if args.interface not in ('i2c', 'spi'):
         parser.error('unknown interface %s' % args.interface)
 
-    Device = getattr(oled.device, args.display)
+    Device = getattr(luma.oled.device, args.display)
     try:
         if (args.interface == 'i2c'):
-            serial = oled.serial.i2c(port=args.i2c_port, address=args.i2c_address)
+            serial = luma.core.serial.i2c(port=args.i2c_port, address=args.i2c_address)
         elif (args.interface == 'spi'):
-            serial = oled.serial.spi(port=args.spi_port,
-                                     device=args.spi_device,
-                                     bus_speed_hz=args.spi_bus_speed,
-                                     bcm_DC=args.bcm_data_command,
-                                     bcm_RST=args.bcm_reset)
+            serial = luma.core.serial.spi(port=args.spi_port,
+                                          device=args.spi_device,
+                                          bus_speed_hz=args.spi_bus_speed,
+                                          bcm_DC=args.bcm_data_command,
+                                          bcm_RST=args.bcm_reset)
         device = Device(serial, width=args.width, height=args.height,
                         rotate=args.rotate)
     except Exception as e:
         parser.error(e)
 
 elif args.display in ('capture', 'pygame', 'gifanim'):
-    Emulator = getattr(oled.emulator, args.display)
+    Emulator = getattr(luma.core.emulator, args.display)
     device = Emulator(**vars(args))
 
 else:
