@@ -4,12 +4,10 @@
 import os
 from setuptools import setup
 
-import luma.oled
-
 README = open(os.path.join(os.path.dirname(__file__), "README.rst")).read()
 CONTRIB = open(os.path.join(os.path.dirname(__file__), "CONTRIBUTING.rst")).read()
 CHANGES = open(os.path.join(os.path.dirname(__file__), "CHANGES.rst")).read()
-version = luma.oled.__version__
+version = "2.0.0"
 
 setup(
     name="luma.oled",
@@ -23,6 +21,7 @@ setup(
     keywords="raspberry pi rpi oled display screen ssd1306 ssd1325 ssd1331 sh1106 spi i2c 128x64 128x32 96x16",
     url="https://github.com/rm-hull/luma.oled",
     download_url="https://github.com/rm-hull/luma.oled/tarball/" + version,
+    namespace_packages=["luma"],
     packages=["luma.oled"],
     install_requires=["luma.core"],
     setup_requires=["pytest-runner"],
