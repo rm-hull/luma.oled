@@ -1,16 +1,17 @@
 Python usage
 ------------
-The screen can be driven with python using the ``oled/device.py`` script.
-There are two device classes and usage is very simple if you have ever
-used `Pillow <https://pillow.readthedocs.io/en/latest/>`_ or PIL.
+OLED displays can be driven with python using the varous implementations in the
+:py:mod:`luma.oled.device` package.  There are several device classes available
+and usage is very simple if you have ever used `Pillow
+<https://pillow.readthedocs.io/en/latest/>`_ or PIL.
 
 First, import and initialise the device:
 
 .. code:: python
 
-  from luma.core.serial import i2c
+  from luma.core.serial import i2c, spi
   from luma.core.render import canvas
-  from oled.device import ssd1306, ssd1331, sh1106
+  from luma.oled.device import ssd1306, ssd1325, ssd1331, sh1106
 
   # rev.1 users set port=0
   # substitute spi(device=0, port=0) below if using that interface
@@ -19,11 +20,14 @@ First, import and initialise the device:
   # substitute ssd1331(...) or sh1106(...) below if using that device
   device = ssd1306(serial)
 
-The display device should now be configured for use. The specific ``ssd1306``,
-``ssd1331`` or ``sh1106`` classes all expose a ``display()`` method which takes
-an image with attributes consistent with the capabilities of the device.
-However, for most cases, for drawing text and graphics primitives, the canvas
-class should be used as follows:
+The display device should now be configured for use. The specific
+:py:class:`luma.oled.device.ssd1306`,
+:py:class:`luma.oled.device.ssd1325`,
+:py:class:`luma.oled.device.ssd1331`, or
+:py:class:`luma.oled.device.sh1106`, classes all expose a ``display()`` method
+which takes an image with attributes consistent with the capabilities of the
+device. However, for most cases, for drawing text and graphics primitives, the
+canvas class should be used as follows:
 
 .. code:: python
 
@@ -44,7 +48,7 @@ Color Model
 Any of the standard :mod:`PIL.ImageColor` color formats may be used, but since
 the SSD1306 and SH1106 OLEDs are monochrome, only the HTML color names
 ``"black"`` and ``"white"`` values should really be used; in fact, by default,
-any value *other* than black is treated as white. The :py:class:`canvas` object
+any value *other* than black is treated as white. The :py:class:`luma.core.canvas` object
 does have a ``dither`` flag which if set to True, will convert color drawings
 to a dithered monochrome effect (see the *3d_box.py* example, below).
 
@@ -176,6 +180,7 @@ flag to show the options::
       --max-frames MAX_FRAMES
                             Maximum frames to record (gifanim emulator only)
                             (default: None)
+
 .. note::
    #. Substitute ``python3`` for ``python`` in the above examples if you are using python3.
    #. ``python-dev`` (apt-get) and ``psutil`` (pip/pip3) are required to run the ``sys_info.py`` 
@@ -186,14 +191,14 @@ Emulators
 There are various display emulators available for running code against, for debugging
 and screen capture functionality:
 
-* The :class:`oled.emulator.capture` device will persist a numbered PNG file to
+* The :py:class:`luma.core.emulator.capture` device will persist a numbered PNG file to
   disk every time its ``display`` method is called.
 
-* The :class:`oled.emulator.gifanim` device will record every image when its ``display``
+* The :py:class:`luma.core.emulator.gifanim` device will record every image when its ``display``
   method is called, and on program exit (or Ctrl-C), will assemble the images into an
   animated GIF.
 
-* The :class:`oled.emulator.pygame` device uses the :py:mod:`pygame` library to
+* The :py:class:`luma.core.emulator.pygame` device uses the :py:mod:`pygame` library to
   render the displayed image to a pygame display surface. 
 
 Invoke the demos with::

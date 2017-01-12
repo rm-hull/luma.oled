@@ -18,6 +18,8 @@
 import os, sys
 from datetime import datetime
 
+version = "2.0.0"
+
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
@@ -62,7 +64,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'Luma.OLED: SSD1306 / SSD1325 / SSD1331 / SH1106 display driver'
+project = 'Luma.OLED: Dipsplay drivers for SSD1306 / SSD1325 / SSD1331 / SH1106'
 copyright = u'{0}, Richard Hull'.format(datetime.now().year)
 author = 'Richard Hull'
 
@@ -70,10 +72,6 @@ author = 'Richard Hull'
 # |version| and |release|, also used in various other places throughout the
 # built documents.
 
-from oled import __version__
-
-# The short X.Y version.
-version = __version__
 # The full version, including alpha/beta/rc tags.
 release = version
 
@@ -275,7 +273,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'luma.oled.tex', 'luma.oled Documentation',
+    (master_doc, 'luma.oled.tex', 'Luma.OLED Documentation',
      author, 'manual'),
 ]
 
@@ -332,7 +330,7 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'luma.oled', 'luma.oled Documentation',
+    (master_doc, 'luma.oled', 'Luma.OLED Documentation',
      author, 'luma.oled', project,
      'Miscellaneous'),
 ]
@@ -357,5 +355,6 @@ texinfo_documents = [
 # Configuration for intersphinx.
 intersphinx_mapping = {
     'python': ('https://docs.python.org/2', None),
-    'pillow': ('https://pillow.readthedocs.io/en/latest', None)
+    'pillow': ('https://pillow.readthedocs.io/en/latest', None),
+    'luma.core': ('https://luma-core.readthedocs.io/en/latest', None)
 }

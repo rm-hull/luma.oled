@@ -1,63 +1,15 @@
 API Documentation
 -----------------
-.. automodule:: oled
+.. automodule:: luma.oled
     :members:
     :undoc-members:
     :show-inheritance:
 
-.. inheritance-diagram:: oled.device oled.emulator oled.mixin oled.virtual
+.. inheritance-diagram:: luma.core.device luma.core.emulator luma.core.mixin luma.core.virtual luma.oled.device
 
-:mod:`oled.device`
-""""""""""""""""""
-.. automodule:: oled.device
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-:mod:`oled.emulator`
-""""""""""""""""""""
-.. automodule:: oled.emulator
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-:mod:`oled.error`
-"""""""""""""""""""
-.. automodule:: oled.error
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-:mod:`oled.mixin`
-"""""""""""""""""
-.. automodule:: oled.mixin
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-:mod:`oled.render`
-""""""""""""""""""
-.. automodule:: oled.render
-    :members:
-    :undoc-members:
-
-:mod:`oled.serial`
-""""""""""""""""""
-.. automodule:: oled.serial
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-:mod:`oled.threadpool`
-""""""""""""""""""""""
-.. automodule:: oled.threadpool
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-:mod:`oled.virtual`
-"""""""""""""""""""
-.. automodule:: oled.virtual
+:mod:`luma.oled.device`
+"""""""""""""""""""""""
+.. automodule:: luma.oled.device
     :members:
     :undoc-members:
     :show-inheritance:
