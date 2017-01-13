@@ -6,3 +6,5 @@ smbus2
 spidev
 RPi.GPIO
 pygame
+luma.core
+luma.oled
