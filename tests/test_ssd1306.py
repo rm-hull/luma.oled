@@ -27,7 +27,7 @@ def test_init_128x64():
     serial.command.assert_has_calls([
         # Initial burst are initialization commands
         call(174, 213, 128, 168, 63, 211, 0, 64, 141, 20, 32, 0,
-             160, 200, 218, 18, 217, 241, 219, 64, 164, 166),
+             161, 200, 218, 18, 217, 241, 219, 64, 164, 166),
         # set contrast
         call(129, 207),
         # reset the display
@@ -46,7 +46,7 @@ def test_init_128x32():
     serial.command.assert_has_calls([
         # Initial burst are initialization commands
         call(174, 213, 128, 168, 31, 211, 0, 64, 141, 20, 32, 0,
-             160, 200, 218, 2, 217, 241, 219, 64, 164, 166),
+             161, 200, 218, 2, 217, 241, 219, 64, 164, 166),
         # set contrast
         call(129, 207),
         # reset the display
@@ -65,7 +65,7 @@ def test_init_96x16():
     serial.command.assert_has_calls([
         # Initial burst are initialization commands
         call(174, 213, 96, 168, 15, 211, 0, 64, 141, 20, 32, 0,
-             160, 200, 218, 2, 217, 241, 219, 64, 164, 166),
+             161, 200, 218, 2, 217, 241, 219, 64, 164, 166),
         # set contrast
         call(129, 207),
         # reset the display
