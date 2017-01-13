@@ -18,7 +18,7 @@
 import os, sys
 from datetime import datetime
 
-version = "2.0.0"
+version = open("../VERSION.txt").read()
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
