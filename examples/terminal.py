@@ -5,7 +5,7 @@
 import os
 import time
 from demo_opts import device
-from oled.virtual import terminal
+from luma.core.virtual import terminal
 from PIL import ImageFont
 
 

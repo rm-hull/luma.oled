@@ -9,7 +9,7 @@
 
 import time
 from demo_opts import device
-from oled.render import canvas
+from luma.core.render import canvas
 from random import randrange
 
 NORTH = 1

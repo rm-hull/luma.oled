@@ -18,7 +18,7 @@ and the table shows that "0 0" is 4-wire SPI. That is the type of connection
 that is currently supported by the SPI mode of this library.
 
 A list of tested devices can be found in the
-`wiki <https://github.com/rm-hull/ssd1306/wiki/Usage-&-Benchmarking>`_.
+`wiki <https://github.com/rm-hull/luma.oled/wiki/Usage-&-Benchmarking>`_.
 
 I2C vs. SPI
 ^^^^^^^^^^^
@@ -26,7 +26,7 @@ If you have not yet purchased your display, you may be wondering if you should
 get an I2C or SPI display. The basic trade-off is that I2C will be easier to connect
 because it has fewer pins while SPI may have a faster display update rate due
 to running at a higher frequency and having less overhead (see
-`benchmarks <https://github.com/rm-hull/ssd1306/wiki/Usage-&-Benchmarking>`_).
+`benchmarks <https://github.com/rm-hull/luma.oled/wiki/Usage-&-Benchmarking>`_).
 
 Tips for connecting the display
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

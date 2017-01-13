@@ -9,7 +9,7 @@
 import math
 from operator import itemgetter
 from demo_opts import device
-from oled.render import canvas
+from luma.core.render import canvas
 
 
 def radians(degrees):
