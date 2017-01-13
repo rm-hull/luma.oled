@@ -315,7 +315,7 @@ class ssd1325(device):
 
     def display(self, image):
         """
-        Takes a 24-bit RGB :py:mod:`PIL.Image` and dumps it to the SSD1325 OoledLED
+        Takes a 24-bit RGB :py:mod:`PIL.Image` and dumps it to the SSD1325 OLED
         display, converting the image pixels to 4-bit greyscale using a
         simplified Luma calculation, based on *Y'=0.299R'+0.587G'+0.114B'*.
         """
