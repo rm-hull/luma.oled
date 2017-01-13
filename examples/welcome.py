@@ -6,7 +6,7 @@ import os
 import time
 import random
 from demo_opts import device
-from oled.virtual import viewport, snapshot, range_overlap
+from luma.core.virtual import viewport, snapshot, range_overlap
 from PIL import ImageFont
 
 welcome = [

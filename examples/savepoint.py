@@ -4,8 +4,8 @@
 
 import time
 from demo_opts import device
-from oled.virtual import history
-from oled.render import canvas
+from luma.core.virtual import history
+from luma.core.render import canvas
 
 
 def render_box(draw, idx, color):

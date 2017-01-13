@@ -8,7 +8,7 @@
 import time
 import datetime
 from demo_opts import device
-from oled.render import canvas
+from luma.core.render import canvas
 
 
 def primitives(draw):

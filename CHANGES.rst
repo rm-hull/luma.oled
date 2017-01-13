@@ -4,7 +4,7 @@ ChangeLog
 +------------+---------------------------------------------------------------------+------------+
 | Version    | Description                                                         | Date       |
 +============+=====================================================================+============+
-| *Upcoming* | *TBD*                                                               |            |
+| *Upcoming* | * Package rename to *luma.oled* (**Note:** Breaking changes)        |            |
 +------------+---------------------------------------------------------------------+------------+
 | **1.5.0**  | * Performance improvements for SH1106 driver (2x frame rate!)       | 2017/01/09 |
 |            | * Support for 4-bit greyscale OLED (SSD1325)                        |            |

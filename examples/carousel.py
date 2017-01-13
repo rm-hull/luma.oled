@@ -8,7 +8,7 @@
 import psutil
 
 from demo_opts import device
-from oled.virtual import viewport, snapshot
+from luma.core.virtual import viewport, snapshot
 import hotspot.memory as memory
 import hotspot.uptime as uptime
 import hotspot.cpu_load as cpu_load

@@ -5,8 +5,8 @@
 import time
 import os.path
 from demo_opts import device
-from oled.virtual import viewport
-from oled.render import canvas
+from luma.core.virtual import viewport
+from luma.core.render import canvas
 from PIL import Image
 
 

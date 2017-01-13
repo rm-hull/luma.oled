@@ -25,7 +25,7 @@ From PyPI
 Install the latest version of the library directly from PyPI_::
 
   $ sudo apt-get install python-dev python-pip libfreetype6-dev libjpeg8-dev libsdl1.2-dev
-  $ sudo pip install --upgrade ssd1306
+  $ sudo pip install --upgrade luma.oled
 
 From source
 ^^^^^^^^^^^
@@ -35,4 +35,4 @@ For Python 2, from the bash prompt, enter::
   $ sudo python setup.py install
 
 
-.. _PyPI: https://pypi.python.org/pypi?:action=display&name=ssd1306
+.. _PyPI: https://pypi.python.org/pypi?:action=display&name=luma.oled
