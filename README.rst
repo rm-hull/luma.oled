@@ -53,7 +53,7 @@ code for these is available in the `examples <https://github.com/rm-hull/luma.ol
 Documentation
 -------------
 Full documentation with installation instructions and examples can be found on
-https://ssd1306.readthedocs.io.
+https://luma-oled.readthedocs.io.
 
 License
 -------
