@@ -30,10 +30,11 @@ and will fit neatly inside the RPi case.
    Benchmarks for tested devices can be found in the
    `wiki <https://github.com/rm-hull/luma.oled/wiki/Usage-&-Benchmarking>`_.
 
-As well as display drivers for various physical OLED devices
-there are emulators that run in real-time (with pygame) and others that can
-take screenshots, or assemble animated GIFs, as per the examples below (source
-code for these is available in the `examples <https://github.com/rm-hull/luma.oled/tree/master/examples>`_ directory:
+As well as display drivers for various physical OLED devices there are
+emulators that run in real-time (with pygame) and others that can take
+screenshots, or assemble animated GIFs, as per the examples below (source code
+for these is available in the `luma.examples <https://github.com/rm-hull/luma.examples>`_ 
+git repository:
 
 .. image:: images/clock_anim.gif
    :alt: clock
