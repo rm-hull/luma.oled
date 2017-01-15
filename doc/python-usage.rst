@@ -98,9 +98,9 @@ Examples
 After installing the library, head over to the `luma.examples <https://github.com/rm-hull/luma.examples>`_ 
 repository, and try running the following examples (and more):
 
-=============== ========================================================
+=============== ================================================================
 Example         Description
-=============== ========================================================
+=============== ================================================================
 3d_box.py       Rotating 3D box wireframe & color dithering
 bounce.py       Display a bouncing ball animation and frames per second
 carousel.py     Showcase viewport and hotspot functionality
@@ -119,8 +119,9 @@ starfield.py    3D starfield simulation
 sys_info.py     Display basic system information
 terminal.py     Simple println capabilities
 tv_snow.py      Example image-blitting
+tweet_scroll.py Using Twitter's Streaming API to display scrolling notifications
 welcome.py      Unicode font rendering & scrolling
-=============== ========================================================
+=============== ================================================================
 
 Further details of how to run the examples is shown in the example repo's README.
 
