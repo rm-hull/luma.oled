@@ -56,8 +56,8 @@ git repository:
 Breaking changes
 ----------------
 Version 2.0.0 was released on 11 January 2017: this came with a rename of the
-project from **ssd1306** to **luma.oled** to reflect the changing nature of the
-codebase. 
+guthub project from **ssd1306** to **luma.oled** to reflect the changing nature
+of the codebase.
 
 Some core functionality has been moved out to another git repository,
 **`luma.core <https://github.com/rm-hull/luma.core>`_**: this has enabled
