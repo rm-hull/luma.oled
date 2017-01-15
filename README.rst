@@ -18,9 +18,10 @@ Luma.OLED: Display drivers for SSD1306 / SSD1325 / SSD1331 / SH1106
 .. image:: https://img.shields.io/pypi/v/luma.oled.svg
    :target: https://pypi.python.org/pypi/luma.oled
 
-Python library interfacing OLED matrix displays with the SSD1306, SSD1325, SSD1331 or 
-SH1106 driver using I2C/SPI on the Raspberry Pi and other linux-based single-board computers - 
-it provides a Pillow-compatible drawing canvas, and other functionality to support:
+Python library interfacing OLED matrix displays with the SSD1306, SSD1325,
+SSD1331 or SH1106 driver using I2C/SPI on the Raspberry Pi and other
+linux-based single-board computers - it provides a Pillow-compatible drawing
+canvas, and other functionality to support:
 
 * scrolling/panning capability,
 * terminal-style printing,
@@ -37,9 +38,11 @@ and will fit neatly inside the RPi case.
 .. image:: https://raw.githubusercontent.com/rm-hull/luma.oled/master/doc/images/mounted_display.jpg
    :alt: mounted
 
-As well as display drivers for various physical OLED devices, there are emulators that run in real-time 
-(with pygame) and others that can take screenshots, or assemble animated GIFs, as per the examples below (source
-code for these is available in the `examples <https://github.com/rm-hull/luma.oled/tree/master/examples>`_ directory:
+As well as display drivers for various physical OLED devices, there are
+emulators that run in real-time (with pygame) and others that can take
+screenshots, or assemble animated GIFs, as per the examples below (source code
+for these is available in the `luma.examples <https://github.com/rm-hull/luma.examples>`_ 
+git repository:
 
 .. image:: https://raw.githubusercontent.com/rm-hull/luma.oled/master/doc/images/clock_anim.gif?raw=true
    :alt: clock
@@ -49,6 +52,24 @@ code for these is available in the `examples <https://github.com/rm-hull/luma.ol
 
 .. image:: https://raw.githubusercontent.com/rm-hull/luma.oled/master/doc/images/crawl_anim.gif?raw=true
    :alt: crawl
+
+Breaking changes
+----------------
+Version 2.0.0 was released on 11 January 2017: this came with a rename of the
+github project from **ssd1306** to **luma.oled** to reflect the changing nature
+of the codebase.
+
+Some core functionality has been moved out to another git repository,
+`luma.core <https://github.com/rm-hull/luma.core>`_: this has enabled
+another project to have a facelift: **pcd8544** has now been reborn as
+`luma.lcd <https://github.com/rm-hull/luma.lcd>`_: the same API can now be
+used across both projects. Likewise `max7219 <https://github.com/rm-hull/max7219>`_ 
+will be renamed **luma.led_matrix** to also take advantage of the common API.
+
+The consequence is that any existing code that uses the old **ssd1306** package
+will need to be updated. The changes should be limited to altering import
+statements only, and are described in the 
+`API documentation <https://luma-oled.readthedocs.io/en/latest/api-documentation.html>`_.
 
 Documentation
 -------------
