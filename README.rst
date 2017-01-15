@@ -66,7 +66,7 @@ another project to have a facelift: **pcd8544** has now been reborn as
 used across both projects. Likewise `max7219 <https://github.com/rm-hull/max7219>`_ 
 will be renamed **luma.led_matrix** to also take advantage of the common API.
 
-The consequence is that any existing code that uses the old ``ssd1306`` package
+The consequence is that any existing code that uses the old **ssd1306** package
 will need to be updated. The changes should be limited to altering import
 statements only, and are described in the 
 `API documentation <https://luma-oled.readthedocs.io/en/latest/api-documentation.html>`_.
