@@ -4,10 +4,12 @@ ChangeLog
 +------------+---------------------------------------------------------------------+------------+
 | Version    | Description                                                         | Date       |
 +============+=====================================================================+============+
-| *Upcoming* | * Moved examples to separate git repo                               |            |
+| *Upcoming* | * Simplify/optimize SSD1306 display logic                           |            |
++------------+---------------------------------------------------------------------+------------+
+| **2.0.1**  | * Moved examples to separate git repo                               | 2017/01/15 |
 |            | * Add notes about breaking changes                                  |            |
 +------------+---------------------------------------------------------------------+------------+
-| **2.0.0**  | * Package rename to ``luma.oled`` (**Note:** Breaking changes)      |            |
+| **2.0.0**  | * Package rename to ``luma.oled`` (**Note:** Breaking changes)      | 2017/01/11 |
 +------------+---------------------------------------------------------------------+------------+
 | **1.5.0**  | * Performance improvements for SH1106 driver (2x frame rate!)       | 2017/01/09 |
 |            | * Support for 4-bit greyscale OLED (SSD1325)                        |            |
