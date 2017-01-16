@@ -194,8 +194,7 @@ or::
 
 Then add your user to the *spi* and *gpio* groups::
 
-  $ sudo usermod -a G spi pi
-  $ sudo usermod -a G gpio pi
+  $ sudo usermod -a -G spi,gpio pi
 
 Log out and back in again to ensure that the group permissions are applied
 successfully.
