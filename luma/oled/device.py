@@ -117,9 +117,6 @@ class ssd1306(device):
     def __init__(self, serial_interface=None, width=128, height=64, rotate=0):
         super(ssd1306, self).__init__(luma.oled.const.ssd1306, serial_interface)
         self.capabilities(width, height, rotate)
-        self._pages = self._h // 8
-        self._buffer = [0] * self._w * self._pages
-        self._offsets = [n * self._w for n in range(8)]
 
         # Supported modes
         settings = {
@@ -132,6 +129,10 @@ class ssd1306(device):
             raise luma.core.error.DeviceDisplayModeError(
                 "Unsupported display mode: {0} x {1}".format(width, height))
 
+        self._pages = height // 8
+        self._mask = [1 << (i // width) % 8 for i in range(width * height)]
+        self._offsets = [(width * (i // (width * 8))) + (i % width) for i in range(width * height)]
+
         self.command(
             self._const.DISPLAYOFF,
             self._const.SETDISPLAYCLOCKDIV, settings['displayclockdiv'],
@@ -140,7 +141,7 @@ class ssd1306(device):
             self._const.SETSTARTLINE,
             self._const.CHARGEPUMP,         0x14,
             self._const.MEMORYMODE,         0x00,
-            self._const.SETREMAP,
+            self._const.SETSEGMENTREMAP,
             self._const.COMSCANDEC,
             self._const.SETCOMPINS,         settings['compins'],
             self._const.SETPRECHARGE,       0xF1,
@@ -168,29 +169,17 @@ class ssd1306(device):
             # Page start/end address
             self._const.PAGEADDR, 0x00, self._pages - 1)
 
-        w = self._w
-        pix = list(image.getdata())
-        step = w * 8
-        buf = self._buffer
-        os0, os1, os2, os3, os4, os5, os6, os7 = self._offsets
-        j = 0
-        for y in range(0, self._pages * step, step):
-            i = y + w - 1
-            while i >= y:
-                buf[j] = \
-                    (0x01 if pix[i] > 0 else 0) | \
-                    (0x02 if pix[i + os1] > 0 else 0) | \
-                    (0x04 if pix[i + os2] > 0 else 0) | \
-                    (0x08 if pix[i + os3] > 0 else 0) | \
-                    (0x10 if pix[i + os4] > 0 else 0) | \
-                    (0x20 if pix[i + os5] > 0 else 0) | \
-                    (0x40 if pix[i + os6] > 0 else 0) | \
-                    (0x80 if pix[i + os7] > 0 else 0)
+        buf = bytearray(self._w * self._pages)
+        off = self._offsets
+        mask = self._mask
 
-                i -= 1
-                j += 1
+        idx = 0
+        for pix in image.getdata():
+            if pix > 0:
+                buf[off[idx]] |= mask[idx]
+            idx += 1
 
-        self.data(buf)
+        self.data(list(buf))
 
 
 class ssd1331(device):
