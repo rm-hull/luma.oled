@@ -1,7 +1,7 @@
-`luma.core <https://github.com/rm-hull/luma.core>`_ **|** 
-`luma.examples <https://github.com/rm-hull/luma.examples>`_ **|** 
-`luma.lcd <https://github.com/rm-hull/luma.lcd>`_ **|** 
-`luma.led_matrix <https://github.com/rm-hull/luma.led_matrix>`_ **|** 
+`luma.core <https://github.com/rm-hull/luma.core>`__ **|** 
+`luma.examples <https://github.com/rm-hull/luma.examples>`__ **|** 
+`luma.lcd <https://github.com/rm-hull/luma.lcd>`__ **|** 
+`luma.led_matrix <https://github.com/rm-hull/luma.led_matrix>`__ **|** 
 luma.oled
 
 Luma.OLED: Display drivers for SSD1306 / SSD1325 / SSD1331 / SH1106
