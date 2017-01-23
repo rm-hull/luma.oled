@@ -7,7 +7,7 @@ from setuptools import setup
 README = open(os.path.join(os.path.dirname(__file__), "README.rst")).read()
 CONTRIB = open(os.path.join(os.path.dirname(__file__), "CONTRIBUTING.rst")).read()
 CHANGES = open(os.path.join(os.path.dirname(__file__), "CHANGES.rst")).read()
-version = open(os.path.join(os.path.dirname(__file__), "VERSION.txt")).read()
+version = open(os.path.join(os.path.dirname(__file__), "VERSION.txt")).read().strip()
 
 setup(
     name="luma.oled",
