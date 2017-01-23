@@ -25,12 +25,15 @@ From PyPI
 Install the latest version of the library directly from PyPI_::
 
   $ sudo apt-get install python-dev python-pip libfreetype6-dev libjpeg8-dev libsdl1.2-dev
-  $ sudo pip install --upgrade luma.oled
+  $ sudo -H pip install --upgrade pip
+  $ sudo -H pip install --upgrade luma.oled
 
 From source
 ^^^^^^^^^^^
-For Python 2, from the bash prompt, enter::
+For Python 2, from the bash prompt, enter (for Raspbian, other OSes may be different)::
 
+  $ git clone https://github.com/rm-hull/luma.oled.git
+  $ cd luma.oled
   $ sudo apt-get install python-dev python-pip libfreetype6-dev libjpeg8-dev libsdl1.2-dev
   $ sudo python setup.py install
 
