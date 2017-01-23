@@ -3,7 +3,7 @@
 # Copyright (c) 2014-17 Richard Hull and contributors
 # See LICENSE.rst for details.
 
-# ssd1306 documentation build configuration file, created by
+# luma.oled documentation build configuration file, created by
 # sphinx-quickstart on Wed Oct  5 00:14:54 2016.
 #
 # This file is execfile()d with the current directory set to its
