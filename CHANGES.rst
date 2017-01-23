@@ -5,7 +5,6 @@ ChangeLog
 | Version    | Description                                                         | Date       |
 +============+=====================================================================+============+
 | **2.1.0**  | * Simplify/optimize SSD1306 display logic                           | 2017/01/22 |
-|            | * Moved examples to separate git repo                               |            |
 +------------+---------------------------------------------------------------------+------------+
 | **2.0.1**  | * Moved examples to separate git repo                               | 2017/01/15 |
 |            | * Add notes about breaking changes                                  |            |
