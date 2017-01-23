@@ -151,4 +151,4 @@ or::
 .. note::
    *Pygame* is required to use any of the emulated devices, but it is **NOT**
    installed as a dependency by default, and so must be manually installed
-   before using any of these emulation devices.
+   before using any of these emulation devices (e.g. ``pip install pygame``).
