@@ -3,7 +3,7 @@
 # Copyright (c) 2014-17 Richard Hull and contributors
 # See LICENSE.rst for details.
 
-# ssd1306 documentation build configuration file, created by
+# luma.oled documentation build configuration file, created by
 # sphinx-quickstart on Wed Oct  5 00:14:54 2016.
 #
 # This file is execfile()d with the current directory set to its
@@ -64,9 +64,9 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'Luma.OLED: Dipsplay drivers for SSD1306 / SSD1325 / SSD1331 / SH1106'
-copyright = u'{0}, Richard Hull'.format(datetime.now().year)
-author = 'Richard Hull'
+project = 'Luma.OLED: Display drivers for SSD1306 / SSD1325 / SSD1331 / SH1106'
+author = 'Richard Hull and contributors'
+copyright = u'{0}, {1}'.format(datetime.now().year, author)
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
