@@ -261,6 +261,81 @@ class ssd1331(device):
                      self._const.SETCONTRASTC, level)
 
 
+class ssd1322(device):
+    """
+    Encapsulates the serial interface to the 4-bit greyscale SSD1322 OLED
+    display hardware. On creation, an initialization sequence is pumped to the
+    display to properly configure it. Further control commands can then be
+    called to affect the brightness and other settings.
+    """
+    def __init__(self, serial_interface=None, width=256, height=64, rotate=0):
+        super(ssd1322, self).__init__(luma.oled.const.ssd1322, serial_interface)
+        self.capabilities(width, height, rotate, mode="RGB")
+        self._buffer = [0] * (self._w * self._h // 2)
+
+        if width != 256 or height != 64:
+            raise luma.core.error.DeviceDisplayModeError(
+                "Unsupported display mode: {0} x {1}".format(width, height))
+
+        self.command(
+            0xFD, 0x12,         # Unlock IC
+            0xAE,               # Display off
+            self._const.SETCLOCK, 0xF3,         # Display divide clockratio/freq
+            self._const.SETOFFSET, 0x00,         # Set offset, starting line COM0
+            self._const.SETSTARTLINE, 0x00,         # Set start line
+            0xA0, 0x14, 0x11,   # Set remap, horiz address disable column
+            0xAB, 0x01,         # External VDD
+            self._const.SETPRECHARGECOMP, 0xA0, 0xFD,   # Display enhancement A, external VSL, Enhanced low GS display
+            0xC1, 0xFF,         # Contrast
+            0xC7, 0x0F,         # Master contrast
+            self._const.SETPHASELEN, 0xF0,         # Phase length
+            0xD1, 0x82, 0x20,   # Display enhancement B
+            0xBB, 0x0D,         # Precharge voltage
+            self._const.SETVCOMLEVEL, 0x00,         # VCOMH
+            0xA6,               # Normal Display
+            0xAF)               # Display ON
+
+
+        self.clear()
+        self.show()
+
+    def display(self, image):
+        """
+        Takes a 24-bit RGB :py:mod:`PIL.Image` and dumps it to the SSD1322 OLED
+        display, converting the image pixels to 4-bit greyscale using a
+        simplified Luma calculation, based on *Y'=0.299R'+0.587G'+0.114B'*.
+        """
+        assert(image.mode == self.mode)
+        assert(image.size == self.size)
+
+        image = self.preprocess(image)
+
+        self.command(
+            self._const.SETCOLUMNADDR, 0x00, self._w - 1,
+            self._const.SETROWADDR, 0x00, self._h - 1)
+
+        i = 0
+        buf = self._buffer
+        for r, g, b in image.getdata():
+            # RGB->Greyscale luma calculation into 4-bits
+            grey = (r * 306 + g * 601 + b * 117) >> 14
+
+            if i % 2 == 0:
+                buf[i // 2] = grey
+            else:
+                buf[i // 2] |= (grey << 4)
+
+            i += 1
+
+        self.data(buf)
+
+    def show(self):
+        pass
+
+    def hide(self):
+        pass
+
+
 class ssd1325(device):
     """
     Encapsulates the serial interface to the 4-bit greyscale SSD1325 OLED

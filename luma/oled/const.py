@@ -73,3 +73,6 @@ class ssd1325(common):
     SETPRECHARGEVOLTAGE = 0xBC
     SETVCOMLEVEL = 0xBE
     SETVSL = 0xBF
+
+class ssd1322(ssd1325):
+    pass
