@@ -74,5 +74,8 @@ class ssd1325(common):
     SETVCOMLEVEL = 0xBE
     SETVSL = 0xBF
 
-class ssd1322(ssd1325):
-    pass
+
+class ssd1322(common):
+    DISPLAYON = 0xAF
+    DISPLAYOFF = 0xAE
+    SETCONTRAST = 0xC1

@@ -277,25 +277,26 @@ class ssd1322(device):
             raise luma.core.error.DeviceDisplayModeError(
                 "Unsupported display mode: {0} x {1}".format(width, height))
 
-        self.command(
-            0xFD, 0x12,         # Unlock IC
-            0xAE,               # Display off
-            self._const.SETCLOCK, 0xF3,         # Display divide clockratio/freq
-            self._const.SETOFFSET, 0x00,         # Set offset, starting line COM0
-            self._const.SETSTARTLINE, 0x00,         # Set start line
-            0xA0, 0x14, 0x11,   # Set remap, horiz address disable column
-            0xAB, 0x01,         # External VDD
-            self._const.SETPRECHARGECOMP, 0xA0, 0xFD,   # Display enhancement A, external VSL, Enhanced low GS display
-            0xC1, 0xFF,         # Contrast
-            0xC7, 0x0F,         # Master contrast
-            self._const.SETPHASELEN, 0xF0,         # Phase length
-            0xD1, 0x82, 0x20,   # Display enhancement B
-            0xBB, 0x0D,         # Precharge voltage
-            self._const.SETVCOMLEVEL, 0x00,         # VCOMH
-            0xA6,               # Normal Display
-            0xAF)               # Display ON
+        self.command(0xFD, 0x12)        # Unlock IC
+        self.command(0xB3, 0xD0)        # Display divide clockratio/freq
+        self.command(0xCA, 0x3F)        # Set MUX ratio
+        self.command(0xA2, 0x00)        # Display offset
+        self.command(0xA1, 0x00)        # Display start Line
+        self.command(0xA0, 0x14, 0x11)  # Set remap & dual COM Line
+        self.command(0xB5, 0x00)        # Set GPIO (disabled)
+        self.command(0xAB, 0x01)        # Function select (internal Vdd)
+        self.command(0xB4, 0xA0, 0xB5)  # Display enhancement (External VSL)
+        self.command(0xC7, 0x0F)        # Master contrast (reset)
+        self.command(0xB9)              # Set default greyscale table
+        self.command(0xB1, 0xE2)        # Phase length
+        self.command(0xD1, 0xA2, 0x20)  # Display enhancement (reset)
+        self.command(0xBB, 0x1F)        # Pre-charge voltage
+        self.command(0xB6, 0x08)        # 2nd precharge period
+        self.command(0xBE, 0x07)        # Set VcomH
+        self.command(0xA6)              # Normal display (reset)
+        self.command(0xA9)              # Exit partial display
 
-
+        self.contrast(0x7F)             # Reset
         self.clear()
         self.show()
 
@@ -310,10 +311,9 @@ class ssd1322(device):
 
         image = self.preprocess(image)
 
-        self.command(
-            self._const.SETCOLUMNADDR, 0x00, self._w - 1,
-            self._const.SETROWADDR, 0x00, self._h - 1)
-
+        self.command(0x15, 0x00, 0x77)      # Reset column addr
+        self.command(0x75, 0x00, 0x7F)      # Reset row addr
+        self.command(0x5C)                  # Enable MCU to write data into RAM
         i = 0
         buf = self._buffer
         for r, g, b in image.getdata():
@@ -329,11 +329,15 @@ class ssd1322(device):
 
         self.data(buf)
 
-    def show(self):
-        pass
-
-    def hide(self):
-        pass
+    def command(self, cmd, *args):
+        """
+        Sends a command and an (optional) sequence of arguments through to the
+        delegated serial interface. Note that the arguments are passed through
+        as data.
+        """
+        self._serial_interface.command(cmd)
+        if len(args) > 0:
+            self._serial_interface.data(args)
 
 
 class ssd1325(device):
