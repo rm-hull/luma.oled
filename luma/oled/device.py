@@ -273,26 +273,29 @@ class ssd1322(device):
         self.capabilities(width, height, rotate, mode="RGB")
         self._buffer = [0] * (self._w * self._h // 2)
 
-        if width != 256 or height != 64:
+        if width <= 0 or width > 256 or \
+           height <= 0 or height > 64 or \
+           width % 16 != 0 or height % 16 != 0:
             raise luma.core.error.DeviceDisplayModeError(
                 "Unsupported display mode: {0} x {1}".format(width, height))
 
         self.command(0xFD, 0x12)        # Unlock IC
-        self.command(0xB3, 0xD0)        # Display divide clockratio/freq
+        self.command(0xA4)              # Display off (all pixels off)
+        self.command(0xB3, 0xF2)        # Display divide clockratio/freq
         self.command(0xCA, 0x3F)        # Set MUX ratio
         self.command(0xA2, 0x00)        # Display offset
         self.command(0xA1, 0x00)        # Display start Line
         self.command(0xA0, 0x14, 0x11)  # Set remap & dual COM Line
         self.command(0xB5, 0x00)        # Set GPIO (disabled)
         self.command(0xAB, 0x01)        # Function select (internal Vdd)
-        self.command(0xB4, 0xA0, 0xB5)  # Display enhancement (External VSL)
+        self.command(0xB4, 0xA0, 0xFD)  # Display enhancement A (External VSL)
         self.command(0xC7, 0x0F)        # Master contrast (reset)
         self.command(0xB9)              # Set default greyscale table
-        self.command(0xB1, 0xE2)        # Phase length
-        self.command(0xD1, 0xA2, 0x20)  # Display enhancement (reset)
-        self.command(0xBB, 0x1F)        # Pre-charge voltage
+        self.command(0xB1, 0xF0)        # Phase length
+        self.command(0xD1, 0x82, 0x20)  # Display enhancement B (reset)
+        self.command(0xBB, 0x0D)        # Pre-charge voltage
         self.command(0xB6, 0x08)        # 2nd precharge period
-        self.command(0xBE, 0x07)        # Set VcomH
+        self.command(0xBE, 0x00)        # Set VcomH
         self.command(0xA6)              # Normal display (reset)
         self.command(0xA9)              # Exit partial display
 
@@ -311,7 +314,10 @@ class ssd1322(device):
 
         image = self.preprocess(image)
 
-        self.command(0x15, 0x00, 0x77)      # Reset column addr
+        start = (480 - self._w) // 8
+        end = start + (self._w // 4) - 1
+
+        self.command(0x15, start, end)      # set column addr
         self.command(0x75, 0x00, 0x7F)      # Reset row addr
         self.command(0x5C)                  # Enable MCU to write data into RAM
         i = 0
@@ -321,9 +327,9 @@ class ssd1322(device):
             grey = (r * 306 + g * 601 + b * 117) >> 14
 
             if i % 2 == 0:
-                buf[i // 2] = grey
+                buf[i // 2] = (grey << 4)
             else:
-                buf[i // 2] |= (grey << 4)
+                buf[i // 2] |= grey
 
             i += 1
 
