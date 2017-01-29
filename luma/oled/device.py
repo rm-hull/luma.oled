@@ -271,7 +271,9 @@ class ssd1322(device):
     def __init__(self, serial_interface=None, width=256, height=64, rotate=0):
         super(ssd1322, self).__init__(luma.oled.const.ssd1322, serial_interface)
         self.capabilities(width, height, rotate, mode="RGB")
-        self._buffer = [0] * (self._w * self._h // 2)
+        self._buffer_size = width * height // 2
+        self._coladdr_start = (480 - width) // 8
+        self._coladdr_end = self._coladdr_start + (width // 4) - 1
 
         if width <= 0 or width > 256 or \
            height <= 0 or height > 64 or \
@@ -314,26 +316,25 @@ class ssd1322(device):
 
         image = self.preprocess(image)
 
-        start = (480 - self._w) // 8
-        end = start + (self._w // 4) - 1
-
-        self.command(0x15, start, end)      # set column addr
+        self.command(0x15, self._coladdr_start, self._coladdr_end)  # set column addr
         self.command(0x75, 0x00, 0x7F)      # Reset row addr
         self.command(0x5C)                  # Enable MCU to write data into RAM
+
         i = 0
-        buf = self._buffer
+        buf = bytearray(self._buffer_size)
         for r, g, b in image.getdata():
             # RGB->Greyscale luma calculation into 4-bits
             grey = (r * 306 + g * 601 + b * 117) >> 14
 
-            if i % 2 == 0:
-                buf[i // 2] = (grey << 4)
-            else:
-                buf[i // 2] |= grey
+            if grey > 0:
+                if i % 2 == 0:
+                    buf[i // 2] = (grey << 4)
+                else:
+                    buf[i // 2] |= grey
 
             i += 1
 
-        self.data(buf)
+        self.data(list(buf))
 
     def command(self, cmd, *args):
         """
