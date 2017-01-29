@@ -19,6 +19,9 @@ and will fit neatly inside the RPi case.
 .. image:: images/mounted_display.jpg
    :alt: mounted
 
+.. image:: images/ssd1322.jpg
+   :alt: ssd1322
+
 .. seealso::
    Further technical information for the specific devices can be found in the
    datasheets below: 

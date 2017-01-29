@@ -45,6 +45,9 @@ and will fit neatly inside the RPi case.
 .. image:: https://raw.githubusercontent.com/rm-hull/luma.oled/master/doc/images/mounted_display.jpg
    :alt: mounted
 
+.. image:: https://raw.githubusercontent.com/rm-hull/luma.oled/master/doc/images/ssd1322.jpg
+   :alt: ssd1322
+
 As well as display drivers for various physical OLED devices, there are
 emulators that run in real-time (with pygame) and others that can take
 screenshots, or assemble animated GIFs, as per the examples below (source code
