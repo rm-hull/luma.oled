@@ -64,7 +64,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'Luma.OLED: Display drivers for SSD1306 / SSD1325 / SSD1331 / SH1106'
+project = 'Luma.OLED: Display drivers for SSD1306 / SSD1322 / SSD1325 / SSD1331 / SH1106'
 author = 'Richard Hull and contributors'
 copyright = u'{0}, {1}'.format(datetime.now().year, author)
 

@@ -75,5 +75,4 @@ def test_display():
     serial.data.assert_called()
     serial.command.assert_called()
 
-    print(recordings)
     assert recordings == baseline_data.demo_sh1106

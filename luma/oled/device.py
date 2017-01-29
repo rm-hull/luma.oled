@@ -261,6 +261,92 @@ class ssd1331(device):
                      self._const.SETCONTRASTC, level)
 
 
+class ssd1322(device):
+    """
+    Encapsulates the serial interface to the 4-bit greyscale SSD1322 OLED
+    display hardware. On creation, an initialization sequence is pumped to the
+    display to properly configure it. Further control commands can then be
+    called to affect the brightness and other settings.
+    """
+    def __init__(self, serial_interface=None, width=256, height=64, rotate=0):
+        super(ssd1322, self).__init__(luma.oled.const.ssd1322, serial_interface)
+        self.capabilities(width, height, rotate, mode="RGB")
+        self._buffer_size = width * height // 2
+        self._coladdr_start = (480 - width) // 8
+        self._coladdr_end = self._coladdr_start + (width // 4) - 1
+
+        if width <= 0 or width > 256 or \
+           height <= 0 or height > 64 or \
+           width % 16 != 0 or height % 16 != 0:
+            raise luma.core.error.DeviceDisplayModeError(
+                "Unsupported display mode: {0} x {1}".format(width, height))
+
+        self.command(0xFD, 0x12)        # Unlock IC
+        self.command(0xA4)              # Display off (all pixels off)
+        self.command(0xB3, 0xF2)        # Display divide clockratio/freq
+        self.command(0xCA, 0x3F)        # Set MUX ratio
+        self.command(0xA2, 0x00)        # Display offset
+        self.command(0xA1, 0x00)        # Display start Line
+        self.command(0xA0, 0x14, 0x11)  # Set remap & dual COM Line
+        self.command(0xB5, 0x00)        # Set GPIO (disabled)
+        self.command(0xAB, 0x01)        # Function select (internal Vdd)
+        self.command(0xB4, 0xA0, 0xFD)  # Display enhancement A (External VSL)
+        self.command(0xC7, 0x0F)        # Master contrast (reset)
+        self.command(0xB9)              # Set default greyscale table
+        self.command(0xB1, 0xF0)        # Phase length
+        self.command(0xD1, 0x82, 0x20)  # Display enhancement B (reset)
+        self.command(0xBB, 0x0D)        # Pre-charge voltage
+        self.command(0xB6, 0x08)        # 2nd precharge period
+        self.command(0xBE, 0x00)        # Set VcomH
+        self.command(0xA6)              # Normal display (reset)
+        self.command(0xA9)              # Exit partial display
+
+        self.contrast(0x7F)             # Reset
+        self.clear()
+        self.show()
+
+    def display(self, image):
+        """
+        Takes a 24-bit RGB :py:mod:`PIL.Image` and dumps it to the SSD1322 OLED
+        display, converting the image pixels to 4-bit greyscale using a
+        simplified Luma calculation, based on *Y'=0.299R'+0.587G'+0.114B'*.
+        """
+        assert(image.mode == self.mode)
+        assert(image.size == self.size)
+
+        image = self.preprocess(image)
+
+        self.command(0x15, self._coladdr_start, self._coladdr_end)  # set column addr
+        self.command(0x75, 0x00, 0x7F)      # Reset row addr
+        self.command(0x5C)                  # Enable MCU to write data into RAM
+
+        i = 0
+        buf = bytearray(self._buffer_size)
+        for r, g, b in image.getdata():
+            # RGB->Greyscale luma calculation into 4-bits
+            grey = (r * 306 + g * 601 + b * 117) >> 14
+
+            if grey > 0:
+                if i % 2 == 0:
+                    buf[i // 2] = (grey << 4)
+                else:
+                    buf[i // 2] |= grey
+
+            i += 1
+
+        self.data(list(buf))
+
+    def command(self, cmd, *args):
+        """
+        Sends a command and an (optional) sequence of arguments through to the
+        delegated serial interface. Note that the arguments are passed through
+        as data.
+        """
+        self._serial_interface.command(cmd)
+        if len(args) > 0:
+            self._serial_interface.data(list(args))
+
+
 class ssd1325(device):
     """
     Encapsulates the serial interface to the 4-bit greyscale SSD1325 OLED

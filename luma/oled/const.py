@@ -73,3 +73,9 @@ class ssd1325(common):
     SETPRECHARGEVOLTAGE = 0xBC
     SETVCOMLEVEL = 0xBE
     SETVSL = 0xBF
+
+
+class ssd1322(common):
+    DISPLAYON = 0xAF
+    DISPLAYOFF = 0xAE
+    SETCONTRAST = 0xC1
