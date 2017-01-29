@@ -60,3 +60,4 @@ target/
 
 # OSX
 .DS_Store
+.AppleDouble
