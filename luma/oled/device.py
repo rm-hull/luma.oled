@@ -344,7 +344,7 @@ class ssd1322(device):
         """
         self._serial_interface.command(cmd)
         if len(args) > 0:
-            self._serial_interface.data(args)
+            self._serial_interface.data(list(args))
 
 
 class ssd1325(device):
