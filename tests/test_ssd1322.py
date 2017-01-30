@@ -36,10 +36,8 @@ def test_init_256x64():
 
     ssd1322(serial)
 
-    # FIXME: these asserts fail on py35 only.
-    # See also: failshttps://github.com/rm-hull/luma.led_matrix/issues/70
-    # serial.data.assert_called()
-    # serial.command.assert_called()
+    assert serial.data.called
+    assert serial.command.called
 
     assert recordings == [
         {'command': [253]}, {'data': [18]},
@@ -108,10 +106,8 @@ def test_display():
     with canvas(device) as draw:
         baseline_data.primitives(device, draw)
 
-    # FIXME: these asserts fail on py35 only.
-    # See also: failshttps://github.com/rm-hull/luma.led_matrix/issues/70
-    # serial.data.assert_called()
-    # serial.command.assert_called()
+    assert serial.data.called
+    assert serial.command.called
 
     assert recordings == [
         {'command': [21]}, {'data': [28, 91]},
