@@ -192,7 +192,7 @@ class ssd1331(device):
     def __init__(self, serial_interface=None, width=96, height=64, rotate=0):
         super(ssd1331, self).__init__(luma.oled.const.ssd1331, serial_interface)
         self.capabilities(width, height, rotate, mode="RGB")
-        self._buffer = [0] * self._w * self._h * 2
+        self._buffer_size = width * height * 2
 
         if width != 96 or height != 64:
             raise luma.core.error.DeviceDisplayModeError(
@@ -235,14 +235,15 @@ class ssd1331(device):
             self._const.SETROWADDR, 0x00, self._h - 1)
 
         i = 0
-        buf = self._buffer
+        buf = bytearray(self._buffer_size)
         for r, g, b in image.getdata():
-            # 65K format 1
-            buf[i] = r & 0xF8 | g >> 5
-            buf[i + 1] = g << 5 & 0xE0 | b >> 3
+            if not(r == g == b == 0):
+                # 65K format 1
+                buf[i] = r & 0xF8 | g >> 5
+                buf[i + 1] = g << 5 & 0xE0 | b >> 3
             i += 2
 
-        self.data(buf)
+        self.data(list(buf))
 
     def contrast(self, level):
         """

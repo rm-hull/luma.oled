@@ -5,6 +5,7 @@ ChangeLog
 | Version    | Description                                                         | Date       |
 +============+=====================================================================+============+
 | *Upcoming* | * SSD1325 performance improvements (perfloop: 25.50 --> 34.31 FPS)  |            |
+|            | * SSD1331 performance improvements (perfloop: 34.64 --> 51.89 FPS)  |            |
 +------------+---------------------------------------------------------------------+------------+
 | **2.2.1**  | * Support for 256x64 4-bit greyscale OLED (SSD1322)                 | 2017/01/29 |
 |            | * Improved API documentation (shows inherited members)              |            |
