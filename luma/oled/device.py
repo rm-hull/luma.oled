@@ -357,7 +357,7 @@ class ssd1325(device):
     def __init__(self, serial_interface=None, width=128, height=64, rotate=0):
         super(ssd1325, self).__init__(luma.oled.const.ssd1325, serial_interface)
         self.capabilities(width, height, rotate, mode="RGB")
-        self._buffer = [0] * (self._w * self._h // 2)
+        self._buffer_size = width * height // 2
 
         if width != 128 or height != 64:
             raise luma.core.error.DeviceDisplayModeError(
@@ -404,16 +404,17 @@ class ssd1325(device):
             self._const.SETROWADDR, 0x00, self._h - 1)
 
         i = 0
-        buf = self._buffer
+        buf = bytearray(self._buffer_size)
         for r, g, b in image.getdata():
             # RGB->Greyscale luma calculation into 4-bits
             grey = (r * 306 + g * 601 + b * 117) >> 14
 
-            if i % 2 == 0:
-                buf[i // 2] = grey
-            else:
-                buf[i // 2] |= (grey << 4)
+            if grey > 0:
+                if i % 2 == 0:
+                    buf[i // 2] = grey
+                else:
+                    buf[i // 2] |= (grey << 4)
 
             i += 1
 
-        self.data(buf)
+        self.data(list(buf))
