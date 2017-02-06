@@ -11,6 +11,7 @@ levels high.
 GitHub
 ^^^^^^
 The source code is available to clone at: https://github.com/rm-hull/luma.oled
+
 Contributors
 ^^^^^^^^^^^^
 * Thijs Triemstra (@thijstriemstra)
