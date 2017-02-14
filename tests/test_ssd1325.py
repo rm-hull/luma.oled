@@ -57,8 +57,8 @@ def test_show():
     serial.command.assert_called_once_with(175)
 
 
-def test_display():
-    device = ssd1325(serial)
+def test_greyscale_display():
+    device = ssd1325(serial, mode="RGB")
     serial.reset_mock()
 
     # Use the same drawing primitives as the demo
@@ -69,4 +69,19 @@ def test_display():
     serial.command.assert_called_once_with(21, 0, 127, 117, 0, 63)
 
     # Next 4096 bytes are data representing the drawn image
-    serial.data.assert_called_once_with(baseline_data.demo_ssd1325)
+    serial.data.assert_called_once_with(baseline_data.demo_ssd1325_greyscale)
+
+
+def test_monochrome_display():
+    device = ssd1325(serial, mode="1")
+    serial.reset_mock()
+
+    # Use the same drawing primitives as the demo
+    with canvas(device) as draw:
+        baseline_data.primitives(device, draw)
+
+    # Initial command to reset the display
+    serial.command.assert_called_once_with(21, 0, 127, 117, 0, 63)
+
+    # Next 4096 bytes are data representing the drawn image
+    serial.data.assert_called_once_with(baseline_data.demo_ssd1325_monochrome)

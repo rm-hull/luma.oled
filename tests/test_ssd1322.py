@@ -87,8 +87,8 @@ def test_show():
     serial.command.assert_called_once_with(175)
 
 
-def test_display():
-    device = ssd1322(serial)
+def test_greyscale_display():
+    device = ssd1322(serial, mode="RGB")
     serial.reset_mock()
 
     recordings = []
@@ -112,5 +112,34 @@ def test_display():
     assert recordings == [
         {'command': [21]}, {'data': [28, 91]},
         {'command': [117]}, {'data': [0, 127]},
-        {'command': [92]}, {'data': baseline_data.demo_ssd1322}
+        {'command': [92]}, {'data': baseline_data.demo_ssd1322_greyscale}
+    ]
+
+
+def test_monochrome_display():
+    device = ssd1322(serial, mode="1")
+    serial.reset_mock()
+
+    recordings = []
+
+    def data(data):
+        recordings.append({'data': data})
+
+    def command(*cmd):
+        recordings.append({'command': list(cmd)})
+
+    serial.command.side_effect = command
+    serial.data.side_effect = data
+
+    # Use the same drawing primitives as the demo
+    with canvas(device) as draw:
+        baseline_data.primitives(device, draw)
+
+    assert serial.data.called
+    assert serial.command.called
+
+    assert recordings == [
+        {'command': [21]}, {'data': [28, 91]},
+        {'command': [117]}, {'data': [0, 127]},
+        {'command': [92]}, {'data': baseline_data.demo_ssd1322_monochrome}
     ]

@@ -42,7 +42,7 @@ class sh1106(device):
     to properly configure it. Further control commands can then be called to
     affect the brightness and other settings.
     """
-    def __init__(self, serial_interface=None, width=128, height=64, rotate=0):
+    def __init__(self, serial_interface=None, width=128, height=64, rotate=0, **kwargs):
         super(sh1106, self).__init__(luma.oled.const.sh1106, serial_interface)
         self.capabilities(width, height, rotate)
         self._pages = self._h // 8
@@ -114,7 +114,7 @@ class ssd1306(device):
     to properly configure it. Further control commands can then be called to
     affect the brightness and other settings.
     """
-    def __init__(self, serial_interface=None, width=128, height=64, rotate=0):
+    def __init__(self, serial_interface=None, width=128, height=64, rotate=0, **kwargs):
         super(ssd1306, self).__init__(luma.oled.const.ssd1306, serial_interface)
         self.capabilities(width, height, rotate)
 
@@ -189,7 +189,7 @@ class ssd1331(device):
     the display to properly configure it. Further control commands can then be
     called to affect the brightness and other settings.
     """
-    def __init__(self, serial_interface=None, width=96, height=64, rotate=0):
+    def __init__(self, serial_interface=None, width=96, height=64, rotate=0, **kwargs):
         super(ssd1331, self).__init__(luma.oled.const.ssd1331, serial_interface)
         self.capabilities(width, height, rotate, mode="RGB")
         self._buffer_size = width * height * 2
@@ -269,9 +269,10 @@ class ssd1322(device):
     display to properly configure it. Further control commands can then be
     called to affect the brightness and other settings.
     """
-    def __init__(self, serial_interface=None, width=256, height=64, rotate=0):
+    def __init__(self, serial_interface=None, width=256, height=64, rotate=0,
+                 mode="RGB", **kwargs):
         super(ssd1322, self).__init__(luma.oled.const.ssd1322, serial_interface)
-        self.capabilities(width, height, rotate, mode="RGB")
+        self.capabilities(width, height, rotate, mode)
         self._buffer_size = width * height // 2
         self._coladdr_start = (480 - width) // 8
         self._coladdr_end = self._coladdr_start + (width // 4) - 1
@@ -306,23 +307,19 @@ class ssd1322(device):
         self.clear()
         self.show()
 
-    def display(self, image):
-        """
-        Takes a 24-bit RGB :py:mod:`PIL.Image` and dumps it to the SSD1322 OLED
-        display, converting the image pixels to 4-bit greyscale using a
-        simplified Luma calculation, based on *Y'=0.299R'+0.587G'+0.114B'*.
-        """
-        assert(image.mode == self.mode)
-        assert(image.size == self.size)
-
-        image = self.preprocess(image)
-
-        self.command(0x15, self._coladdr_start, self._coladdr_end)  # set column addr
-        self.command(0x75, 0x00, 0x7F)      # Reset row addr
-        self.command(0x5C)                  # Enable MCU to write data into RAM
-
+    def _render_mono(self, buf, image):
         i = 0
-        buf = bytearray(self._buffer_size)
+        for pix in image.getdata():
+            if pix > 0:
+                if i % 2 == 0:
+                    buf[i // 2] = 0xF0
+                else:
+                    buf[i // 2] |= 0x0F
+
+            i += 1
+
+    def _render_greyscale(self, buf, image):
+        i = 0
         for r, g, b in image.getdata():
             # RGB->Greyscale luma calculation into 4-bits
             grey = (r * 306 + g * 601 + b * 117) >> 14
@@ -334,6 +331,29 @@ class ssd1322(device):
                     buf[i // 2] |= grey
 
             i += 1
+
+    def display(self, image):
+        """
+        Takes a 1-bit monochrome or 24-bit RGB :py:mod:`PIL.Image` and dumps it
+        to the SSD1322 OLED display, converting the image pixels to 4-bit
+        greyscale using a simplified Luma calculation, based on
+        *Y'=0.299R'+0.587G'+0.114B'*.
+        """
+        assert(image.mode == self.mode)
+        assert(image.size == self.size)
+
+        image = self.preprocess(image)
+
+        self.command(0x15, self._coladdr_start, self._coladdr_end)  # set column addr
+        self.command(0x75, 0x00, 0x7F)      # Reset row addr
+        self.command(0x5C)                  # Enable MCU to write data into RAM
+
+        buf = bytearray(self._buffer_size)
+
+        if self.mode == "1":
+            self._render_mono(buf, image)
+        else:
+            self._render_greyscale(buf, image)
 
         self.data(list(buf))
 
@@ -355,9 +375,10 @@ class ssd1325(device):
     display to properly configure it. Further control commands can then be
     called to affect the brightness and other settings.
     """
-    def __init__(self, serial_interface=None, width=128, height=64, rotate=0):
+    def __init__(self, serial_interface=None, width=128, height=64, rotate=0,
+                 mode="RGB", **kwargs):
         super(ssd1325, self).__init__(luma.oled.const.ssd1325, serial_interface)
-        self.capabilities(width, height, rotate, mode="RGB")
+        self.capabilities(width, height, rotate, mode)
         self._buffer_size = width * height // 2
 
         if width != 128 or height != 64:
@@ -389,23 +410,19 @@ class ssd1325(device):
         self.clear()
         self.show()
 
-    def display(self, image):
-        """
-        Takes a 24-bit RGB :py:mod:`PIL.Image` and dumps it to the SSD1325 OLED
-        display, converting the image pixels to 4-bit greyscale using a
-        simplified Luma calculation, based on *Y'=0.299R'+0.587G'+0.114B'*.
-        """
-        assert(image.mode == self.mode)
-        assert(image.size == self.size)
-
-        image = self.preprocess(image)
-
-        self.command(
-            self._const.SETCOLUMNADDR, 0x00, self._w - 1,
-            self._const.SETROWADDR, 0x00, self._h - 1)
-
+    def _render_mono(self, buf, image):
         i = 0
-        buf = bytearray(self._buffer_size)
+        for pix in image.getdata():
+            if pix > 0:
+                if i % 2 == 0:
+                    buf[i // 2] = 0x0F
+                else:
+                    buf[i // 2] |= 0xF0
+
+            i += 1
+
+    def _render_greyscale(self, buf, image):
+        i = 0
         for r, g, b in image.getdata():
             # RGB->Greyscale luma calculation into 4-bits
             grey = (r * 306 + g * 601 + b * 117) >> 14
@@ -417,5 +434,28 @@ class ssd1325(device):
                     buf[i // 2] |= (grey << 4)
 
             i += 1
+
+    def display(self, image):
+        """
+        Takes a 1-bit monochrome or 24-bit RGB :py:mod:`PIL.Image` and dumps it
+        to the SSD1325 OLED display, converting the image pixels to 4-bit
+        greyscale using a simplified Luma calculation, based on
+        *Y'=0.299R'+0.587G'+0.114B'*.
+        """
+        assert(image.mode == self.mode)
+        assert(image.size == self.size)
+
+        image = self.preprocess(image)
+
+        self.command(
+            self._const.SETCOLUMNADDR, 0x00, self._w - 1,
+            self._const.SETROWADDR, 0x00, self._h - 1)
+
+        buf = bytearray(self._buffer_size)
+
+        if self.mode == "1":
+            self._render_mono(buf, image)
+        else:
+            self._render_greyscale(buf, image)
 
         self.data(list(buf))
