@@ -231,8 +231,8 @@ class ssd1331(device):
         image = self.preprocess(image)
 
         self.command(
-            self._const.SETCOLUMNADDR, 0x00, self._w - 1,
-            self._const.SETROWADDR, 0x00, self._h - 1)
+            0x15, 0x00, self._w - 1,    # Set column addr
+            0x75, 0x00, self._h - 1)    # Set row addr
 
         i = 0
         buf = bytearray(self._buffer_size)
@@ -377,7 +377,7 @@ class ssd1325(device):
     """
     def __init__(self, serial_interface=None, width=128, height=64, rotate=0,
                  mode="RGB", **kwargs):
-        super(ssd1325, self).__init__(luma.oled.const.ssd1325, serial_interface)
+        super(ssd1325, self).__init__(luma.core.const.common, serial_interface)
         self.capabilities(width, height, rotate, mode)
         self._buffer_size = width * height // 2
 
@@ -386,27 +386,27 @@ class ssd1325(device):
                 "Unsupported display mode: {0} x {1}".format(width, height))
 
         self.command(
-            self._const.DISPLAYOFF,
-            self._const.SETCLOCK,               0xF1,
-            self._const.SETMULTIPLEX,           0x3F,
-            self._const.SETOFFSET,              0x4C,
-            self._const.SETSTARTLINE,           0x00,
-            self._const.MASTERCONFIG,           0x02,
-            self._const.SETREMAP,               0x50,
-            self._const.SETCURRENT + 2,
-            self._const.SETGRAYTABLE,           0x01, 0x11, 0x22, 0x32, 0x43, 0x54, 0x65, 0x76)
+            0xAE,               # Diplay off (all pixels off)
+            0xB3, 0xF2,         # Display divide clockratio/freq
+            0xA8, 0x3F,         # Set MUX ratio
+            0xA2, 0x4C,         # Display offset
+            0xA1, 0x00,         # Display start line
+            0xAD, 0x02,         # Master configuration (external Vcc)
+            0xA0, 0x50,         # Set remap (enable COM remap & split odd/even)
+            0x86,               # Set current range (full)
+            0xB8, 0x01, 0x11,   # Set greyscale table
+            0x22, 0x32, 0x43,   # .. cont
+            0x54, 0x65, 0x76,   # .. cont
+            0xB2, 0x51,         # Set row period
+            0xB1, 0x55,         # Set phase length
+            0xB4, 0x03,         # Set pre-charge compensation level
+            0xB0, 0x28,         # Set pre-charge compensation enable
+            0xBC, 0x01,         # Pre-charge voltage
+            0xBE, 0x00,         # Set VcomH
+            0xBF, 0x02,         # Set VSL (not connected)
+            0xA4)               # Normal dislay
 
-        self.contrast(0xFF)
-
-        self.command(
-            self._const.SETROWPERIOD,           0x51,
-            self._const.SETPHASELEN,            0x55,
-            self._const.SETPRECHARGECOMP,       0x02,
-            self._const.SETPRECHARGECOMPENABLE, 0x28,
-            self._const.SETVCOMLEVEL,           0x1C,
-            self._const.SETVSL,                 0x0F,
-            self._const.NORMALDISPLAY)
-
+        self.contrast(0x7F)
         self.clear()
         self.show()
 
@@ -448,8 +448,8 @@ class ssd1325(device):
         image = self.preprocess(image)
 
         self.command(
-            self._const.SETCOLUMNADDR, 0x00, self._w - 1,
-            self._const.SETROWADDR, 0x00, self._h - 1)
+            0x15, 0x00, self._w - 1,  # set column addr
+            0x75, 0x00, self._h - 1)  # set row addr
 
         buf = bytearray(self._buffer_size)
 
