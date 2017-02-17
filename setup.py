@@ -27,7 +27,7 @@ setup(
     namespace_packages=["luma"],
     packages=["luma.oled"],
     zip_safe=False,
-    install_requires=["luma.core"],
+    install_requires=["luma.core>=0.2.0"],
     setup_requires=["pytest-runner"],
     tests_require=["mock", "pytest", "pytest-cov", "python-coveralls"],
     classifiers=[
