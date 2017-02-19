@@ -33,16 +33,6 @@ Breaking changes
     :undoc-members:
     :show-inheritance:
 
-
-:mod:`luma.core.emulator`
-"""""""""""""""""""""""""
-.. automodule:: luma.core.emulator
-    :members:
-    :inherited-members:
-    :undoc-members:
-    :show-inheritance:
-
-
 :mod:`luma.core.error`
 """"""""""""""""""""""
 .. automodule:: luma.core.error
@@ -51,6 +41,19 @@ Breaking changes
     :undoc-members:
     :show-inheritance:
 
+:mod:`luma.core.legacy`
+"""""""""""""""""""""""
+.. automodule:: luma.core.legacy
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`luma.core.legacy.font`
+""""""""""""""""""""""""""""
+.. automodule:: luma.core.legacy.font
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
 :mod:`luma.core.mixin`
 """"""""""""""""""""""
@@ -60,7 +63,6 @@ Breaking changes
     :undoc-members:
     :show-inheritance:
 
-
 :mod:`luma.core.render`
 """""""""""""""""""""""
 .. automodule:: luma.core.render
@@ -68,7 +70,6 @@ Breaking changes
     :inherited-members:
     :undoc-members:
     :show-inheritance:
-
 
 :mod:`luma.core.serial`
 """""""""""""""""""""""
@@ -78,7 +79,6 @@ Breaking changes
     :undoc-members:
     :show-inheritance:
 
-
 :mod:`luma.core.threadpool`
 """""""""""""""""""""""""""
 .. automodule:: luma.core.threadpool
@@ -87,7 +87,6 @@ Breaking changes
     :undoc-members:
     :show-inheritance:
 
-
 :mod:`luma.core.virtual`
 """"""""""""""""""""""""
 .. automodule:: luma.core.virtual
@@ -95,7 +94,6 @@ Breaking changes
     :inherited-members:
     :undoc-members:
     :show-inheritance:
-
 
 :mod:`luma.oled.device`
 """""""""""""""""""""""
