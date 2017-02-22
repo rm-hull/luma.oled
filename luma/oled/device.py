@@ -190,7 +190,7 @@ class ssd1331(device):
     called to affect the brightness and other settings.
     """
     def __init__(self, serial_interface=None, width=96, height=64, rotate=0, **kwargs):
-        super(ssd1331, self).__init__(luma.oled.const.ssd1331, serial_interface)
+        super(ssd1331, self).__init__(luma.oled.const.common, serial_interface)
         self.capabilities(width, height, rotate, mode="RGB")
         self._buffer_size = width * height * 2
 
@@ -199,22 +199,22 @@ class ssd1331(device):
                 "Unsupported display mode: {0} x {1}".format(width, height))
 
         self.command(
-            self._const.DISPLAYOFF,
-            self._const.SETREMAP,             0x72,
-            self._const.SETDISPLAYSTARTLINE,  0x00,
-            self._const.SETDISPLAYOFFSET,     0x00,
-            self._const.NORMALDISPLAY,
-            self._const.SETMULTIPLEX,         0x3F,
-            self._const.SETMASTERCONFIGURE,   0x8E,
-            self._const.POWERSAVEMODE,        0x0B,
-            self._const.PHASE12PERIOD,        0x74,
-            self._const.CLOCKDIVIDER,         0xD0,
-            self._const.SETPRECHARGESPEEDA,   0x80,
-            self._const.SETPRECHARGESPEEDB,   0x80,
-            self._const.SETPRECHARGESPEEDC,   0x80,
-            self._const.SETPRECHARGEVOLTAGE,  0x3E,
-            self._const.SETVVOLTAGE,          0x3E,
-            self._const.MASTERCURRENTCONTROL, 0x0F)
+            0xAE,        # Display off
+            0xA0, 0x72,  # Seg remap
+            0xA1, 0x00,  # Set Display start line
+            0xA2, 0x00,  # Set display offset
+            0xA4,        # Normal display
+            0xA8, 0x3F,  # Set multiplex
+            0xAD, 0x8E,  # Master configure
+            0xB0, 0x0B,  # Power save mode
+            0xB1, 0x74,  # Phase12 period
+            0xB3, 0xD0,  # Clock divider
+            0x8A, 0x80,  # Set precharge speed A
+            0x8B, 0x80,  # Set precharge speed B
+            0x8C, 0x80,  # Set precharge speed C
+            0xBB, 0x3E,  # Set pre-charge voltage
+            0xBE, 0x3E,  # Set voltage
+            0x87, 0x0F)  # Master current control
 
         self.contrast(0xFF)
         self.clear()
@@ -255,11 +255,10 @@ class ssd1331(device):
         :param level: Desired contrast level in the range of 0-255.
         :type level: int
         """
-        assert(level >= 0)
-        assert(level <= 255)
-        self.command(self._const.SETCONTRASTA, level,
-                     self._const.SETCONTRASTB, level,
-                     self._const.SETCONTRASTC, level)
+        assert(0 <= level <= 255)
+        self.command(0x81, level,  # Set contrast A
+                     0x82, level,  # Set contrast B
+                     0x83, level)  # Set contrast C
 
 
 class ssd1322(device):
