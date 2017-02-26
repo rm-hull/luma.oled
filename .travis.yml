@@ -1,4 +1,4 @@
-sudo: true
+sudo: false
 language: python
 cache: pip
 
@@ -18,17 +18,6 @@ matrix:
           env: TOXENV=qa
     allow_failures:
         - python: 3.7-dev
-addons:
-  apt:
-    packages:
-    - libsdl1.2-dev
-    - libsdl-image1.2-dev
-    - libsdl-mixer1.2-dev
-    - libsdl-ttf2.0-dev
-    - libportmidi-dev
-    - libfreetype6-dev
-    - libjpeg8-dev
-    - i2c-tools
 
 install: pip install -U pip tox coveralls
 script: tox -vv
