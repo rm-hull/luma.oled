@@ -32,8 +32,8 @@
 
 from luma.core.device import device
 import luma.core.error
+import luma.core.framebuffer
 import luma.oled.const
-from luma.oled import framebuffer
 
 
 class sh1106(device):
@@ -189,12 +189,27 @@ class ssd1331(device):
     OLED display hardware. On creation, an initialization sequence is pumped to
     the display to properly configure it. Further control commands can then be
     called to affect the brightness and other settings.
+
+    :param serial_interface: the serial interface (usually a
+        :py:class`luma.core.serial.spi` instance) to delegate sending data and
+        commands through.
+    :param width: the number of horizontal pixels (optional, defaults to 96)
+    :type width: int
+    :param height: the number of vertical pixels (optional, defaults to 64)
+    :type height: int
+    :param rotate: an integer value of 0 (default), 1, 2 or 3 only, where 0 is
+        no rotation, 1 is rotate 90° clockwise, 2 is 180° rotation and 3
+        represents 270° rotation.
+    :type rotate: int
+    :param framebuffer: Framebuffering strategy, currently values of
+        "diff_to_previous" or "full_frame" are only supported
+    :param framebuffer: str
     """
-    def __init__(self, serial_interface=None, width=96, height=64, rotate=0, **kwargs):
+    def __init__(self, serial_interface=None, width=96, height=64, rotate=0,
+                 framebuffer="diff_to_previous", **kwargs):
         super(ssd1331, self).__init__(luma.oled.const.common, serial_interface)
         self.capabilities(width, height, rotate, mode="RGB")
-        self.framebuf = framebuffer.full_frame(self)
-        # self.framebuf = framebuffer.diff_to_previous(self)
+        self.framebuffer = getattr(luma.core.framebuffer, framebuffer)(self)
 
         if width != 96 or height != 64:
             raise luma.core.error.DeviceDisplayModeError(
@@ -224,17 +239,18 @@ class ssd1331(device):
 
     def display(self, image):
         """
-        Takes a 24-bit RGB :py:mod:`PIL.Image` and dumps it to the SSD1331 OLED
-        display.
+        Renders a 24-bit RGB image to the SSD1331 OLED display
+
+        :param image: the image to render
+        :type image: PIL.Image.Image
         """
         assert(image.mode == self.mode)
         assert(image.size == self.size)
 
         image = self.preprocess(image)
 
-        self.framebuf.calc(image)
-        if self.framebuf.bbox is not None:
-            left, top, right, bottom = self.framebuf.bbox
+        if self.framebuffer.redraw_required(image):
+            left, top, right, bottom = self.framebuffer.bounding_box
             width = right - left
             height = bottom - top
 
@@ -244,7 +260,7 @@ class ssd1331(device):
 
             i = 0
             buf = bytearray(width * height * 2)
-            for r, g, b in self.framebuf.getdata():
+            for r, g, b in self.framebuffer.getdata():
                 if not(r == g == b == 0):
                     # 65K format 1
                     buf[i] = r & 0xF8 | g >> 5
