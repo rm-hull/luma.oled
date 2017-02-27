@@ -40,6 +40,11 @@ setup(
     install_requires=["luma.core>=0.2.0"],
     setup_requires=pytest_runner,
     tests_require=["mock", "pytest", "pytest-cov", "python-coveralls"],
+    extras_require={
+        'docs': [
+            'sphinx >= 1.5.1'
+        ]
+    },
     classifiers=[
         "License :: OSI Approved :: MIT License",
         "Development Status :: 5 - Production/Stable",
