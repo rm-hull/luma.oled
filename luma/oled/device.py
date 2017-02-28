@@ -291,14 +291,33 @@ class ssd1322(device):
     display hardware. On creation, an initialization sequence is pumped to the
     display to properly configure it. Further control commands can then be
     called to affect the brightness and other settings.
+
+    :param serial_interface: the serial interface (usually a
+       :py:class`luma.core.serial.spi` instance) to delegate sending data and
+        commands through.
+    :param width: the number of horizontal pixels (optional, defaults to 96)
+    :type width: int
+    :param height: the number of vertical pixels (optional, defaults to 64)
+    :type height: int
+    :param rotate: an integer value of 0 (default), 1, 2 or 3 only, where 0 is
+        no rotation, 1 is rotate 90° clockwise, 2 is 180° rotation and 3
+        represents 270° rotation.
+    :type rotate: int
+    :param mode: Supplying "1" or "RGB" effects a different rendering
+         mechanism, either to monochrome or 4-bit greyscale.
+    :type mode: str
+    :param framebuffer: Framebuffering strategy, currently values of
+        "diff_to_previous" or "full_frame" are only supported
+    :param framebuffer: str
+
     """
     def __init__(self, serial_interface=None, width=256, height=64, rotate=0,
-                 mode="RGB", **kwargs):
+                 mode="RGB", framebuffer="diff_to_previous", **kwargs):
         super(ssd1322, self).__init__(luma.oled.const.ssd1322, serial_interface)
         self.capabilities(width, height, rotate, mode)
-        self._buffer_size = width * height // 2
-        self._coladdr_start = (480 - width) // 8
-        self._coladdr_end = self._coladdr_start + (width // 4) - 1
+        self.framebuffer = getattr(luma.core.framebuffer, framebuffer)(self)
+        self.populate = self._render_mono if mode == "1" else self._render_greyscale
+        self.column_offset = (480 - width) // 2
 
         if width <= 0 or width > 256 or \
            height <= 0 or height > 64 or \
@@ -330,9 +349,9 @@ class ssd1322(device):
         self.clear()
         self.show()
 
-    def _render_mono(self, buf, image):
+    def _render_mono(self, buf, pixel_data):
         i = 0
-        for pix in image.getdata():
+        for pix in pixel_data:
             if pix > 0:
                 if i % 2 == 0:
                     buf[i // 2] = 0xF0
@@ -341,9 +360,9 @@ class ssd1322(device):
 
             i += 1
 
-    def _render_greyscale(self, buf, image):
+    def _render_greyscale(self, buf, pixel_data):
         i = 0
-        for r, g, b in image.getdata():
+        for r, g, b in pixel_data:
             # RGB->Greyscale luma calculation into 4-bits
             grey = (r * 306 + g * 601 + b * 117) >> 14
 
@@ -357,28 +376,36 @@ class ssd1322(device):
 
     def display(self, image):
         """
-        Takes a 1-bit monochrome or 24-bit RGB :py:mod:`PIL.Image` and dumps it
-        to the SSD1322 OLED display, converting the image pixels to 4-bit
-        greyscale using a simplified Luma calculation, based on
+        Takes a 1-bit monochrome or 24-bit RGB image and renders it
+        to the SSD1322 OLED display. RGB pixels are converted to 4-bit
+        greyscale values using a simplified Luma calculation, based on
         *Y'=0.299R'+0.587G'+0.114B'*.
+
+        :param image: the image to render
+        :type image: PIL.Image.Image
         """
         assert(image.mode == self.mode)
         assert(image.size == self.size)
 
         image = self.preprocess(image)
 
-        self.command(0x15, self._coladdr_start, self._coladdr_end)  # set column addr
-        self.command(0x75, 0x00, 0x7F)      # Reset row addr
-        self.command(0x5C)                  # Enable MCU to write data into RAM
+        if self.framebuffer.redraw_required(image):
+            left, top, right, bottom = self.framebuffer.inflate_bbox()
+            width = right - left
+            height = bottom - top
 
-        buf = bytearray(self._buffer_size)
+            pix_start = self.column_offset + left
+            coladdr_start = pix_start >> 2
+            coladdr_end = (pix_start + width >> 2) - 1
 
-        if self.mode == "1":
-            self._render_mono(buf, image)
-        else:
-            self._render_greyscale(buf, image)
+            self.command(0x15, coladdr_start, coladdr_end)  # set column addr
+            self.command(0x75, top, bottom - 1)             # Reset row addr
+            self.command(0x5C)                              # Enable MCU to write data into RAM
 
-        self.data(list(buf))
+            buf = bytearray(width * height >> 1)
+
+            self.populate(buf, self.framebuffer.getdata())
+            self.data(list(buf))
 
     def command(self, cmd, *args):
         """
