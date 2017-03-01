@@ -18,6 +18,7 @@ version = read_file("VERSION.txt").strip()
 
 needs_pytest = {'pytest', 'test', 'ptr'}.intersection(sys.argv)
 pytest_runner = ['pytest-runner'] if needs_pytest else []
+test_deps = ["mock", "pytest", "pytest-cov"]
 
 setup(
     name="luma.oled",
@@ -39,11 +40,16 @@ setup(
     zip_safe=False,
     install_requires=["luma.core>=0.2.0"],
     setup_requires=pytest_runner,
-    tests_require=["mock", "pytest", "pytest-cov"],
+    tests_require=test_deps,
     extras_require={
         'docs': [
             'sphinx >= 1.5.1'
-        ]
+        ],
+        'qa': [
+            'rstcheck',
+            'flake8'
+        ],
+        'test': test_deps
     },
     classifiers=[
         "License :: OSI Approved :: MIT License",
