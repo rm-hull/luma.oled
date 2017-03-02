@@ -2,12 +2,23 @@
 # -*- coding: utf-8 -*-
 
 import os
+import sys
 from setuptools import setup
 
-README = open(os.path.join(os.path.dirname(__file__), "README.rst")).read()
-CONTRIB = open(os.path.join(os.path.dirname(__file__), "CONTRIBUTING.rst")).read()
-CHANGES = open(os.path.join(os.path.dirname(__file__), "CHANGES.rst")).read()
-version = open(os.path.join(os.path.dirname(__file__), "VERSION.txt")).read().strip()
+
+def read_file(fname):
+    with open(os.path.join(os.path.dirname(__file__), fname)) as r:
+        return r.read()
+
+
+README = read_file("README.rst")
+CONTRIB = read_file("CONTRIBUTING.rst")
+CHANGES = read_file("CHANGES.rst")
+version = read_file("VERSION.txt").strip()
+
+needs_pytest = {'pytest', 'test', 'ptr'}.intersection(sys.argv)
+pytest_runner = ['pytest-runner'] if needs_pytest else []
+test_deps = ["mock", "pytest", "pytest-cov"]
 
 setup(
     name="luma.oled",
@@ -28,8 +39,18 @@ setup(
     packages=["luma.oled"],
     zip_safe=False,
     install_requires=["luma.core>=0.4.2"],
-    setup_requires=["pytest-runner"],
-    tests_require=["mock", "pytest", "pytest-cov", "python-coveralls"],
+    setup_requires=pytest_runner,
+    tests_require=test_deps,
+    extras_require={
+        'docs': [
+            'sphinx >= 1.5.1'
+        ],
+        'qa': [
+            'rstcheck',
+            'flake8'
+        ],
+        'test': test_deps
+    },
     classifiers=[
         "License :: OSI Approved :: MIT License",
         "Development Status :: 5 - Production/Stable",

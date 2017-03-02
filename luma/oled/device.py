@@ -36,6 +36,9 @@ import luma.core.framebuffer
 import luma.oled.const
 
 
+__all__ = ["ssd1306", "ssd1322", "ssd1325", "ssd1331", "sh1106"]
+
+
 class sh1106(device):
     """
     Encapsulates the serial interface to the monochrome SH1106 OLED display
