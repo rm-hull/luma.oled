@@ -18,24 +18,10 @@ Installation
    kernel version 4.1.16+, and has subsequently been tested on Raspberry Pi
    model A, model B2 and 3B (Debian Jessie) and OrangePi Zero (Armbian Jessie).
 
-From PyPI
-^^^^^^^^^
-.. note:: This is the preferred installation mechanism.
-
 Install the latest version of the library directly from PyPI_::
 
-  $ sudo apt-get install python-dev python-pip libfreetype6-dev libjpeg8-dev
+  $ sudo apt-get install python-dev python-pip libfreetype6-dev libjpeg-dev
   $ sudo -H pip install --upgrade pip
   $ sudo -H pip install --upgrade luma.oled
-
-From source
-^^^^^^^^^^^
-For Python 2, from the bash prompt, enter (for Raspbian, other OSes may be different)::
-
-  $ git clone https://github.com/rm-hull/luma.oled.git
-  $ cd luma.oled
-  $ sudo apt-get install python-dev python-pip libfreetype6-dev libjpeg8-dev
-  $ sudo python setup.py install
-
 
 .. _PyPI: https://pypi.python.org/pypi?:action=display&name=luma.oled
