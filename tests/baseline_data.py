@@ -3,6 +3,10 @@
 # Copyright (c) 2014-17 Richard Hull and contributors
 # See LICENSE.rst for details.
 
+"""
+Collection of datasets to prevent regression bugs from creeping in.
+"""
+
 
 def primitives(device, draw):
     padding = 2
@@ -24,7 +28,6 @@ def primitives(device, draw):
     draw.text((x, top + 20), 'World!', fill="purple")
 
 
-# These datasets are purely to prevent regression bugs from creeping in
 demo_ssd1306 = [
 
     255, 1, 1, 1, 1, 1, 129, 97, 25, 9, 5, 5, 5, 5, 5, 9, 25, 97, 129, 1, 1, 1,

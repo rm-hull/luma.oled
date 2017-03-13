@@ -3,26 +3,17 @@
 # Copyright (c) 2014-17 Richard Hull and contributors
 # See LICENSE.rst for details.
 
-try:
-    from unittest.mock import call, Mock
-except ImportError:
-    from mock import call, Mock
-
-import pytest
-import luma.core.error
 from luma.oled.device import ssd1306
 from luma.core.render import canvas
+
 import baseline_data
-
-serial = Mock(unsafe=True)
-
-
-def setup_function(function):
-    serial.reset_mock()
-    serial.command.side_effect = None
+from helpers import serial, call, setup_function, assert_invalid_dimensions  # noqa: F401
 
 
 def test_init_128x64():
+    """
+    SSD1306 OLED with a 128 x 64 resolution works correctly.
+    """
     ssd1306(serial)
     serial.command.assert_has_calls([
         # Initial burst are initialization commands
@@ -42,6 +33,9 @@ def test_init_128x64():
 
 
 def test_init_128x32():
+    """
+    SSD1306 OLED with a 128 x 32 resolution works correctly.
+    """
     ssd1306(serial, width=128, height=32)
     serial.command.assert_has_calls([
         # Initial burst are initialization commands
@@ -61,6 +55,9 @@ def test_init_128x32():
 
 
 def test_init_96x16():
+    """
+    SSD1306 OLED with a 96 x 16 resolution works correctly.
+    """
     ssd1306(serial, width=96, height=16)
     serial.command.assert_has_calls([
         # Initial burst are initialization commands
@@ -80,12 +77,17 @@ def test_init_96x16():
 
 
 def test_init_invalid_dimensions():
-    with pytest.raises(luma.core.error.DeviceDisplayModeError) as ex:
-        ssd1306(serial, width=59, height=22)
-    assert "Unsupported display mode: 59 x 22" in str(ex.value)
+    """
+    SSD1306 OLED with an invalid resolution raises a
+    :py:class:`luma.core.error.DeviceDisplayModeError`.
+    """
+    assert_invalid_dimensions(ssd1306, serial, 59, 22)
 
 
 def test_hide():
+    """
+    SSD1306 OLED screen content can be hidden.
+    """
     device = ssd1306(serial)
     serial.reset_mock()
     device.hide()
@@ -93,6 +95,9 @@ def test_hide():
 
 
 def test_show():
+    """
+    SSD1306 OLED screen content can be displayed.
+    """
     device = ssd1306(serial)
     serial.reset_mock()
     device.show()
@@ -100,6 +105,9 @@ def test_show():
 
 
 def test_display():
+    """
+    SSD1306 OLED screen can draw and display an image.
+    """
     device = ssd1306(serial)
     serial.reset_mock()
 
