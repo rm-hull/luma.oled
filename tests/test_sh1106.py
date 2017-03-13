@@ -3,27 +3,20 @@
 # Copyright (c) 2014-17 Richard Hull and contributors
 # See LICENSE.rst for details.
 
-try:
-    from unittest.mock import call, Mock
-except ImportError:
-    from mock import call, Mock
-
 import pytest
+
 import luma.core.error
 from luma.oled.device import sh1106
 from luma.core.render import canvas
 
 import baseline_data
-
-serial = Mock(unsafe=True)
-
-
-def setup_function(function):
-    serial.reset_mock()
-    serial.command.side_effect = None
+from helpers import serial, call, Mock, setup_function  # noqa: F401
 
 
 def test_init_128x64():
+    """
+    SH1106 OLED with a 128 x 64 resolution works correctly.
+    """
     sh1106(serial)
     serial.command.assert_has_calls([
         # Initial burst are initialization commands
@@ -48,12 +41,20 @@ def test_init_128x64():
 
 
 def test_init_invalid_dimensions():
+    """
+    SH1106 OLED with an invalid resolution raises a
+    :py:class:`luma.core.error.DeviceDisplayModeError`.
+    """
+    w, h = 77, 105
     with pytest.raises(luma.core.error.DeviceDisplayModeError) as ex:
-        sh1106(serial, width=77, height=105)
-    assert "Unsupported display mode: 77 x 105" in str(ex.value)
+        sh1106(serial, width=w, height=h)
+    assert "Unsupported display mode: {} x {}".format(w, h) in str(ex.value)
 
 
 def test_display():
+    """
+    SH1106 OLED screen can draw and display an image.
+    """
     device = sh1106(serial)
     serial.reset_mock()
 

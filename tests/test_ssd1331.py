@@ -3,26 +3,20 @@
 # Copyright (c) 2014-17 Richard Hull and contributors
 # See LICENSE.rst for details.
 
-try:
-    from unittest.mock import call, Mock
-except ImportError:
-    from mock import call, Mock
-
 import pytest
+
 import luma.core.error
 from luma.oled.device import ssd1331
 from luma.core.render import canvas
+
 import baseline_data
-
-serial = Mock(unsafe=True)
-
-
-def setup_function(function):
-    serial.reset_mock()
-    serial.command.side_effect = None
+from helpers import call, serial, setup_function  # noqa: F401
 
 
 def test_init_96x64():
+    """
+    SSD1331 OLED with a 96 x 64 resolution works correctly.
+    """
     ssd1331(serial)
     serial.command.assert_has_calls([
         # Initial burst are initialization commands
@@ -43,12 +37,20 @@ def test_init_96x64():
 
 
 def test_init_invalid_dimensions():
+    """
+    SSD1331 OLED with an invalid resolution raises a
+    :py:class:`luma.core.error.DeviceDisplayModeError`.
+    """
+    w, h = 23, 57
     with pytest.raises(luma.core.error.DeviceDisplayModeError) as ex:
-        ssd1331(serial, width=23, height=57)
-    assert "Unsupported display mode: 23 x 57" in str(ex.value)
+        ssd1331(serial, width=w, height=h)
+    assert "Unsupported display mode: {} x {}".format(w, h) in str(ex.value)
 
 
 def test_hide():
+    """
+    SSD1331 OLED screen content can be hidden.
+    """
     device = ssd1331(serial)
     serial.reset_mock()
     device.hide()
@@ -56,6 +58,9 @@ def test_hide():
 
 
 def test_show():
+    """
+    SSD1331 OLED screen content can be displayed.
+    """
     device = ssd1331(serial)
     serial.reset_mock()
     device.show()
@@ -63,6 +68,9 @@ def test_show():
 
 
 def test_display():
+    """
+    SSD1331 OLED screen can draw and display an image.
+    """
     device = ssd1331(serial)
     serial.reset_mock()
 
