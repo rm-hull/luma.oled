@@ -3,14 +3,11 @@
 # Copyright (c) 2014-17 Richard Hull and contributors
 # See LICENSE.rst for details.
 
-import pytest
-
-import luma.core.error
 from luma.oled.device import ssd1331
 from luma.core.render import canvas
 
 import baseline_data
-from helpers import call, serial, setup_function  # noqa: F401
+from helpers import call, serial, setup_function, assert_invalid_dimensions  # noqa: F401
 
 
 def test_init_96x64():
@@ -41,10 +38,7 @@ def test_init_invalid_dimensions():
     SSD1331 OLED with an invalid resolution raises a
     :py:class:`luma.core.error.DeviceDisplayModeError`.
     """
-    w, h = 23, 57
-    with pytest.raises(luma.core.error.DeviceDisplayModeError) as ex:
-        ssd1331(serial, width=w, height=h)
-    assert "Unsupported display mode: {} x {}".format(w, h) in str(ex.value)
+    assert_invalid_dimensions(ssd1331, serial, 23, 57)
 
 
 def test_hide():
