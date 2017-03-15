@@ -1,4 +1,5 @@
 `luma.core <https://github.com/rm-hull/luma.core>`__ **|** 
+`luma.docs <https://github.com/rm-hull/luma.docs>`__ **|** 
 `luma.emulator <https://github.com/rm-hull/luma.emulator>`__ **|** 
 `luma.examples <https://github.com/rm-hull/luma.examples>`__ **|** 
 `luma.lcd <https://github.com/rm-hull/luma.lcd>`__ **|** 
