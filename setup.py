@@ -18,7 +18,12 @@ version = read_file("VERSION.txt").strip()
 
 needs_pytest = {'pytest', 'test', 'ptr'}.intersection(sys.argv)
 pytest_runner = ['pytest-runner'] if needs_pytest else []
-test_deps = ["mock", "pytest", "pytest-cov"]
+test_deps = [
+    'mock;python_version<"3.3"',
+    "pytest",
+    "pytest-cov",
+    "pytest-warnings"
+]
 
 setup(
     name="luma.oled",
