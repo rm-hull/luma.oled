@@ -125,7 +125,8 @@ class ssd1306(device):
         settings = {
             (128, 64): dict(multiplex=0x3F, displayclockdiv=0x80, compins=0x12),
             (128, 32): dict(multiplex=0x1F, displayclockdiv=0x80, compins=0x02),
-            (96, 16): dict(multiplex=0x0F, displayclockdiv=0x60, compins=0x02)
+            (96, 16): dict(multiplex=0x0F, displayclockdiv=0x60, compins=0x02),
+            (64, 48): dict(multiplex=0x2F, displayclockdiv=0x80, compins=0x12)
         }.get((width, height))
 
         if settings is None:
@@ -135,6 +136,8 @@ class ssd1306(device):
         self._pages = height // 8
         self._mask = [1 << (i // width) % 8 for i in range(width * height)]
         self._offsets = [(width * (i // (width * 8))) + (i % width) for i in range(width * height)]
+        self._colstart = (0x80 - self._w) // 2
+        self._colend = self._colstart + self._w
 
         self.command(
             self._const.DISPLAYOFF,
@@ -168,7 +171,7 @@ class ssd1306(device):
 
         self.command(
             # Column start/end address
-            self._const.COLUMNADDR, 0x00, self._w - 1,
+            self._const.COLUMNADDR, self._colstart, self._colend - 1,
             # Page start/end address
             self._const.PAGEADDR, 0x00, self._pages - 1)
 
