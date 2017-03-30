@@ -66,7 +66,7 @@ def test_init_96x16():
         # set contrast
         call(129, 207),
         # reset the display
-        call(33, 0, 95, 34, 0, 1),
+        call(33, 16, 111, 34, 0, 1),
         # called last, is a command to show the screen
         call(175)
     ])
@@ -74,6 +74,28 @@ def test_init_96x16():
     # Next 192 are all data: zero's to clear the RAM
     # (192 = 96 * 16 / 8)
     serial.data.assert_called_once_with([0] * (96 * 16 // 8))
+
+
+def test_init_64x48():
+    """
+    SSD1306 OLED with a 64 x 48 resolution works correctly.
+    """
+    ssd1306(serial, width=64, height=48)
+    serial.command.assert_has_calls([
+        # Initial burst are initialization commands
+        call(174, 213, 128, 168, 47, 211, 0, 64, 141, 20, 32, 0,
+             161, 200, 218, 18, 217, 241, 219, 64, 164, 166),
+        # set contrast
+        call(129, 207),
+        # reset the display
+        call(33, 32, 95, 34, 0, 5),
+        # called last, is a command to show the screen
+        call(175)
+    ])
+
+    # Next 192 are all data: zero's to clear the RAM
+    # (192 = 96 * 16 / 8)
+    serial.data.assert_called_once_with([0] * (64 * 48 // 8))
 
 
 def test_init_invalid_dimensions():
