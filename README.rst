@@ -1,4 +1,5 @@
 `luma.core <https://github.com/rm-hull/luma.core>`__ **|** 
+`luma.docs <https://github.com/rm-hull/luma.docs>`__ **|** 
 `luma.emulator <https://github.com/rm-hull/luma.emulator>`__ **|** 
 `luma.examples <https://github.com/rm-hull/luma.examples>`__ **|** 
 `luma.lcd <https://github.com/rm-hull/luma.lcd>`__ **|** 
@@ -36,6 +37,11 @@ canvas, and other functionality to support:
 * state management,
 * color/greyscale (where supported),
 * dithering to monochrome
+
+Documentation
+-------------
+Full documentation with installation instructions and examples can be found on
+https://luma-oled.readthedocs.io.
 
 A list of tested devices can be found in the
 `wiki <https://github.com/rm-hull/luma.oled/wiki/Usage-&-Benchmarking>`_.
@@ -82,11 +88,6 @@ The consequence is that any existing code that uses the old **ssd1306** package
 will need to be updated. The changes should be limited to altering import
 statements only, and are described in the 
 `API documentation <https://luma-oled.readthedocs.io/en/latest/api-documentation.html>`_.
-
-Documentation
--------------
-Full documentation with installation instructions and examples can be found on
-https://luma-oled.readthedocs.io.
 
 License
 -------

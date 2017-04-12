@@ -3,26 +3,17 @@
 # Copyright (c) 2014-17 Richard Hull and contributors
 # See LICENSE.rst for details.
 
-try:
-    from unittest.mock import Mock
-except ImportError:
-    from mock import Mock
-
-import pytest
-import luma.core.error
 from luma.oled.device import ssd1322
 from luma.core.render import canvas
+
 import baseline_data
-
-serial = Mock(unsafe=True)
-
-
-def setup_function(function):
-    serial.reset_mock()
-    serial.command.side_effect = None
+from helpers import serial, setup_function, assert_invalid_dimensions  # noqa: F401
 
 
 def test_init_256x64():
+    """
+    SSD1322 OLED with a 256 x 64 resolution works correctly.
+    """
     recordings = []
 
     def data(data):
@@ -68,12 +59,17 @@ def test_init_256x64():
 
 
 def test_init_invalid_dimensions():
-    with pytest.raises(luma.core.error.DeviceDisplayModeError) as ex:
-        ssd1322(serial, width=128, height=77)
-    assert "Unsupported display mode: 128 x 77" in str(ex.value)
+    """
+    SSD1322 OLED with an invalid resolution raises a
+    :py:class:`luma.core.error.DeviceDisplayModeError`.
+    """
+    assert_invalid_dimensions(ssd1322, serial, 128, 77)
 
 
 def test_hide():
+    """
+    SSD1322 OLED screen content can be hidden.
+    """
     device = ssd1322(serial)
     serial.reset_mock()
     device.hide()
@@ -81,6 +77,9 @@ def test_hide():
 
 
 def test_show():
+    """
+    SSD1322 OLED screen content can be displayed.
+    """
     device = ssd1322(serial)
     serial.reset_mock()
     device.show()
@@ -88,6 +87,9 @@ def test_show():
 
 
 def test_greyscale_display():
+    """
+    SSD1322 OLED screen can draw and display a greyscale image.
+    """
     device = ssd1322(serial, mode="RGB")
     serial.reset_mock()
 
@@ -117,6 +119,9 @@ def test_greyscale_display():
 
 
 def test_monochrome_display():
+    """
+    SSD1322 OLED screen can draw and display a monochrome image.
+    """
     device = ssd1322(serial, mode="1")
     serial.reset_mock()
 
