@@ -52,7 +52,7 @@ def test_init_256x64():
         {'command': [169]},
         {'command': [193]}, {'data': [127]},
         {'command': [21]}, {'data': [28, 91]},
-        {'command': [117]}, {'data': [0, 127]},
+        {'command': [117]}, {'data': [0, 63]},
         {'command': [92]}, {'data': [0] * (256 * 64 // 2)},
         {'command': [175]}
     ]
@@ -113,7 +113,7 @@ def test_greyscale_display():
 
     assert recordings == [
         {'command': [21]}, {'data': [28, 91]},
-        {'command': [117]}, {'data': [0, 127]},
+        {'command': [117]}, {'data': [0, 63]},
         {'command': [92]}, {'data': baseline_data.demo_ssd1322_greyscale}
     ]
 
@@ -145,6 +145,6 @@ def test_monochrome_display():
 
     assert recordings == [
         {'command': [21]}, {'data': [28, 91]},
-        {'command': [117]}, {'data': [0, 127]},
+        {'command': [117]}, {'data': [0, 63]},
         {'command': [92]}, {'data': baseline_data.demo_ssd1322_monochrome}
     ]
