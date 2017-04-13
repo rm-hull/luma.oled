@@ -210,7 +210,7 @@ class ssd1331(device):
     :type rotate: int
     :param framebuffer: Framebuffering strategy, currently values of
         "diff_to_previous" or "full_frame" are only supported
-    :param framebuffer: str
+    :type framebuffer: str
     """
     def __init__(self, serial_interface=None, width=96, height=64, rotate=0,
                  framebuffer="diff_to_previous", **kwargs):
@@ -315,7 +315,7 @@ class ssd1322(device):
     :type mode: str
     :param framebuffer: Framebuffering strategy, currently values of
         "diff_to_previous" or "full_frame" are only supported
-    :param framebuffer: str
+    :type framebuffer: str
 
     """
     def __init__(self, serial_interface=None, width=256, height=64, rotate=0,
