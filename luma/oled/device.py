@@ -4,7 +4,7 @@
 
 # Example usage:
 #
-#   from luma.core.serial import i2c, spi
+#   from luma.core.interface.serial import i2c, spi
 #   from luma.core.render import canvas
 #   from luma.oled.device import ssd1306, sh1106
 #   from PIL import ImageDraw
@@ -198,8 +198,8 @@ class ssd1331(device):
     called to affect the brightness and other settings.
 
     :param serial_interface: the serial interface (usually a
-        :py:class`luma.core.serial.spi` instance) to delegate sending data and
-        commands through.
+        :py:class`luma.core.interface.serial.spi` instance) to delegate sending
+        data and commands through.
     :param width: the number of horizontal pixels (optional, defaults to 96)
     :type width: int
     :param height: the number of vertical pixels (optional, defaults to 64)
@@ -300,8 +300,8 @@ class ssd1322(device):
     called to affect the brightness and other settings.
 
     :param serial_interface: the serial interface (usually a
-       :py:class`luma.core.serial.spi` instance) to delegate sending data and
-        commands through.
+       :py:class`luma.core.interface.serial.spi` instance) to delegate sending
+       data and commands through.
     :param width: the number of horizontal pixels (optional, defaults to 96)
     :type width: int
     :param height: the number of vertical pixels (optional, defaults to 64)
