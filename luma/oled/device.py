@@ -52,9 +52,9 @@ class sh1106(device):
         self._pages = self._h // 8
 
         settings = {
-            (64): dict(multiplex=0x3F, displayoffset=0x00),
-            (32): dict(multiplex=0x20, displayoffset=0x0F)
-        }.get(height)
+            (128,64): dict(multiplex=0x3F, displayoffset=0x00),
+            (128,32): dict(multiplex=0x20, displayoffset=0x0F)
+        }.get(width,height)
 
         if settings is None:
             raise luma.core.error.DeviceDisplayModeError(
