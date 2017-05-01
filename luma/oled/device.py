@@ -51,9 +51,12 @@ class sh1106(device):
         self.capabilities(width, height, rotate)
         self._pages = self._h // 8
 
-        # FIXME: Delay doing anything here with alternate screen sizes
-        # until we are able to get a device to test with.
-        if width != 128 or height != 64:
+        settings = {
+            (64): dict(multiplex=0x3F, displayoffset=0x00),
+            (32): dict(multiplex=0x20, displayoffset=0x0F)
+        }.get(height)
+        
+        if settings is None:
             raise luma.core.error.DeviceDisplayModeError(
                 "Unsupported display mode: {0} x {1}".format(width, height))
 
@@ -64,9 +67,9 @@ class sh1106(device):
             self._const.SETLOWCOLUMN,       0x10, 0x40,
             self._const.SETSEGMENTREMAP,
             self._const.NORMALDISPLAY,
-            self._const.SETMULTIPLEX,       0x3F,
+            self._const.SETMULTIPLEX,       settings['multiplex'],
             self._const.DISPLAYALLON_RESUME,
-            self._const.SETDISPLAYOFFSET,   0x00,
+            self._const.SETDISPLAYOFFSET,   settings['displayoffset'],
             self._const.SETDISPLAYCLOCKDIV, 0xF0,
             self._const.SETPRECHARGE,       0x22,
             self._const.SETCOMPINS,         0x12,
