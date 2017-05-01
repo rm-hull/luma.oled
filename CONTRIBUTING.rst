@@ -21,3 +21,4 @@ Contributors
 * Roger Dahl (@rogerdahl)
 * Václav Šmilauer (@eudoxos)
 * Claus Bjerre (@bjerrep)
+* Vx Displays LLC (@VxGeeks)
