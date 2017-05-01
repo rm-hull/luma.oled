@@ -55,7 +55,7 @@ class sh1106(device):
             (64): dict(multiplex=0x3F, displayoffset=0x00),
             (32): dict(multiplex=0x20, displayoffset=0x0F)
         }.get(height)
-        
+
         if settings is None:
             raise luma.core.error.DeviceDisplayModeError(
                 "Unsupported display mode: {0} x {1}".format(width, height))
