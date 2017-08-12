@@ -22,6 +22,7 @@ Luma.OLED: Display drivers for SSD1306 / SSD1322 / SSD1325 / SSD1331 / SH1106
    hardware
    install
    api-documentation
+   troubleshooting
    references
 
 .. include:: ../CONTRIBUTING.rst
