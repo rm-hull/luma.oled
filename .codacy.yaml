@@ -1,0 +1,4 @@
+exclude_paths:
+  - tests/**
+  - .tox/**/*
+  - doc/**
