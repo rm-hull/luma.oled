@@ -3,11 +3,13 @@
 
 import os
 import sys
+from io import open
+
 from setuptools import setup
 
 
-def read_file(fname):
-    with open(os.path.join(os.path.dirname(__file__), fname)) as r:
+def read_file(fname, encoding='utf-8'):
+    with open(os.path.join(os.path.dirname(__file__), fname), encoding=encoding) as r:
         return r.read()
 
 
