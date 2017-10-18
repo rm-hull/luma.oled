@@ -44,7 +44,7 @@ setup(
     namespace_packages=["luma"],
     packages=["luma.oled"],
     zip_safe=False,
-    install_requires=["luma.core>=1.0.0"],
+    install_requires=["luma.core>=1.0.3"],
     setup_requires=pytest_runner,
     tests_require=test_deps,
     extras_require={
