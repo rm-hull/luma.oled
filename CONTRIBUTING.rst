@@ -22,3 +22,5 @@ Contributors
 * Václav Šmilauer (@eudoxos)
 * Claus Bjerre (@bjerrep)
 * Vx Displays LLC (@VxGeeks)
+* Christopher Arndt (@SpotlightKid)
+
