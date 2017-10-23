@@ -8,7 +8,7 @@ Using the SSD1306 driver on a display that has a SH1106 controller can result in
 the display showing a small section of the expected output with the rest of the
 display consisting of semi-random pixels (uninitialized memory).
 
-.. figure:: ./images/ssd1306_driver_on_sh1106_controller.jpg
+.. figure:: images/ssd1306_driver_on_sh1106_controller.jpg
   :scale: 50 %
   :alt: Display corruption due to using driver for wrong controller
 
