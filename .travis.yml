@@ -15,7 +15,12 @@ matrix:
         - python: 3.7-dev
           env: TOXENV=py37
         - python: 3.5
-          env: TOXENV=qa
+          env: TOXENV=qa,doc
+
+addons:
+    apt:
+        packages:
+            - graphviz
 
 install: pip install -U pip tox coveralls setuptools
 script: tox -vv
