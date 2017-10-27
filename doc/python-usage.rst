@@ -57,8 +57,8 @@ to a dithered monochrome effect (see the *3d_box.py* example, below).
   with canvas(device, dither=True) as draw:
       draw.rectangle((10, 10, 30, 30), outline="white", fill="red")
 
-There is no such constraint on the SSD1331 OLED which features 16-bit RGB
-colors: 24-bit RGB images are downsized to 16-bit using a 565 scheme.
+There is no such constraint on the SSD1331 or SSD1351 OLEDs, which features
+16-bit RGB colors: 24-bit RGB images are downsized to 16-bit using a 565 scheme.
 
 The SSD1322 and SSD1325 OLEDs both support 16 greyscale graduations: 24-bit RGB
 images are downsized to 4-bit using a Luma conversion which is approximately
