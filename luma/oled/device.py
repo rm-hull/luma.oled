@@ -316,6 +316,8 @@ class ssd1351(device):
     :param framebuffer: Framebuffering strategy, currently values of
         "diff_to_previous" or "full_frame" are only supported.
     :type framebuffer: str
+
+    .. versionadded:: 2.3.0
     """
     def __init__(self, serial_interface=None, width=128, height=128, rotate=0,
                  framebuffer="diff_to_previous", **kwargs):
