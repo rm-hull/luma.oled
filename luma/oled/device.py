@@ -249,9 +249,9 @@ class ssd1331(device):
 
     def display(self, image):
         """
-        Renders a 24-bit RGB image to the SSD1331 OLED display
+        Renders a 24-bit RGB image to the SSD1331 OLED display.
 
-        :param image: the image to render
+        :param image: the image to render.
         :type image: PIL.Image.Image
         """
         assert(image.mode == self.mode)
@@ -354,9 +354,9 @@ class ssd1351(device):
 
     def display(self, image):
         """
-        Renders a 24-bit RGB image to the SSD1351 OLED display
+        Renders a 24-bit RGB image to the SSD1351 OLED display.
 
-        :param image: the image to render
+        :param image: the image to render.
         :type image: PIL.Image.Image
         """
         assert(image.mode == self.mode)
