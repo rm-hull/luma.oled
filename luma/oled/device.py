@@ -36,7 +36,7 @@ import luma.core.framebuffer
 import luma.oled.const
 
 
-__all__ = ["ssd1306", "ssd1322", "ssd1325", "ssd1331", "sh1106"]
+__all__ = ["ssd1306", "ssd1322", "ssd1325", "ssd1331", "ssd1351", "sh1106"]
 
 
 class sh1106(device):
@@ -212,7 +212,7 @@ class ssd1331(device):
         represents 270° rotation.
     :type rotate: int
     :param framebuffer: Framebuffering strategy, currently values of
-        "diff_to_previous" or "full_frame" are only supported
+        "diff_to_previous" or "full_frame" are only supported.
     :type framebuffer: str
     """
     def __init__(self, serial_interface=None, width=96, height=64, rotate=0,
@@ -249,9 +249,9 @@ class ssd1331(device):
 
     def display(self, image):
         """
-        Renders a 24-bit RGB image to the SSD1331 OLED display
+        Renders a 24-bit RGB image to the SSD1331 OLED display.
 
-        :param image: the image to render
+        :param image: the image to render.
         :type image: PIL.Image.Image
         """
         assert(image.mode == self.mode)
@@ -293,6 +293,119 @@ class ssd1331(device):
         self.command(0x81, level,  # Set contrast A
                      0x82, level,  # Set contrast B
                      0x83, level)  # Set contrast C
+
+
+class ssd1351(device):
+    """
+    Encapsulates the serial interface to the 16-bit color (5-6-5 RGB) SSD1351
+    OLED display hardware. On creation, an initialization sequence is pumped to
+    the display to properly configure it. Further control commands can then be
+    called to affect the brightness and other settings.
+
+    :param serial_interface: the serial interface (usually a
+        :py:class`luma.core.interface.serial.spi` instance) to delegate sending
+        data and commands through.
+    :param width: the number of horizontal pixels (optional, defaults to 96)
+    :type width: int
+    :param height: the number of vertical pixels (optional, defaults to 64)
+    :type height: int
+    :param rotate: an integer value of 0 (default), 1, 2 or 3 only, where 0 is
+        no rotation, 1 is rotate 90° clockwise, 2 is 180° rotation and 3
+        represents 270° rotation.
+    :type rotate: int
+    :param framebuffer: Framebuffering strategy, currently values of
+        "diff_to_previous" or "full_frame" are only supported.
+    :type framebuffer: str
+
+    .. versionadded:: 2.3.0
+    """
+    def __init__(self, serial_interface=None, width=128, height=128, rotate=0,
+                 framebuffer="diff_to_previous", **kwargs):
+        super(ssd1351, self).__init__(luma.oled.const.common, serial_interface)
+        self.capabilities(width, height, rotate, mode="RGB")
+        self.framebuffer = getattr(luma.core.framebuffer, framebuffer)(self)
+
+        if width != 128 or height != 128:
+            raise luma.core.error.DeviceDisplayModeError(
+                "Unsupported display mode: {0} x {1}".format(width, height))
+
+        self.command(0xFD, 0x12)              # Unlock IC MCU interface
+        self.command(0xFD, 0xB1)              # Command A2,B1,B3,BB,BE,C1 accessible if in unlock state
+        self.command(0xAE)                    # Display off
+        self.command(0xB3, 0xF1)              # Clock divider
+        self.command(0xCA, 0x7F)              # Mux ratio
+        self.command(0x15, 0x00, 0x7F)        # Set column address
+        self.command(0x75, 0x00, 0x7F)        # Set row address
+        self.command(0xA0, 0x74)              # Segment remapping
+        self.command(0xA1, 0x00)              # Set Display start line
+        self.command(0xA2, 0x00)              # Set display offset
+        self.command(0xB5, 0x00)              # Set GPIO
+        self.command(0xAB, 0x01)              # Function select (internal - diode drop)
+        self.command(0xB1, 0x32)              # Precharge
+        self.command(0xB4, 0xA0, 0xB5, 0x55)  # Set segment low voltage
+        self.command(0xBE, 0x05)              # Set VcomH voltage
+        self.command(0xC7, 0x0F)              # Contrast master
+        self.command(0xB6, 0x01)              # Precharge2
+        self.command(0xA6)                    # Normal display
+
+        self.contrast(0xFF)
+        self.clear()
+        self.show()
+
+    def display(self, image):
+        """
+        Renders a 24-bit RGB image to the SSD1351 OLED display.
+
+        :param image: the image to render.
+        :type image: PIL.Image.Image
+        """
+        assert(image.mode == self.mode)
+        assert(image.size == self.size)
+
+        image = self.preprocess(image)
+
+        if self.framebuffer.redraw_required(image):
+            left, top, right, bottom = self.framebuffer.bounding_box
+            width = right - left
+            height = bottom - top
+
+            self.command(0x15, left, right - 1)    # Set column addr
+            self.command(0x75, top, bottom - 1)    # Set row addr
+            self.command(0x5C)                     # Write RAM
+
+            i = 0
+            buf = bytearray(width * height * 2)
+            for r, g, b in self.framebuffer.getdata():
+                if not(r == g == b == 0):
+                    # 65K format 1
+                    buf[i] = r & 0xF8 | g >> 5
+                    buf[i + 1] = g << 5 & 0xE0 | b >> 3
+                i += 2
+
+            self.data(list(buf))
+
+    def contrast(self, level):
+        """
+        Switches the display contrast to the desired level, in the range
+        0-255. Note that setting the level to a low (or zero) value will
+        not necessarily dim the display to nearly off. In other words,
+        this method is **NOT** suitable for fade-in/out animation.
+
+        :param level: Desired contrast level in the range of 0-255.
+        :type level: int
+        """
+        assert(0 <= level <= 255)
+        self.command(0xC1, level, level, level)
+
+    def command(self, cmd, *args):
+        """
+        Sends a command and an (optional) sequence of arguments through to the
+        delegated serial interface. Note that the arguments are passed through
+        as data.
+        """
+        self._serial_interface.command(cmd)
+        if len(args) > 0:
+            self._serial_interface.data(list(args))
 
 
 class ssd1322(device):
