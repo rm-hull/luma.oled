@@ -6,7 +6,7 @@
 from luma.oled.device import ssd1306
 from luma.core.render import canvas
 
-import baseline_data
+from baseline_data import primitives, get_json_data
 from helpers import serial, call, setup_function, assert_invalid_dimensions  # noqa: F401
 
 
@@ -152,10 +152,10 @@ def test_display():
 
     # Use the same drawing primitives as the demo
     with canvas(device) as draw:
-        baseline_data.primitives(device, draw)
+        primitives(device, draw)
 
     # Initial command to reset the display
     serial.command.assert_called_once_with(33, 0, 127, 34, 0, 7)
 
     # Next 1024 bytes are data representing the drawn image
-    serial.data.assert_called_once_with(baseline_data.demo_ssd1306)
+    serial.data.assert_called_once_with(get_json_data('demo_ssd1306'))

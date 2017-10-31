@@ -6,7 +6,7 @@
 from luma.oled.device import ssd1322
 from luma.core.render import canvas
 
-import baseline_data
+from baseline_data import get_json_data, primitives
 from helpers import serial, setup_function, assert_invalid_dimensions  # noqa: F401
 
 
@@ -106,7 +106,7 @@ def test_greyscale_display():
 
     # Use the same drawing primitives as the demo
     with canvas(device) as draw:
-        baseline_data.primitives(device, draw)
+        primitives(device, draw)
 
     assert serial.data.called
     assert serial.command.called
@@ -114,7 +114,7 @@ def test_greyscale_display():
     assert recordings == [
         {'command': [21]}, {'data': [28, 91]},
         {'command': [117]}, {'data': [0, 63]},
-        {'command': [92]}, {'data': baseline_data.demo_ssd1322_greyscale}
+        {'command': [92]}, {'data': get_json_data('demo_ssd1322_greyscale')}
     ]
 
 
@@ -138,7 +138,7 @@ def test_monochrome_display():
 
     # Use the same drawing primitives as the demo
     with canvas(device) as draw:
-        baseline_data.primitives(device, draw)
+        primitives(device, draw)
 
     assert serial.data.called
     assert serial.command.called
@@ -146,5 +146,5 @@ def test_monochrome_display():
     assert recordings == [
         {'command': [21]}, {'data': [28, 91]},
         {'command': [117]}, {'data': [0, 63]},
-        {'command': [92]}, {'data': baseline_data.demo_ssd1322_monochrome}
+        {'command': [92]}, {'data': get_json_data('demo_ssd1322_monochrome')}
     ]
