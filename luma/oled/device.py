@@ -2,6 +2,10 @@
 # Copyright (c) 2014-17 Richard Hull and contributors
 # See LICENSE.rst for details.
 
+"""
+Collection of serial interfaces to OLED devices.
+"""
+
 # Example usage:
 #
 #   from luma.core.interface.serial import i2c, spi
@@ -41,8 +45,9 @@ __all__ = ["ssd1306", "ssd1322", "ssd1325", "ssd1331", "ssd1351", "sh1106"]
 
 class sh1106(device):
     """
-    Encapsulates the serial interface to the monochrome SH1106 OLED display
-    hardware. On creation, an initialization sequence is pumped to the display
+    Serial interface to a monochrome SH1106 OLED display.
+
+    On creation, an initialization sequence is pumped to the display
     to properly configure it. Further control commands can then be called to
     affect the brightness and other settings.
     """
@@ -116,8 +121,9 @@ class sh1106(device):
 
 class ssd1306(device):
     """
-    Encapsulates the serial interface to the monochrome SSD1306 OLED display
-    hardware. On creation, an initialization sequence is pumped to the display
+    Serial interface to a monochrome SSD1306 OLED display.
+
+    On creation, an initialization sequence is pumped to the display
     to properly configure it. Further control commands can then be called to
     affect the brightness and other settings.
     """
@@ -195,24 +201,25 @@ class ssd1306(device):
 
 class ssd1331(device):
     """
-    Encapsulates the serial interface to the 16-bit color (5-6-5 RGB) SSD1331
-    OLED display hardware. On creation, an initialization sequence is pumped to
+    Serial interface to a 16-bit color (5-6-5 RGB) SSD1331 OLED display.
+
+    On creation, an initialization sequence is pumped to
     the display to properly configure it. Further control commands can then be
     called to affect the brightness and other settings.
 
     :param serial_interface: the serial interface (usually a
         :py:class`luma.core.interface.serial.spi` instance) to delegate sending
         data and commands through.
-    :param width: the number of horizontal pixels (optional, defaults to 96)
+    :param width: the number of horizontal pixels (optional, defaults to 96).
     :type width: int
-    :param height: the number of vertical pixels (optional, defaults to 64)
+    :param height: the number of vertical pixels (optional, defaults to 64).
     :type height: int
     :param rotate: an integer value of 0 (default), 1, 2 or 3 only, where 0 is
         no rotation, 1 is rotate 90° clockwise, 2 is 180° rotation and 3
         represents 270° rotation.
     :type rotate: int
     :param framebuffer: Framebuffering strategy, currently values of
-        "diff_to_previous" or "full_frame" are only supported.
+        ``diff_to_previous`` or ``full_frame`` are only supported.
     :type framebuffer: str
     """
     def __init__(self, serial_interface=None, width=96, height=64, rotate=0,
@@ -297,24 +304,25 @@ class ssd1331(device):
 
 class ssd1351(device):
     """
-    Encapsulates the serial interface to the 16-bit color (5-6-5 RGB) SSD1351
-    OLED display hardware. On creation, an initialization sequence is pumped to
+    Serial interface to the 16-bit color (5-6-5 RGB) SSD1351 OLED display.
+
+    On creation, an initialization sequence is pumped to
     the display to properly configure it. Further control commands can then be
     called to affect the brightness and other settings.
 
     :param serial_interface: the serial interface (usually a
         :py:class`luma.core.interface.serial.spi` instance) to delegate sending
         data and commands through.
-    :param width: the number of horizontal pixels (optional, defaults to 96)
+    :param width: the number of horizontal pixels (optional, defaults to 96).
     :type width: int
-    :param height: the number of vertical pixels (optional, defaults to 64)
+    :param height: the number of vertical pixels (optional, defaults to 64).
     :type height: int
     :param rotate: an integer value of 0 (default), 1, 2 or 3 only, where 0 is
         no rotation, 1 is rotate 90° clockwise, 2 is 180° rotation and 3
         represents 270° rotation.
     :type rotate: int
     :param framebuffer: Framebuffering strategy, currently values of
-        "diff_to_previous" or "full_frame" are only supported.
+        ``diff_to_previous`` or ``full_frame`` are only supported.
     :type framebuffer: str
 
     .. versionadded:: 2.3.0
@@ -410,17 +418,18 @@ class ssd1351(device):
 
 class ssd1322(device):
     """
-    Encapsulates the serial interface to the 4-bit greyscale SSD1322 OLED
-    display hardware. On creation, an initialization sequence is pumped to the
+    Serial interface to a 4-bit greyscale SSD1322 OLED display.
+
+    On creation, an initialization sequence is pumped to the
     display to properly configure it. Further control commands can then be
     called to affect the brightness and other settings.
 
     :param serial_interface: the serial interface (usually a
        :py:class`luma.core.interface.serial.spi` instance) to delegate sending
        data and commands through.
-    :param width: the number of horizontal pixels (optional, defaults to 96)
+    :param width: the number of horizontal pixels (optional, defaults to 96).
     :type width: int
-    :param height: the number of vertical pixels (optional, defaults to 64)
+    :param height: the number of vertical pixels (optional, defaults to 64).
     :type height: int
     :param rotate: an integer value of 0 (default), 1, 2 or 3 only, where 0 is
         no rotation, 1 is rotate 90° clockwise, 2 is 180° rotation and 3
@@ -430,7 +439,7 @@ class ssd1322(device):
          mechanism, either to monochrome or 4-bit greyscale.
     :type mode: str
     :param framebuffer: Framebuffering strategy, currently values of
-        "diff_to_previous" or "full_frame" are only supported
+        ``diff_to_previous`` or ``full_frame`` are only supported
     :type framebuffer: str
 
     """
@@ -543,8 +552,9 @@ class ssd1322(device):
 
 class ssd1325(device):
     """
-    Encapsulates the serial interface to the 4-bit greyscale SSD1325 OLED
-    display hardware. On creation, an initialization sequence is pumped to the
+    Serial interface to a 4-bit greyscale SSD1325 OLED display.
+
+    On creation, an initialization sequence is pumped to the
     display to properly configure it. Further control commands can then be
     called to affect the brightness and other settings.
     """
