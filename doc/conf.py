@@ -67,7 +67,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'Luma.OLED: Display drivers for {0}'.format(
-    '/ '.join(supported_devices).upper())
+    ', '.join(supported_devices).upper())
 author = 'Richard Hull and contributors'
 copyright = u'{0}, {1}'.format(datetime.now().year, author)
 
