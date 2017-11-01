@@ -25,6 +25,8 @@ version = open("../VERSION.txt").read()
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 sys.path.insert(0, os.path.abspath('..'))
 
+from luma.oled.device import __all__ as supported_devices
+
 # -- General configuration ------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
@@ -64,7 +66,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'Luma.OLED: Display drivers for SSD1306 / SSD1322 / SSD1325 / SSD1331 / SSD1351 / SH1106'
+project = 'Luma.OLED: Display drivers for {0}'.format(
+    '/ '.join(supported_devices).upper())
 author = 'Richard Hull and contributors'
 copyright = u'{0}, {1}'.format(datetime.now().year, author)
 
