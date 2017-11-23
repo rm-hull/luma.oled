@@ -45,12 +45,12 @@ setup(
     author="Richard Hull",
     author_email="richard.hull@destructuring-bind.org",
     description=("A small library to drive an OLED device with either "
-                 "SSD1306, SSD1322, SSD1325, SSD1331 or SH1106 chipset"),
+                 "SSD1306, SSD1322, SSD1325, SSD1331, SSD1351 or SH1106 chipset"),
     long_description="\n\n".join([README, CONTRIB, CHANGES]),
     license="MIT",
     keywords=("raspberry pi rpi oled display screen "
               "rgb monochrome greyscale color "
-              "ssd1306 ssd1322 ssd1325 ssd1331 sh1106 "
+              "ssd1306 ssd1322 ssd1325 ssd1331 ssd1351 sh1106 "
               "spi i2c 256x64 128x64 128x32 96x16"),
     url="https://github.com/rm-hull/luma.oled",
     download_url="https://github.com/rm-hull/luma.oled/tarball/" + version,
