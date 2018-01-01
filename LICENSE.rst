@@ -1,7 +1,7 @@
 The MIT License (MIT)
 ---------------------
 
-Copyright (c) 2014-17 Richard Hull & Contributors
+Copyright (c) 2014-18 Richard Hull and contributors
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
