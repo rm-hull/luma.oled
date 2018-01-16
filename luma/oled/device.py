@@ -333,7 +333,12 @@ class ssd1351(device):
         self.capabilities(width, height, rotate, mode="RGB")
         self.framebuffer = getattr(luma.core.framebuffer, framebuffer)(self)
 
-        if width != 128 or height != 128:
+        settings = {
+            (128,128): dict(width=0x7f, height=0x7f, displayoffset=0x00, startline=0x00, remap=0x00),
+            (96,96): dict(width=0x6f, height=0x5f, displayoffset=0x00, startline=0x00, remap=0x02)
+        }.get((width, height))
+
+        if settings == None:
             raise luma.core.error.DeviceDisplayModeError(
                 "Unsupported display mode: {0} x {1}".format(width, height))
 
@@ -341,11 +346,11 @@ class ssd1351(device):
         self.command(0xFD, 0xB1)              # Command A2,B1,B3,BB,BE,C1 accessible if in unlock state
         self.command(0xAE)                    # Display off
         self.command(0xB3, 0xF1)              # Clock divider
-        self.command(0xCA, 0x7F)              # Mux ratio
-        self.command(0x15, 0x00, 0x7F)        # Set column address
-        self.command(0x75, 0x00, 0x7F)        # Set row address
-        self.command(0xA0, 0x74)              # Segment remapping
-        self.command(0xA1, 0x00)              # Set Display start line
+        self.command(0xCA, 0x7f)              # Mux ratio
+        self.command(0x15, settings['displayoffset'], settings['width'])        # Set column address
+        self.command(0x75, settings['displayoffset'], settings['height'])        # Set row address
+        self.command(0xA0, 0x74 | settings['remap'])              # Segment remapping # Column address remapping or else everthing is mirrored
+        self.command(0xA1, settings['startline'])              # Set Display start line
         self.command(0xA2, 0x00)              # Set display offset
         self.command(0xB5, 0x00)              # Set GPIO
         self.command(0xAB, 0x01)              # Function select (internal - diode drop)
@@ -374,6 +379,10 @@ class ssd1351(device):
 
         if self.framebuffer.redraw_required(image):
             left, top, right, bottom = self.framebuffer.bounding_box
+            _,_,w,h = self.bounding_box
+            if w == 95 and h == 95 :
+                left += 16
+                right += 16
             width = right - left
             height = bottom - top
 
