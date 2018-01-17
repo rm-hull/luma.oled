@@ -334,11 +334,11 @@ class ssd1351(device):
         self.framebuffer = getattr(luma.core.framebuffer, framebuffer)(self)
 
         settings = {
-            (128,128):  dict(width=0x7F, height=0x7F, displayoffset=0x00, startline=0x00, remap=0x00),
-            (96,96):    dict(width=0x6F, height=0x5F, displayoffset=0x00, startline=0x00, remap=0x02)
+            (128, 128):  dict(width=0x7F, height=0x7F, displayoffset=0x00, startline=0x00, remap=0x00),
+            (96, 96):    dict(width=0x6F, height=0x5F, displayoffset=0x00, startline=0x00, remap=0x02)
         }.get((width, height))
 
-        if settings == None:
+        if settings is None:
             raise luma.core.error.DeviceDisplayModeError(
                 "Unsupported display mode: {0} x {1}".format(width, height))
 
@@ -379,8 +379,8 @@ class ssd1351(device):
 
         if self.framebuffer.redraw_required(image):
             left, top, right, bottom = self.framebuffer.bounding_box
-            _,_,w,h = self.bounding_box
-            if w == 95 and h == 95 :
+            _, _, w, h = self.bounding_box
+            if w == 95 and h == 95:
                 left += 16
                 right += 16
             width = right - left
