@@ -351,26 +351,26 @@ class ssd1351(device):
             self.apply_offsets = offset
         else:
             self.apply_offsets = lambda bbox: bbox
-            
+
         if settings is None:
             raise luma.core.error.DeviceDisplayModeError(
                 "Unsupported display mode: {0} x {1}".format(width, height))
 
         self.command(0xFD, 0x12)                                                    # Unlock IC MCU interface
         # Command A2,B1,B3,BB,BE,C1 accessible if in unlock state
-        self.command(0xFD, 0xB1)                                                    
+        self.command(0xFD, 0xB1)
         self.command(0xAE)                                                          # Display off
         self.command(0xB3, 0xF1)                                                    # Clock divider
         self.command(0xCA, 0x7F)                                                    # Mux ratio
         self.command(0x15, settings['displayoffset'], settings['width'])            # Set column address
         self.command(0x75, settings['displayoffset'], settings['height'])           # Set row address
         # Segment remapping # Column address remapping or else everthing is mirrored
-        self.command(0xA0, 0x74 | settings['remap'])                                
+        self.command(0xA0, 0x74 | settings['remap'])
         self.command(0xA1, settings['startline'])                                   # Set Display start line
         self.command(0xA2, 0x00)                                                    # Set display offset
         self.command(0xB5, 0x00)                                                    # Set GPIO
         # Function select (internal - diode drop)
-        self.command(0xAB, 0x01)                                                    
+        self.command(0xAB, 0x01)
         self.command(0xB1, 0x32)                                                    # Precharge
         self.command(0xB4, 0xA0, 0xB5, 0x55)                                        # Set segment low voltage
         self.command(0xBE, 0x05)                                                    # Set VcomH voltage
