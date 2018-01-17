@@ -324,11 +324,17 @@ class ssd1351(device):
     :param framebuffer: Framebuffering strategy, currently values of
         ``diff_to_previous`` or ``full_frame`` are only supported.
     :type framebuffer: str
+    :param h_offset: horizontal offset (in pixels) of screen to device memory
+        (default: 0)
+    :type h_offset: int
+    :param v_offset: vertical offset (in pixels) of screen to device memory
+        (default: 0)
+    :type h_offset: int
 
     .. versionadded:: 2.3.0
     """
     def __init__(self, serial_interface=None, width=128, height=128, rotate=0,
-                 framebuffer="diff_to_previous", **kwargs):
+                 framebuffer="diff_to_previous", h_offset=0, v_offset=0, **kwargs):
         super(ssd1351, self).__init__(luma.oled.const.common, serial_interface)
         self.capabilities(width, height, rotate, mode="RGB")
         self.framebuffer = getattr(luma.core.framebuffer, framebuffer)(self)
@@ -338,22 +344,33 @@ class ssd1351(device):
             (96, 96):    dict(width=0x6F, height=0x5F, displayoffset=0x00, startline=0x00, remap=0x02)
         }.get((width, height))
 
+        if h_offset != 0 or v_offset != 0:
+            def offset(bbox):
+                left, top, right, bottom = bbox
+                return (left + h_offset, top + v_offset, right + h_offset, bottom + v_offset)
+            self.apply_offsets = offset
+        else:
+            self.apply_offsets = lambda bbox: bbox
+            
         if settings is None:
             raise luma.core.error.DeviceDisplayModeError(
                 "Unsupported display mode: {0} x {1}".format(width, height))
 
         self.command(0xFD, 0x12)                                                    # Unlock IC MCU interface
-        self.command(0xFD, 0xB1)                                                    # Command A2,B1,B3,BB,BE,C1 accessible if in unlock state
+        # Command A2,B1,B3,BB,BE,C1 accessible if in unlock state
+        self.command(0xFD, 0xB1)                                                    
         self.command(0xAE)                                                          # Display off
         self.command(0xB3, 0xF1)                                                    # Clock divider
         self.command(0xCA, 0x7F)                                                    # Mux ratio
         self.command(0x15, settings['displayoffset'], settings['width'])            # Set column address
         self.command(0x75, settings['displayoffset'], settings['height'])           # Set row address
-        self.command(0xA0, 0x74 | settings['remap'])                                # Segment remapping # Column address remapping or else everthing is mirrored
+        # Segment remapping # Column address remapping or else everthing is mirrored
+        self.command(0xA0, 0x74 | settings['remap'])                                
         self.command(0xA1, settings['startline'])                                   # Set Display start line
         self.command(0xA2, 0x00)                                                    # Set display offset
         self.command(0xB5, 0x00)                                                    # Set GPIO
-        self.command(0xAB, 0x01)                                                    # Function select (internal - diode drop)
+        # Function select (internal - diode drop)
+        self.command(0xAB, 0x01)                                                    
         self.command(0xB1, 0x32)                                                    # Precharge
         self.command(0xB4, 0xA0, 0xB5, 0x55)                                        # Set segment low voltage
         self.command(0xBE, 0x05)                                                    # Set VcomH voltage
@@ -378,11 +395,7 @@ class ssd1351(device):
         image = self.preprocess(image)
 
         if self.framebuffer.redraw_required(image):
-            left, top, right, bottom = self.framebuffer.bounding_box
-            _, _, w, h = self.bounding_box
-            if w == 95 and h == 95:
-                left += 16
-                right += 16
+            left, top, right, bottom = self.apply_offsets(self.framebuffer.bounding_box)
             width = right - left
             height = bottom - top
 
