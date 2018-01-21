@@ -356,27 +356,42 @@ class ssd1351(device):
             raise luma.core.error.DeviceDisplayModeError(
                 "Unsupported display mode: {0} x {1}".format(width, height))
 
-        self.command(0xFD, 0x12)                                                    # Unlock IC MCU interface
+        # Unlock IC MCU interface
+        self.command(0xFD, 0x12)
         # Command A2,B1,B3,BB,BE,C1 accessible if in unlock state
         self.command(0xFD, 0xB1)
-        self.command(0xAE)                                                          # Display off
-        self.command(0xB3, 0xF1)                                                    # Clock divider
-        self.command(0xCA, 0x7F)                                                    # Mux ratio
-        self.command(0x15, settings['displayoffset'], settings['width'])            # Set column address
-        self.command(0x75, settings['displayoffset'], settings['height'])           # Set row address
-        # Segment remapping # Column address remapping or else everthing is mirrored
+        # Display off
+        self.command(0xAE)
+        # Clock divider
+        self.command(0xB3, 0xF1)
+        # Mux ratio
+        self.command(0xCA, 0x7F)
+        # Set column address
+        self.command(0x15, settings['displayoffset'], settings['width'])
+        # Set row address
+        self.command(0x75, settings['displayoffset'], settings['height'])
+        # Segment remapping - Column address remapping or else everything is mirrored
         self.command(0xA0, 0x74 | settings['remap'])
-        self.command(0xA1, settings['startline'])                                   # Set Display start line
-        self.command(0xA2, 0x00)                                                    # Set display offset
-        self.command(0xB5, 0x00)                                                    # Set GPIO
+        # Set Display start line
+        self.command(0xA1, settings['startline'])
+        # Set display offset
+        self.command(0xA2, 0x00)
+        # Set GPIO
+        self.command(0xB5, 0x00)                                                    
         # Function select (internal - diode drop)
         self.command(0xAB, 0x01)
-        self.command(0xB1, 0x32)                                                    # Precharge
-        self.command(0xB4, 0xA0, 0xB5, 0x55)                                        # Set segment low voltage
-        self.command(0xBE, 0x05)                                                    # Set VcomH voltage
-        self.command(0xC7, 0x0F)                                                    # Contrast master
-        self.command(0xB6, 0x01)                                                    # Precharge2
-        self.command(0xA6)                                                          # Normal display
+        # Precharge
+        self.command(0xB1, 0x32)
+        # Set segment low voltage
+        self.command(0xB4, 0xA0, 0xB5, 0x55)
+        # Set VcomH voltage
+        self.command(0xBE, 0x05)
+        # Contrast master
+        self.command(0xC7, 0x0F)
+        # Precharge2
+        self.command(0xB6, 0x01)
+        # Normal display
+        self.command(0xA6)
 
         self.contrast(0xFF)
         self.clear()
