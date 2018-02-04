@@ -16,13 +16,12 @@ Installation
 
    It was *originally* tested with Raspbian on a rev.2 model B, with a vanilla
    kernel version 4.1.16+, and has subsequently been tested on Raspberry Pi
-   model A, model B2, 3B, Zero (Raspbian Jessie and Stretch) and OrangePi Zero (Armbian Jessie).
+   (both Raspbian Jessie and Stretch) models A, B2, 3B, Zero, Zero W and
+   OrangePi Zero (Armbian Jessie).
 
 Install the latest version of the library directly from PyPI_::
 
   $ sudo apt-get install python-dev python-pip libfreetype6-dev libjpeg-dev build-essential
-  $ sudo -H pip install --upgrade pip
-  $ sudo apt-get purge python-pip
   $ sudo -H pip install --upgrade luma.oled
 
 .. _PyPI: https://pypi.python.org/pypi?:action=display&name=luma.oled
