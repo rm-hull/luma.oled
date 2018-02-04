@@ -377,7 +377,7 @@ class ssd1351(device):
         # Set display offset
         self.command(0xA2, 0x00)
         # Set GPIO
-        self.command(0xB5, 0x00)                                                    
+        self.command(0xB5, 0x00)
         # Function select (internal - diode drop)
         self.command(0xAB, 0x01)
         # Precharge
