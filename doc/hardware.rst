@@ -91,10 +91,14 @@ or::
 
 If you have no kernel modules listed and nothing is showing using ``dmesg``
 then this implies the kernel I2C driver is not loaded. Enable the I2C as
-follows::
+follows:
 
-  $ sudo raspi-config
-  > Advanced Options > A7 I2C
+#. Run ``sudo raspi-config``
+#. Use the down arrow to select ``5 Interfacing Options``
+#. Arrow down to ``P5 I2C``
+#. Select **yes** when it asks you to enable I2C
+#. Also select **yes** when it asks about automatically loading the kernel module
+#. Use the right arrow to select the **<Finish>** button
 
 After rebooting re-check that the ``dmesg | grep i2c`` command shows whether
 I2C driver is loaded before proceeding. You can also
