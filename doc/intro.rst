@@ -23,8 +23,8 @@ and will fit neatly inside the RPi case.
    :alt: ssd1322
 
 .. seealso::
-   Further technical information for the specific devices can be found in the
-   datasheets below: 
+   Further technical information for the specific implemented devices can be found
+   in the following datasheets: 
    
    - :download:`SSD1306 <tech-spec/SSD1306.pdf>`
    - :download:`SSD1322 <tech-spec/SSD1322.pdf>`
