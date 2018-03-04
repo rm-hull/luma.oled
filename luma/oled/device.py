@@ -324,6 +324,8 @@ class ssd1351(device):
     :param framebuffer: Framebuffering strategy, currently values of
         ``diff_to_previous`` or ``full_frame`` are only supported.
     :type framebuffer: str
+    :param bgr: Set to ``True`` if device pixels are BGR order (rather than RGB).
+    :type bgr: bool
     :param h_offset: horizontal offset (in pixels) of screen to device memory
         (default: 0)
     :type h_offset: int
@@ -334,15 +336,11 @@ class ssd1351(device):
     .. versionadded:: 2.3.0
     """
     def __init__(self, serial_interface=None, width=128, height=128, rotate=0,
-                 framebuffer="diff_to_previous", h_offset=0, v_offset=0, **kwargs):
+                 framebuffer="diff_to_previous", h_offset=0, v_offset=0,
+                 bgr=False, **kwargs):
         super(ssd1351, self).__init__(luma.oled.const.common, serial_interface)
         self.capabilities(width, height, rotate, mode="RGB")
         self.framebuffer = getattr(luma.core.framebuffer, framebuffer)(self)
-
-        settings = {
-            (128, 128):  dict(width=0x7F, height=0x7F, displayoffset=0x00, startline=0x00, remap=0x00),
-            (96, 96):    dict(width=0x6F, height=0x5F, displayoffset=0x00, startline=0x00, remap=0x02)
-        }.get((width, height))
 
         if h_offset != 0 or v_offset != 0:
             def offset(bbox):
@@ -352,46 +350,31 @@ class ssd1351(device):
         else:
             self.apply_offsets = lambda bbox: bbox
 
-        if settings is None:
+        if (width, height) not in [(96, 96), (128, 128)]:
             raise luma.core.error.DeviceDisplayModeError(
                 "Unsupported display mode: {0} x {1}".format(width, height))
 
-        # Unlock IC MCU interface
-        self.command(0xFD, 0x12)
-        # Command A2,B1,B3,BB,BE,C1 accessible if in unlock state
-        self.command(0xFD, 0xB1)
-        # Display off
-        self.command(0xAE)
-        # Clock divider
-        self.command(0xB3, 0xF1)
-        # Mux ratio
-        self.command(0xCA, 0x7F)
-        # Set column address
-        self.command(0x15, settings['displayoffset'], settings['width'])
-        # Set row address
-        self.command(0x75, settings['displayoffset'], settings['height'])
-        # Segment remapping - Column address remapping or else everything is mirrored
-        self.command(0xA0, 0x74 | settings['remap'])
-        # Set Display start line
-        self.command(0xA1, settings['startline'])
-        # Set display offset
-        self.command(0xA2, 0x00)
-        # Set GPIO
-        self.command(0xB5, 0x00)
-        # Function select (internal - diode drop)
-        self.command(0xAB, 0x01)
-        # Precharge
-        self.command(0xB1, 0x32)
-        # Set segment low voltage
-        self.command(0xB4, 0xA0, 0xB5, 0x55)
-        # Set VcomH voltage
-        self.command(0xBE, 0x05)
-        # Contrast master
-        self.command(0xC7, 0x0F)
-        # Precharge2
-        self.command(0xB6, 0x01)
-        # Normal display
-        self.command(0xA6)
+        # RGB or BGR order
+        order = 0x02 if bgr else 0x00
+
+        self.command(0xFD, 0x12)              # Unlock IC MCU interface
+        self.command(0xFD, 0xB1)              # Command A2,B1,B3,BB,BE,C1 accessible if in unlock state
+        self.command(0xAE)                    # Display off
+        self.command(0xB3, 0xF1)              # Clock divider
+        self.command(0xCA, 0x7F)              # Mux ratio
+        self.command(0x15, 0x00, width - 1)   # Set column address
+        self.command(0x75, 0x00, height - 1)  # Set row address
+        self.command(0xA0, 0x74 | order)      # Segment remapping
+        self.command(0xA1, 0x00)              # Set Display start line
+        self.command(0xA2, 0x00)              # Set display offset
+        self.command(0xB5, 0x00)              # Set GPIO
+        self.command(0xAB, 0x01)              # Function select (internal - diode drop)
+        self.command(0xB1, 0x32)              # Precharge
+        self.command(0xB4, 0xA0, 0xB5, 0x55)  # Set segment low voltage
+        self.command(0xBE, 0x05)              # Set VcomH voltage
+        self.command(0xC7, 0x0F)              # Contrast master
+        self.command(0xB6, 0x01)              # Precharge2
+        self.command(0xA6)                    # Normal display
 
         self.contrast(0xFF)
         self.clear()
