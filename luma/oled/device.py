@@ -313,9 +313,9 @@ class ssd1351(device):
     :param serial_interface: the serial interface (usually a
         :py:class`luma.core.interface.serial.spi` instance) to delegate sending
         data and commands through.
-    :param width: the number of horizontal pixels (optional, defaults to 96).
+    :param width: the number of horizontal pixels (optional, defaults to 128).
     :type width: int
-    :param height: the number of vertical pixels (optional, defaults to 64).
+    :param height: the number of vertical pixels (optional, defaults to 128).
     :type height: int
     :param rotate: an integer value of 0 (default), 1, 2 or 3 only, where 0 is
         no rotation, 1 is rotate 90° clockwise, 2 is 180° rotation and 3
