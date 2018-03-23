@@ -682,11 +682,26 @@ class ssd1327(device):
                 "Unsupported display mode: {0} x {1}".format(width, height))
 
         self.command(
-            0xAE,               # Diplay off (all pixels off)
+            0xAE,               # Display off (all pixels off)
             0xA0, 0x53,         # gment remap (com split, com remap, nibble remap, column remap)
             0xA1, 0x00,         # Display start line
             0xA2, 0x00,         # Display offset
             0xA4,               # regular display
+            0xA8, 0x7F,         # set multiplex ratio: 127
+
+            0xB8, 0x01, 0x11,   # Set greyscale table
+            0x22, 0x32, 0x43,   # .. cont
+            0x54, 0x65, 0x76,   # .. cont
+
+            0xB3, 0x00,         # Front clock divider: 0, Fosc: 0
+            0xAB, 0x01,         # Enable Internal Vdd
+
+            0xB1, 0xF1,         # Set phase periods - 1: 1 clk, 2: 15 clks
+            0xBC, 0x08,         # Pre-charge voltage: Vcomh
+            0xBE, 0x07,         # COM deselect voltage level: 0.86 x Vcc
+
+            0xD5, 0x62,         # Enable 2nd pre-charge
+            0xB6, 0x0F,         # 2nd Pre-charge period: 15 clks
             )
 
         self.contrast(0x7F)
