@@ -40,7 +40,7 @@ import luma.core.framebuffer
 import luma.oled.const
 
 
-__all__ = ["ssd1306", "ssd1322", "ssd1325", "ssd1331", "ssd1351", "sh1106"]
+__all__ = ["ssd1306", "ssd1322", "ssd1325", "ssd1327", "ssd1331", "ssd1351", "sh1106"]
 
 
 class sh1106(device):
@@ -659,6 +659,86 @@ class ssd1325(device):
         """
         Takes a 1-bit monochrome or 24-bit RGB :py:mod:`PIL.Image` and dumps it
         to the SSD1325 OLED display, converting the image pixels to 4-bit
+        greyscale using a simplified Luma calculation, based on
+        *Y'=0.299R'+0.587G'+0.114B'*.
+        """
+        assert(image.mode == self.mode)
+        assert(image.size == self.size)
+
+        image = self.preprocess(image)
+
+        self.command(
+            0x15, 0x00, self._w - 1,  # set column addr
+            0x75, 0x00, self._h - 1)  # set row addr
+
+        buf = bytearray(self._buffer_size)
+
+        if self.mode == "1":
+            self._render_mono(buf, image)
+        else:
+            self._render_greyscale(buf, image)
+
+        self.data(list(buf))
+
+class ssd1327(device):
+    """
+    Serial interface to a 4-bit greyscale SSD1327 OLED display.
+
+    On creation, an initialization sequence is pumped to the
+    display to properly configure it. Further control commands can then be
+    called to affect the brightness and other settings.
+    """
+    def __init__(self, serial_interface=None, width=128, height=128, rotate=0,
+                 mode="RGB", **kwargs):
+        super(ssd1327, self).__init__(luma.core.const.common, serial_interface)
+        self.capabilities(width, height, rotate, mode)
+        self._buffer_size = width * height // 2
+
+        if width != 128 or height != 128:
+            raise luma.core.error.DeviceDisplayModeError(
+                "Unsupported display mode: {0} x {1}".format(width, height))
+
+        self.command(
+            0xAE,               # Diplay off (all pixels off)
+            0xA0, 0x53,         # gment remap (com split, com remap, nibble remap, column remap)
+            0xA1, 0x00,         # Display start line
+            0xA2, 0x00,         # Display offset
+            0xA4,               # regular display
+            )
+
+        self.contrast(0x7F)
+        self.clear()
+        self.show()
+
+    def _render_mono(self, buf, image):
+        i = 0
+        for pix in image.getdata():
+            if pix > 0:
+                if i % 2 == 0:
+                    buf[i // 2] = 0x0F
+                else:
+                    buf[i // 2] |= 0xF0
+
+            i += 1
+
+    def _render_greyscale(self, buf, image):
+        i = 0
+        for r, g, b in image.getdata():
+            # RGB->Greyscale luma calculation into 4-bits
+            grey = (r * 306 + g * 601 + b * 117) >> 14
+
+            if grey > 0:
+                if i % 2 == 0:
+                    buf[i // 2] = grey
+                else:
+                    buf[i // 2] |= (grey << 4)
+
+            i += 1
+
+    def display(self, image):
+        """
+        Takes a 1-bit monochrome or 24-bit RGB :py:mod:`PIL.Image` and dumps it
+        to the SSD1327 OLED display, converting the image pixels to 4-bit
         greyscale using a simplified Luma calculation, based on
         *Y'=0.299R'+0.587G'+0.114B'*.
         """
