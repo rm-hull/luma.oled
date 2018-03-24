@@ -663,6 +663,7 @@ class ssd1325(device):
 
         self.data(list(buf))
 
+
 class ssd1327(device):
     """
     Serial interface to a 4-bit greyscale SSD1327 OLED display.
@@ -702,7 +703,7 @@ class ssd1327(device):
 
             0xD5, 0x62,         # Enable 2nd pre-charge
             0xB6, 0x0F,         # 2nd Pre-charge period: 15 clks
-            )
+        )
 
         self.contrast(0x7F)
         self.clear()
