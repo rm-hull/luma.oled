@@ -4,6 +4,8 @@
 
 """
 Base class for SSD13xx greyscale devices
+
+.. versionadded:: 3.0.0
 """
 
 from luma.core.device import device
