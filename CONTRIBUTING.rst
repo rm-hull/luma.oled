@@ -24,4 +24,5 @@ Contributors
 * Vx Displays LLC (@VxGeeks)
 * Christopher Arndt (@SpotlightKid)
 * Sascha Walther (@leragequit)
+* Marcus Kellerman (@sharkusk)
 
