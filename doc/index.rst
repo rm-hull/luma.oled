@@ -21,6 +21,7 @@ Luma.OLED: Display drivers for SSD1306 / SSD1322 / SSD1325 / SSD1327 / SSD1331 /
    python-usage
    hardware
    install
+   upgrade
    api-documentation
    troubleshooting
    references
