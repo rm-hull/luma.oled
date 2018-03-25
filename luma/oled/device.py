@@ -35,6 +35,8 @@ Collection of serial interfaces to OLED devices.
 # to the device
 
 from luma.core.device import device
+from luma.oled.color_device import color_device
+from luma.oled.greyscale_device import greyscale_device
 import luma.core.error
 import luma.core.framebuffer
 import luma.oled.const
@@ -200,7 +202,7 @@ class ssd1306(device):
         self.data(list(buf))
 
 
-class ssd1331(device):
+class ssd1331(color_device):
     """
     Serial interface to a 16-bit color (5-6-5 RGB) SSD1331 OLED display.
 
@@ -225,14 +227,13 @@ class ssd1331(device):
     """
     def __init__(self, serial_interface=None, width=96, height=64, rotate=0,
                  framebuffer="diff_to_previous", **kwargs):
-        super(ssd1331, self).__init__(luma.oled.const.common, serial_interface)
-        self.capabilities(width, height, rotate, mode="RGB")
-        self.framebuffer = getattr(luma.core.framebuffer, framebuffer)(self)
+        super(ssd1331, self).__init__(serial_interface, width, height, rotate,
+                                      framebuffer, **kwargs)
 
-        if width != 96 or height != 64:
-            raise luma.core.error.DeviceDisplayModeError(
-                "Unsupported display mode: {0} x {1}".format(width, height))
+    def _supported_dimensions(self):
+        return [(96, 64)]
 
+    def _init_sequence(self):
         self.command(
             0xAE,        # Display off
             0xA0, 0x72,  # Seg remap
@@ -251,41 +252,10 @@ class ssd1331(device):
             0xBE, 0x3E,  # Set voltage
             0x87, 0x0F)  # Master current control
 
-        self.contrast(0xFF)
-        self.clear()
-        self.show()
-
-    def display(self, image):
-        """
-        Renders a 24-bit RGB image to the SSD1331 OLED display.
-
-        :param image: the image to render.
-        :type image: PIL.Image.Image
-        """
-        assert(image.mode == self.mode)
-        assert(image.size == self.size)
-
-        image = self.preprocess(image)
-
-        if self.framebuffer.redraw_required(image):
-            left, top, right, bottom = self.framebuffer.bounding_box
-            width = right - left
-            height = bottom - top
-
-            self.command(
-                0x15, left, right - 1,    # Set column addr
-                0x75, top, bottom - 1)    # Set row addr
-
-            i = 0
-            buf = bytearray(width * height * 2)
-            for r, g, b in self.framebuffer.getdata():
-                if not(r == g == b == 0):
-                    # 65K format 1
-                    buf[i] = r & 0xF8 | g >> 5
-                    buf[i + 1] = g << 3 & 0xE0 | b >> 3
-                i += 2
-
-            self.data(list(buf))
+    def _set_position(self, top, right, bottom, left):
+        self.command(
+            0x15, left, right - 1,    # Set column addr
+            0x75, top, bottom - 1)    # Set row addr
 
     def contrast(self, level):
         """
@@ -303,7 +273,7 @@ class ssd1331(device):
                      0x83, level)  # Set contrast C
 
 
-class ssd1351(device):
+class ssd1351(color_device):
     """
     Serial interface to the 16-bit color (5-6-5 RGB) SSD1351 OLED display.
 
@@ -339,79 +309,45 @@ class ssd1351(device):
     def __init__(self, serial_interface=None, width=128, height=128, rotate=0,
                  framebuffer="diff_to_previous", h_offset=0, v_offset=0,
                  bgr=False, **kwargs):
-        super(ssd1351, self).__init__(luma.oled.const.common, serial_interface)
-        self.capabilities(width, height, rotate, mode="RGB")
-        self.framebuffer = getattr(luma.core.framebuffer, framebuffer)(self)
+
+        # RGB or BGR order
+        self._color_order = 0x02 if bgr else 0x00
 
         if h_offset != 0 or v_offset != 0:
             def offset(bbox):
                 left, top, right, bottom = bbox
                 return (left + h_offset, top + v_offset, right + h_offset, bottom + v_offset)
-            self.apply_offsets = offset
-        else:
-            self.apply_offsets = lambda bbox: bbox
+            self._apply_offsets = offset
 
-        if (width, height) not in [(96, 96), (128, 128)]:
-            raise luma.core.error.DeviceDisplayModeError(
-                "Unsupported display mode: {0} x {1}".format(width, height))
+        super(ssd1351, self).__init__(serial_interface, width, height, rotate, framebuffer, **kwargs)
 
-        # RGB or BGR order
-        order = 0x02 if bgr else 0x00
+    def _supported_dimensions(self):
+        return [(96, 96), (128, 128)]
 
-        self.command(0xFD, 0x12)              # Unlock IC MCU interface
-        self.command(0xFD, 0xB1)              # Command A2,B1,B3,BB,BE,C1 accessible if in unlock state
-        self.command(0xAE)                    # Display off
-        self.command(0xB3, 0xF1)              # Clock divider
-        self.command(0xCA, 0x7F)              # Mux ratio
-        self.command(0x15, 0x00, width - 1)   # Set column address
-        self.command(0x75, 0x00, height - 1)  # Set row address
-        self.command(0xA0, 0x74 | order)      # Segment remapping
-        self.command(0xA1, 0x00)              # Set Display start line
-        self.command(0xA2, 0x00)              # Set display offset
-        self.command(0xB5, 0x00)              # Set GPIO
-        self.command(0xAB, 0x01)              # Function select (internal - diode drop)
-        self.command(0xB1, 0x32)              # Precharge
-        self.command(0xB4, 0xA0, 0xB5, 0x55)  # Set segment low voltage
-        self.command(0xBE, 0x05)              # Set VcomH voltage
-        self.command(0xC7, 0x0F)              # Contrast master
-        self.command(0xB6, 0x01)              # Precharge2
-        self.command(0xA6)                    # Normal display
+    def _init_sequence(self):
+        self.command(0xFD, 0x12)               # Unlock IC MCU interface
+        self.command(0xFD, 0xB1)               # Command A2,B1,B3,BB,BE,C1 accessible if in unlock state
+        self.command(0xAE)                     # Display off
+        self.command(0xB3, 0xF1)               # Clock divider
+        self.command(0xCA, 0x7F)               # Mux ratio
+        self.command(0x15, 0x00, self.width - 1)    # Set column address
+        self.command(0x75, 0x00, self.height - 1)   # Set row address
+        self.command(0xA0, 0x74 | self._color_order)  # Segment remapping
+        self.command(0xA1, 0x00)               # Set Display start line
+        self.command(0xA2, 0x00)               # Set display offset
+        self.command(0xB5, 0x00)               # Set GPIO
+        self.command(0xAB, 0x01)               # Function select (internal - diode drop)
+        self.command(0xB1, 0x32)               # Precharge
+        self.command(0xB4, 0xA0, 0xB5, 0x55)   # Set segment low voltage
+        self.command(0xBE, 0x05)               # Set VcomH voltage
+        self.command(0xC7, 0x0F)               # Contrast master
+        self.command(0xB6, 0x01)               # Precharge2
+        self.command(0xA6)                     # Normal display
 
-        self.contrast(0xFF)
-        self.clear()
-        self.show()
-
-    def display(self, image):
-        """
-        Renders a 24-bit RGB image to the SSD1351 OLED display.
-
-        :param image: the image to render.
-        :type image: PIL.Image.Image
-        """
-        assert(image.mode == self.mode)
-        assert(image.size == self.size)
-
-        image = self.preprocess(image)
-
-        if self.framebuffer.redraw_required(image):
-            left, top, right, bottom = self.apply_offsets(self.framebuffer.bounding_box)
-            width = right - left
-            height = bottom - top
-
-            self.command(0x15, left, right - 1)    # Set column addr
-            self.command(0x75, top, bottom - 1)    # Set row addr
-            self.command(0x5C)                     # Write RAM
-
-            i = 0
-            buf = bytearray(width * height * 2)
-            for r, g, b in self.framebuffer.getdata():
-                if not(r == g == b == 0):
-                    # 65K format 1
-                    buf[i] = r & 0xF8 | g >> 5
-                    buf[i + 1] = g << 3 & 0xE0 | b >> 3
-                i += 2
-
-            self.data(list(buf))
+    def _set_position(self, top, right, bottom, left):
+        self.command(0x15, left, right - 1)    # Set column addr
+        self.command(0x75, top, bottom - 1)    # Set row addr
+        self.command(0x5C)                     # Write RAM
 
     def contrast(self, level):
         """
@@ -437,7 +373,7 @@ class ssd1351(device):
             self._serial_interface.data(list(args))
 
 
-class ssd1322(device):
+class ssd1322(greyscale_device):
     """
     Serial interface to a 4-bit greyscale SSD1322 OLED display.
 
@@ -466,18 +402,17 @@ class ssd1322(device):
     """
     def __init__(self, serial_interface=None, width=256, height=64, rotate=0,
                  mode="RGB", framebuffer="diff_to_previous", **kwargs):
-        super(ssd1322, self).__init__(luma.oled.const.ssd1322, serial_interface)
-        self.capabilities(width, height, rotate, mode)
-        self.framebuffer = getattr(luma.core.framebuffer, framebuffer)(self)
-        self.populate = self._render_mono if mode == "1" else self._render_greyscale
-        self.column_offset = (480 - width) // 2
+        self._column_offset = (480 - width) // 2
+        super(ssd1322, self).__init__(luma.oled.const.ssd1322, serial_interface,
+                                      width, height, rotate, mode, framebuffer,
+                                      nibble_order=0, **kwargs)
 
-        if width <= 0 or width > 256 or \
-           height <= 0 or height > 64 or \
-           width % 16 != 0 or height % 16 != 0:
-            raise luma.core.error.DeviceDisplayModeError(
-                "Unsupported display mode: {0} x {1}".format(width, height))
+    def _supported_dimensions(self):
+        return [(256, 64), (256, 48), (256, 32),
+                (128, 64), (128, 48), (128, 32),
+                (64, 64),  (64, 48),  (64, 32)]
 
+    def _init_sequence(self):
         self.command(0xFD, 0x12)        # Unlock IC
         self.command(0xA4)              # Display off (all pixels off)
         self.command(0xB3, 0xF2)        # Display divide clockratio/freq
@@ -498,67 +433,15 @@ class ssd1322(device):
         self.command(0xA6)              # Normal display (reset)
         self.command(0xA9)              # Exit partial display
 
-        self.contrast(0x7F)             # Reset
-        self.clear()
-        self.show()
+    def _set_position(self, top, right, bottom, left):
+        width = right - left
+        pix_start = self._column_offset + left
+        coladdr_start = pix_start >> 2
+        coladdr_end = (pix_start + width >> 2) - 1
 
-    def _render_mono(self, buf, pixel_data):
-        i = 0
-        for pix in pixel_data:
-            if pix > 0:
-                if i % 2 == 0:
-                    buf[i // 2] = 0xF0
-                else:
-                    buf[i // 2] |= 0x0F
-
-            i += 1
-
-    def _render_greyscale(self, buf, pixel_data):
-        i = 0
-        for r, g, b in pixel_data:
-            # RGB->Greyscale luma calculation into 4-bits
-            grey = (r * 306 + g * 601 + b * 117) >> 14
-
-            if grey > 0:
-                if i % 2 == 0:
-                    buf[i // 2] = (grey << 4)
-                else:
-                    buf[i // 2] |= grey
-
-            i += 1
-
-    def display(self, image):
-        """
-        Takes a 1-bit monochrome or 24-bit RGB image and renders it
-        to the SSD1322 OLED display. RGB pixels are converted to 4-bit
-        greyscale values using a simplified Luma calculation, based on
-        *Y'=0.299R'+0.587G'+0.114B'*.
-
-        :param image: the image to render
-        :type image: PIL.Image.Image
-        """
-        assert(image.mode == self.mode)
-        assert(image.size == self.size)
-
-        image = self.preprocess(image)
-
-        if self.framebuffer.redraw_required(image):
-            left, top, right, bottom = self.framebuffer.inflate_bbox()
-            width = right - left
-            height = bottom - top
-
-            pix_start = self.column_offset + left
-            coladdr_start = pix_start >> 2
-            coladdr_end = (pix_start + width >> 2) - 1
-
-            self.command(0x15, coladdr_start, coladdr_end)  # set column addr
-            self.command(0x75, top, bottom - 1)             # Reset row addr
-            self.command(0x5C)                              # Enable MCU to write data into RAM
-
-            buf = bytearray(width * height >> 1)
-
-            self.populate(buf, self.framebuffer.getdata())
-            self.data(list(buf))
+        self.command(0x15, coladdr_start, coladdr_end)  # set column addr
+        self.command(0x75, top, bottom - 1)             # Reset row addr
+        self.command(0x5C)                              # Enable MCU to write data into RAM
 
     def command(self, cmd, *args):
         """
@@ -571,7 +454,7 @@ class ssd1322(device):
             self._serial_interface.data(list(args))
 
 
-class ssd1325(device):
+class ssd1325(greyscale_device):
     """
     Serial interface to a 4-bit greyscale SSD1325 OLED display.
 
@@ -579,16 +462,16 @@ class ssd1325(device):
     display to properly configure it. Further control commands can then be
     called to affect the brightness and other settings.
     """
-    def __init__(self, serial_interface=None, width=128, height=64, rotate=0,
-                 mode="RGB", **kwargs):
-        super(ssd1325, self).__init__(luma.core.const.common, serial_interface)
-        self.capabilities(width, height, rotate, mode)
-        self._buffer_size = width * height // 2
+    def __init__(self, serial_interface=None, width=128, height=64, rotate=0, mode="RGB", **kwargs):
+        super(ssd1325, self).__init__(luma.core.const.common, serial_interface,
+                                      width, height, rotate, mode,
+                                      framebuffer="full_frame", nibble_order=1,
+                                      **kwargs)
 
-        if width != 128 or height != 64:
-            raise luma.core.error.DeviceDisplayModeError(
-                "Unsupported display mode: {0} x {1}".format(width, height))
+    def _supported_dimensions(self):
+        return [(128, 64)]
 
+    def _init_sequence(self):
         self.command(
             0xAE,               # Diplay off (all pixels off)
             0xB3, 0xF2,         # Display divide clockratio/freq
@@ -610,79 +493,32 @@ class ssd1325(device):
             0xBF, 0x02,         # Set VSL (not connected)
             0xA4)               # Normal dislay
 
-        self.contrast(0x7F)
-        self.clear()
-        self.show()
-
-    def _render_mono(self, buf, image):
-        i = 0
-        for pix in image.getdata():
-            if pix > 0:
-                if i % 2 == 0:
-                    buf[i // 2] = 0x0F
-                else:
-                    buf[i // 2] |= 0xF0
-
-            i += 1
-
-    def _render_greyscale(self, buf, image):
-        i = 0
-        for r, g, b in image.getdata():
-            # RGB->Greyscale luma calculation into 4-bits
-            grey = (r * 306 + g * 601 + b * 117) >> 14
-
-            if grey > 0:
-                if i % 2 == 0:
-                    buf[i // 2] = grey
-                else:
-                    buf[i // 2] |= (grey << 4)
-
-            i += 1
-
-    def display(self, image):
-        """
-        Takes a 1-bit monochrome or 24-bit RGB :py:mod:`PIL.Image` and dumps it
-        to the SSD1325 OLED display, converting the image pixels to 4-bit
-        greyscale using a simplified Luma calculation, based on
-        *Y'=0.299R'+0.587G'+0.114B'*.
-        """
-        assert(image.mode == self.mode)
-        assert(image.size == self.size)
-
-        image = self.preprocess(image)
-
+    def _set_position(self, top, right, bottom, left):
         self.command(
-            0x15, 0x00, self._w - 1,  # set column addr
-            0x75, 0x00, self._h - 1)  # set row addr
-
-        buf = bytearray(self._buffer_size)
-
-        if self.mode == "1":
-            self._render_mono(buf, image)
-        else:
-            self._render_greyscale(buf, image)
-
-        self.data(list(buf))
+            0x15, left, right - 1,  # set column addr
+            0x75, top, bottom - 1)  # set row addr
 
 
-class ssd1327(device):
+class ssd1327(greyscale_device):
     """
     Serial interface to a 4-bit greyscale SSD1327 OLED display.
 
     On creation, an initialization sequence is pumped to the
     display to properly configure it. Further control commands can then be
     called to affect the brightness and other settings.
+
+    .. versionadded:: 2.4.0
     """
-    def __init__(self, serial_interface=None, width=128, height=128, rotate=0,
-                 mode="RGB", **kwargs):
-        super(ssd1327, self).__init__(luma.core.const.common, serial_interface)
-        self.capabilities(width, height, rotate, mode)
-        self._buffer_size = width * height // 2
+    def __init__(self, serial_interface=None, width=128, height=128, rotate=0, mode="RGB", **kwargs):
+        super(ssd1327, self).__init__(luma.core.const.common, serial_interface,
+                                      width, height, rotate, mode,
+                                      framebuffer="full_frame", nibble_order=1,
+                                      **kwargs)
 
-        if width != 128 or height != 128:
-            raise luma.core.error.DeviceDisplayModeError(
-                "Unsupported display mode: {0} x {1}".format(width, height))
+    def _supported_dimensions(self):
+        return [(128, 128)]
 
+    def _init_sequence(self):
         self.command(
             0xAE,               # Display off (all pixels off)
             0xA0, 0x53,         # gment remap (com split, com remap, nibble remap, column remap)
@@ -707,56 +543,7 @@ class ssd1327(device):
             0xD5, 0x62,         # Enable 2nd pre-charge
             0xB6, 0x0F)         # 2nd Pre-charge period: 15 clks
 
-        self.contrast(0x7F)
-        self.clear()
-        self.show()
-
-    def _render_mono(self, buf, image):
-        i = 0
-        for pix in image.getdata():
-            if pix > 0:
-                if i % 2 == 0:
-                    buf[i // 2] = 0x0F
-                else:
-                    buf[i // 2] |= 0xF0
-
-            i += 1
-
-    def _render_greyscale(self, buf, image):
-        i = 0
-        for r, g, b in image.getdata():
-            # RGB->Greyscale luma calculation into 4-bits
-            grey = (r * 306 + g * 601 + b * 117) >> 14
-
-            if grey > 0:
-                if i % 2 == 0:
-                    buf[i // 2] = grey
-                else:
-                    buf[i // 2] |= (grey << 4)
-
-            i += 1
-
-    def display(self, image):
-        """
-        Takes a 1-bit monochrome or 24-bit RGB :py:mod:`PIL.Image` and dumps it
-        to the SSD1327 OLED display, converting the image pixels to 4-bit
-        greyscale using a simplified Luma calculation, based on
-        *Y'=0.299R'+0.587G'+0.114B'*.
-        """
-        assert(image.mode == self.mode)
-        assert(image.size == self.size)
-
-        image = self.preprocess(image)
-
+    def _set_position(self, top, right, bottom, left):
         self.command(
-            0x15, 0x00, self._w - 1,  # set column addr
-            0x75, 0x00, self._h - 1)  # set row addr
-
-        buf = bytearray(self._buffer_size)
-
-        if self.mode == "1":
-            self._render_mono(buf, image)
-        else:
-            self._render_greyscale(buf, image)
-
-        self.data(list(buf))
+            0x15, left, right - 1,  # set column addr
+            0x75, top, bottom - 1)  # set row addr
