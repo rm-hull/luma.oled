@@ -72,7 +72,7 @@ def test_greyscale_display():
     serial.command.assert_called_once_with(21, 0, 127, 117, 0, 127)
 
     # Next 4096 bytes are data representing the drawn image
-    serial.data.assert_called_once_with(get_json_data('demo_ssd1325_greyscale'))
+    serial.data.assert_called_once_with(get_json_data('demo_ssd1327_greyscale'))
 
 
 def test_monochrome_display():
@@ -90,4 +90,4 @@ def test_monochrome_display():
     serial.command.assert_called_once_with(21, 0, 127, 117, 0, 127)
 
     # Next 4096 bytes are data representing the drawn image
-    serial.data.assert_called_once_with(get_json_data('demo_ssd1325_monochrome'))
+    serial.data.assert_called_once_with(get_json_data('demo_ssd1327_monochrome'))
