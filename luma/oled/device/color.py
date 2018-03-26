@@ -8,6 +8,8 @@ Base class for SSD13xx color devices
 .. versionadded:: 3.0.0
 """
 
+from abc import abstractmethod, ABCMeta
+
 from luma.core.device import device
 import luma.core.error
 import luma.core.framebuffer
@@ -15,6 +17,8 @@ import luma.oled.const
 
 
 class color_device(device):
+    __metaclass__ = ABCMeta
+
     def __init__(self, serial_interface, width, height, rotate, framebuffer, **kwargs):
         super(color_device, self).__init__(luma.oled.const.common, serial_interface)
         self.capabilities(width, height, rotate, mode="RGB")
@@ -29,14 +33,17 @@ class color_device(device):
         self.clear()
         self.show()
 
+    @abstractmethod
     def _supported_dimensions(self):
-        raise NotImplementedError()
+        pass  # pragma: no cover
 
+    @abstractmethod
     def _init_sequence(self):
-        raise NotImplementedError()
+        pass  # pragma: no cover
 
+    @abstractmethod
     def _set_position(self, top, right, bottom, left):
-        raise NotImplementedError()
+        pass  # pragma: no cover
 
     def _apply_offsets(self, bbox):
         return bbox

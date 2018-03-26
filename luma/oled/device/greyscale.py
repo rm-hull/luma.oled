@@ -8,6 +8,8 @@ Base class for SSD13xx greyscale devices
 .. versionadded:: 3.0.0
 """
 
+from abc import abstractmethod, ABCMeta
+
 from luma.core.device import device
 import luma.core.error
 import luma.core.framebuffer
@@ -15,6 +17,8 @@ import luma.oled.const
 
 
 class greyscale_device(device):
+    __metaclass__ = ABCMeta
+
     def __init__(self, const, serial_interface, width, height, rotate, mode, framebuffer, nibble_order, **kwargs):
         super(greyscale_device, self).__init__(const, serial_interface)
         self.capabilities(width, height, rotate, mode)
@@ -31,14 +35,17 @@ class greyscale_device(device):
         self.clear()
         self.show()
 
-    def _check_dimensions(self):
-        raise NotImplementedError()
+    @abstractmethod
+    def _supported_dimensions(self):
+        pass  # pragma: no cover
 
+    @abstractmethod
     def _init_sequence(self):
-        raise NotImplementedError()
+        pass  # pragma: no cover
 
+    @abstractmethod
     def _set_position(self, top, right, bottom, left):
-        raise NotImplementedError()
+        pass  # pragma: no cover
 
     def _render_mono(self, buf, pixel_data):
         i = 0
