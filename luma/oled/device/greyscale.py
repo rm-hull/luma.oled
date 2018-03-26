@@ -68,7 +68,7 @@ class greyscale_device(device):
     def display(self, image):
         """
         Takes a 1-bit monochrome or 24-bit RGB image and renders it
-        to the SSD1322 OLED display. RGB pixels are converted to 4-bit
+        to the greyscale OLED display. RGB pixels are converted to 4-bit
         greyscale values using a simplified Luma calculation, based on
         *Y'=0.299R'+0.587G'+0.114B'*.
 
