@@ -35,8 +35,8 @@ Collection of serial interfaces to OLED devices.
 # to the device
 
 from luma.core.device import device
-from luma.oled.device.color import device as color_device
-from luma.oled.device.greyscale import device as greyscale_device
+from luma.oled.device.color import color_device
+from luma.oled.device.greyscale import greyscale_device
 import luma.core.error
 import luma.core.framebuffer
 import luma.oled.const

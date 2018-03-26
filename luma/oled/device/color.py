@@ -10,17 +10,17 @@ Base class for SSD13xx color devices
 
 from abc import abstractmethod, ABCMeta
 
-from luma.core.device import device as core_device
+from luma.core.device import device
 import luma.core.error
 import luma.core.framebuffer
 import luma.oled.const
 
 
-class device(core_device):
+class color_device(device):
     __metaclass__ = ABCMeta
 
     def __init__(self, serial_interface, width, height, rotate, framebuffer, **kwargs):
-        super(device, self).__init__(luma.oled.const.common, serial_interface)
+        super(color_device, self).__init__(luma.oled.const.common, serial_interface)
         self.capabilities(width, height, rotate, mode="RGB")
         self.framebuffer = getattr(luma.core.framebuffer, framebuffer)(self)
 

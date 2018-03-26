@@ -10,17 +10,17 @@ Base class for SSD13xx greyscale devices
 
 from abc import abstractmethod, ABCMeta
 
-from luma.core.device import device as core_device
+from luma.core.device import device
 import luma.core.error
 import luma.core.framebuffer
 import luma.oled.const
 
 
-class device(core_device):
+class greyscale_device(device):
     __metaclass__ = ABCMeta
 
     def __init__(self, const, serial_interface, width, height, rotate, mode, framebuffer, nibble_order, **kwargs):
-        super(device, self).__init__(const, serial_interface)
+        super(greyscale_device, self).__init__(const, serial_interface)
         self.capabilities(width, height, rotate, mode)
         self.framebuffer = getattr(luma.core.framebuffer, framebuffer)(self)
         self._populate = self._render_mono if mode == "1" else self._render_greyscale
