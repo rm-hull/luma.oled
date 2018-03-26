@@ -35,14 +35,31 @@ class color_device(device):
 
     @abstractmethod
     def _supported_dimensions(self):
+        """
+        Enumerates the screen resolutions that the specific device supports, as
+        a list of tuples; e.g.: [(96, 64), (96, 32), (96, 16)]
+        """
         pass  # pragma: no cover
 
     @abstractmethod
     def _init_sequence(self):
+        """
+        Concrete implementations should call the initiation sequence for the
+        specific device. Invoked from the constructor, but no assumptions should
+        be made about what has been initialized so far. No return value is
+        expected.
+        """
         pass  # pragma: no cover
 
     @abstractmethod
     def _set_position(self, top, right, bottom, left):
+        """
+        Invoked once as part of the devices display refresh. The four coordinates
+        form a bounding box that determines the area of the screen that will get
+        get redrawn; thus the concrete implementations should send the correct
+        command sequence to the device to set that bounding box. No return value
+        is expected.
+        """
         pass  # pragma: no cover
 
     def _apply_offsets(self, bbox):
