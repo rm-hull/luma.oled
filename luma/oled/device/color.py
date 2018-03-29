@@ -37,7 +37,7 @@ class color_device(device):
     def _supported_dimensions(self):
         """
         Enumerates the screen resolutions that the specific device supports, as
-        a list of tuples; e.g.: [(96, 64), (96, 32), (96, 16)]
+        a list of tuples; e.g.: ``[(96, 64), (96, 32), (96, 16)]``
         """
         pass  # pragma: no cover
 
