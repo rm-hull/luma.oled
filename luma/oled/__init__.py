@@ -7,4 +7,4 @@ OLED display driver for SSD1306, SSD1322, SSD1325, SSD1327, SSD1331, SSD1351
 and SH1106 devices.
 """
 
-__version__ = '2.3.2'
+__version__ = '2.4.0'
