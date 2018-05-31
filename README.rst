@@ -46,8 +46,8 @@ https://luma-oled.readthedocs.io.
 A list of tested devices can be found in the
 `wiki <https://github.com/rm-hull/luma.oled/wiki/Usage-&-Benchmarking>`_.
 
-The SSD1306 display pictured below is 128 x 64 pixels, and the board is `tiny`,
-and will fit neatly inside the RPi case.
+The display pictured below is a SSD1306 (128 x 64 pixels), and the board is `tiny` enough to fit
+inside the RPi case.
 
 .. image:: https://raw.githubusercontent.com/rm-hull/luma.oled/master/doc/images/mounted_display.jpg
    :alt: mounted
