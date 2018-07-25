@@ -50,7 +50,7 @@ setup(
     license="MIT",
     keywords=("raspberry pi rpi oled display screen "
               "rgb monochrome greyscale color "
-              "ssd1306 ssd1322 ssd1325 ssd1331 ssd1351 sh1106 "
+              "ssd1306 ssd1322 ssd1325 ssd1327 ssd1331 ssd1351 sh1106 "
               "spi i2c 256x64 128x64 128x32 96x16"),
     url="https://github.com/rm-hull/luma.oled",
     download_url="https://github.com/rm-hull/luma.oled/tarball/" + version,
