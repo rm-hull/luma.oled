@@ -57,6 +57,7 @@ class sh1106(device):
         self._pages = self._h // 8
 
         settings = {
+            (128, 128): dict(multiplex=0xFF, displayoffset=0x02),
             (128, 64): dict(multiplex=0x3F, displayoffset=0x00),
             (128, 32): dict(multiplex=0x20, displayoffset=0x0F)
         }.get((width, height))

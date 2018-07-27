@@ -25,4 +25,5 @@ Contributors
 * Christopher Arndt (@SpotlightKid)
 * Sascha Walther (@leragequit)
 * Marcus Kellerman (@sharkusk)
+* Phil Howard (@gadgetoid)
 
