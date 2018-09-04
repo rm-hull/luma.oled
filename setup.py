@@ -56,7 +56,7 @@ setup(
     download_url="https://github.com/rm-hull/luma.oled/tarball/" + version,
     packages=["luma", "luma.oled"],
     zip_safe=False,
-    install_requires=["luma.core>=1.6.0"],
+    install_requires=["luma.core>=1.8.0"],
     setup_requires=pytest_runner,
     tests_require=test_deps,
     extras_require={
