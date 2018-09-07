@@ -54,10 +54,9 @@ setup(
               "spi i2c 256x64 128x64 128x32 96x16"),
     url="https://github.com/rm-hull/luma.oled",
     download_url="https://github.com/rm-hull/luma.oled/tarball/" + version,
-    namespace_packages=["luma"],
-    packages=["luma.oled"],
+    packages=["luma", "luma.oled"],
     zip_safe=False,
-    install_requires=["luma.core>=1.6.0"],
+    install_requires=["luma.core>=1.8.0"],
     setup_requires=pytest_runner,
     tests_require=test_deps,
     extras_require={
