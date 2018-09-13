@@ -3,6 +3,8 @@
 # Copyright (c) 2014-18 Richard Hull and contributors
 # See LICENSE.rst for details.
 
+import pytest
+
 from luma.oled.device import ssd1331
 from luma.core.render import canvas
 
@@ -77,3 +79,31 @@ def test_display():
 
     # Next 12288 bytes are data representing the drawn image
     serial.data.assert_called_once_with(get_json_data('demo_ssd1331'))
+
+
+@pytest.mark.parametrize("bit,expected_16_bit_color", [
+    (7, [0b10000100, 0b00010000]),
+    (6, [0b01000010, 0b00001000]),
+    (5, [0b00100001, 0b00000100]),
+    (4, [0b00010000, 0b10000010]),
+    (3, [0b00001000, 0b01000001]),
+    (2, [0b00000000, 0b00100000]),
+    (1, [0b00000000, 0b00000000]),
+    (0, [0b00000000, 0b00000000]),
+])
+def test_16bit_rgb_packing(bit, expected_16_bit_color):
+    """
+    Checks that 8 bit red component is packed into first 5 bits
+    Checks that 8 bit green component is packed into next 6 bits
+    Checks that 8 bit blue component is packed into remaining 5 bits
+    """
+    device = ssd1331(serial)
+    serial.reset_mock()
+
+    rgb_color = (2 ** bit,) * 3
+    expected = expected_16_bit_color * device.width * device.height
+
+    with canvas(device) as draw:
+        draw.rectangle(device.bounding_box, outline=rgb_color, fill=rgb_color)
+
+    serial.data.assert_called_once_with(expected)
