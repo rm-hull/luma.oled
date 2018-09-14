@@ -282,7 +282,7 @@ class ssd1331(device):
                 if not(r == g == b == 0):
                     # 65K format 1
                     buf[i] = r & 0xF8 | g >> 5
-                    buf[i + 1] = g << 5 & 0xE0 | b >> 3
+                    buf[i + 1] = g << 3 & 0xE0 | b >> 3
                 i += 2
 
             self.data(list(buf))
@@ -408,7 +408,7 @@ class ssd1351(device):
                 if not(r == g == b == 0):
                     # 65K format 1
                     buf[i] = r & 0xF8 | g >> 5
-                    buf[i + 1] = g << 5 & 0xE0 | b >> 3
+                    buf[i + 1] = g << 3 & 0xE0 | b >> 3
                 i += 2
 
             self.data(list(buf))

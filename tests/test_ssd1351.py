@@ -3,6 +3,8 @@
 # Copyright (c) 2017-18 Richard Hull and contributors
 # See LICENSE.rst for details.
 
+import pytest
+
 from luma.oled.device import ssd1351
 from luma.core.render import canvas
 
@@ -161,4 +163,49 @@ def test_display():
         {'command': [21]}, {'data': [0, 127]},
         {'command': [117]}, {'data': [0, 127]},
         {'command': [92]}, {'data': get_json_data('demo_ssd1351')}
+    ]
+
+
+@pytest.mark.parametrize("bit,expected_16_bit_color", [
+    (7, [0b10000100, 0b00010000]),
+    (6, [0b01000010, 0b00001000]),
+    (5, [0b00100001, 0b00000100]),
+    (4, [0b00010000, 0b10000010]),
+    (3, [0b00001000, 0b01000001]),
+    (2, [0b00000000, 0b00100000]),
+    (1, [0b00000000, 0b00000000]),
+    (0, [0b00000000, 0b00000000]),
+])
+def test_16bit_rgb_packing(bit, expected_16_bit_color):
+    """
+    Checks that 8 bit red component is packed into first 5 bits
+    Checks that 8 bit green component is packed into next 6 bits
+    Checks that 8 bit blue component is packed into remaining 5 bits
+    """
+    device = ssd1351(serial)
+    serial.reset_mock()
+
+    rgb_color = (2 ** bit,) * 3
+    expected = expected_16_bit_color * device.width * device.height
+    recordings = []
+
+    def data(data):
+        recordings.append({'data': data})
+
+    def command(*cmd):
+        recordings.append({'command': list(cmd)})
+
+    serial.command.side_effect = command
+    serial.data.side_effect = data
+
+    with canvas(device) as draw:
+        draw.rectangle(device.bounding_box, outline=rgb_color, fill=rgb_color)
+
+    assert serial.data.called
+    assert serial.command.called
+
+    assert recordings == [
+        {'command': [21]}, {'data': [0, 127]},
+        {'command': [117]}, {'data': [0, 127]},
+        {'command': [92]}, {'data': expected}
     ]
