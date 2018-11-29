@@ -356,7 +356,7 @@ class ssd1351(device):
                 "Unsupported display mode: {0} x {1}".format(width, height))
 
         # RGB or BGR order
-        order = 0x02 if bgr else 0x00
+        order = 0x04 if bgr else 0x00
 
         self.command(0xFD, 0x12)              # Unlock IC MCU interface
         self.command(0xFD, 0xB1)              # Command A2,B1,B3,BB,BE,C1 accessible if in unlock state
@@ -365,7 +365,7 @@ class ssd1351(device):
         self.command(0xCA, 0x7F)              # Mux ratio
         self.command(0x15, 0x00, width - 1)   # Set column address
         self.command(0x75, 0x00, height - 1)  # Set row address
-        self.command(0xA0, 0x74 | order)      # Segment remapping
+        self.command(0xA0, 0x70 | order)      # Segment remapping
         self.command(0xA1, 0x00)              # Set Display start line
         self.command(0xA2, 0x00)              # Set display offset
         self.command(0xB5, 0x00)              # Set GPIO
