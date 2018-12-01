@@ -311,7 +311,7 @@ class ssd1351(color_device):
                  bgr=False, **kwargs):
 
         # RGB or BGR order
-        self._color_order = 0x02 if bgr else 0x00
+        self._color_order = 0x04 if bgr else 0x00
 
         if h_offset != 0 or v_offset != 0:
             def offset(bbox):
@@ -332,7 +332,7 @@ class ssd1351(color_device):
         self.command(0xCA, 0x7F)               # Mux ratio
         self.command(0x15, 0x00, self.width - 1)    # Set column address
         self.command(0x75, 0x00, self.height - 1)   # Set row address
-        self.command(0xA0, 0x74 | self._color_order)  # Segment remapping
+        self.command(0xA0, 0x70 | self._color_order)  # Segment remapping
         self.command(0xA1, 0x00)               # Set Display start line
         self.command(0xA2, 0x00)               # Set display offset
         self.command(0xB5, 0x00)               # Set GPIO

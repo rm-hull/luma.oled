@@ -4,6 +4,11 @@ ChangeLog
 +------------+---------------------------------------------------------------------+------------+
 | Version    | Description                                                         | Date       |
 +============+=====================================================================+============+
+| *upcoming* | * **BREAKING** Fix SSD1351 init sequence didn't set RGB/BGR color   | TBC        |
+|            |   order properly. Users of this device should verify proper color   |            |
+|            |   rendering and add ``bgr=True`` if blue/red color components       |            |
+|            |   appear to be reversed                                             |            |
++------------+---------------------------------------------------------------------+------------+
 | **2.5.1**  | * Fix bug where SSD1331/1351 didn't render green accurately         | 2018/09/14 |
 +------------+---------------------------------------------------------------------+------------+
 | **2.5.0**  | * Add support form 128x128 Monochrome OLED (SH1106) (by @Gadgetoid) | 2018/09/07 |
