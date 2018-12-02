@@ -4,10 +4,12 @@ ChangeLog
 +------------+---------------------------------------------------------------------+------------+
 | Version    | Description                                                         | Date       |
 +============+=====================================================================+============+
-| *upcoming* | * **BREAKING** Fix SSD1351 init sequence didn't set RGB/BGR color   | TBC        |
+| **3.0.0**  | * **BREAKING** Fix SSD1351 init sequence didn't set RGB/BGR color   | 2018/12/02 |
 |            |   order properly. Users of this device should verify proper color   |            |
 |            |   rendering and add ``bgr=True`` if blue/red color components       |            |
 |            |   appear to be reversed                                             |            |
+|            | * Device consolidation - greyscale and colour SSD13xx devices now   |            |
+|            |   share common base classes.                                        |            |
 +------------+---------------------------------------------------------------------+------------+
 | **2.5.1**  | * Fix bug where SSD1331/1351 didn't render green accurately         | 2018/09/14 |
 +------------+---------------------------------------------------------------------+------------+
