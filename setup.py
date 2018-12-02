@@ -45,7 +45,7 @@ setup(
     author="Richard Hull",
     author_email="richard.hull@destructuring-bind.org",
     description=("A small library to drive an OLED device with either "
-                 "SSD1306, SSD1322, SSD1325, SSD1331, SSD1351 or SH1106 chipset"),
+                 "SSD1306, SSD1322, SSD1325, SSD1327, SSD1331, SSD1351 or SH1106 chipset"),
     long_description="\n\n".join([README, CONTRIB, CHANGES]),
     license="MIT",
     keywords=("raspberry pi rpi oled display screen "
@@ -54,7 +54,7 @@ setup(
               "spi i2c 256x64 128x64 128x32 96x16"),
     url="https://github.com/rm-hull/luma.oled",
     download_url="https://github.com/rm-hull/luma.oled/tarball/" + version,
-    packages=["luma", "luma.oled"],
+    packages=["luma", "luma.oled", "luma.oled.device"],
     zip_safe=False,
     install_requires=["luma.core>=1.8.0"],
     setup_requires=pytest_runner,

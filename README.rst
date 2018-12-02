@@ -87,13 +87,13 @@ it can also take advantage of the common API.
 The consequence is that any existing code that uses the old **ssd1306** package
 will need to be updated. The changes should be limited to altering import
 statements only, and are described in the 
-`API documentation <https://luma-oled.readthedocs.io/en/latest/api-documentation.html>`_.
+`upgrade documentation <https://luma-oled.readthedocs.io/en/latest/upgrade.html>`_.
 
 License
 -------
 The MIT License (MIT)
 
-Copyright (c) 2014-17 Richard Hull and contributors
+Copyright (c) 2014-18 Richard Hull and contributors
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
