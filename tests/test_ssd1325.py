@@ -91,3 +91,10 @@ def test_monochrome_display():
 
     # Next 4096 bytes are data representing the drawn image
     serial.data.assert_called_once_with(get_json_data('demo_ssd1325_monochrome'))
+
+
+def test_framebuffer_override():
+    """
+    Reproduce https://github.com/rm-hull/luma.examples/issues/95
+    """
+    ssd1325(serial, mode="1", framebuffer="diff_to_previous")
