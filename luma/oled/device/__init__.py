@@ -210,7 +210,6 @@ class ssd1309(ssd1306):
     to properly configure it. Further control commands can then be called to
     affect the brightness and other settings.
     """
-    pass
 
 
 class ssd1331(color_device):
