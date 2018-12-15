@@ -473,11 +473,11 @@ class ssd1325(greyscale_device):
     display to properly configure it. Further control commands can then be
     called to affect the brightness and other settings.
     """
-    def __init__(self, serial_interface=None, width=128, height=64, rotate=0, mode="RGB", **kwargs):
+    def __init__(self, serial_interface=None, width=128, height=64, rotate=0,
+                 mode="RGB", framebuffer="full_frame", **kwargs):
         super(ssd1325, self).__init__(luma.core.const.common, serial_interface,
-                                      width, height, rotate, mode,
-                                      framebuffer="full_frame", nibble_order=1,
-                                      **kwargs)
+                                      width, height, rotate, mode, framebuffer,
+                                      nibble_order=1, **kwargs)
 
     def _supported_dimensions(self):
         return [(128, 64)]
@@ -520,11 +520,11 @@ class ssd1327(greyscale_device):
 
     .. versionadded:: 2.4.0
     """
-    def __init__(self, serial_interface=None, width=128, height=128, rotate=0, mode="RGB", **kwargs):
+    def __init__(self, serial_interface=None, width=128, height=128, rotate=0,
+                 mode="RGB", framebuffer="full_frame",  **kwargs):
         super(ssd1327, self).__init__(luma.core.const.common, serial_interface,
-                                      width, height, rotate, mode,
-                                      framebuffer="full_frame", nibble_order=1,
-                                      **kwargs)
+                                      width, height, rotate, mode, framebuffer,
+                                      nibble_order=1, **kwargs)
 
     def _supported_dimensions(self):
         return [(128, 128)]
