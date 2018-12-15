@@ -202,6 +202,17 @@ class ssd1306(device):
         self.data(list(buf))
 
 
+class ssd1309(ssd1306):
+    """
+    Serial interface to a monochrome SSD1309 OLED display.
+
+    On creation, an initialization sequence is pumped to the display
+    to properly configure it. Further control commands can then be called to
+    affect the brightness and other settings.
+    """
+    pass
+
+    
 class ssd1331(color_device):
     """
     Serial interface to a 16-bit color (5-6-5 RGB) SSD1331 OLED display.
