@@ -212,7 +212,7 @@ class ssd1309(ssd1306):
     """
     pass
 
-    
+
 class ssd1331(color_device):
     """
     Serial interface to a 16-bit color (5-6-5 RGB) SSD1331 OLED display.
