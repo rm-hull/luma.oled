@@ -129,6 +129,18 @@ class ssd1306(device):
     On creation, an initialization sequence is pumped to the display
     to properly configure it. Further control commands can then be called to
     affect the brightness and other settings.
+
+    :param serial_interface: the serial interface (usually a
+        :py:class`luma.core.interface.serial.i2c` instance) to delegate sending
+        data and commands through.
+    :param width: the number of horizontal pixels (optional, defaults to 128).
+    :type width: int
+    :param height: the number of vertical pixels (optional, defaults to 64).
+    :type height: int
+    :param rotate: an integer value of 0 (default), 1, 2 or 3 only, where 0 is
+        no rotation, 1 is rotate 90° clockwise, 2 is 180° rotation and 3
+        represents 270° rotation.
+    :type rotate: int
     """
     def __init__(self, serial_interface=None, width=128, height=64, rotate=0, **kwargs):
         super(ssd1306, self).__init__(luma.oled.const.ssd1306, serial_interface)
@@ -209,6 +221,20 @@ class ssd1309(ssd1306):
     On creation, an initialization sequence is pumped to the display
     to properly configure it. Further control commands can then be called to
     affect the brightness and other settings.
+
+    :param serial_interface: the serial interface (usually a
+        :py:class`luma.core.interface.serial.spi` instance) to delegate sending
+        data and commands through.
+    :param width: the number of horizontal pixels (optional, defaults to 128).
+    :type width: int
+    :param height: the number of vertical pixels (optional, defaults to 64).
+    :type height: int
+    :param rotate: an integer value of 0 (default), 1, 2 or 3 only, where 0 is
+        no rotation, 1 is rotate 90° clockwise, 2 is 180° rotation and 3
+        represents 270° rotation.
+    :type rotate: int
+
+    .. versionadded:: 3.1.0
     """
 
 

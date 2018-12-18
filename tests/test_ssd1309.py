@@ -74,4 +74,4 @@ def test_display():
     serial.command.assert_called_once_with(33, 0, 127, 34, 0, 7)
 
     # Next 1024 bytes are data representing the drawn image
-    serial.data.assert_called_once_with(get_json_data('demo_ssd1306'))
+    serial.data.assert_called_once_with(get_json_data('demo_ssd1309'))
