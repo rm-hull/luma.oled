@@ -42,7 +42,7 @@ import luma.core.framebuffer
 import luma.oled.const
 
 
-__all__ = ["ssd1306", "ssd1322", "ssd1325", "ssd1327", "ssd1331", "ssd1351", "sh1106"]
+__all__ = ["ssd1306", "ssd1309", "ssd1322", "ssd1325", "ssd1327", "ssd1331", "ssd1351", "sh1106"]
 
 
 class sh1106(device):
@@ -129,6 +129,18 @@ class ssd1306(device):
     On creation, an initialization sequence is pumped to the display
     to properly configure it. Further control commands can then be called to
     affect the brightness and other settings.
+
+    :param serial_interface: the serial interface (usually a
+        :py:class:`luma.core.interface.serial.i2c` instance) to delegate sending
+        data and commands through.
+    :param width: the number of horizontal pixels (optional, defaults to 128).
+    :type width: int
+    :param height: the number of vertical pixels (optional, defaults to 64).
+    :type height: int
+    :param rotate: an integer value of 0 (default), 1, 2 or 3 only, where 0 is
+        no rotation, 1 is rotate 90° clockwise, 2 is 180° rotation and 3
+        represents 270° rotation.
+    :type rotate: int
     """
     def __init__(self, serial_interface=None, width=128, height=64, rotate=0, **kwargs):
         super(ssd1306, self).__init__(luma.oled.const.ssd1306, serial_interface)
@@ -175,8 +187,8 @@ class ssd1306(device):
 
     def display(self, image):
         """
-        Takes a 1-bit :py:mod:`PIL.Image` and dumps it to the SSD1306
-        OLED display.
+        Takes a 1-bit :py:mod:`PIL.Image` and dumps it to the OLED
+        display.
         """
         assert(image.mode == self.mode)
         assert(image.size == self.size)
@@ -202,6 +214,30 @@ class ssd1306(device):
         self.data(list(buf))
 
 
+class ssd1309(ssd1306):
+    """
+    Serial interface to a monochrome SSD1309 OLED display.
+
+    On creation, an initialization sequence is pumped to the display
+    to properly configure it. Further control commands can then be called to
+    affect the brightness and other settings.
+
+    :param serial_interface: the serial interface (usually a
+        :py:class:`luma.core.interface.serial.spi` instance) to delegate sending
+        data and commands through.
+    :param width: the number of horizontal pixels (optional, defaults to 128).
+    :type width: int
+    :param height: the number of vertical pixels (optional, defaults to 64).
+    :type height: int
+    :param rotate: an integer value of 0 (default), 1, 2 or 3 only, where 0 is
+        no rotation, 1 is rotate 90° clockwise, 2 is 180° rotation and 3
+        represents 270° rotation.
+    :type rotate: int
+
+    .. versionadded:: 3.1.0
+    """
+
+
 class ssd1331(color_device):
     """
     Serial interface to a 16-bit color (5-6-5 RGB) SSD1331 OLED display.
@@ -211,7 +247,7 @@ class ssd1331(color_device):
     called to affect the brightness and other settings.
 
     :param serial_interface: the serial interface (usually a
-        :py:class`luma.core.interface.serial.spi` instance) to delegate sending
+        :py:class:`luma.core.interface.serial.spi` instance) to delegate sending
         data and commands through.
     :param width: the number of horizontal pixels (optional, defaults to 96).
     :type width: int
@@ -282,7 +318,7 @@ class ssd1351(color_device):
     called to affect the brightness and other settings.
 
     :param serial_interface: the serial interface (usually a
-        :py:class`luma.core.interface.serial.spi` instance) to delegate sending
+        :py:class:`luma.core.interface.serial.spi` instance) to delegate sending
         data and commands through.
     :param width: the number of horizontal pixels (optional, defaults to 128).
     :type width: int
@@ -382,7 +418,7 @@ class ssd1322(greyscale_device):
     called to affect the brightness and other settings.
 
     :param serial_interface: the serial interface (usually a
-       :py:class`luma.core.interface.serial.spi` instance) to delegate sending
+       :py:class:`luma.core.interface.serial.spi` instance) to delegate sending
        data and commands through.
     :param width: the number of horizontal pixels (optional, defaults to 96).
     :type width: int
