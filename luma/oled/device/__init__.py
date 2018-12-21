@@ -187,8 +187,8 @@ class ssd1306(device):
 
     def display(self, image):
         """
-        Takes a 1-bit :py:mod:`PIL.Image` and dumps it to the SSD1306
-        OLED display.
+        Takes a 1-bit :py:mod:`PIL.Image` and dumps it to the OLED
+        display.
         """
         assert(image.mode == self.mode)
         assert(image.size == self.size)
