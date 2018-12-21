@@ -4,7 +4,7 @@ ChangeLog
 +------------+---------------------------------------------------------------------+------------+
 | Version    | Description                                                         | Date       |
 +============+=====================================================================+============+
-| *upcoming* | * Fix bug where SSD1325/1327 didn't handle ``framebuffer`` properly |            |
+| **3.0.1**  | * Fix bug where SSD1325/1327 didn't handle ``framebuffer`` properly |            |
 +------------+---------------------------------------------------------------------+------------+
 | **3.0.0**  | * **BREAKING** Fix SSD1351 init sequence didn't set RGB/BGR color   | 2018/12/02 |
 |            |   order properly. Users of this device should verify proper color   |            |
