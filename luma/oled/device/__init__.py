@@ -131,7 +131,7 @@ class ssd1306(device):
     affect the brightness and other settings.
 
     :param serial_interface: the serial interface (usually a
-        :py:class`luma.core.interface.serial.i2c` instance) to delegate sending
+        :py:class:`luma.core.interface.serial.i2c` instance) to delegate sending
         data and commands through.
     :param width: the number of horizontal pixels (optional, defaults to 128).
     :type width: int
@@ -223,7 +223,7 @@ class ssd1309(ssd1306):
     affect the brightness and other settings.
 
     :param serial_interface: the serial interface (usually a
-        :py:class`luma.core.interface.serial.spi` instance) to delegate sending
+        :py:class:`luma.core.interface.serial.spi` instance) to delegate sending
         data and commands through.
     :param width: the number of horizontal pixels (optional, defaults to 128).
     :type width: int
@@ -247,7 +247,7 @@ class ssd1331(color_device):
     called to affect the brightness and other settings.
 
     :param serial_interface: the serial interface (usually a
-        :py:class`luma.core.interface.serial.spi` instance) to delegate sending
+        :py:class:`luma.core.interface.serial.spi` instance) to delegate sending
         data and commands through.
     :param width: the number of horizontal pixels (optional, defaults to 96).
     :type width: int
@@ -318,7 +318,7 @@ class ssd1351(color_device):
     called to affect the brightness and other settings.
 
     :param serial_interface: the serial interface (usually a
-        :py:class`luma.core.interface.serial.spi` instance) to delegate sending
+        :py:class:`luma.core.interface.serial.spi` instance) to delegate sending
         data and commands through.
     :param width: the number of horizontal pixels (optional, defaults to 128).
     :type width: int
@@ -418,7 +418,7 @@ class ssd1322(greyscale_device):
     called to affect the brightness and other settings.
 
     :param serial_interface: the serial interface (usually a
-       :py:class`luma.core.interface.serial.spi` instance) to delegate sending
+       :py:class:`luma.core.interface.serial.spi` instance) to delegate sending
        data and commands through.
     :param width: the number of horizontal pixels (optional, defaults to 96).
     :type width: int
