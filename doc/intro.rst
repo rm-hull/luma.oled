@@ -4,7 +4,7 @@ Interfacing `OLED matrix displays
 <https://github.com/rm-hull/luma.oled/wiki/Usage-&-Benchmarking>`_ with the
 SSD1306, SSD1309, SSD1322, SSD1325, SSD1327, SSD1331, SSD1351 or SH1106 driver
 in Python 2 or 3 using I2C/SPI on the Raspberry Pi and other linux-based
-single-board computers: the library provides a Pillow-compatible drawing
+single-board computers: the library provides a Pillow_-compatible drawing
 canvas, and other functionality to support:
 
 * scrolling/panning capability,
@@ -39,7 +39,7 @@ and will fit neatly inside the RPi case.
    `wiki <https://github.com/rm-hull/luma.oled/wiki/Usage-&-Benchmarking>`_.
 
 As well as display drivers for various physical OLED devices there are
-emulators that run in real-time (with pygame) and others that can take
+emulators that run in real-time (with pygame_) and others that can take
 screenshots, or assemble animated GIFs, as per the examples below (source code
 for these is available in the `luma.examples <https://github.com/rm-hull/luma.examples>`_ 
 git repository:
@@ -52,3 +52,7 @@ git repository:
 
 .. image:: images/crawl_anim.gif
    :alt: crawl
+
+
+.. _Pillow: https://pillow.readthedocs.io
+.. _pygame: https://www.pygame.org

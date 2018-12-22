@@ -19,7 +19,8 @@ import luma.oled.const
 class greyscale_device(device):
     __metaclass__ = ABCMeta
 
-    def __init__(self, const, serial_interface, width, height, rotate, mode, framebuffer, nibble_order, **kwargs):
+    def __init__(self, const, serial_interface, width, height, rotate, mode,
+                 framebuffer, nibble_order, **kwargs):
         super(greyscale_device, self).__init__(const, serial_interface)
         self.capabilities(width, height, rotate, mode)
         self.framebuffer = getattr(luma.core.framebuffer, framebuffer)(self)
@@ -96,7 +97,7 @@ class greyscale_device(device):
         greyscale values using a simplified Luma calculation, based on
         *Y'=0.299R'+0.587G'+0.114B'*.
 
-        :param image: the image to render
+        :param image: The image to render.
         :type image: PIL.Image.Image
         """
         assert(image.mode == self.mode)
