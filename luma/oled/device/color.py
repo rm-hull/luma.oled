@@ -69,7 +69,7 @@ class color_device(device):
         """
         Renders a 24-bit RGB image to the Color OLED display.
 
-        :param image: the image to render.
+        :param image: The image to render.
         :type image: PIL.Image.Image
         """
         assert(image.mode == self.mode)

@@ -20,14 +20,10 @@ First, import and initialise the device:
   # substitute ssd1331(...) or sh1106(...) below if using that device
   device = ssd1306(serial)
 
-The display device should now be configured for use. The specific
-:py:class:`luma.oled.device.ssd1306`,
-:py:class:`luma.oled.device.ssd1325`,
-:py:class:`luma.oled.device.ssd1331`, or
-:py:class:`luma.oled.device.sh1106`, classes all expose a ``display()`` method
-which takes an image with attributes consistent with the capabilities of the
-device. However, for most cases, for drawing text and graphics primitives, the
-canvas class should be used as follows:
+The display device should now be configured for use. The device classes all
+expose a ``display()`` method which takes an image with attributes consistent
+with the capabilities of the device. However, for most cases, for drawing text
+and graphics primitives, the canvas class should be used as follows:
 
 .. code:: python
 
@@ -48,8 +44,8 @@ Color Model
 Any of the standard :mod:`PIL.ImageColor` color formats may be used, but since
 the SSD1306 and SH1106 OLEDs are monochrome, only the HTML color names
 ``"black"`` and ``"white"`` values should really be used; in fact, by default,
-any value *other* than black is treated as white. The :py:class:`luma.core.canvas` object
-does have a ``dither`` flag which if set to True, will convert color drawings
+any value *other* than black is treated as white. The :py:class:`luma.core.render.canvas`
+object does have a ``dither`` flag which if set to ``True``, will convert color drawings
 to a dithered monochrome effect (see the *3d_box.py* example, below).
 
 .. code:: python
