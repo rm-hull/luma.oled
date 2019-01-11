@@ -1,6 +1,6 @@
 Python usage
 ------------
-OLED displays can be driven with python using the varous implementations in the
+OLED displays can be driven with python using the various implementations in the
 :py:mod:`luma.oled.device` package.  There are several device classes available
 and usage is very simple if you have ever used `Pillow
 <https://pillow.readthedocs.io/en/latest/>`_ or PIL.
@@ -93,5 +93,5 @@ the rotated dimensions rather than the physical dimensions.
 
 Examples
 ^^^^^^^^
-After installing the library, head over to the `luma.examples <https://github.com/rm-hull/luma.examples>`_ 
+After installing the library see the `luma.examples <https://github.com/rm-hull/luma.examples>`_ 
 repository. Details of how to run the examples is shown in the example repo's README.
