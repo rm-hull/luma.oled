@@ -587,5 +587,5 @@ class ssd1327(greyscale_device):
 
     def _set_position(self, top, right, bottom, left):
         self.command(
-            0x15, left, right - 1,  # set column addr
+            0x15, left>>1, (right - 1)>>1,  # set column addr
             0x75, top, bottom - 1)  # set row addr
