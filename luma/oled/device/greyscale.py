@@ -115,4 +115,4 @@ class greyscale_device(device):
             buf = bytearray(width * height >> 1)
             self._set_position(top, right, bottom, left)
             self._populate(buf, self.framebuffer.getdata())
-            self.data(buf)
+            self.data(list(buf))
