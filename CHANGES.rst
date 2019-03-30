@@ -4,6 +4,10 @@ ChangeLog
 +------------+---------------------------------------------------------------------+------------+
 | Version    | Description                                                         | Date       |
 +============+=====================================================================+============+
+| **3.1.1**  | * Fix bug where SSD1327 ``framebuffer=diff_to_prev`` didn't set     | 2019/03/30 |
+|            |   column address properly, resulting in garbled output              |            |
+|            | * Minor API documentation improvements                              |            |
++------------+---------------------------------------------------------------------+------------+
 | **3.1.0**  | * Add support for 128x64 monochrome OLED (SSD1309)                  | 2018/12/21 |
 +------------+---------------------------------------------------------------------+------------+
 | **3.0.1**  | * Fix bug where SSD1325/1327 didn't handle ``framebuffer`` properly | 2018/12/21 |
