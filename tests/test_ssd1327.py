@@ -20,7 +20,7 @@ def test_init_128x128():
         call(184, 1, 17, 34, 50, 67, 84, 101, 118),
         call(179, 0, 171, 1, 177, 241, 188, 8, 190, 7, 213, 98, 182, 15),
         call(129, 127),
-        call(21, 0, 127, 117, 0, 127),
+        call(21, 0, 63, 117, 0, 127),
         call(175)
     ])
 
@@ -69,7 +69,7 @@ def test_greyscale_display():
         primitives(device, draw)
 
     # Initial command to reset the display
-    serial.command.assert_called_once_with(21, 0, 127, 117, 0, 127)
+    serial.command.assert_called_once_with(21, 0, 63, 117, 0, 127)
 
     # Next 4096 bytes are data representing the drawn image
     serial.data.assert_called_once_with(get_json_data('demo_ssd1327_greyscale'))
@@ -87,7 +87,7 @@ def test_monochrome_display():
         primitives(device, draw)
 
     # Initial command to reset the display
-    serial.command.assert_called_once_with(21, 0, 127, 117, 0, 127)
+    serial.command.assert_called_once_with(21, 0, 63, 117, 0, 127)
 
     # Next 4096 bytes are data representing the drawn image
     serial.data.assert_called_once_with(get_json_data('demo_ssd1327_monochrome'))

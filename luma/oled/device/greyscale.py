@@ -67,9 +67,10 @@ class greyscale_device(device):
 
     def _render_mono(self, buf, pixel_data):
         i = 0
+        nibble_order = self._nibble_order
         for pix in pixel_data:
             if pix > 0:
-                if i % 2 == self._nibble_order:
+                if i % 2 == nibble_order:
                     buf[i // 2] |= 0xF0
                 else:
                     buf[i // 2] |= 0x0F
@@ -78,12 +79,13 @@ class greyscale_device(device):
 
     def _render_greyscale(self, buf, pixel_data):
         i = 0
+        nibble_order = self._nibble_order
         for r, g, b in pixel_data:
             # RGB->Greyscale luma calculation into 4-bits
             grey = (r * 306 + g * 601 + b * 117) >> 14
 
             if grey > 0:
-                if i % 2 == self._nibble_order:
+                if i % 2 == nibble_order:
                     buf[i // 2] |= (grey << 4)
                 else:
                     buf[i // 2] |= grey

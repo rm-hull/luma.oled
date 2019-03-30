@@ -563,7 +563,7 @@ class ssd1327(greyscale_device):
     def _init_sequence(self):
         self.command(
             0xAE,               # Display off (all pixels off)
-            0xA0, 0x53,         # gment remap (com split, com remap, nibble remap, column remap)
+            0xA0, 0x53,         # Segment remap (com split, com remap, nibble remap, column remap)
             0xA1, 0x00,         # Display start line
             0xA2, 0x00,         # Display offset
             0xA4,               # regular display
@@ -587,5 +587,5 @@ class ssd1327(greyscale_device):
 
     def _set_position(self, top, right, bottom, left):
         self.command(
-            0x15, left, right - 1,  # set column addr
+            0x15, left >> 1, (right - 1) >> 1,  # set column addr
             0x75, top, bottom - 1)  # set row addr
