@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# Copyright (c) 2014-18 Richard Hull and contributors
+# Copyright (c) 2019 Richard Hull and contributors
 # See LICENSE.rst for details.
 
 from luma.oled.device import ssd1322_nhd
