@@ -4,6 +4,8 @@ ChangeLog
 +------------+---------------------------------------------------------------------+------------+
 | Version    | Description                                                         | Date       |
 +============+=====================================================================+============+
+| **3.2.0**  | * Add support for 128x64 OLED (Newhaven SSD1322_NHD))               | 2019/04/17 |
++------------+---------------------------------------------------------------------+------------+
 | **3.1.1**  | * Fix bug where SSD1327 ``framebuffer=diff_to_prev`` didn't set     | 2019/03/30 |
 |            |   column address properly, resulting in garbled output              |            |
 |            | * Minor API documentation improvements                              |            |
