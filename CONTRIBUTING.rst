@@ -27,3 +27,4 @@ Contributors
 * Marcus Kellerman (@sharkusk)
 * Phil Howard (@gadgetoid)
 * @wjgeorge
+* Doug Burrell (@doug-burrell)
