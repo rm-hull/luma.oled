@@ -42,7 +42,7 @@ import luma.core.framebuffer
 import luma.oled.const
 
 
-__all__ = ["ssd1306", "ssd1309", "ssd1322", "ssd1325", "ssd1327", "ssd1331", "ssd1351", "sh1106"]
+__all__ = ["ssd1306", "ssd1309", "ssd1322", "ssd1322_nhd", "ssd1325", "ssd1327", "ssd1331", "ssd1351", "sh1106"]
 
 
 class sh1106(device):
@@ -494,6 +494,99 @@ class ssd1322(greyscale_device):
         self._serial_interface.command(cmd)
         if len(args) > 0:
             self._serial_interface.data(list(args))
+
+
+class ssd1322_nhd(greyscale_device):
+    """Similar to ssd1322 but several options are hard coded: width, height and
+    frame buffer"""
+
+    def __init__(self, serial_interface=None, width=128, height=64, rotate=0,
+                 mode="RGB", framebuffer="full_frame", **kwargs):
+        super(ssd1322_nhd, self).__init__(luma.oled.const.ssd1322, serial_interface,
+                                      128, 64, rotate, mode, "full_frame",
+                                      nibble_order=0, **kwargs)
+
+    def _supported_dimensions(self):
+        return [(128, 64)]
+
+    def _init_sequence(self):
+        self.command(0xFD, 0x12)  # Unlock IC
+        self.command(0xAE)  # Display off
+        self.command(0xB3, 0x91)  # Display divide clockratio/freq
+        self.command(0xCA, 0x3F)  # Set MUX ratio
+        self.command(0xA2, 0x00)  # Display offset
+        self.command(0xAB, 0x01)  # Display offset
+        self.command(0xA0, 0x16, 0x11)  # Set remap & dual COM Line
+        self.command(0xC7, 0x0F)  # Master contrast (reset)
+        self.command(0xC1, 0x9F)  # Set contrast current
+        self.command(0xB1, 0xF2)  # Set default greyscale table
+        self.command(0xBB, 0x1F)  # Pre-charge voltage
+        self.command(0xB4, 0xA0, 0xFD)  # Display enhancement A (External VSL)
+        self.command(0xBE, 0x04)  # Set VcomH
+        self.command(0xA6)  # Normal display (reset)
+        self.command(0xAF)  # Exit partial display
+
+    def _set_position(self, top, bottom):
+        coladdr_start = 28
+        coladdr_end = 91
+
+        self.command(0x15, coladdr_start, coladdr_end)  # set column addr
+        self.command(0x75, top, bottom - 1)             # Reset row addr
+        self.command(0x5C)                              # Enable MCU to write data into RAM
+
+    def command(self, cmd, *args):
+        """
+        Sends a command and an (optional) sequence of arguments through to the
+        delegated serial interface. Note that the arguments are passed through
+        as data.
+        """
+        self._serial_interface.command(cmd)
+        if len(args) > 0:
+            self._serial_interface.data(list(args))
+
+    def _render_mono(self, buf, pixel_data):
+        i = 0
+        for pix in pixel_data:
+            if pix > 0:
+                buf[i] = 0xFF
+
+            i += 1
+
+    def _render_greyscale(self, buf, pixel_data):
+        i = 0
+        for r, g, b in pixel_data:
+            # RGB->Greyscale luma calculation into 8-bits
+            grey = (r * 306 + g * 601 + b * 117) >> 10
+
+            if grey > 0:
+                buf[i] = grey
+
+            i += 1
+
+    def display(self, image):
+        """
+        Takes a 1-bit monochrome or 24-bit RGB image and renders it
+        to the greyscale OLED display. RGB pixels are converted to 8-bit
+        greyscale values using a simplified Luma calculation, based on
+        *Y'=0.299R'+0.587G'+0.114B'*.
+
+        :param image: the image to render
+        :type image: PIL.Image.Image
+        """
+        assert(image.mode == self.mode)
+        assert(image.size == self.size)
+
+        image = self.preprocess(image)
+
+        if self.framebuffer.redraw_required(image):
+            left, top, right, bottom = self.framebuffer.inflate_bbox()
+            width = right - left
+            height = bottom - top
+
+            buf = bytearray(width * height)
+            self._set_position(top, bottom)
+            self._populate(buf, self.framebuffer.getdata())
+            self.data(list(buf))
 
 
 class ssd1325(greyscale_device):
