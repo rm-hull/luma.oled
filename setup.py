@@ -5,8 +5,7 @@ import re
 import os
 import sys
 from io import open
-
-from setuptools import setup
+from setuptools import setup, find_packages
 
 
 def read_file(fpath):
@@ -55,7 +54,8 @@ setup(
               "spi i2c 256x64 128x64 128x32 96x16"),
     url="https://github.com/rm-hull/luma.oled",
     download_url="https://github.com/rm-hull/luma.oled/tarball/" + version,
-    packages=["luma", "luma.oled", "luma.oled.device"],
+    packages=find_packages(),
+    namespace_packages=["luma"],
     zip_safe=False,
     install_requires=["luma.core>=1.8.0"],
     setup_requires=pytest_runner,
