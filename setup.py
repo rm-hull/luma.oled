@@ -5,8 +5,7 @@ import re
 import os
 import sys
 from io import open
-
-from setuptools import setup
+from setuptools import setup, find_packages
 
 
 def read_file(fpath):
@@ -35,7 +34,7 @@ needs_pytest = {'pytest', 'test', 'ptr'}.intersection(sys.argv)
 pytest_runner = ['pytest-runner'] if needs_pytest else []
 test_deps = [
     'mock;python_version<"3.3"',
-    'pytest==4.5',
+    'pytest<=4.5',
     'pytest-cov'
 ]
 
@@ -55,9 +54,10 @@ setup(
               "spi i2c 256x64 128x64 128x32 96x16"),
     url="https://github.com/rm-hull/luma.oled",
     download_url="https://github.com/rm-hull/luma.oled/tarball/" + version,
-    packages=["luma", "luma.oled", "luma.oled.device"],
+    packages=find_packages(),
+    namespace_packages=["luma"],
     zip_safe=False,
-    install_requires=["luma.core>=1.8.0"],
+    install_requires=["luma.core>=1.12.0"],
     setup_requires=pytest_runner,
     tests_require=test_deps,
     extras_require={
