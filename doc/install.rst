@@ -21,7 +21,7 @@ Installation
 
 Install the latest version of the library directly from PyPI_::
 
-  $ sudo apt-get install python-dev python-pip libfreetype6-dev libjpeg-dev build-essential
+  $ sudo apt install python-dev python-pip libfreetype6-dev libjpeg-dev build-essential libopenjp2-7 libtiff5
   $ sudo -H pip install --upgrade luma.oled
 
 If you are upgrading from a previous version, make sure to read the
