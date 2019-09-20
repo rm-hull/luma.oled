@@ -39,6 +39,9 @@ As soon as the with scope is ended, the resultant image is automatically
 flushed to the device's display memory and the :mod:`PIL.ImageDraw` object is
 garbage collected.
 
+Note: at the end of the program the display is cleared. This means that a fast program
+that ends quickly may never display a visible image.
+
 Color Model
 ^^^^^^^^^^^
 Any of the standard :mod:`PIL.ImageColor` color formats may be used, but since
@@ -76,6 +79,7 @@ when creating the device:
   from luma.core.interface.serial import i2c
   from luma.core.render import canvas
   from luma.oled.device import ssd1306, ssd1325, ssd1331, sh1106
+  from time import sleep
 
   serial = i2c(port=1, address=0x3C)
   device = ssd1306(serial, rotate=1)
@@ -84,6 +88,7 @@ when creating the device:
   with canvas(device) as draw:
       draw.rectangle(device.bounding_box, outline="white", fill="black")
       draw.text((10, 40), "Hello World", fill="white")
+  sleep(10)
 
 *N* should be a value of 0, 1, 2 or 3 only, where 0 is no rotation, 1 is
 rotate 90° clockwise, 2 is 180° rotation and 3 represents 270° rotation.
