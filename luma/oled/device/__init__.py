@@ -42,7 +42,7 @@ import luma.core.framebuffer
 import luma.oled.const
 
 
-__all__ = ["ssd1306", "ssd1309", "ssd1322", "ssd1322_nhd", "ssd1325", "ssd1327", "ssd1331", "ssd1351", "sh1106"]
+__all__ = ["ssd1306", "ssd1309", "ssd1322", "ssd1362", "ssd1322_nhd", "ssd1325", "ssd1327", "ssd1331", "ssd1351", "sh1106"]
 
 
 class sh1106(device):
@@ -474,6 +474,87 @@ class ssd1322(greyscale_device):
         self.command(0xBE, 0x00)        # Set VcomH
         self.command(0xA6)              # Normal display (reset)
         self.command(0xA9)              # Exit partial display
+
+    def _set_position(self, top, right, bottom, left):
+        width = right - left
+        pix_start = self._column_offset + left
+        coladdr_start = pix_start >> 2
+        coladdr_end = (pix_start + width >> 2) - 1
+
+        self.command(0x15, coladdr_start, coladdr_end)  # set column addr
+        self.command(0x75, top, bottom - 1)             # Reset row addr
+        self.command(0x5C)                              # Enable MCU to write data into RAM
+
+    def command(self, cmd, *args):
+        """
+        Sends a command and an (optional) sequence of arguments through to the
+        delegated serial interface. Note that the arguments are passed through
+        as data.
+        """
+        self._serial_interface.command(cmd)
+        if len(args) > 0:
+            self._serial_interface.data(list(args))
+
+
+class ssd1362(greyscale_device):
+    """
+    Serial interface to a 4-bit greyscale SSD1362 OLED display.
+
+    On creation, an initialization sequence is pumped to the
+    display to properly configure it. Further control commands can then be
+    called to affect the brightness and other settings.
+
+    :param serial_interface: The serial interface (usually a
+       :py:class:`luma.core.interface.serial.spi` instance) to delegate sending
+       data and commands through.
+    :param width: The number of horizontal pixels (optional, defaults to 96).
+    :type width: int
+    :param height: The number of vertical pixels (optional, defaults to 64).
+    :type height: int
+    :param rotate: An integer value of 0 (default), 1, 2 or 3 only, where 0 is
+        no rotation, 1 is rotate 90° clockwise, 2 is 180° rotation and 3
+        represents 270° rotation.
+    :type rotate: int
+    :param mode: Supplying "1" or "RGB" effects a different rendering
+         mechanism, either to monochrome or 4-bit greyscale.
+    :type mode: str
+    :param framebuffer: Framebuffering strategy, currently values of
+        ``diff_to_previous`` or ``full_frame`` are only supported
+    :type framebuffer: str
+
+    """
+    def __init__(self, serial_interface=None, width=256, height=64, rotate=0,
+                 mode="RGB", framebuffer="diff_to_previous", **kwargs):
+        self._column_offset = (480 - width) // 2
+        super(ssd1362, self).__init__(luma.oled.const.ssd1362, serial_interface,
+                                      width, height, rotate, mode, framebuffer,
+                                      nibble_order=0, **kwargs)
+
+    def _supported_dimensions(self):
+        return [(256, 64), (256, 48), (256, 32),
+                (128, 64), (128, 48), (128, 32),
+                (64, 64),  (64, 48),  (64, 32)]
+
+    def _init_sequence(self):
+        self.command(0xFD, 0x12)        # Unlock IC
+        self.command(0xAE)              # Display off (all pixels off)
+        self.command(0xAB, 0x01)        # Function select (internal Vdd)
+        self.command(0xAD, 0x9E)        # IREF Selection
+        self.command(0x15, 0x00, 0x7F)  # Set column address
+        self.command(0x75, 0x00, 0x3F)  # Set row address
+        self.command(0x81, 0x87)        # Master contrast (reset)
+        self.command(0xA0, 0x53)        # Remap
+        self.command(0xA1, 0x00)        # Display start Line
+        self.command(0xA2, 0x00)        # Display offset
+        self.command(0xA4)              # Set display mode
+        self.command(0xA8, 0x3F)        # Set MUX ratio
+        self.command(0xB1, 0x11)        # Phase length
+        self.command(0xB3, 0xF0)        # Display divide clockratio/freq
+        self.command(0xB9)              # Set default greyscale table
+        self.command(0xBC, 0x04)        # Pre-charge voltage
+        self.command(0xBE, 0x05)        # Set VcomH
+        self.command(0xAF)              # Display on
+
 
     def _set_position(self, top, right, bottom, left):
         width = right - left
