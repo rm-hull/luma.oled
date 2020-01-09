@@ -29,6 +29,7 @@ README = read_file('README.rst')
 CONTRIB = read_file('CONTRIBUTING.rst')
 CHANGES = read_file('CHANGES.rst')
 version = find_version('luma', 'oled', '__init__.py')
+project_url = 'https://github.com/rm-hull/luma.oled'
 
 needs_pytest = {'pytest', 'test', 'ptr'}.intersection(sys.argv)
 pytest_runner = ['pytest-runner'] if needs_pytest else []
@@ -47,13 +48,20 @@ setup(
                  "SSD1306, SSD1309, SSD1322, SSD1325, SSD1327, SSD1331, "
                  "SSD1351 or SH1106 chipset"),
     long_description="\n\n".join([README, CONTRIB, CHANGES]),
+    long_description_content_type="text/x-rst",
+    python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, <4',
     license="MIT",
     keywords=("raspberry pi rpi oled display screen "
               "rgb monochrome greyscale color "
               "ssd1306 ssd1309 ssd1322 ssd1325 ssd1327 ssd1331 ssd1351 sh1106 "
               "spi i2c 256x64 128x64 128x32 96x16"),
-    url="https://github.com/rm-hull/luma.oled",
-    download_url="https://github.com/rm-hull/luma.oled/tarball/" + version,
+    url=project_url,
+    download_url=project_url + "/tarball/" + version,
+    project_urls={
+        'Documentation': 'https://luma-oled.readthedocs.io',
+        'Source': project_url,
+        'Issue Tracker': project_url + '/issues',
+    },
     packages=find_packages(),
     namespace_packages=["luma"],
     zip_safe=False,
@@ -80,9 +88,9 @@ setup(
         "Programming Language :: Python :: 2",
         "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.4",
         "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
-        "Programming Language :: Python :: 3.7"
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8"
     ]
 )
