@@ -525,7 +525,6 @@ class ssd1362(greyscale_device):
     """
     def __init__(self, serial_interface=None, width=256, height=64, rotate=0,
                  mode="RGB", framebuffer="diff_to_previous", **kwargs):
-        self._column_offset = (480 - width) // 2
         super(ssd1362, self).__init__(luma.oled.const.ssd1362, serial_interface,
                                       width, height, rotate, mode, framebuffer,
                                       nibble_order=1, **kwargs)
@@ -568,9 +567,7 @@ class ssd1362(greyscale_device):
 
     def command(self, *cmd):
         """
-        Sends a command and an (optional) sequence of arguments through to the
-        delegated serial interface. Note that the arguments are passed through
-        as data.
+        Sends a sequence of  commands through to the delegated serial interface.
         """
         self._serial_interface.command(*cmd)
 
