@@ -528,53 +528,64 @@ class ssd1362(greyscale_device):
         self._column_offset = (480 - width) // 2
         super(ssd1362, self).__init__(luma.oled.const.ssd1362, serial_interface,
                                       width, height, rotate, mode, framebuffer,
-                                      nibble_order=0, **kwargs)
+                                      nibble_order=1, **kwargs)
 
     def _supported_dimensions(self):
-        return [(256, 64), (256, 48), (256, 32),
-                (128, 64), (128, 48), (128, 32),
-                (64, 64),  (64, 48),  (64, 32)]
+        return [(256, 64)]
 
     def _init_sequence(self):
-        self.command(0xFD, 0x12)        # Unlock IC
-        self.command(0xAE)              # Display off (all pixels off)
-        self.command(0xAB, 0x01)        # Function select (internal Vdd)
-        self.command(0xAD, 0x9E)        # IREF Selection
-        self.command(0x15, 0x00, 0x7F)  # Set column address
-        self.command(0x75, 0x00, 0x3F)  # Set row address
-        self.command(0x81, 0x87)        # Master contrast (reset)
-        self.command(0xA0, 0x53)        # Remap
-        self.command(0xA1, 0x00)        # Display start Line
-        self.command(0xA2, 0x00)        # Display offset
+        self.command(0xAB)              # Set Vdd Mode
+        self.command(0x01)              # ELW2106AA VCI = 3.0V
+        self.command(0xAD)              # Set IREF selection
+        self.command(0x9E)              #
+        self.command(0x15, 0x00, 0x7F)              # Set column address
+        self.command(0x75, 0x00, 0x3F)              # Set row address
+        self.command(0xA0, 0x43)        # Set Re-map
+        self.command(0xA1)              # Set display start line
+        self.command(0x00)              #
+        self.command(0xA2)              # Set display offset
+        self.command(0x00)              #
         self.command(0xA4)              # Set display mode
-        self.command(0xA8, 0x3F)        # Set MUX ratio
-        self.command(0xB1, 0x11)        # Phase length
-        self.command(0xB3, 0xF0)        # Display divide clockratio/freq
-        self.command(0xB9)              # Set default greyscale table
-        self.command(0xBC, 0x04)        # Pre-charge voltage
-        self.command(0xBE, 0x05)        # Set VcomH
-        self.command(0xAF)              # Display on
+        self.command(0xA8)              # Set multiplex ratio
+        self.command(0x3F)              #
+        self.command(0xB1)              # Set Phase1,2 length
+        self.command(0x11)              #
+        self.command(0xB3)              # Set display clock divide ratio
+        self.command(0xF0)              #
+        self.command(0xB9)              # Grey scale table
+        self.command(0xBC)              # Set pre-charge voltage
+        self.command(0x04)              #
+        self.command(0xBE)              # Set VCOMH deselect level
+        self.command(0x05)              # 0.82 * Vcc
 
+        self.contrast(0x87)
 
     def _set_position(self, top, right, bottom, left):
-        width = right - left
-        pix_start = self._column_offset + left
-        coladdr_start = pix_start >> 2
-        coladdr_end = (pix_start + width >> 2) - 1
+        self.command(
+            0x15, left >> 1, (right - 1) >> 1,  # set column addr
+            0x75, top, bottom - 1,  # set row addr
+        )
 
-        self.command(0x15, coladdr_start, coladdr_end)  # set column addr
-        self.command(0x75, top, bottom - 1)             # Reset row addr
-        self.command(0x5C)                              # Enable MCU to write data into RAM
-
-    def command(self, cmd, *args):
+    def command(self, *cmd):
         """
         Sends a command and an (optional) sequence of arguments through to the
         delegated serial interface. Note that the arguments are passed through
         as data.
         """
-        self._serial_interface.command(cmd)
-        if len(args) > 0:
-            self._serial_interface.data(list(args))
+        self._serial_interface.command(*cmd)
+
+    def contrast(self, level):
+        """
+        Switches the display contrast to the desired level, in the range
+        0-255. Note that setting the level to a low (or zero) value will
+        not necessarily dim the display to nearly off. In other words,
+        this method is **NOT** suitable for fade-in/out animation.
+
+        :param level: Desired contrast level in the range of 0-255.
+        :type level: int
+        """
+        assert(0 <= level <= 255)
+        self.command(0x81, level)
 
 
 class ssd1322_nhd(greyscale_device):
