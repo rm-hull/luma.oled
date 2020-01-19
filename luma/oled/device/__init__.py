@@ -42,7 +42,7 @@ import luma.core.framebuffer
 import luma.oled.const
 
 
-__all__ = ["ssd1306", "ssd1309", "ssd1322", "ssd1322_nhd", "ssd1325", "ssd1327", "ssd1331", "ssd1351", "sh1106"]
+__all__ = ["ssd1306", "ssd1309", "ssd1322", "ssd1362", "ssd1322_nhd", "ssd1325", "ssd1327", "ssd1331", "ssd1351", "sh1106"]
 
 
 class sh1106(device):
@@ -494,6 +494,67 @@ class ssd1322(greyscale_device):
         self._serial_interface.command(cmd)
         if len(args) > 0:
             self._serial_interface.data(list(args))
+
+
+class ssd1362(greyscale_device):
+    """
+    Serial interface to a 4-bit greyscale SSD1362 OLED display.
+
+    On creation, an initialization sequence is pumped to the
+    display to properly configure it. Further control commands can then be
+    called to affect the brightness and other settings.
+
+    :param serial_interface: The serial interface (usually a
+       :py:class:`luma.core.interface.serial.spi` instance) to delegate sending
+       data and commands through.
+    :param width: The number of horizontal pixels (optional, defaults to 96).
+    :type width: int
+    :param height: The number of vertical pixels (optional, defaults to 64).
+    :type height: int
+    :param rotate: An integer value of 0 (default), 1, 2 or 3 only, where 0 is
+        no rotation, 1 is rotate 90° clockwise, 2 is 180° rotation and 3
+        represents 270° rotation.
+    :type rotate: int
+    :param mode: Supplying "1" or "RGB" effects a different rendering
+         mechanism, either to monochrome or 4-bit greyscale.
+    :type mode: str
+    :param framebuffer: Framebuffering strategy, currently values of
+        ``diff_to_previous`` or ``full_frame`` are only supported
+    :type framebuffer: str
+
+    .. versionadded:: 3.4.0
+    """
+    def __init__(self, serial_interface=None, width=256, height=64, rotate=0,
+                 mode="RGB", framebuffer="diff_to_previous", **kwargs):
+        super(ssd1362, self).__init__(luma.oled.const.ssd1362, serial_interface,
+                                      width, height, rotate, mode, framebuffer,
+                                      nibble_order=1, **kwargs)
+
+    def _supported_dimensions(self):
+        return [(256, 64)]
+
+    def _init_sequence(self):
+        self.command(
+            0xAB,              # Set Vdd Mode
+            0x01,              # ELW2106AA VCI = 3.0V
+            0xAD, 0x9E,        # Set IREF selection
+            0x15, 0x00, 0x7F,  # Set column address
+            0x75, 0x00, 0x3F,  # Set row address
+            0xA0, 0x43,        # Set Re-map
+            0xA1, 0x00,        # Set display start line
+            0xA2, 0x00,        # Set display offset
+            0xA4,              # Set display mode
+            0xA8, 0x3F,        # Set multiplex ratio
+            0xB1, 0x11,        # Set Phase1,2 length
+            0xB3, 0xF0,        # Set display clock divide ratio
+            0xB9,              # Grey scale table
+            0xBC, 0x04,        # Set pre-charge voltage
+            0xBE, 0x05)        # Set VCOMH deselect level, 0.82 * Vcc
+
+    def _set_position(self, top, right, bottom, left):
+        self.command(
+            0x15, left >> 1, (right - 1) >> 1,  # set column addr
+            0x75, top, bottom - 1)              # set row addr
 
 
 class ssd1322_nhd(greyscale_device):

@@ -46,7 +46,7 @@ setup(
     author_email="richard.hull@destructuring-bind.org",
     description=("A small library to drive an OLED device with either "
                  "SSD1306, SSD1309, SSD1322, SSD1325, SSD1327, SSD1331, "
-                 "SSD1351 or SH1106 chipset"),
+                 "SSD1351, SSD1362 or SH1106 chipset"),
     long_description="\n\n".join([README, CONTRIB, CHANGES]),
     long_description_content_type="text/x-rst",
     python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, <4',
