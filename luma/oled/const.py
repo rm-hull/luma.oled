@@ -34,6 +34,7 @@ class ssd1322(common):
     DISPLAYOFF = 0xAE
     SETCONTRAST = 0xC1
 
+
 class ssd1362(common):
     DISPLAYON = 0xAF
     DISPLAYOFF = 0xAE
