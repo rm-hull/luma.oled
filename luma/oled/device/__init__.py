@@ -535,54 +535,26 @@ class ssd1362(greyscale_device):
     def _init_sequence(self):
         self.command(0xAB)              # Set Vdd Mode
         self.command(0x01)              # ELW2106AA VCI = 3.0V
-        self.command(0xAD)              # Set IREF selection
-        self.command(0x9E)              #
-        self.command(0x15, 0x00, 0x7F)              # Set column address
-        self.command(0x75, 0x00, 0x3F)              # Set row address
+        self.command(0xAD, 0x9E)        # Set IREF selection
+        self.command(0x15, 0x00, 0x7F)  # Set column address
+        self.command(0x75, 0x00, 0x3F)  # Set row address
         self.command(0xA0, 0x43)        # Set Re-map
-        self.command(0xA1)              # Set display start line
-        self.command(0x00)              #
-        self.command(0xA2)              # Set display offset
-        self.command(0x00)              #
+        self.command(0xA1, 0x00)        # Set display start line
+        self.command(0xA2, 0x00)        # Set display offset
         self.command(0xA4)              # Set display mode
-        self.command(0xA8)              # Set multiplex ratio
-        self.command(0x3F)              #
-        self.command(0xB1)              # Set Phase1,2 length
-        self.command(0x11)              #
-        self.command(0xB3)              # Set display clock divide ratio
-        self.command(0xF0)              #
+        self.command(0xA8, 0x3F)        # Set multiplex ratio
+        self.command(0xB1, 0x11)        # Set Phase1,2 length
+        self.command(0xB3, 0xF0)        # Set display clock divide ratio
         self.command(0xB9)              # Grey scale table
-        self.command(0xBC)              # Set pre-charge voltage
-        self.command(0x04)              #
-        self.command(0xBE)              # Set VCOMH deselect level
-        self.command(0x05)              # 0.82 * Vcc
+        self.command(0xBC, 0x04)        # Set pre-charge voltage
+        self.command(0xBE, 0x05)        # Set VCOMH deselect level, 0.82 * Vcc
 
         self.contrast(0x87)
 
     def _set_position(self, top, right, bottom, left):
         self.command(
             0x15, left >> 1, (right - 1) >> 1,  # set column addr
-            0x75, top, bottom - 1,  # set row addr
-        )
-
-    def command(self, *cmd):
-        """
-        Sends a sequence of  commands through to the delegated serial interface.
-        """
-        self._serial_interface.command(*cmd)
-
-    def contrast(self, level):
-        """
-        Switches the display contrast to the desired level, in the range
-        0-255. Note that setting the level to a low (or zero) value will
-        not necessarily dim the display to nearly off. In other words,
-        this method is **NOT** suitable for fade-in/out animation.
-
-        :param level: Desired contrast level in the range of 0-255.
-        :type level: int
-        """
-        assert(0 <= level <= 255)
-        self.command(0x81, level)
+            0x75, top, bottom - 1)              # set row addr
 
 
 class ssd1322_nhd(greyscale_device):
