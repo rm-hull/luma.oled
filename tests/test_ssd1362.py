@@ -89,4 +89,3 @@ def test_monochrome_display():
 
     # Next 4096 bytes are data representing the drawn image
     serial.data.assert_called_once_with(get_json_data('demo_ssd1362_monochrome'))
-
