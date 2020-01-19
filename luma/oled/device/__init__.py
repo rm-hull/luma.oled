@@ -533,23 +533,22 @@ class ssd1362(greyscale_device):
         return [(256, 64)]
 
     def _init_sequence(self):
-        self.command(0xAB)              # Set Vdd Mode
-        self.command(0x01)              # ELW2106AA VCI = 3.0V
-        self.command(0xAD, 0x9E)        # Set IREF selection
-        self.command(0x15, 0x00, 0x7F)  # Set column address
-        self.command(0x75, 0x00, 0x3F)  # Set row address
-        self.command(0xA0, 0x43)        # Set Re-map
-        self.command(0xA1, 0x00)        # Set display start line
-        self.command(0xA2, 0x00)        # Set display offset
-        self.command(0xA4)              # Set display mode
-        self.command(0xA8, 0x3F)        # Set multiplex ratio
-        self.command(0xB1, 0x11)        # Set Phase1,2 length
-        self.command(0xB3, 0xF0)        # Set display clock divide ratio
-        self.command(0xB9)              # Grey scale table
-        self.command(0xBC, 0x04)        # Set pre-charge voltage
-        self.command(0xBE, 0x05)        # Set VCOMH deselect level, 0.82 * Vcc
-
-        self.contrast(0x87)
+        self.command(
+            0xAB,              # Set Vdd Mode
+            0x01,              # ELW2106AA VCI = 3.0V
+            0xAD, 0x9E,        # Set IREF selection
+            0x15, 0x00, 0x7F,  # Set column address
+            0x75, 0x00, 0x3F,  # Set row address
+            0xA0, 0x43,        # Set Re-map
+            0xA1, 0x00,        # Set display start line
+            0xA2, 0x00,        # Set display offset
+            0xA4,              # Set display mode
+            0xA8, 0x3F,        # Set multiplex ratio
+            0xB1, 0x11,        # Set Phase1,2 length
+            0xB3, 0xF0,        # Set display clock divide ratio
+            0xB9,              # Grey scale table
+            0xBC, 0x04,        # Set pre-charge voltage
+            0xBE, 0x05)        # Set VCOMH deselect level, 0.82 * Vcc
 
     def _set_position(self, top, right, bottom, left):
         self.command(
