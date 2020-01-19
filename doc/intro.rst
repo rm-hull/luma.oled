@@ -2,7 +2,7 @@ Introduction
 ------------
 Interfacing `OLED matrix displays
 <https://github.com/rm-hull/luma.oled/wiki/Usage-&-Benchmarking>`_ with the
-SSD1306, SSD1309, SSD1322, SSD1325, SSD1327, SSD1331, SSD1351 or SH1106 driver
+SSD1306, SSD1309, SSD1322, SSD1325, SSD1327, SSD1331, SSD1351, SSD1362 or SH1106 driver
 in Python 2 or 3 using I2C/SPI on the Raspberry Pi and other linux-based
 single-board computers: the library provides a Pillow_-compatible drawing
 canvas, and other functionality to support:
@@ -33,6 +33,7 @@ and will fit neatly inside the RPi case.
    - :download:`SSD1327 <tech-spec/SSD1327.pdf>`
    - :download:`SSD1331 <tech-spec/SSD1331.pdf>`
    - :download:`SSD1351 <tech-spec/SSD1351.pdf>`
+   - :download:`SSD1362 <tech-spec/SSD1362.pdf>`
    - :download:`SH1106 <tech-spec/SH1106.pdf>`
 
    Benchmarks for tested devices can be found in the
