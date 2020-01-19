@@ -522,6 +522,7 @@ class ssd1362(greyscale_device):
         ``diff_to_previous`` or ``full_frame`` are only supported
     :type framebuffer: str
 
+    .. versionadded:: 3.4.0
     """
     def __init__(self, serial_interface=None, width=256, height=64, rotate=0,
                  mode="RGB", framebuffer="diff_to_previous", **kwargs):
