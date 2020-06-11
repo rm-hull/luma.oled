@@ -7,7 +7,7 @@ from luma.oled.device import ssd1322_nhd
 from luma.core.render import canvas
 
 from baseline_data import get_json_data, primitives
-from helpers import serial, setup_function, assert_invalid_dimensions  # noqa: F401
+from helpers import serial
 
 
 def test_init_128x64():

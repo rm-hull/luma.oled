@@ -7,8 +7,8 @@ from luma.oled.device import sh1106
 from luma.core.render import canvas
 
 from baseline_data import get_json_data, primitives
-from helpers import (serial, call, Mock, setup_function,  # noqa: F401
-    assert_invalid_dimensions)
+from helpers import serial, assert_invalid_dimensions
+from unittest.mock import Mock, call
 
 
 def test_init_128x64():

@@ -34,7 +34,6 @@ project_url = 'https://github.com/rm-hull/luma.oled'
 needs_pytest = {'pytest', 'test', 'ptr'}.intersection(sys.argv)
 pytest_runner = ['pytest-runner'] if needs_pytest else []
 test_deps = [
-    'mock;python_version<"3.3"',
     'pytest<=4.5',
     'pytest-cov'
 ]
@@ -49,7 +48,7 @@ setup(
                  "SSD1351, SSD1362 or SH1106 chipset"),
     long_description="\n\n".join([README, CONTRIB, CHANGES]),
     long_description_content_type="text/x-rst",
-    python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, <4',
+    python_requires='>=3.5, <4',
     license="MIT",
     keywords=("raspberry pi rpi oled display screen "
               "rgb monochrome greyscale color "
@@ -85,8 +84,6 @@ setup(
         "Intended Audience :: Developers",
         "Topic :: Education",
         "Topic :: System :: Hardware",
-        "Programming Language :: Python :: 2",
-        "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
