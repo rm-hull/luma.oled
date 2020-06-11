@@ -27,7 +27,7 @@ Luma.OLED
 
 .. image:: https://img.shields.io/maintenance/yes/2020.svg?maxAge=2592000
 
-Python library interfacing OLED matrix displays with the SSD1306, SSD1309,
+Python 3 library interfacing OLED matrix displays with the SSD1306, SSD1309,
 SSD1322, SSD1325, SSD1327, SSD1331, SSD1351 or SH1106 driver using I2C/SPI on
 the Raspberry Pi and other linux-based single-board computers - it provides a
 `Pillow <https://pillow.readthedocs.io/>`_-compatible drawing canvas, and other
