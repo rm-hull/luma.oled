@@ -7,7 +7,7 @@ from luma.oled.device import ssd1325
 from luma.core.render import canvas
 
 from baseline_data import get_json_data, primitives
-from helpers import serial, assert_invalid_dimensions
+from helpers import serial, assert_invalid_dimensions, setup_function  # noqa: F401
 from unittest.mock import call
 
 
