@@ -355,6 +355,9 @@ class ssd1351(color_device):
         # RGB or BGR order
         self._color_order = 0x04 if bgr else 0x00
 
+        if width is 128 and height is 96:
+            v_offset = 32
+
         if h_offset != 0 or v_offset != 0:
             def offset(bbox):
                 left, top, right, bottom = bbox
@@ -364,7 +367,7 @@ class ssd1351(color_device):
         super(ssd1351, self).__init__(serial_interface, width, height, rotate, framebuffer, **kwargs)
 
     def _supported_dimensions(self):
-        return [(96, 96), (128, 128)]
+        return [(96, 96), (128, 128), (128, 96)]
 
     def _init_sequence(self):
         self.command(0xFD, 0x12)               # Unlock IC MCU interface
