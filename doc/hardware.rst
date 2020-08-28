@@ -241,3 +241,4 @@ Device Pin Name   Remarks          RPi Pin  RPi Function
   * Reading from the display is not supported by the parallel class so it needs
     to be connected to ground in order to always be set for writes (assuming the
     device uses logic-low for write).
+  * Be careful with the logic level of the device you are using.

@@ -824,8 +824,8 @@ class ws0010(parallel_device, character):
 
     .. versionadded:: 3.6.0
     """
-    def __init__(self, serial_interface=None, width=100, height=16, undefined='_', font=None, selected_font=0, rotate=0, framebuffer="diff_to_previous", const=luma.oled.const.ws0010, **kwargs):
-        super(ws0010, self).__init__(const, serial_interface, **kwargs)
+    def __init__(self, serial_interface=None, width=100, height=16, undefined='_', font=None, selected_font=0, exec_time=1e-6 * 50, rotate=0, framebuffer="diff_to_previous", const=luma.oled.const.ws0010, **kwargs):
+        super(ws0010, self).__init__(const, serial_interface, exec_time=exec_time, **kwargs)
         self.capabilities(width, height, rotate)
         self.framebuffer = getattr(luma.core.framebuffer, framebuffer)(self)
         self.font = font if font is not None else embedded_fonts(self._const.FONTDATA, selected_font=selected_font)
