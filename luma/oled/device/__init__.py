@@ -780,6 +780,16 @@ class ws0010(parallel_device, character):
         ``diff_to_previous`` or ``full_frame`` are only supported.
     :type framebuffer: str
 
+    To place text on the display, simply assign the text to the 'text'
+    instance variable::
+
+        p = parallel(RS=7, E=8, PINS=[25,24,23,18])
+        my_display = ws0010(p, selected_font='FT01')
+        my_display.text = 'WS0010 Display\\nFont FT01 5x8'
+
+    For more details on how to use the 'text' interface see
+    :class:`luma.core.virtual.character`
+
     .. note:
         The ws0010 is a fully graphical device that also supports character-based
         operations similar to LCD displays such as the hd44780.  This driver
@@ -810,17 +820,7 @@ class ws0010(parallel_device, character):
         |    6   | FT10_10 | English Russian      | 5x10 |
         +--------+---------+----------------------+------+
         |    7   | FT11_10 | Western European II  | 5x10 |
-        +--------+---------+----------------------+------+
-
-        To place text on the display, simply assign the text to the 'text'
-        instance variable::
-
-            p = parallel(RS=7, E=8, PINS=[25,24,23,18])
-            my_display = ws0010(p, selected_font='FT01')
-            my_display.text = 'WS0010 Display\\nFont FT01 5x8'
-
-        For more details on how to use the 'text' interface see
-        :class:`luma.core.virtual.character`
+        +--------+---------+----------------------+------+    
 
     .. versionadded:: 3.6.0
     """
