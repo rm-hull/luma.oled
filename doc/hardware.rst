@@ -3,9 +3,10 @@ Hardware
 
 Identifying your serial interface
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-You can determine if you have an I2C or a SPI interface by counting the number
-of pins on your card. An I2C display will have 4 pins while an SPI interface
-will have 6 or 7 pins.
+You can determine if you have an I2C, SPI or parallel-bus interface by counting
+the number of pins on your card. An I2C display will have 4 pins while an SPI
+interface will have 6 or 7 pins, and a parallel-bus interface will typically need
+to have at least 9 pins connected on a device that will contain as 16+ pins.
 
 If you have a SPI display, check the back of your display for a configuration
 such as this:
@@ -20,13 +21,15 @@ that is currently supported by the SPI mode of this library.
 A list of tested devices can be found in the
 `wiki <https://github.com/rm-hull/luma.oled/wiki/Usage-&-Benchmarking>`_.
 
-I2C vs. SPI
-^^^^^^^^^^^
+I2C vs. SPI vs Parallel
+^^^^^^^^^^^^^^^^^^^^^^^
 If you have not yet purchased your display, you may be wondering if you should
-get an I2C or SPI display. The basic trade-off is that I2C will be easier to connect
-because it has fewer pins while SPI may have a faster display update rate due
-to running at a higher frequency and having less overhead (see
-`benchmarks <https://github.com/rm-hull/luma.oled/wiki/Usage-&-Benchmarking>`_).
+get an I2C, SPI or parallel-bus display. The basic trade-off is implementation
+complexity and speed.  The I2C is the easiest to connect because it has fewer pins
+while SPI may have a faster display update rate due to running at a higher
+frequency and having less overhead (see `benchmarks <https://github.com/rm-hull/luma.oled/wiki/Usage-&-Benchmarking>`_).
+Parallel-bus displays are both slower and harder to connect but are typically
+less expensive.
 
 Tips for connecting the display
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -202,3 +205,39 @@ Then add your user to the *spi* and *gpio* groups::
 
 Log out and back in again to ensure that the group permissions are applied
 successfully.
+
+PARALLEL
+""""""""
+Beyond the power and ground connections, you can choose which ever GPIO pins
+you like to connect up your display.  The following is one example for how to
+wire popular displays such as the Winstar WEH001602A.
+
+========== ====== ================ ======== ==============
+Device Pin Name   Remarks          RPi Pin  RPi Function
+========== ====== ================ ======== ==============
+1          GND    Ground           P01-6    GND
+2          VDD    +5.0V Power      P01-2    5V Power
+3          NC     Not Connect
+4          RS     Register Select  P01-26   GPIO 7
+5          R/W    Read/Write       P01-14   GND
+6          E      Enable           P01-24   GPIO 8
+7          D0     Not Connected
+8          D1     Not Connected
+9          D2     Not Connected
+10         D3     Not Connected
+11         D4     Databus line 4   P01-22   GPIO 25
+12         D5     Databus line 5   P01-18   GPIO 24
+13         D6     Databus line 6   P01-16   GPIO 23
+14         D7     Databus line 7   P01-13   GPIO 27
+15         NC     Not Connect
+16         NC     Not Connect
+========== ====== ================ ======== ==============
+
+.. note::
+  * You have the choice on whether to wire your device with 4 or 8 data-lines.
+    Wiring with 8 provides a faster interface but at the cost of increased wiring
+    complexity.  Most implementations use 4 data-lines which provides acceptable
+    performance and is the default setting for the parallel class.
+  * Reading from the display is not supported by the parallel class so it needs
+    to be connected to ground in order to always be set for writes (assuming the
+    device uses logic-low for write).

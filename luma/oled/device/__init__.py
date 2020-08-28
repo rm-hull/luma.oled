@@ -882,7 +882,7 @@ class ws0010(parallel_device, character):
 
         if self.framebuffer.redraw_required(image):
             # Expand bounding box to align to cell height boundary (8)
-            # Should consider whether this should be moved into framebuffer class
+            # TODO: Should consider whether this should be moved into framebuffer class
             x0, y0, x1, y1 = self.framebuffer.bounding_box
             y0 = y0 // 8 * 8
             y1 = y1 // 8 * 8 if not y1 % 8 else (y1 // 8 + 1) * 8
@@ -926,7 +926,7 @@ class winstar_weh(ws0010):
     character version of the display using the ws0010 controller.  This class
     provides the same ``text`` property as the ws0010 interface so you can set
     the text value which will be rendered to the display's screen.  This
-    interface uses a varient of the ws0010 controller's built-in font that is
+    interface uses a variant of the ws0010 controller's built-in font that is
     designed to match the grid structure of the weh displays (see note below).
 
     :param serial_interface: The serial interface (usually a

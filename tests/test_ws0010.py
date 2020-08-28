@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# Copyright (c) 2013-17 Richard Hull and contributors
+# Copyright (c) 2020 Richard Hull and contributors
 # See LICENSE.rst for details.
 
 """
-Tests for the :py:class:`luma.lcd.device.ws0010` device.
+Tests for the :py:class:`luma.oled.device.ws0010` device.
 """
 
 from luma.oled.device import ws0010, winstar_weh

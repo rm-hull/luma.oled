@@ -42,6 +42,13 @@ class ssd1362(common):
 
 
 class ws0010(object):
+    """
+    Values to be used by the ws0010 class during initialization of the display.
+    Contains FONTDATA to enable the ws0010 class to embed the same fonts that
+    are contained within any display that uses the ws0010 controller
+
+    .. versionadded:: 3.6.0
+    """
     CLEAR = 0x01
     HOME = 0x02
     ENTRY = 0x06
@@ -57,7 +64,6 @@ class ws0010(object):
     DDRAMADDR = 0x80
     CGRAMADDR = 0x40
     FONTDATA = {
-        # TODO: Extend and verify Unicode Mappings
         'metrics': [
             # FT00 ENGLISH_JAPANESE 5x8 METRICS
             {
@@ -96,14 +102,11 @@ class ws0010(object):
                 'table_size': (800, 20)
             },
         ],
+        # TODO: Complete (and verify) FONT Mappings (Issue #296)
         'mappings': [
             {   # FT00 ENGLISH_JAPANESE CHARACTER FONT
                 # Missing maps for
                 # 10-1F, 80-9f, a0, a1, e7, e9, ea, f8, f9, fa, fc, fe
-                # The following characters will not display properly when
-                # embedded_font is set to 5x8
-                # e2, e4, e6, e7, ea
-                # f0, f1, f9
                 0x0410:   0x41,  # А CYRILLIC CAPITAL LETTER A
                 0x0412:   0x42,  # В CYRILLIC CAPITAL LETTER VE
                 0x0421:   0x43,  # С CYRILLIC CAPITAL LETTER ES
@@ -210,10 +213,6 @@ class ws0010(object):
             {   # FT01 WESTERN EUROPEAN CHARACTER FONT
                 # Missing mappings 9f, a0, aa, ab, ac, ad, ae, c5, c8
                 # Dropping e1, e2, e3 conflict with 5x8 versions at be, bd, bf
-                # The following characters will not display properly when
-                # embedded_font is set to 5x8
-                # e4, e5, e6, e7, e8, e,9, e10, e11, e12
-                # f0, f1, f5, f8, f9, fa, fb, fd, fe
                 0x0410:   0x41,  # А CYRILLIC CAPITAL LETTER A
                 0x0412:   0x42,  # В CYRILLIC CAPITAL LETTER VE
                 0x0421:   0x43,  # С CYRILLIC CAPITAL LETTER ES
@@ -418,7 +417,6 @@ class ws0010(object):
             },
 
             {   # FT11 WESTERN_EUROPEAN_II CHARACTER FONT
-                # TODO: Finish documenting mappings
                 0x00b1:   0x10,  # ± PLUS-MINUS SIGN
                 0x039e:   0x11,  # Ξ GREEK CAPITAL LETTER XI
                 0x2248:   0x1a,  # ≈ ALMOST EQUAL TO
@@ -511,7 +509,7 @@ class ws0010(object):
                 0x25ff:   0xd5,  # ◿ LOWER RIGHT TRIANGLE
                 0x0398:   0xd6,  # Θ GREEK CAPITAL LETTER THETA
                 0x03f4:   0xd6,  # ϴ GREEK CAPITAL THETA SYMBOL
-                0x1d6b5:   0xd8,  # 𝚵 MATHEMATICAL BOLD CAPITAL XI
+                0x1d6b5:  0xd8,  # 𝚵 MATHEMATICAL BOLD CAPITAL XI
                 0x2aea:   0xd9,  # ⫪ DOUBLE DOWN TACK
                 0x03a3:   0xda,  # Σ GREEK CAPITAL LETTER SIGMA
                 0x297e:   0xdb,  # ⥾ UP FISH TAIL
@@ -579,6 +577,13 @@ class ws0010(object):
 
 
 class winstar_weh(ws0010):
+    """
+    Values to be used by the winstar_weh class during initialization of the display.
+    Contains FONTDATA to enable the winstar_weh class to embed the same fonts that
+    are contained within any character-based display that uses the ws0010 controller.
+
+    .. versionadded:: 3.6.0
+    """
     FONTDATA = {
         'mappings': ws0010.FONTDATA['mappings'],
         'fonts': ws0010.FONTDATA['fonts'],
