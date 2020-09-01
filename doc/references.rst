@@ -9,3 +9,4 @@ References
 - https://pinout.xyz/
 - https://learn.sparkfun.com/tutorials/serial-peripheral-interface-spi
 - http://code.activestate.com/recipes/577187-python-thread-pool/
+- https://www.circuits.dk/everything-about-raspberry-gpio/

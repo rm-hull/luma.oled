@@ -9,21 +9,29 @@ First, import and initialise the device:
 
 .. code:: python
 
-  from luma.core.interface.serial import i2c, spi
+  from luma.core.interface.serial import i2c, spi, parallel, pcf8574
   from luma.core.render import canvas
-  from luma.oled.device import ssd1306, ssd1309, ssd1325, ssd1331, sh1106
+  from luma.oled.device import ssd1306, ssd1309, ssd1325, ssd1331, sh1106, ws0010
 
   # rev.1 users set port=0
   # substitute spi(device=0, port=0) below if using that interface
+  # substitute parallel(RS=7, E=8, PINS=[25,24,23,27]) below if using that interface
   serial = i2c(port=1, address=0x3C)
 
   # substitute ssd1331(...) or sh1106(...) below if using that device
   device = ssd1306(serial)
 
-The display device should now be configured for use. The device classes all
-expose a ``display()`` method which takes an image with attributes consistent
-with the capabilities of the device. However, for most cases, for drawing text
-and graphics primitives, the canvas class should be used as follows:
+The display device should now be configured for use.
+
+..note:
+  The values provided for the parallel interface are examples only.  You must
+  ensure that you provide the correct numbers that match how YOUR display has
+  been wired up
+
+The device classes all expose a ``display()`` method which takes an image with
+attributes consistent with the capabilities of the device. However, for most
+cases, for drawing text and graphics primitives, the canvas class should be used
+as follows:
 
 .. code:: python
 
@@ -45,7 +53,7 @@ that ends quickly may never display a visible image.
 Color Model
 ^^^^^^^^^^^
 Any of the standard :mod:`PIL.ImageColor` color formats may be used, but since
-the SSD1306 and SH1106 OLEDs are monochrome, only the HTML color names
+the SSD1306, SH1106 and WS0010 OLEDs are monochrome, only the HTML color names
 ``"black"`` and ``"white"`` values should really be used; in fact, by default,
 any value *other* than black is treated as white. The :py:class:`luma.core.render.canvas`
 object does have a ``dither`` flag which if set to ``True``, will convert color drawings
@@ -98,5 +106,5 @@ the rotated dimensions rather than the physical dimensions.
 
 Examples
 ^^^^^^^^
-After installing the library see the `luma.examples <https://github.com/rm-hull/luma.examples>`_ 
+After installing the library see the `luma.examples <https://github.com/rm-hull/luma.examples>`_
 repository. Details of how to run the examples is shown in the example repo's README.
