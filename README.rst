@@ -71,8 +71,8 @@ git repository:
 .. image:: https://raw.githubusercontent.com/rm-hull/luma.oled/master/doc/images/crawl_anim.gif?raw=true
    :alt: crawl
 
-Breaking changes
-----------------
+Upgrade
+-------
 Version 2.0.0 was released on 11 January 2017: this came with a rename of the
 github project from **ssd1306** to **luma.oled** to reflect the changing nature
 of the codebase.
