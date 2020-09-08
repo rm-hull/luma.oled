@@ -45,15 +45,16 @@ setup(
     author_email="richard.hull@destructuring-bind.org",
     description=("A small library to drive an OLED device with either "
                  "SSD1306, SSD1309, SSD1322, SSD1325, SSD1327, SSD1331, "
-                 "SSD1351, SSD1362 or SH1106 chipset"),
+                 "SSD1351, SSD1362, SH1106 or WS0010 chipset"),
     long_description="\n\n".join([README, CONTRIB, CHANGES]),
     long_description_content_type="text/x-rst",
     python_requires='>=3.5, <4',
     license="MIT",
     keywords=("raspberry pi rpi oled display screen "
               "rgb monochrome greyscale color "
-              "ssd1306 ssd1309 ssd1322 ssd1325 ssd1327 ssd1331 ssd1351 sh1106 "
-              "spi i2c 256x64 128x64 128x32 96x16"),
+              "ssd1306 ssd1309 ssd1322 ssd1325 ssd1327 ssd1331 ssd1351 sh1106 WS0010 "
+              "spi i2c 256x64 128x64 128x32 96x16 "
+              "WEH001602A WEG010016"),
     url=project_url,
     download_url=project_url + "/tarball/" + version,
     project_urls={
@@ -64,7 +65,7 @@ setup(
     packages=find_packages(),
     namespace_packages=["luma"],
     zip_safe=False,
-    install_requires=["luma.core>=1.14.0"],
+    install_requires=["luma.core>=1.16.1"],
     setup_requires=pytest_runner,
     tests_require=test_deps,
     extras_require={

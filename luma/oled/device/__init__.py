@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2014-18 Richard Hull and contributors
+# Copyright (c) 2014-20 Richard Hull and contributors
 # See LICENSE.rst for details.
 
 """
@@ -34,15 +34,18 @@ Collection of serial interfaces to OLED devices.
 # As before, as soon as the with block completes, the canvas buffer is flushed
 # to the device
 
-from luma.core.device import device
+from time import sleep
+from luma.core.device import device, parallel_device
+from luma.core.virtual import character
 from luma.oled.device.color import color_device
 from luma.oled.device.greyscale import greyscale_device
 import luma.core.error
 import luma.core.framebuffer
+from luma.core.bitmap_font import embedded_fonts
 import luma.oled.const
 
 
-__all__ = ["ssd1306", "ssd1309", "ssd1322", "ssd1362", "ssd1322_nhd", "ssd1325", "ssd1327", "ssd1331", "ssd1351", "sh1106"]
+__all__ = ["ssd1306", "ssd1309", "ssd1322", "ssd1362", "ssd1322_nhd", "ssd1325", "ssd1327", "ssd1331", "ssd1351", "sh1106", "ws0010", "winstar_weh"]
 
 
 class sh1106(device):
@@ -746,3 +749,232 @@ class ssd1327(greyscale_device):
         self.command(
             0x15, left >> 1, (right - 1) >> 1,  # set column addr
             0x75, top, bottom - 1)  # set row addr
+
+
+class ws0010(parallel_device, character):
+    """
+    Serial interface to a monochrome Winstar WS0010 OLED display.  This
+    interface will work with most ws0010 powered devices including the weg010016.
+
+    :param serial_interface: The serial interface (usually a
+        :py:class:`luma.core.interface.serial.parallel` instance) to delegate sending
+        data and commands through.
+    :param width: The number of pixels laid out horizontally.
+    :type width: int
+    :param height: The number of pixels laid out vertically.
+    :type height: int
+    :param undefined: The character to display if the font doesn't contain
+        the requested character
+    :type undefined: str
+    :param font: Allows you to override the internal font by passing in an alternate
+    :type font: :py:mod:`PIL.ImageFont`
+    :param selected_font: Select one of the ws0010's embedded font tables (see
+        note).  Can be selected by number or name.  Default is 'FT00'
+        (English Japanese).
+    :type selected_font: int or str
+    :param exec_time: Time in seconds to wait for a command to complete.
+        Default is 50 μs (1e-6 * 50) which is enough for all ws0010 commands.
+    :type exec_time: float
+    :param rotate: An integer value of 0 (default), 1, 2 or 3 only, where 0 is
+        no rotation, 1 is rotate 90° clockwise, 2 is 180° rotation and 3
+        represents 270° rotation.
+    :type rotate: int
+    :param framebuffer: Framebuffering strategy, currently values of
+        ``diff_to_previous`` or ``full_frame`` are only supported.
+    :type framebuffer: str
+
+    To place text on the display, simply assign the text to the 'text'
+    instance variable::
+
+        p = parallel(RS=7, E=8, PINS=[25,24,23,18])
+        my_display = ws0010(p, selected_font='FT01')
+        my_display.text = 'WS0010 Display\\nFont FT01 5x8'
+
+    For more details on how to use the 'text' interface see
+    :class:`luma.core.virtual.character`
+
+    .. note:
+        The ws0010 is a fully graphical device that also supports character-based
+        operations similar to LCD displays such as the hd44780.  This driver
+        uses the graphics mode but includes functionality to allow the device
+        to act like a character-based one.  To do this it includes four
+        embedded fonts which are available in two sizes (5x8 pixel and 5x10
+        pixel).  You can select which font to use by providing the appropriate
+        name or number to selected_font during initialization.  You can also use
+        any PIL.ImageFont object instead by providing it to the font parameter.
+        If you do, the internal fonts will be bypassed.
+
+        Available Internal Fonts
+        +--------+---------+----------------------+------+
+        | Number | Name    | Font                 | Size |
+        +--------+---------+----------------------+------+
+        |    0   | FT00    | English Japanese     | 5x8  |
+        +--------+---------+----------------------+------+
+        |    1   | FT01    | Western European I   | 5x8  |
+        +--------+---------+----------------------+------+
+        |    2   | FT10    | English Russian      | 5x8  |
+        +--------+---------+----------------------+------+
+        |    3   | FT11    | Western European II  | 5x8  |
+        +--------+---------+----------------------+------+
+        |    4   | FT00_10 | English Japanese     | 5x10 |
+        +--------+---------+----------------------+------+
+        |    5   | FT01_10 | Western European I   | 5x10 |
+        +--------+---------+----------------------+------+
+        |    6   | FT10_10 | English Russian      | 5x10 |
+        +--------+---------+----------------------+------+
+        |    7   | FT11_10 | Western European II  | 5x10 |
+        +--------+---------+----------------------+------+
+
+    .. versionadded:: 3.6.0
+    """
+    def __init__(self, serial_interface=None, width=100, height=16, undefined='_', font=None, selected_font=0, exec_time=1e-6 * 50, rotate=0, framebuffer="diff_to_previous", const=luma.oled.const.ws0010, **kwargs):
+        super(ws0010, self).__init__(const, serial_interface, exec_time=exec_time, **kwargs)
+        self.capabilities(width, height, rotate)
+        self.framebuffer = getattr(luma.core.framebuffer, framebuffer)(self)
+        self.font = font if font is not None else embedded_fonts(self._const.FONTDATA, selected_font=selected_font)
+        self._undefined = undefined
+        self.device = self
+
+        # Supported modes
+        supported = (width, height) in [(40, 8), (40, 16), (60, 8), (60, 16), (80, 8), (80, 16), (100, 8), (100, 16)]
+        if not supported:
+            raise luma.core.error.DeviceDisplayModeError(
+                "Unsupported display mode: {0} x {1}".format(width, height))
+
+        # In case display just powered up, sleep to be sure it has finished
+        # its internal initialization
+        sleep(0.5)
+        self._reset()
+        self.text = ""
+
+    def _reset(self):
+        """
+        WS0010 Initialization Routine
+
+        Reset (not really needed after power-on but does no harm and is useful
+        in case the display is already initialized)
+
+        Send five 0s in four bit mode (e.g. d4-d7 are the only pins that matter)
+        Set interface data length FUNCTIONSET|DL8 or FUNCTIONSET|DL4 (again in 4 bit mode)
+        Turn Display Off
+        Turn internal power off
+        Configure Entry Mode (Set Cursor to Right and Shift Off)
+        Set Graphics Mode and Internal Power On
+        Turn Display On (with Cursor Off and Blink Off)
+
+        Device is now ready to receive data
+        """
+
+        dl = 0x03 if self._bitmode == 8 else 0x02
+        self.command(0x00, 0x00, dl, self._const.FUNCTIONSET | (dl << 4))
+        self.command(self._const.DISPLAYOFF)  # Set Display Off
+        self.command(self._const.POWEROFF)
+        self.command(self._const.ENTRY)  # Set entry mode to direction right, no shift
+        self.command(self._const.POWERON | self._const.GRAPHIC)  # Turn internal power on and set into graphics mode
+        self.command(self._const.DISPLAYON)  # Turn Display back on
+
+    def display(self, image):
+        """
+        Takes a 1-bit :py:mod:`PIL.Image` and dumps it to the ws0010
+        OLED display.
+        """
+        assert(image.mode == self.mode)
+        assert(image.size == self.size)
+
+        image = self.preprocess(image)
+
+        if self.framebuffer.redraw_required(image):
+            # Expand bounding box to align to cell height boundary (8)
+            # TODO: Should consider whether this should be moved into framebuffer class
+            x0, y0, x1, y1 = self.framebuffer.bounding_box
+            y0 = y0 // 8 * 8
+            y1 = y1 // 8 * 8 if not y1 % 8 else (y1 // 8 + 1) * 8
+            self.framebuffer.bounding_box = (x0, y0, x1, y1)
+
+            if self._bitmode == 4:
+                # If in 4 bit mode, issue reset to make sure we are in sync with the display
+                self._reset()
+
+            w = x1 - x0
+            h = y1 - y0
+            mask = [1 << (i // w) % 8 for i in range(w * h)]
+            off = [(w * (i // (w * 8))) + (i % w) for i in range(w * h)]
+            buf = bytearray(w * h // 8)
+
+            for idx, pix in enumerate(self.framebuffer.getdata()):
+                if pix > 0:
+                    buf[off[idx]] |= mask[idx]
+
+            lines = int((y1 - y0) / 8)
+            lineSize = int(len(buf) / lines)
+            for i in range(lines):
+                self.command(self._const.DDRAMADDR + x0, self._const.CGRAMADDR + i + (y0 // 8))  # Set display to current line at the starting column to update
+                self.data(buf[lineSize * i:lineSize * (i + 1)])   # Send section of current line that needs to be changed
+
+    def get_font(self, ft):
+        """
+        Load one of the devices embedded fonts by its index value or name and
+        return it
+
+        :param val: The index or the name of the font to return
+        :type val: int or str
+        """
+
+        return self.font.load(ft)
+
+
+class winstar_weh(ws0010):
+    """
+    Serial interface to a monochrome Winstar WEH OLED display.  This is the
+    character version of the display using the ws0010 controller.  This class
+    provides the same ``text`` property as the ws0010 interface so you can set
+    the text value which will be rendered to the display's screen.  This
+    interface uses a variant of the ws0010 controller's built-in font that is
+    designed to match the grid structure of the weh displays (see note below).
+
+    :param serial_interface: The serial interface (usually a
+        :py:class:`luma.core.interface.serial.parallel` instance) to delegate sending
+        data and commands through.
+    :param width: The number of characters that can be displayed on a single line.
+        Example: the weh001602a has a width of 16 characters.
+    :type width: int
+    :param height: The number of lines the display has.  Example: the weh001602a
+        has a height of 2 lines.
+    :type height: int
+    :param undefined: The character to display if the font doesn't contain
+        the requested character
+    :type undefined: str
+    :param font: Allows you to override the internal font by passing in an alternate
+    :type font: :py:mod:`PIL.ImageFont`
+    :param default_table: Select one of the ws0010's four embedded font tables
+        (see :py:class:`ws0010` documentation)
+    :type default_table: int
+    :param embedded_font: Select the size of the embedded font to use.  Allowed
+        sizes are 5x8 (default) and 5x10
+    :type embedded_font: str '5x8' or '5x10'
+    :param exec_time: Time in seconds to wait for a command to complete.
+        Default is 50 μs (1e-6 * 50)
+    :type exec_time: float
+    :param rotate: An integer value of 0 (default), 1, 2 or 3 only, where 0 is
+        no rotation, 1 is rotate 90° clockwise, 2 is 180° rotation and 3
+        represents 270° rotation.
+    :type rotate: int
+    :param framebuffer: Framebuffering strategy, currently values of
+        ``diff_to_previous`` or ``full_frame`` are only supported.
+    :type framebuffer: str
+
+    .. note:
+      The WEH devices mimic character displays by having a small gap every fifth
+      horizontal pixel. So, while the device can be addressed as a graphical
+      display, the images that are shown will have a one pixel gap every 5th pixel.
+      For this reason, you should be careful when designing you screens to
+      account for this effect.
+
+      The included text functionality automatically takes care of this for you
+      if you are displaying character-based content.
+
+    .. versionadded:: 3.6.0
+    """
+
+    def __init__(self, serial_interface=None, width=16, height=2, **kwargs):
+        super(winstar_weh, self).__init__(const=luma.oled.const.winstar_weh, serial_interface=serial_interface, width=width * 5, height=height * 8, xwidth=5, **kwargs)

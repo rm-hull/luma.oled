@@ -1,14 +1,14 @@
-`luma.core <https://github.com/rm-hull/luma.core>`__ **|** 
-`luma.docs <https://github.com/rm-hull/luma.docs>`__ **|** 
-`luma.emulator <https://github.com/rm-hull/luma.emulator>`__ **|** 
-`luma.examples <https://github.com/rm-hull/luma.examples>`__ **|** 
-`luma.lcd <https://github.com/rm-hull/luma.lcd>`__ **|** 
-`luma.led_matrix <https://github.com/rm-hull/luma.led_matrix>`__ **|** 
+`luma.core <https://github.com/rm-hull/luma.core>`__ **|**
+`luma.docs <https://github.com/rm-hull/luma.docs>`__ **|**
+`luma.emulator <https://github.com/rm-hull/luma.emulator>`__ **|**
+`luma.examples <https://github.com/rm-hull/luma.examples>`__ **|**
+`luma.lcd <https://github.com/rm-hull/luma.lcd>`__ **|**
+`luma.led_matrix <https://github.com/rm-hull/luma.led_matrix>`__ **|**
 luma.oled
 
 Luma.OLED
 ---------
-**Display drivers for SSD1306 / SSD1309 / SSD1322 / SSD1325 / SSD1327 / SSD1331 / SSD1351 / SSD1362 / SH1106**
+**Display drivers for SSD1306 / SSD1309 / SSD1322 / SSD1325 / SSD1327 / SSD1331 / SSD1351 / SSD1362 / SH1106 / WS0010**
 
 .. image:: https://travis-ci.org/rm-hull/luma.oled.svg?branch=master
    :target: https://travis-ci.org/rm-hull/luma.oled
@@ -28,10 +28,10 @@ Luma.OLED
 .. image:: https://img.shields.io/maintenance/yes/2020.svg?maxAge=2592000
 
 Python 3 library interfacing OLED matrix displays with the SSD1306, SSD1309,
-SSD1322, SSD1325, SSD1327, SSD1331, SSD1351 or SH1106 driver using I2C/SPI on
-the Raspberry Pi and other linux-based single-board computers - it provides a
-`Pillow <https://pillow.readthedocs.io/>`_-compatible drawing canvas, and other
-functionality to support:
+SSD1322, SSD1325, SSD1327, SSD1331, SSD1351, SH1106 or WS0010 driver using
+I2C/SPI/Parallel on the Raspberry Pi and other linux-based single-board
+computers - it provides a `Pillow <https://pillow.readthedocs.io/>`_-compatible
+drawing canvas, and other functionality to support:
 
 * scrolling/panning capability,
 * terminal-style printing,
@@ -59,7 +59,7 @@ inside the RPi case.
 As well as display drivers for various physical OLED devices, there are
 emulators that run in real-time (with pygame) and others that can take
 screenshots, or assemble animated GIFs, as per the examples below (source code
-for these is available in the `luma.examples <https://github.com/rm-hull/luma.examples>`_ 
+for these is available in the `luma.examples <https://github.com/rm-hull/luma.examples>`_
 git repository:
 
 .. image:: https://raw.githubusercontent.com/rm-hull/luma.oled/master/doc/images/clock_anim.gif?raw=true
@@ -71,8 +71,8 @@ git repository:
 .. image:: https://raw.githubusercontent.com/rm-hull/luma.oled/master/doc/images/crawl_anim.gif?raw=true
    :alt: crawl
 
-Breaking changes
-----------------
+Upgrade
+-------
 Version 2.0.0 was released on 11 January 2017: this came with a rename of the
 github project from **ssd1306** to **luma.oled** to reflect the changing nature
 of the codebase.
@@ -87,7 +87,7 @@ it can also take advantage of the common API.
 
 The consequence is that any existing code that uses the old **ssd1306** package
 will need to be updated. The changes should be limited to altering import
-statements only, and are described in the 
+statements only, and are described in the
 `upgrade documentation <https://luma-oled.readthedocs.io/en/latest/upgrade.html>`_.
 
 License
