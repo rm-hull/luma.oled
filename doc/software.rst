@@ -65,7 +65,7 @@ are available on their pypi pages.
 
 Permissions
 -----------
-``Luma.oled`` uses hardware interfaces that require permission to access.  After you
+``luma.oled`` uses hardware interfaces that require permission to access.  After you
 have successfully installed ``luma.oled`` you may want to add the user account that
 your ``luma.oled`` program will run as to the groups that grant access to these
 interfaces.::
