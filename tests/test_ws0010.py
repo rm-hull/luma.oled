@@ -35,7 +35,6 @@ interface = Mock(unsafe=True, _bitmode=4, _pulse_time=1e-6)
 def test_init_4bitmode():
     ws0010(interface)
 
-
     to_4 = \
         [call(0, 0, 0, 0, 0, 2, 2, 9)]
 
