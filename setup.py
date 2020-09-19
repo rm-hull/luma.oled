@@ -56,6 +56,7 @@ setup(
               "ws0010 WEH001602A WEG010016A "
               "spi i2c parallel 6800 pcf8574 "
               "256x64 128x64 128x32 96x16 "),
+
     url=project_url,
     download_url=project_url + "/tarball/" + version,
     project_urls={
@@ -66,7 +67,8 @@ setup(
     packages=find_packages(),
     namespace_packages=["luma"],
     zip_safe=False,
-    install_requires=["luma.core>=1.16.0"],
+    install_requires=["luma.core>=1.16.1"],
+
     setup_requires=pytest_runner,
     tests_require=test_deps,
     extras_require={

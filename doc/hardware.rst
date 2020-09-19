@@ -237,6 +237,7 @@ successfully.
 
 PARALLEL
 --------
+
 Beyond the power and ground connections, you can choose which ever GPIO pins
 you like to connect up your display.  The following is one example for how to
 wire popular displays such as the Winstar WEH001602A.
@@ -267,6 +268,7 @@ Device Pin Name   Remarks          RPi Pin  RPi Function
     Wiring with 8 provides a faster interface but at the cost of increased wiring
     complexity.  Most implementations use 4 data-lines which provides acceptable
     performance and is the default setting for the parallel class.
+    
   * Reading from the display is not supported by the
     :py:class:luma.core.interface.parallel.``bitbang_6800`` class so it needs
     to be connected to ground in order to always be set for writes (assuming the
@@ -276,3 +278,4 @@ Device Pin Name   Remarks          RPi Pin  RPi Function
   * Be careful with the logic level of the device you are using.  Many SBCs
     including the Raspberry Pi uses 3.3V logic.  If your device supplies 5Vs to
     one of the GPIO pins of an SBC that uses 3.3V logic you may damage your SBC.
+
