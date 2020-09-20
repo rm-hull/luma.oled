@@ -19,10 +19,10 @@ are included in :doc:`python-usage`.
 
 .. note:: This library has been tested against Python 3.5, 3.6, 3.7 and 3.8.
 
-   It was *originally* tested with Raspbian on a rev.2 model B, with a vanilla
-   kernel version 4.1.16+, and has subsequently been tested on Raspberry Pi
-   (Raspbian Jessie, Stretch and Buster) models A, B2, 3B, Zero, Zero W,
-   OrangePi Zero (Armbian Jessie), and 4B.
+  It was *originally* tested with Raspbian on a rev.2 model B, with a vanilla
+  kernel version 4.1.16+, and has subsequently been tested on Raspberry Pi
+  models A, B2, 3B, Zero, Zero W, OrangePi Zero (Armbian Jessie), and 4B with
+  Raspbian Jessie, Stretch and Buster operating systems.
 
 .. note:: Upgrading
   If you are upgrading from a previous version, make sure to read the
