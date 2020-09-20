@@ -6,7 +6,7 @@
 `luma.led_matrix <https://github.com/rm-hull/luma.led_matrix>`__ **|**
 luma.oled
 
-Luma.OLED
+luma.oled
 ---------
 **Display drivers for SSD1306 / SSD1309 / SSD1322 / SSD1325 / SSD1327 / SSD1331 / SSD1351 / SSD1362 / SH1106 / WS0010**
 
