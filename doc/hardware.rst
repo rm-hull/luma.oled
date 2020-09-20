@@ -203,7 +203,7 @@ Device Pin Name   Remarks      RPi Pin  RPi Function
     most SPI documentation, the terms are used to describe the regular 4-wire
     configuration of SPI and a 3-wire mode where the input and output lines, MOSI
     and MISO, have been combined into a single line called SISO. However, in the
-    context of these LCD controllers, 4-wire means MOSI + Data/Command and 3-wire
+    context of these OLED controllers, 4-wire means MOSI + Data/Command and 3-wire
     means Data/Command sent as an extra bit over MOSI.
 
 
@@ -268,7 +268,7 @@ Device Pin Name   Remarks          RPi Pin  RPi Function
     Wiring with 8 provides a faster interface but at the cost of increased wiring
     complexity.  Most implementations use 4 data-lines which provides acceptable
     performance and is the default setting for the parallel class.
-    
+
   * Reading from the display is not supported by the
     :py:class:luma.core.interface.parallel.``bitbang_6800`` class so it needs
     to be connected to ground in order to always be set for writes (assuming the
@@ -278,4 +278,3 @@ Device Pin Name   Remarks          RPi Pin  RPi Function
   * Be careful with the logic level of the device you are using.  Many SBCs
     including the Raspberry Pi uses 3.3V logic.  If your device supplies 5Vs to
     one of the GPIO pins of an SBC that uses 3.3V logic you may damage your SBC.
-

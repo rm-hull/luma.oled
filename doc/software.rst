@@ -21,7 +21,7 @@ be able to use the following commands to add the required packages::
 
 $ sudo apt-get update
 $ sudo apt-get install python3 python3-pip python3-pil libjpeg-dev zlib1g-dev libfreetype6-dev liblcms2-dev libopenjp2-7 libtiff5 -y
-$ sudo -H pip3 install luma.lcd
+$ sudo -H pip3 install luma.oled
 
 If you are not using Raspbian you will need to consult the documentation for
 your Linux distribution to determine the correct procedure to install
