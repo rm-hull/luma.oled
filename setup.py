@@ -52,9 +52,10 @@ setup(
     license="MIT",
     keywords=("raspberry pi rpi oled display screen "
               "rgb monochrome greyscale color "
-              "ssd1306 ssd1309 ssd1322 ssd1325 ssd1327 ssd1331 ssd1351 sh1106 WS0010 "
-              "spi i2c 256x64 128x64 128x32 96x16 "
-              "WEH001602A WEG010016"),
+              "ssd1306 ssd1309 ssd1322 ssd1325 ssd1327 ssd1331 ssd1351 sh1106 "
+              "ws0010 WEH001602A WEG010016A "
+              "spi i2c parallel 6800 pcf8574 "),
+
     url=project_url,
     download_url=project_url + "/tarball/" + version,
     project_urls={
@@ -65,7 +66,7 @@ setup(
     packages=find_packages(),
     namespace_packages=["luma"],
     zip_safe=False,
-    install_requires=["luma.core>=1.16.1"],
+    install_requires=["luma.core>=1.16.2"],
     setup_requires=pytest_runner,
     tests_require=test_deps,
     extras_require={

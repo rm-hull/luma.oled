@@ -1,11 +1,11 @@
 Introduction
-------------
-Interfacing `OLED matrix displays
+============
+luma.oled provides a Python3 interface to `OLED matrix displays
 <https://github.com/rm-hull/luma.oled/wiki/Usage-&-Benchmarking>`_ with the
 SSD1306, SSD1309, SSD1322, SSD1325, SSD1327, SSD1331, SSD1351, SSD1362, SH1106 or
-WS0010 driver in Python 3 using I2C/SPI/Parallel interfaces on the Raspberry Pi
-and other linux-based single-board computers: the library provides a
-Pillow_-compatible drawing canvas, and other functionality to support:
+WS0010 controllers to connect with Raspberry Pi and other Linux-based
+single-board computers (SBC).  It provides a Pillow-compatible drawing canvas,
+and other functionality to support:
 
 * scrolling/panning capability,
 * terminal-style printing,
@@ -41,6 +41,8 @@ and will fit neatly inside the RPi case.
    Benchmarks for tested devices can be found in the
    `wiki <https://github.com/rm-hull/luma.oled/wiki/Usage-&-Benchmarking>`_.
 
+Examples and Emulators
+----------------------
 As well as display drivers for various physical OLED devices there are
 emulators that run in real-time (with pygame_) and others that can take
 screenshots, or assemble animated GIFs, as per the examples below (source code
