@@ -16,8 +16,8 @@ If ``pip`` is unable to automatically install its dependencies you will have to
 add them manually.  To resolve the issues you will need to add the appropriate
 development packages to continue.
 
-If you are using Raspbian Stretch or Raspberry Pi OS you should
-be able to use the following commands to add the required packages::
+If you are using Raspberry Pi OS you should be able to use the following commands
+to add the required packages::
 
 $ sudo apt-get update
 $ sudo apt-get install python3 python3-pip python3-pil libjpeg-dev zlib1g-dev libfreetype6-dev liblcms2-dev libopenjp2-7 libtiff5 -y
