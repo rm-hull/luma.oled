@@ -101,7 +101,7 @@ or::
 If you have no kernel modules listed and nothing is showing using ``dmesg``
 then this implies the kernel I2C driver is not loaded.
 
-For the Raspberry PI running Raspbian, enable the I2C as follows::
+For the Raspberry PI running Raspberry Pi OS, enable the I2C as follows::
 
   #. Run ``sudo raspi-config``
   #. Use the down arrow to select ``5 Interfacing Options``
