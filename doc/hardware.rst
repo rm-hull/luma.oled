@@ -101,14 +101,14 @@ or::
 If you have no kernel modules listed and nothing is showing using ``dmesg``
 then this implies the kernel I2C driver is not loaded.
 
-For the Raspberry PI running Raspberry Pi OS, enable the I2C as follows::
+For Raspberry Pi OS, enable the I2C driver as follows:
 
-  #. Run ``sudo raspi-config``
-  #. Use the down arrow to select ``5 Interfacing Options``
-  #. Arrow down to ``P5 I2C``
-  #. Select **yes** when it asks you to enable I2C
-  #. Also select **yes** when it asks about automatically loading the kernel module
-  #. Use the right arrow to select the **<Finish>** button
+#. Run ``sudo raspi-config``
+#. Use the down arrow to select ``5 Interfacing Options``
+#. Arrow down to ``P5 I2C``
+#. Select **yes** when it asks you to enable I2C
+#. Also select **yes** when it asks about automatically loading the kernel module
+#. Use the right arrow to select the **<Finish>** button
 
 After rebooting re-check that the ``dmesg | grep i2c`` command shows whether
 I2C driver is loaded before proceeding. You can also
@@ -156,15 +156,12 @@ device is which.
 SPI
 ---
 The GPIO pins used for this SPI connection are the same for all versions of the
-Raspberry Pi, up to and including the Raspberry Pi 3 B.
+Raspberry Pi, up to and including the Raspberry Pi 4 B.
 
 .. warning::
    There appears to be varying pin-out configurations on different display
    modules!  Make sure to verify the pin numbers of your device by their function
    especially VCC and GND.
-
-The GPIO pins used for this SPI connection are the same for all versions of the
-Raspberry Pi, up to and including the Raspberry Pi 4 B.
 
 ========== ====== ============ ======== ==============
 Device Pin Name   Remarks      RPi Pin  RPi Function
@@ -235,7 +232,7 @@ Then add your user to the *spi* and *gpio* groups::
 Log out and back in again to ensure that the group permissions are applied
 successfully.
 
-PARALLEL
+Parallel
 --------
 
 Beyond the power and ground connections, you can choose which ever GPIO pins
@@ -270,11 +267,11 @@ Device Pin Name   Remarks          RPi Pin  RPi Function
     performance and is the default setting for the parallel class.
 
   * Reading from the display is not supported by the
-    :py:class:luma.core.interface.parallel.``bitbang_6800`` class so it needs
+    :py:class:`luma.core.interface.parallel.bitbang_6800` class so it needs
     to be connected to ground in order to always be set for writes (assuming the
     device uses logic-low for write).
 
 .. warning::
   * Be careful with the logic level of the device you are using.  Many SBCs
-    including the Raspberry Pi uses 3.3V logic.  If your device supplies 5Vs to
-    one of the GPIO pins of an SBC that uses 3.3V logic you may damage your SBC.
+    including the Raspberry Pi uses 3.3V logic.  If your device supplies 5V to
+    one of the GPIO pins of an SBC that uses 3.3V logic, you may damage your SBC.
