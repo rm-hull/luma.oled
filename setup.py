@@ -35,7 +35,8 @@ needs_pytest = {'pytest', 'test', 'ptr'}.intersection(sys.argv)
 pytest_runner = ['pytest-runner'] if needs_pytest else []
 test_deps = [
     'pytest<=4.5',
-    'pytest-cov'
+    'pytest-cov',
+    'pytest-timeout'
 ]
 
 setup(
