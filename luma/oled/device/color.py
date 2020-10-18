@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2018 Richard Hull and contributors
+# Copyright (c) 2018-2020 Richard Hull and contributors
 # See LICENSE.rst for details.
 
 """
@@ -26,7 +26,7 @@ class color_device(device):
 
         if (width, height) not in self._supported_dimensions():
             raise luma.core.error.DeviceDisplayModeError(
-                "Unsupported display mode: {0} x {1}".format(width, height))
+                f"Unsupported display mode: {width} x {height}")
 
         self._init_sequence()
         self.contrast(0xFF)

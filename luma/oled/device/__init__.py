@@ -69,7 +69,7 @@ class sh1106(device):
 
         if settings is None:
             raise luma.core.error.DeviceDisplayModeError(
-                "Unsupported display mode: {0} x {1}".format(width, height))
+                f"Unsupported display mode: {width} x {height}")
 
         self.command(
             self._const.DISPLAYOFF,
