@@ -358,9 +358,6 @@ class ssd1351(color_device):
         # RGB or BGR order
         self._color_order = 0x04 if bgr else 0x00
 
-        if width is 128 and height is 96:
-            v_offset = 32
-
         if h_offset != 0 or v_offset != 0:
             def offset(bbox):
                 left, top, right, bottom = bbox
