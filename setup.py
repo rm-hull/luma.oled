@@ -49,7 +49,7 @@ setup(
                  "SSD1351, SSD1362, SH1106 or WS0010 chipset"),
     long_description="\n\n".join([README, CONTRIB, CHANGES]),
     long_description_content_type="text/x-rst",
-    python_requires='>=3.5, <4',
+    python_requires='>=3.6, <4',
     license="MIT",
     keywords=("raspberry pi rpi oled display screen "
               "rgb monochrome greyscale color "
@@ -88,9 +88,9 @@ setup(
         "Topic :: Education",
         "Topic :: System :: Hardware",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
-        "Programming Language :: Python :: 3.8"
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9"
     ]
 )
