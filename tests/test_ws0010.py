@@ -29,11 +29,11 @@ DL4 = 0x00
 DDRAMADDR = 0x80
 CGRAMADDR = 0x40
 
-serial = Mock(unsafe=True, _bitmode=4, _pulse_time=1e-6)
+interface = Mock(unsafe=True, _bitmode=4, _pulse_time=1e-6)
 
 
 def test_init_4bitmode():
-    ws0010(serial)
+    ws0010(interface)
 
     to_4 = \
         [call(0, 0, 0, 0, 0, 2, 2, 9)]
@@ -48,19 +48,19 @@ def test_init_4bitmode():
         [call(*bytes_to_nibbles([DDRAMADDR, CGRAMADDR]))] + \
         [call(*bytes_to_nibbles([DDRAMADDR, CGRAMADDR + 1]))]
 
-    serial.command.assert_has_calls(calls)
+    interface.command.assert_has_calls(calls)
 
     # Data to clear the screen
     calls = \
         [call(bytes_to_nibbles([0] * 100))] + \
         [call(bytes_to_nibbles([0] * 100))]
 
-    serial.data.assert_has_calls(calls)
+    interface.data.assert_has_calls(calls)
 
 
 def test_init_8bitmode():
-    serial._bitmode = 8
-    ws0010(serial)
+    interface._bitmode = 8
+    ws0010(interface)
 
     to_4 = \
         [call(0, 0, 3, 57)]
@@ -75,20 +75,20 @@ def test_init_8bitmode():
         [call(*[DDRAMADDR, CGRAMADDR])] + \
         [call(*[DDRAMADDR, CGRAMADDR + 1])]
 
-    serial.command.assert_has_calls(calls)
+    interface.command.assert_has_calls(calls)
 
     # Data to clear the screen
     calls = \
         [call(bytearray([0] * 100))] + \
         [call(bytearray([0] * 100))]
 
-    serial.data.assert_has_calls(calls)
+    interface.data.assert_has_calls(calls)
 
 
 def test_display():
-    serial._bitmode = 4
-    d = ws0010(serial)
-    serial.reset_mock()
+    interface._bitmode = 4
+    d = ws0010(interface)
+    interface.reset_mock()
 
     # Use canvas to create an all white screen
     with canvas(d) as drw:
@@ -99,12 +99,12 @@ def test_display():
     line2 = [call.command(*bytes_to_nibbles([DDRAMADDR, CGRAMADDR + 1])),
         call.data([0x0F] * 200)]
 
-    serial.assert_has_calls(line1 + line2)
+    interface.assert_has_calls(line1 + line2)
 
 
 def test_get_font():
-    serial._bitmode = 8
-    device = ws0010(serial)
+    interface._bitmode = 8
+    device = ws0010(interface)
 
     img = Image.new('1', (11, 8), 0)
     device.font.current = 0
@@ -126,14 +126,14 @@ def test_get_font():
 def test_unsupported_display_mode():
     import luma.core
     try:
-        ws0010(serial, width=99, height=15)
+        ws0010(interface, width=99, height=15)
     except luma.core.error.DeviceDisplayModeError as ex:
         assert str(ex) == "Unsupported display mode: 99 x 15"
 
 
 def test_winstar_weh():
-    serial._bitmode = 4
-    device = winstar_weh(serial)
+    interface._bitmode = 4
+    device = winstar_weh(interface)
 
     device.text = 'This is a test'
 

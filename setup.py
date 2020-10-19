@@ -35,7 +35,8 @@ needs_pytest = {'pytest', 'test', 'ptr'}.intersection(sys.argv)
 pytest_runner = ['pytest-runner'] if needs_pytest else []
 test_deps = [
     'pytest<=4.5',
-    'pytest-cov'
+    'pytest-cov',
+    'pytest-timeout'
 ]
 
 setup(
@@ -48,13 +49,14 @@ setup(
                  "SSD1351, SSD1362, SH1106 or WS0010 chipset"),
     long_description="\n\n".join([README, CONTRIB, CHANGES]),
     long_description_content_type="text/x-rst",
-    python_requires='>=3.5, <4',
+    python_requires='>=3.6, <4',
     license="MIT",
     keywords=("raspberry pi rpi oled display screen "
               "rgb monochrome greyscale color "
-              "ssd1306 ssd1309 ssd1322 ssd1325 ssd1327 ssd1331 ssd1351 sh1106 WS0010 "
-              "spi i2c 256x64 128x64 128x32 96x16 "
-              "WEH001602A WEG010016"),
+              "ssd1306 ssd1309 ssd1322 ssd1325 ssd1327 ssd1331 ssd1351 sh1106 "
+              "ws0010 WEH001602A WEG010016A "
+              "spi i2c parallel 6800 pcf8574 "),
+
     url=project_url,
     download_url=project_url + "/tarball/" + version,
     project_urls={
@@ -65,7 +67,7 @@ setup(
     packages=find_packages(),
     namespace_packages=["luma"],
     zip_safe=False,
-    install_requires=["luma.core>=1.16.1"],
+    install_requires=["luma.core>=1.16.2"],
     setup_requires=pytest_runner,
     tests_require=test_deps,
     extras_require={
@@ -86,9 +88,9 @@ setup(
         "Topic :: Education",
         "Topic :: System :: Hardware",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
-        "Programming Language :: Python :: 3.8"
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9"
     ]
 )

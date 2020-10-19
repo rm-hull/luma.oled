@@ -1,15 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# Copyright (c) 2014-18 Richard Hull and contributors
+# Copyright (c) 2014-2020 Richard Hull and contributors
 # See LICENSE.rst for details.
 
 """
 Collection of datasets to prevent regression bugs from creeping in.
 """
 
-import io
 import json
-import os.path
+from pathlib import Path
 
 
 def primitives(device, draw):
@@ -33,7 +32,13 @@ def primitives(device, draw):
 
 
 def get_json_data(fname):
-    dirname = os.path.abspath(os.path.dirname(__file__))
-    fpath = os.path.join(dirname, 'reference', 'data', fname + '.json')
-    with io.open(fpath) as f:
+    """
+    Load JSON reference data.
+
+    :param fname: Filename without extension.
+    :type fname: str
+    """
+    base_dir = Path(__file__).resolve().parent
+    fpath = base_dir.joinpath('reference', 'data', fname + '.json')
+    with fpath.open() as f:
         return json.load(f)
