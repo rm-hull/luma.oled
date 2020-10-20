@@ -367,7 +367,7 @@ class ssd1351(color_device):
         super(ssd1351, self).__init__(serial_interface, width, height, rotate, framebuffer, **kwargs)
 
     def _supported_dimensions(self):
-        return [(96, 96), (128, 128)]
+        return [(96, 96), (128, 128), (128, 96)]
 
     def _init_sequence(self):
         self.command(0xFD, 0x12)               # Unlock IC MCU interface
