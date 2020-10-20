@@ -6,7 +6,7 @@
 from luma.oled.device import sh1106
 from luma.core.render import canvas
 
-from baseline_data import get_json_data, primitives
+from baseline_data import get_reference_data, primitives
 from helpers import serial, assert_invalid_dimensions, setup_function  # noqa: F401
 from unittest.mock import Mock, call
 
@@ -71,4 +71,9 @@ def test_display():
     serial.data.assert_called()
     serial.command.assert_called()
 
-    assert recordings == get_json_data('demo_sh1106')
+    # To regenerate test data, uncomment the following (remember not to commit though)
+    # ================================================================================
+    # from baseline_data import save_reference_data
+    # save_reference_data("demo_sh1106", recordings)
+
+    assert recordings == get_reference_data('demo_sh1106')

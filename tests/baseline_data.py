@@ -31,7 +31,7 @@ def primitives(device, draw):
     draw.text((x, top + 20), 'World!', fill="purple")
 
 
-def get_json_data(fname):
+def get_reference_data(fname):
     """
     Load JSON reference data.
 
@@ -42,3 +42,11 @@ def get_json_data(fname):
     fpath = base_dir.joinpath('reference', 'data', fname + '.json')
     with fpath.open() as f:
         return json.load(f)
+
+
+def save_reference_data(fname, recordings):
+    base_dir = Path(__file__).resolve().parent
+    fpath = base_dir.joinpath('reference', 'data', fname + '.json')
+    with fpath.open("w") as f:
+        json.dump(recordings, f)
+        raise AssertionError("Regenerating reference data ... do not commit with this active in tests!")

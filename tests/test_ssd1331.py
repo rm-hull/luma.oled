@@ -8,7 +8,7 @@ import pytest
 from luma.oled.device import ssd1331
 from luma.core.render import canvas
 
-from baseline_data import get_json_data, primitives
+from baseline_data import get_reference_data, primitives
 from helpers import serial, assert_invalid_dimensions, setup_function  # noqa: F401
 from unittest.mock import call
 
@@ -78,8 +78,13 @@ def test_display():
     # Initial command to reset the display
     serial.command.assert_called_once_with(21, 0, 95, 117, 0, 63)
 
+    # To regenerate test data, uncomment the following (remember not to commit though)
+    # ================================================================================
+    # from baseline_data import save_reference_data
+    # save_reference_data("demo_ssd1331", serial.data.call_args.args[0])
+
     # Next 12288 bytes are data representing the drawn image
-    serial.data.assert_called_once_with(get_json_data('demo_ssd1331'))
+    serial.data.assert_called_once_with(get_reference_data('demo_ssd1331'))
 
 
 @pytest.mark.parametrize("bit,expected_16_bit_color", [
