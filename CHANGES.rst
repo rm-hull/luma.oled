@@ -6,6 +6,8 @@ ChangeLog
 +============+=====================================================================+============+
 | *TBA*      | * Drop support for Python 3.5, only 3.6 or newer is supported now   |            |
 |            | * Add support for SSD1351 128x96 display                            |            |
+|            | * Pin luma.core to 1.x.y line only, in anticipation of performance  |            |
+|            |   improvements in upcoming major release                            |            |
 +------------+---------------------------------------------------------------------+------------+
 | **3.6.0**  | * Add support for Winstar OLED displays                             | 2020/09/24 |
 +------------+---------------------------------------------------------------------+------------+
