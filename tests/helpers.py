@@ -6,6 +6,7 @@ from unittest.mock import Mock
 import pytest
 
 import luma.core.error
+from luma.core.framebuffer import full_frame
 
 serial = Mock(unsafe=True)
 
@@ -24,5 +25,5 @@ def assert_invalid_dimensions(deviceType, serial_interface, width, height):
     :py:class:`luma.core.error.DeviceDisplayModeError`.
     """
     with pytest.raises(luma.core.error.DeviceDisplayModeError) as ex:
-        deviceType(serial_interface, width=width, height=height)
+        deviceType(serial_interface, width=width, height=height, framebuffer=full_frame())
     assert f"Unsupported display mode: {width} x {height}" in str(ex.value)

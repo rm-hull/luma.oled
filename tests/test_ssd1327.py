@@ -5,6 +5,7 @@
 
 from luma.oled.device import ssd1327
 from luma.core.render import canvas
+from luma.core.framebuffer import diff_to_previous, full_frame
 
 from baseline_data import get_reference_data, primitives
 from helpers import serial, assert_invalid_dimensions, setup_function  # noqa: F401
@@ -15,7 +16,7 @@ def test_init_128x128():
     """
     SSD1327 OLED with a 128 x 128 resolution works correctly.
     """
-    ssd1327(serial)
+    ssd1327(serial, framebuffer=full_frame())
     serial.command.assert_has_calls([
         call(174, 160, 83, 161, 0, 162, 0, 164, 168, 127),
         call(184, 1, 17, 34, 50, 67, 84, 101, 118),
@@ -62,7 +63,7 @@ def test_greyscale_display():
     """
     SSD1327 OLED screen can draw and display a greyscale image.
     """
-    device = ssd1327(serial, mode="RGB")
+    device = ssd1327(serial, mode="RGB", framebuffer=full_frame())
     serial.reset_mock()
 
     # Use the same drawing primitives as the demo
@@ -85,7 +86,7 @@ def test_monochrome_display():
     """
     SSD1327 OLED screen can draw and display a monochrome image.
     """
-    device = ssd1327(serial, mode="1")
+    device = ssd1327(serial, mode="1", framebuffer=full_frame())
     serial.reset_mock()
 
     # Use the same drawing primitives as the demo
@@ -108,4 +109,4 @@ def test_framebuffer_override():
     """
     Reproduce https://github.com/rm-hull/luma.examples/issues/95
     """
-    ssd1327(serial, mode="1", framebuffer="diff_to_previous")
+    ssd1327(serial, mode="1", framebuffer=diff_to_previous())

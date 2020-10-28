@@ -12,7 +12,7 @@ from abc import abstractmethod, ABCMeta
 
 from luma.core.device import device
 import luma.core.error
-import luma.core.framebuffer
+from luma.core.framebuffer import diff_to_previous
 import luma.oled.const
 
 
@@ -20,10 +20,18 @@ class greyscale_device(device):
     __metaclass__ = ABCMeta
 
     def __init__(self, const, serial_interface, width, height, rotate, mode,
-                 framebuffer, nibble_order, **kwargs):
+                 nibble_order, framebuffer=diff_to_previous(num_segments=4),  **kwargs):
         super(greyscale_device, self).__init__(const, serial_interface)
         self.capabilities(width, height, rotate, mode)
-        self.framebuffer = getattr(luma.core.framebuffer, framebuffer)(self)
+        if isinstance(framebuffer, str):
+            import warnings
+            warnings.warn(
+                "Specifying framebuffer as a string is now deprecated; Supply an instance of class full_frame() or diff_to_previous() instead",
+                RuntimeWarning
+            )
+            self.framebuffer = getattr(luma.core.framebuffer, framebuffer)()
+        else:
+            self.framebuffer = framebuffer
         self._populate = self._render_mono if mode == "1" else self._render_greyscale
         self._nibble_order = nibble_order
 
@@ -92,6 +100,21 @@ class greyscale_device(device):
 
             i += 1
 
+    def _inflate_bbox(self, bounding_box):
+        """
+        Realign the left and right edges of the bounding box such that they are
+        inflated to align modulo 4.
+
+        this method is optional, and used mainly to accommodate devices with
+        COM/SEG GDDRAM structures that store pixels in 4-bit nibbles.
+        """
+        left, top, right, bottom = bounding_box
+        return (
+            left & 0xFFFC,
+            top,
+            right if right % 4 == 0 else (right & 0xFFFC) + 0x04,
+            bottom)
+
     def display(self, image):
         """
         Takes a 1-bit monochrome or 24-bit RGB image and renders it
@@ -107,12 +130,13 @@ class greyscale_device(device):
 
         image = self.preprocess(image)
 
-        if self.framebuffer.redraw_required(image):
-            left, top, right, bottom = self.framebuffer.inflate_bbox()
+        for _, bounding_box in self.framebuffer.redraw(image):
+            left, top, right, bottom = self._inflate_bbox(bounding_box)
+            cropped_image_segment = image.crop((left, top, right, bottom))
             width = right - left
             height = bottom - top
 
             buf = bytearray(width * height >> 1)
             self._set_position(top, right, bottom, left)
-            self._populate(buf, self.framebuffer.getdata())
+            self._populate(buf, cropped_image_segment.getdata())
             self.data(list(buf))

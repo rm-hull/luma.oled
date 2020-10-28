@@ -22,7 +22,15 @@ class color_device(device):
     def __init__(self, serial_interface, width, height, rotate, framebuffer, **kwargs):
         super(color_device, self).__init__(luma.oled.const.common, serial_interface)
         self.capabilities(width, height, rotate, mode="RGB")
-        self.framebuffer = getattr(luma.core.framebuffer, framebuffer)(self)
+        if isinstance(framebuffer, str):
+            import warnings
+            warnings.warn(
+                "Specifying framebuffer as a string is now deprecated; Supply an instance of class full_frame() or diff_to_previous() instead",
+                RuntimeWarning
+            )
+            self.framebuffer = getattr(luma.core.framebuffer, framebuffer)()
+        else:
+            self.framebuffer = framebuffer
 
         if (width, height) not in self._supported_dimensions():
             raise luma.core.error.DeviceDisplayModeError(
@@ -77,8 +85,8 @@ class color_device(device):
 
         image = self.preprocess(image)
 
-        if self.framebuffer.redraw_required(image):
-            left, top, right, bottom = self._apply_offsets(self.framebuffer.bounding_box)
+        for image, bounding_box in self.framebuffer.redraw(image):
+            left, top, right, bottom = self._apply_offsets(bounding_box)
             width = right - left
             height = bottom - top
 
@@ -86,7 +94,7 @@ class color_device(device):
 
             i = 0
             buf = bytearray(width * height * 2)
-            for r, g, b in self.framebuffer.getdata():
+            for r, g, b in image.getdata():
                 if not(r == g == b == 0):
                     # 65K format 1
                     buf[i] = r & 0xF8 | g >> 5

@@ -40,7 +40,7 @@ from luma.core.virtual import character
 from luma.oled.device.color import color_device
 from luma.oled.device.greyscale import greyscale_device
 import luma.core.error
-import luma.core.framebuffer
+from luma.core.framebuffer import diff_to_previous, full_frame
 from luma.core.bitmap_font import embedded_fonts
 import luma.oled.const
 
@@ -56,6 +56,7 @@ class sh1106(device):
     to properly configure it. Further control commands can then be called to
     affect the brightness and other settings.
     """
+
     def __init__(self, serial_interface=None, width=128, height=64, rotate=0, **kwargs):
         super(sh1106, self).__init__(luma.oled.const.sh1106, serial_interface)
         self.capabilities(width, height, rotate)
@@ -148,6 +149,7 @@ class ssd1306(device):
         represents 270° rotation.
     :type rotate: int
     """
+
     def __init__(self, serial_interface=None, width=128, height=64, rotate=0, **kwargs):
         super(ssd1306, self).__init__(luma.oled.const.ssd1306, serial_interface)
         self.capabilities(width, height, rotate)
@@ -266,14 +268,13 @@ class ssd1331(color_device):
         no rotation, 1 is rotate 90° clockwise, 2 is 180° rotation and 3
         represents 270° rotation.
     :type rotate: int
-    :param framebuffer: Framebuffering strategy, currently values of
+    :param framebuffer: Framebuffering strategy, currently instances of
         ``diff_to_previous`` or ``full_frame`` are only supported.
     :type framebuffer: str
     """
-    def __init__(self, serial_interface=None, width=96, height=64, rotate=0,
-                 framebuffer="diff_to_previous", **kwargs):
-        super(ssd1331, self).__init__(serial_interface, width, height, rotate,
-                                      framebuffer, **kwargs)
+
+    def __init__(self, serial_interface=None, width=96, height=64, rotate=0, **kwargs):
+        super(ssd1331, self).__init__(serial_interface, width, height, rotate, **kwargs)
 
     def _supported_dimensions(self):
         return [(96, 64)]
@@ -337,7 +338,7 @@ class ssd1351(color_device):
         no rotation, 1 is rotate 90° clockwise, 2 is 180° rotation and 3
         represents 270° rotation.
     :type rotate: int
-    :param framebuffer: Framebuffering strategy, currently values of
+    :param framebuffer: Framebuffering strategy, currently instances of
         ``diff_to_previous`` or ``full_frame`` are only supported.
     :type framebuffer: str
     :param bgr: Set to ``True`` if device pixels are BGR order (rather than RGB).
@@ -351,9 +352,9 @@ class ssd1351(color_device):
 
     .. versionadded:: 2.3.0
     """
+
     def __init__(self, serial_interface=None, width=128, height=128, rotate=0,
-                 framebuffer="diff_to_previous", h_offset=0, v_offset=0,
-                 bgr=False, **kwargs):
+                 h_offset=0, v_offset=0, bgr=False, **kwargs):
 
         # RGB or BGR order
         self._color_order = 0x04 if bgr else 0x00
@@ -364,7 +365,7 @@ class ssd1351(color_device):
                 return (left + h_offset, top + v_offset, right + h_offset, bottom + v_offset)
             self._apply_offsets = offset
 
-        super(ssd1351, self).__init__(serial_interface, width, height, rotate, framebuffer, **kwargs)
+        super(ssd1351, self).__init__(serial_interface, width, height, rotate, **kwargs)
 
     def _supported_dimensions(self):
         return [(96, 96), (128, 128), (128, 96)]
@@ -440,17 +441,18 @@ class ssd1322(greyscale_device):
     :param mode: Supplying "1" or "RGB" effects a different rendering
          mechanism, either to monochrome or 4-bit greyscale.
     :type mode: str
-    :param framebuffer: Framebuffering strategy, currently values of
+    :param framebuffer: Framebuffering strategy, currently instances of
         ``diff_to_previous`` or ``full_frame`` are only supported
     :type framebuffer: str
 
     """
+
     def __init__(self, serial_interface=None, width=256, height=64, rotate=0,
-                 mode="RGB", framebuffer="diff_to_previous", **kwargs):
+                 mode="RGB", **kwargs):
         self._column_offset = (480 - width) // 2
         super(ssd1322, self).__init__(luma.oled.const.ssd1322, serial_interface,
-                                      width, height, rotate, mode, framebuffer,
-                                      nibble_order=0, **kwargs)
+                                      width, height, rotate, mode, nibble_order=0,
+                                      **kwargs)
 
     def _supported_dimensions(self):
         return [(256, 64), (256, 48), (256, 32),
@@ -521,17 +523,18 @@ class ssd1362(greyscale_device):
     :param mode: Supplying "1" or "RGB" effects a different rendering
          mechanism, either to monochrome or 4-bit greyscale.
     :type mode: str
-    :param framebuffer: Framebuffering strategy, currently values of
+    :param framebuffer: Framebuffering strategy, currently instances of
         ``diff_to_previous`` or ``full_frame`` are only supported
     :type framebuffer: str
 
     .. versionadded:: 3.4.0
     """
+
     def __init__(self, serial_interface=None, width=256, height=64, rotate=0,
-                 mode="RGB", framebuffer="diff_to_previous", **kwargs):
+                 mode="RGB", **kwargs):
         super(ssd1362, self).__init__(luma.oled.const.ssd1362, serial_interface,
-                                      width, height, rotate, mode, framebuffer,
-                                      nibble_order=1, **kwargs)
+                                      width, height, rotate, mode, nibble_order=1,
+                                      **kwargs)
 
     def _supported_dimensions(self):
         return [(256, 64)]
@@ -565,10 +568,10 @@ class ssd1322_nhd(greyscale_device):
     frame buffer"""
 
     def __init__(self, serial_interface=None, width=128, height=64, rotate=0,
-                 mode="RGB", framebuffer="full_frame", **kwargs):
+                 mode="RGB", framebuffer=full_frame(), **kwargs):
         super(ssd1322_nhd, self).__init__(luma.oled.const.ssd1322, serial_interface,
-                                      128, 64, rotate, mode, "full_frame",
-                                      nibble_order=0, **kwargs)
+                                      128, 64, rotate, mode, nibble_order=0,
+                                      framebuffer=framebuffer, **kwargs)
 
     def _supported_dimensions(self):
         return [(128, 64)]
@@ -642,14 +645,14 @@ class ssd1322_nhd(greyscale_device):
 
         image = self.preprocess(image)
 
-        if self.framebuffer.redraw_required(image):
-            left, top, right, bottom = self.framebuffer.inflate_bbox()
+        for image, bounding_box in self.framebuffer.redraw(image):
+            left, top, right, bottom = bounding_box
             width = right - left
             height = bottom - top
 
             buf = bytearray(width * height)
             self._set_position(top, bottom)
-            self._populate(buf, self.framebuffer.getdata())
+            self._populate(buf, image.getdata())
             self.data(list(buf))
 
 
@@ -661,11 +664,10 @@ class ssd1325(greyscale_device):
     display to properly configure it. Further control commands can then be
     called to affect the brightness and other settings.
     """
-    def __init__(self, serial_interface=None, width=128, height=64, rotate=0,
-                 mode="RGB", framebuffer="full_frame", **kwargs):
-        super(ssd1325, self).__init__(luma.core.const.common, serial_interface,
-                                      width, height, rotate, mode, framebuffer,
-                                      nibble_order=1, **kwargs)
+
+    def __init__(self, serial_interface=None, width=128, height=64, rotate=0, mode="RGB", **kwargs):
+        super(ssd1325, self).__init__(luma.core.const.common, serial_interface, width, height,
+                                      rotate, mode, nibble_order=1, **kwargs)
 
     def _supported_dimensions(self):
         return [(128, 64)]
@@ -708,11 +710,11 @@ class ssd1327(greyscale_device):
 
     .. versionadded:: 2.4.0
     """
+
     def __init__(self, serial_interface=None, width=128, height=128, rotate=0,
-                 mode="RGB", framebuffer="full_frame",  **kwargs):
+                 mode="RGB", **kwargs):
         super(ssd1327, self).__init__(luma.core.const.common, serial_interface,
-                                      width, height, rotate, mode, framebuffer,
-                                      nibble_order=1, **kwargs)
+                                      width, height, rotate, mode, nibble_order=1, **kwargs)
 
     def _supported_dimensions(self):
         return [(128, 128)]
@@ -824,10 +826,21 @@ class ws0010(parallel_device, character):
 
     .. versionadded:: 3.6.0
     """
-    def __init__(self, serial_interface=None, width=100, height=16, undefined='_', font=None, selected_font=0, exec_time=1e-6 * 50, rotate=0, framebuffer="diff_to_previous", const=luma.oled.const.ws0010, **kwargs):
+
+    def __init__(self, serial_interface=None, width=100, height=16, undefined='_', font=None,
+                 selected_font=0, exec_time=1e-6 * 50, rotate=0, framebuffer=diff_to_previous(num_segments=1),
+                 const=luma.oled.const.ws0010, **kwargs):
         super(ws0010, self).__init__(const, serial_interface, exec_time=exec_time, **kwargs)
         self.capabilities(width, height, rotate)
-        self.framebuffer = getattr(luma.core.framebuffer, framebuffer)(self)
+        if isinstance(framebuffer, str):
+            import warnings
+            warnings.warn(
+                "Specifying framebuffer as a string is now deprecated; Supply an instance of class full_frame() or diff_to_previous() instead",
+                RuntimeWarning
+            )
+            self.framebuffer = getattr(luma.core.framebuffer, framebuffer)()
+        else:
+            self.framebuffer = framebuffer
         self.font = font if font is not None else embedded_fonts(self._const.FONTDATA, selected_font=selected_font)
         self._undefined = undefined
         self.device = self
@@ -880,32 +893,32 @@ class ws0010(parallel_device, character):
 
         image = self.preprocess(image)
 
-        if self.framebuffer.redraw_required(image):
+        for _, bounding_box in self.framebuffer.redraw(image):
             # Expand bounding box to align to cell height boundary (8)
             # TODO: Should consider whether this should be moved into framebuffer class
-            x0, y0, x1, y1 = self.framebuffer.bounding_box
-            y0 = y0 // 8 * 8
-            y1 = y1 // 8 * 8 if not y1 % 8 else (y1 // 8 + 1) * 8
-            self.framebuffer.bounding_box = (x0, y0, x1, y1)
+            left, top, right, bottom = bounding_box
+            top = top // 8 * 8
+            bottom = bottom // 8 * 8 if not bottom % 8 else (bottom // 8 + 1) * 8
 
             if self._bitmode == 4:
                 # If in 4 bit mode, issue reset to make sure we are in sync with the display
                 self._reset()
 
-            w = x1 - x0
-            h = y1 - y0
+            w = right - left
+            h = bottom - top
             mask = [1 << (i // w) % 8 for i in range(w * h)]
             off = [(w * (i // (w * 8))) + (i % w) for i in range(w * h)]
             buf = bytearray(w * h // 8)
 
-            for idx, pix in enumerate(self.framebuffer.getdata()):
+            image_segment = image.crop((left, top, right, bottom))
+            for idx, pix in enumerate(image_segment.getdata()):
                 if pix > 0:
                     buf[off[idx]] |= mask[idx]
 
-            lines = int((y1 - y0) / 8)
+            lines = int((bottom - top) / 8)
             lineSize = int(len(buf) / lines)
             for i in range(lines):
-                self.command(self._const.DDRAMADDR + x0, self._const.CGRAMADDR + i + (y0 // 8))  # Set display to current line at the starting column to update
+                self.command(self._const.DDRAMADDR + left, self._const.CGRAMADDR + i + (top // 8))  # Set display to current line at the starting column to update
                 self.data(buf[lineSize * i:lineSize * (i + 1)])   # Send section of current line that needs to be changed
 
     def get_font(self, ft):

@@ -67,7 +67,8 @@ setup(
     packages=find_packages(),
     namespace_packages=["luma"],
     zip_safe=False,
-    install_requires=["luma.core>=1.16.2,<2.0.0"],
+    # TODO: Replace with >=2.0.0 once package has been released to PyPi
+    install_requires=["luma.core @ https://github.com/rm-hull/luma.core/tarball/feature/improved-framebuffer-performance#egg=luma.core"],
     setup_requires=pytest_runner,
     tests_require=test_deps,
     extras_require={

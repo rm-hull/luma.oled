@@ -5,6 +5,7 @@
 
 from luma.oled.device import ssd1322_nhd
 from luma.core.render import canvas
+from luma.core.framebuffer import full_frame
 
 from baseline_data import get_reference_data, primitives
 from helpers import serial
@@ -78,7 +79,7 @@ def test_greyscale_display():
     """
     SSD1322_NHD OLED screen can draw and display a greyscale image.
     """
-    device = ssd1322_nhd(serial, mode="RGB")
+    device = ssd1322_nhd(serial, mode="RGB", framebuffer=full_frame())
     serial.reset_mock()
 
     recordings = []
@@ -111,7 +112,7 @@ def test_monochrome_display():
     """
     SSD1322_NHD OLED screen can draw and display a monochrome image.
     """
-    device = ssd1322_nhd(serial, mode="1")
+    device = ssd1322_nhd(serial, mode="1", framebuffer=full_frame())
     serial.reset_mock()
 
     recordings = []
