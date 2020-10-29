@@ -7,7 +7,7 @@ import pytest
 
 from luma.oled.device import ssd1331
 from luma.core.render import canvas
-from luma.core.framebuffer import diff_to_previous, full_frame
+from luma.core.framebuffer import full_frame
 
 from baseline_data import get_reference_data, primitives
 from helpers import serial, assert_invalid_dimensions, setup_function  # noqa: F401
