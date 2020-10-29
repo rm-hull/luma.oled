@@ -7,6 +7,7 @@
 Tests for the :py:class:`luma.oled.device.ws0010` device.
 """
 
+from luma.core.framebuffer import full_frame
 from luma.oled.device import ws0010, winstar_weh
 from luma.core.render import canvas
 from luma.core.util import bytes_to_nibbles
@@ -33,7 +34,7 @@ interface = Mock(unsafe=True, _bitmode=4, _pulse_time=1e-6)
 
 
 def test_init_4bitmode():
-    ws0010(interface)
+    ws0010(interface, framebuffer=full_frame())
 
     to_4 = \
         [call(0, 0, 0, 0, 0, 2, 2, 9)]
@@ -60,7 +61,7 @@ def test_init_4bitmode():
 
 def test_init_8bitmode():
     interface._bitmode = 8
-    ws0010(interface)
+    ws0010(interface, framebuffer=full_frame())
 
     to_4 = \
         [call(0, 0, 3, 57)]
@@ -87,7 +88,7 @@ def test_init_8bitmode():
 
 def test_display():
     interface._bitmode = 4
-    d = ws0010(interface)
+    d = ws0010(interface, framebuffer=full_frame())
     interface.reset_mock()
 
     # Use canvas to create an all white screen
@@ -104,7 +105,7 @@ def test_display():
 
 def test_get_font():
     interface._bitmode = 8
-    device = ws0010(interface)
+    device = ws0010(interface, framebuffer=full_frame())
 
     img = Image.new('1', (11, 8), 0)
     device.font.current = 0
@@ -132,8 +133,15 @@ def test_unsupported_display_mode():
 
 
 def test_winstar_weh():
+
+    class image_retaining_framebuffer(full_frame):
+
+        def redraw(self, image):
+            self.image = image
+            yield image, (0, 0) + image.size
+
     interface._bitmode = 4
-    device = winstar_weh(interface)
+    device = winstar_weh(interface, framebuffer=image_retaining_framebuffer())
 
     device.text = 'This is a test'
 
