@@ -20,7 +20,7 @@ class greyscale_device(device):
     __metaclass__ = ABCMeta
 
     def __init__(self, const, serial_interface, width, height, rotate, mode,
-                 nibble_order, framebuffer=diff_to_previous(num_segments=4),  **kwargs):
+                 framebuffer, nibble_order, **kwargs):
         super(greyscale_device, self).__init__(const, serial_interface)
         self.capabilities(width, height, rotate, mode)
         if isinstance(framebuffer, str):
