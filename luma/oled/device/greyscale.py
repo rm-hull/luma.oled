@@ -12,7 +12,6 @@ from abc import abstractmethod, ABCMeta
 
 from luma.core.device import device
 import luma.core.error
-from luma.core.framebuffer import diff_to_previous
 import luma.oled.const
 
 
