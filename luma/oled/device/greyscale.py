@@ -13,24 +13,18 @@ from abc import abstractmethod, ABCMeta
 from luma.core.device import device
 import luma.core.error
 import luma.oled.const
+from luma.oled.device.framebuffer_mixin import __framebuffer_mixin
 
 
-class greyscale_device(device):
+class greyscale_device(device, __framebuffer_mixin):
     __metaclass__ = ABCMeta
 
     def __init__(self, const, serial_interface, width, height, rotate, mode,
                  framebuffer, nibble_order, **kwargs):
         super(greyscale_device, self).__init__(const, serial_interface)
         self.capabilities(width, height, rotate, mode)
-        if isinstance(framebuffer, str):
-            import warnings
-            warnings.warn(
-                "Specifying framebuffer as a string is now deprecated; Supply an instance of class full_frame() or diff_to_previous() instead",
-                RuntimeWarning
-            )
-            self.framebuffer = getattr(luma.core.framebuffer, framebuffer)()
-        else:
-            self.framebuffer = framebuffer
+        self.init_framebuffer(framebuffer)
+
         self._populate = self._render_mono if mode == "1" else self._render_greyscale
         self._nibble_order = nibble_order
 

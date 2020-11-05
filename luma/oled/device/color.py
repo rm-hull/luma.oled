@@ -14,23 +14,16 @@ from luma.core.device import device
 import luma.core.error
 import luma.core.framebuffer
 import luma.oled.const
+from luma.oled.device.framebuffer_mixin import __framebuffer_mixin
 
 
-class color_device(device):
+class color_device(device, __framebuffer_mixin):
     __metaclass__ = ABCMeta
 
     def __init__(self, serial_interface, width, height, rotate, framebuffer, **kwargs):
         super(color_device, self).__init__(luma.oled.const.common, serial_interface)
         self.capabilities(width, height, rotate, mode="RGB")
-        if isinstance(framebuffer, str):
-            import warnings
-            warnings.warn(
-                "Specifying framebuffer as a string is now deprecated; Supply an instance of class full_frame() or diff_to_previous() instead",
-                RuntimeWarning
-            )
-            self.framebuffer = getattr(luma.core.framebuffer, framebuffer)()
-        else:
-            self.framebuffer = framebuffer
+        self.init_framebuffer(framebuffer)
 
         if (width, height) not in self._supported_dimensions():
             raise luma.core.error.DeviceDisplayModeError(

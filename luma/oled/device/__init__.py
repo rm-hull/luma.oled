@@ -43,7 +43,7 @@ import luma.core.error
 from luma.core.framebuffer import diff_to_previous, full_frame
 from luma.core.bitmap_font import embedded_fonts
 import luma.oled.const
-
+from luma.oled.device.framebuffer_mixin import __framebuffer_mixin
 
 __all__ = ["ssd1306", "ssd1309", "ssd1322", "ssd1362", "ssd1322_nhd", "ssd1325", "ssd1327", "ssd1331", "ssd1351", "sh1106", "ws0010", "winstar_weh"]
 
@@ -756,7 +756,7 @@ class ssd1327(greyscale_device):
             0x75, top, bottom - 1)  # set row addr
 
 
-class ws0010(parallel_device, character):
+class ws0010(parallel_device, character, __framebuffer_mixin):
     """
     Serial interface to a monochrome Winstar WS0010 OLED display.  This
     interface will work with most ws0010 powered devices including the weg010016.
@@ -838,15 +838,7 @@ class ws0010(parallel_device, character):
                  const=luma.oled.const.ws0010, **kwargs):
         super(ws0010, self).__init__(const, serial_interface, exec_time=exec_time, **kwargs)
         self.capabilities(width, height, rotate)
-        if isinstance(framebuffer, str):
-            import warnings
-            warnings.warn(
-                "Specifying framebuffer as a string is now deprecated; Supply an instance of class full_frame() or diff_to_previous() instead",
-                RuntimeWarning
-            )
-            self.framebuffer = getattr(luma.core.framebuffer, framebuffer)()
-        else:
-            self.framebuffer = framebuffer
+        self.init_framebuffer(framebuffer)
         self.font = font if font is not None else embedded_fonts(self._const.FONTDATA, selected_font=selected_font)
         self._undefined = undefined
         self.device = self
