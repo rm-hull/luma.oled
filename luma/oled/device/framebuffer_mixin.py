@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+# Copyright (c) 2020 Richard Hull and contributors
+# See LICENSE.rst for details.
+
 import luma.core.framebuffer
 
 
@@ -10,6 +14,8 @@ class __framebuffer_mixin(object):
         Specifying the framebuffer as a string will be removed at the next
         major release, and hence this mixin will become redundant and will
         also be removed at that point.
+
+    .. versionadded:: 3.8.0
     """
 
     def init_framebuffer(self, framebuffer):
