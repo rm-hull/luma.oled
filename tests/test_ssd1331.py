@@ -7,6 +7,7 @@ import pytest
 
 from luma.oled.device import ssd1331
 from luma.core.render import canvas
+from luma.core.framebuffer import full_frame
 
 from baseline_data import get_reference_data, primitives
 from helpers import serial, assert_invalid_dimensions, setup_function  # noqa: F401
@@ -17,7 +18,7 @@ def test_init_96x64():
     """
     SSD1331 OLED with a 96 x 64 resolution works correctly.
     """
-    ssd1331(serial)
+    ssd1331(serial, framebuffer=full_frame())
     serial.command.assert_has_calls([
         # Initial burst are initialization commands
         call(174, 160, 114, 161, 0, 162, 0, 164, 168, 63, 173,
@@ -48,7 +49,7 @@ def test_hide():
     """
     SSD1331 OLED screen content can be hidden.
     """
-    device = ssd1331(serial)
+    device = ssd1331(serial, framebuffer=full_frame())
     serial.reset_mock()
     device.hide()
     serial.command.assert_called_once_with(174)
@@ -58,7 +59,7 @@ def test_show():
     """
     SSD1331 OLED screen content can be displayed.
     """
-    device = ssd1331(serial)
+    device = ssd1331(serial, framebuffer=full_frame())
     serial.reset_mock()
     device.show()
     serial.command.assert_called_once_with(175)
@@ -68,7 +69,7 @@ def test_display():
     """
     SSD1331 OLED screen can draw and display an image.
     """
-    device = ssd1331(serial)
+    device = ssd1331(serial, framebuffer=full_frame())
     serial.reset_mock()
 
     # Use the same drawing primitives as the demo
@@ -103,7 +104,7 @@ def test_16bit_rgb_packing(bit, expected_16_bit_color):
     Checks that 8 bit green component is packed into next 6 bits
     Checks that 8 bit blue component is packed into remaining 5 bits
     """
-    device = ssd1331(serial)
+    device = ssd1331(serial, framebuffer=full_frame())
     serial.reset_mock()
 
     rgb_color = (2 ** bit,) * 3

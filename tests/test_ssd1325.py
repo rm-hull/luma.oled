@@ -5,6 +5,7 @@
 
 from luma.oled.device import ssd1325
 from luma.core.render import canvas
+from luma.core.framebuffer import full_frame, diff_to_previous
 
 from baseline_data import get_reference_data, primitives
 from helpers import serial, assert_invalid_dimensions, setup_function  # noqa: F401
@@ -15,7 +16,7 @@ def test_init_128x64():
     """
     SSD1325 OLED with a 128 x 64 resolution works correctly.
     """
-    ssd1325(serial)
+    ssd1325(serial, framebuffer=full_frame())
     serial.command.assert_has_calls([
         call(174, 179, 242, 168, 63, 162, 76, 161, 0, 173, 2, 160, 80, 134, 184,
              1, 17, 34, 50, 67, 84, 101, 118, 178, 81, 177, 85, 180, 3, 176, 40,
@@ -42,7 +43,7 @@ def test_hide():
     """
     SSD1325 OLED screen content can be hidden.
     """
-    device = ssd1325(serial)
+    device = ssd1325(serial, framebuffer=full_frame())
     serial.reset_mock()
     device.hide()
     serial.command.assert_called_once_with(174)
@@ -52,7 +53,7 @@ def test_show():
     """
     SSD1325 OLED screen content can be displayed.
     """
-    device = ssd1325(serial)
+    device = ssd1325(serial, framebuffer=full_frame())
     serial.reset_mock()
     device.show()
     serial.command.assert_called_once_with(175)
@@ -62,7 +63,7 @@ def test_greyscale_display():
     """
     SSD1325 OLED screen can draw and display a greyscale image.
     """
-    device = ssd1325(serial, mode="RGB")
+    device = ssd1325(serial, mode="RGB", framebuffer=full_frame())
     serial.reset_mock()
 
     # Use the same drawing primitives as the demo
@@ -85,7 +86,7 @@ def test_monochrome_display():
     """
     SSD1325 OLED screen can draw and display a monochrome image.
     """
-    device = ssd1325(serial, mode="1")
+    device = ssd1325(serial, mode="1", framebuffer=full_frame())
     serial.reset_mock()
 
     # Use the same drawing primitives as the demo
@@ -108,4 +109,4 @@ def test_framebuffer_override():
     """
     Reproduce https://github.com/rm-hull/luma.examples/issues/95
     """
-    ssd1325(serial, mode="1", framebuffer="diff_to_previous")
+    ssd1325(serial, mode="1", framebuffer=diff_to_previous())

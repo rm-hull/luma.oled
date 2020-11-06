@@ -7,6 +7,7 @@ import pytest
 
 from luma.oled.device import ssd1351
 from luma.core.render import canvas
+from luma.core.framebuffer import full_frame
 
 from baseline_data import get_reference_data, primitives
 from helpers import serial, assert_invalid_dimensions, setup_function  # noqa: F401
@@ -27,7 +28,7 @@ def test_init_128x128():
     serial.command.side_effect = command
     serial.data.side_effect = data
 
-    ssd1351(serial)
+    ssd1351(serial, framebuffer=full_frame())
 
     assert serial.data.called
     assert serial.command.called
@@ -74,7 +75,7 @@ def test_init_96x96_with_BGR():
     serial.command.side_effect = command
     serial.data.side_effect = data
 
-    ssd1351(serial, width=96, height=96, bgr=True)
+    ssd1351(serial, width=96, height=96, bgr=True, framebuffer=full_frame())
 
     assert serial.data.called
     assert serial.command.called
@@ -121,7 +122,7 @@ def test_offsets():
     serial.command.side_effect = command
     serial.data.side_effect = data
 
-    ssd1351(serial, width=96, height=96, h_offset=2, v_offset=1)
+    ssd1351(serial, width=96, height=96, h_offset=2, v_offset=1, framebuffer=full_frame())
 
     assert serial.data.called
     assert serial.command.called
@@ -165,7 +166,7 @@ def test_hide():
     """
     SSD1351 OLED screen content can be hidden.
     """
-    device = ssd1351(serial)
+    device = ssd1351(serial, framebuffer=full_frame())
     serial.reset_mock()
     device.hide()
     serial.command.assert_called_once_with(174)
@@ -175,7 +176,7 @@ def test_show():
     """
     SSD1351 OLED screen content can be displayed.
     """
-    device = ssd1351(serial)
+    device = ssd1351(serial, framebuffer=full_frame())
     serial.reset_mock()
     device.show()
     serial.command.assert_called_once_with(175)
@@ -185,7 +186,7 @@ def test_display():
     """
     SSD1351 OLED screen can draw and display a color image.
     """
-    device = ssd1351(serial)
+    device = ssd1351(serial, framebuffer=full_frame())
     serial.reset_mock()
 
     recordings = []
@@ -230,7 +231,7 @@ def test_16bit_rgb_packing(bit, expected_16_bit_color):
     Checks that 8 bit green component is packed into next 6 bits
     Checks that 8 bit blue component is packed into remaining 5 bits
     """
-    device = ssd1351(serial)
+    device = ssd1351(serial, framebuffer=full_frame())
     serial.reset_mock()
 
     rgb_color = (2 ** bit,) * 3
