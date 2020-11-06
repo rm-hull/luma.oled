@@ -34,7 +34,7 @@ project_url = 'https://github.com/rm-hull/luma.oled'
 needs_pytest = {'pytest', 'test', 'ptr'}.intersection(sys.argv)
 pytest_runner = ['pytest-runner'] if needs_pytest else []
 test_deps = [
-    'pytest<=4.5',
+    'pytest',
     'pytest-cov',
     'pytest-timeout'
 ]
