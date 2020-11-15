@@ -19,7 +19,9 @@ class __framebuffer_mixin(object):
     """
 
     def init_framebuffer(self, framebuffer):
-        if isinstance(framebuffer, str):
+        if framebuffer is None:
+            self.framebuffer = luma.core.framebuffer.diff_to_previous()
+        elif isinstance(framebuffer, str):
             import warnings
             warnings.warn(
                 "Specifying framebuffer as a string is now deprecated; Supply an instance of class full_frame() or diff_to_previous() instead",

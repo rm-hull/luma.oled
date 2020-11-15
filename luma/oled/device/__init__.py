@@ -40,7 +40,7 @@ from luma.core.virtual import character
 from luma.oled.device.color import color_device
 from luma.oled.device.greyscale import greyscale_device
 import luma.core.error
-from luma.core.framebuffer import diff_to_previous, full_frame
+from luma.core.framebuffer import full_frame
 from luma.core.bitmap_font import embedded_fonts
 import luma.oled.const
 from luma.oled.device.framebuffer_mixin import __framebuffer_mixin
@@ -274,7 +274,7 @@ class ssd1331(color_device):
     """
 
     def __init__(self, serial_interface=None, width=96, height=64, rotate=0,
-                 framebuffer=diff_to_previous(), **kwargs):
+                 framebuffer=None, **kwargs):
         super(ssd1331, self).__init__(serial_interface, width, height, rotate,
                                       framebuffer, **kwargs)
 
@@ -356,7 +356,7 @@ class ssd1351(color_device):
     """
 
     def __init__(self, serial_interface=None, width=128, height=128, rotate=0,
-                 framebuffer=diff_to_previous(), h_offset=0, v_offset=0,
+                 framebuffer=None, h_offset=0, v_offset=0,
                  bgr=False, **kwargs):
 
         # RGB or BGR order
@@ -451,7 +451,7 @@ class ssd1322(greyscale_device):
     """
 
     def __init__(self, serial_interface=None, width=256, height=64, rotate=0,
-                 mode="RGB", framebuffer=diff_to_previous(), **kwargs):
+                 mode="RGB", framebuffer=None, **kwargs):
         self._column_offset = (480 - width) // 2
         super(ssd1322, self).__init__(luma.oled.const.ssd1322, serial_interface,
                                       width, height, rotate, mode, framebuffer,
@@ -534,7 +534,7 @@ class ssd1362(greyscale_device):
     """
 
     def __init__(self, serial_interface=None, width=256, height=64, rotate=0,
-                 mode="RGB", framebuffer=diff_to_previous(), **kwargs):
+                 mode="RGB", framebuffer=None, **kwargs):
         super(ssd1362, self).__init__(luma.oled.const.ssd1362, serial_interface,
                                       width, height, rotate, mode, framebuffer,
                                       nibble_order=1, **kwargs)
@@ -669,7 +669,7 @@ class ssd1325(greyscale_device):
     """
 
     def __init__(self, serial_interface=None, width=128, height=64, rotate=0,
-                 mode="RGB", framebuffer=diff_to_previous(), **kwargs):
+                 mode="RGB", framebuffer=None, **kwargs):
         super(ssd1325, self).__init__(luma.core.const.common, serial_interface,
                                       width, height, rotate, mode, framebuffer,
                                       nibble_order=1, **kwargs)
@@ -717,7 +717,7 @@ class ssd1327(greyscale_device):
     """
 
     def __init__(self, serial_interface=None, width=128, height=128, rotate=0,
-                 mode="RGB", framebuffer=diff_to_previous(), **kwargs):
+                 mode="RGB", framebuffer=None, **kwargs):
         super(ssd1327, self).__init__(luma.core.const.common, serial_interface,
                                       width, height, rotate, mode, framebuffer,
                                       nibble_order=1, **kwargs)
@@ -834,7 +834,7 @@ class ws0010(parallel_device, character, __framebuffer_mixin):
     """
 
     def __init__(self, serial_interface=None, width=100, height=16, undefined='_', font=None,
-                 selected_font=0, exec_time=1e-6 * 50, rotate=0, framebuffer=diff_to_previous(),
+                 selected_font=0, exec_time=1e-6 * 50, rotate=0, framebuffer=None,
                  const=luma.oled.const.ws0010, **kwargs):
         super(ws0010, self).__init__(const, serial_interface, exec_time=exec_time, **kwargs)
         self.capabilities(width, height, rotate)
