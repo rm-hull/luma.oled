@@ -5,7 +5,7 @@ Install the latest version of the library directly from
 `PyPI <https://pypi.python.org/pypi?:action=display&name=luma.oled>`__
 with::
 
-  $ sudo -H pip install --upgrade luma.oled
+  $ sudo -H pip3 install --upgrade luma.oled
 
 This will normally retrieve all of the dependencies ``luma.oled`` requires and
 install them automatically.
