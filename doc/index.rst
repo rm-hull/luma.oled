@@ -14,6 +14,9 @@ Luma.OLED: Display drivers for SSD1306 / SSD1309 / SSD1322 / SSD1325 / SSD1327 /
 .. image:: https://img.shields.io/pypi/v/luma.oled.svg
    :target: https://pypi.python.org/pypi/luma.oled
 
+.. image:: https://img.shields.io/pypi/dm/luma.oled
+   :target: https://pypi.python.org/project/luma.oled
+
 .. toctree::
    :maxdepth: 2
 
