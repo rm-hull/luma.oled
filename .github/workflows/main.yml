@@ -33,7 +33,7 @@ jobs:
       - name: Display Python version
         run: python -c "import sys; print(sys.version)"
       - name: Install Python packages
-        run: pip install --upgrade setuptools pip wheel tox coveralls
+        run: pip install --upgrade setuptools pip wheel tox
       - name: Run tests
         env:
           TOX_ENV: py3${{ matrix.python-minor-version }}
@@ -42,3 +42,22 @@ jobs:
         env:
           TOX_ENV: qa,doc
         run: python -m tox -e $TOX_ENV
+      - name: Upload Coverage
+        run: coveralls
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COVERALLS_FLAG_NAME: ${{ matrix.test-name }}
+          COVERALLS_PARALLEL: true
+
+  coveralls:
+    name: Finish Coveralls
+    needs: build
+    runs-on: ubuntu-latest
+    container: python:3-slim
+    steps:
+    - name: Finished
+      run: |
+        pip3 install --upgrade coveralls
+        coveralls --finish
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
