@@ -42,15 +42,15 @@ jobs:
         env:
           TOX_ENV: qa,doc
         run: python -m tox -e $TOX_ENV
-      - name: Upload Coverage
-        run: coveralls
+      - name: Coverage
+        run: coveralls --service=github
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           COVERALLS_FLAG_NAME: ${{ matrix.test-name }}
           COVERALLS_PARALLEL: true
 
   coveralls:
-    name: Finish Coveralls
+    name: Coveralls
     needs: build
     runs-on: ubuntu-latest
     container: python:3-slim
