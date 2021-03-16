@@ -1,6 +1,9 @@
 name: Publish Package
 
-on: push
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   build-and-publish:
