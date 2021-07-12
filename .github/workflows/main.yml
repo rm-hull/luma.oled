@@ -12,7 +12,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        python-minor-version: [6, 7, 8, 9]
+        python-minor-version: [6, 7, 8, 9, 10-dev]
     name: Python 3.${{ matrix.python-minor-version }}
     steps:
       - uses: actions/checkout@v2
@@ -37,7 +37,9 @@ jobs:
       - name: Run tests
         env:
           TOX_ENV: py3${{ matrix.python-minor-version }}
-        run: python -m tox -e $TOX_ENV
+        run: |
+          python_env=$(echo $TOX_ENV | sed -e s/-dev$//)
+          python -m tox -e ${python_env}
       - name: QA
         env:
           TOX_ENV: qa,doc
