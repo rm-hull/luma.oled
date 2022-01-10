@@ -28,7 +28,7 @@ luma.oled
 .. image:: https://img.shields.io/pypi/dm/luma.oled
    :target: https://pypi.python.org/project/luma.oled
 
-.. image:: https://img.shields.io/maintenance/yes/2021.svg?maxAge=2592000
+.. image:: https://img.shields.io/maintenance/yes/2022.svg?maxAge=2592000
 
 Python 3 library interfacing OLED matrix displays with the SSD1306, SSD1309,
 SSD1322, SSD1325, SSD1327, SSD1331, SSD1351, SH1106 or WS0010 driver using
