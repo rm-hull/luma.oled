@@ -27,6 +27,7 @@ class ssd1306(common):
 
 
 sh1106 = ssd1306
+sh1107 = ssd1306
 
 
 class ssd1322(common):
