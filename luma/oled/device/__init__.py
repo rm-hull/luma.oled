@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2014-20 Richard Hull and contributors
+# Copyright (c) 2014-2022 Richard Hull and contributors
 # See LICENSE.rst for details.
 
 """
@@ -100,8 +100,8 @@ class sh1106(device):
         :param image: Image to display.
         :type image: :py:mod:`PIL.Image`
         """
-        assert(image.mode == self.mode)
-        assert(image.size == self.size)
+        assert image.mode == self.mode
+        assert image.size == self.size
 
         image = self.preprocess(image)
 
@@ -201,8 +201,8 @@ class ssd1306(device):
         :param image: Image to display.
         :type image: :py:mod:`PIL.Image`
         """
-        assert(image.mode == self.mode)
-        assert(image.size == self.size)
+        assert image.mode == self.mode
+        assert image.size == self.size
 
         image = self.preprocess(image)
 
@@ -315,7 +315,7 @@ class ssd1331(color_device):
         :param level: Desired contrast level in the range of 0-255.
         :type level: int
         """
-        assert(0 <= level <= 255)
+        assert 0 <= level <= 255
         self.command(0x81, level,  # Set contrast A
                      0x82, level,  # Set contrast B
                      0x83, level)  # Set contrast C
@@ -408,7 +408,7 @@ class ssd1351(color_device):
         :param level: Desired contrast level in the range of 0-255.
         :type level: int
         """
-        assert(0 <= level <= 255)
+        assert 0 <= level <= 255
         self.command(0xC1, level, level, level)
 
     def command(self, cmd, *args):
@@ -643,8 +643,8 @@ class ssd1322_nhd(greyscale_device):
         :param image: the image to render
         :type image: PIL.Image.Image
         """
-        assert(image.mode == self.mode)
-        assert(image.size == self.size)
+        assert image.mode == self.mode
+        assert image.size == self.size
 
         image = self.preprocess(image)
 
@@ -886,8 +886,8 @@ class ws0010(parallel_device, character, __framebuffer_mixin):
         Takes a 1-bit :py:mod:`PIL.Image` and dumps it to the ws0010
         OLED display.
         """
-        assert(image.mode == self.mode)
-        assert(image.size == self.size)
+        assert image.mode == self.mode
+        assert image.size == self.size
 
         image = self.preprocess(image)
 
