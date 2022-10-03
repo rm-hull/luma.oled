@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2018-2020 Richard Hull and contributors
+# Copyright (c) 2018-2022 Richard Hull and contributors
 # See LICENSE.rst for details.
 
 """
@@ -73,8 +73,8 @@ class color_device(device, __framebuffer_mixin):
         :param image: The image to render.
         :type image: PIL.Image.Image
         """
-        assert(image.mode == self.mode)
-        assert(image.size == self.size)
+        assert image.mode == self.mode
+        assert image.size == self.size
 
         image = self.preprocess(image)
 
@@ -88,7 +88,7 @@ class color_device(device, __framebuffer_mixin):
             i = 0
             buf = bytearray(width * height * 2)
             for r, g, b in image.getdata():
-                if not(r == g == b == 0):
+                if not r == g == b == 0:
                     # 65K format 1
                     buf[i] = r & 0xF8 | g >> 5
                     buf[i + 1] = g << 3 & 0xE0 | b >> 3
