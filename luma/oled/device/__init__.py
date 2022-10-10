@@ -165,7 +165,7 @@ class ssd1306(device):
 
         if settings is None:
             raise luma.core.error.DeviceDisplayModeError(
-                "Unsupported display mode: {0} x {1}".format(width, height))
+                f"Unsupported display mode: {width} x {height}")
 
         self._pages = height // 8
         self._mask = [1 << (i // width) % 8 for i in range(width * height)]
@@ -847,7 +847,7 @@ class ws0010(parallel_device, character, __framebuffer_mixin):
         supported = (width, height) in [(40, 8), (40, 16), (60, 8), (60, 16), (80, 8), (80, 16), (100, 8), (100, 16)]
         if not supported:
             raise luma.core.error.DeviceDisplayModeError(
-                "Unsupported display mode: {0} x {1}".format(width, height))
+                f"Unsupported display mode: {width} x {height}")
 
         # In case display just powered up, sleep to be sure it has finished
         # its internal initialization
