@@ -5,7 +5,7 @@ ChangeLog
 | Version    | Description                                                         | Date       |
 +============+=====================================================================+============+
 +------------+---------------------------------------------------------------------+------------+
-| **3.9.0**  | * Use native namespace package configuration                        | TBD        |
+| **3.9.0**  | * Use native namespace package configuration                        | 2022/10/19 |
 |            | * Drop support for Python 3.6                                       |            |
 +------------+---------------------------------------------------------------------+------------+
 | **3.8.1**  | * Fix mutable default parameter bug when using multiple displays    | 2020/11/15 |
