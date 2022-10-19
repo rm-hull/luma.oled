@@ -15,9 +15,9 @@ jobs:
         python-minor-version: [7, 8, 9, 10, 11-dev]
     name: Python 3.${{ matrix.python-minor-version }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Setup pip cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         id: pipcache
         with:
           path: ~/.cache/pip
@@ -27,7 +27,7 @@ jobs:
       - name: Install system dependencies
         run: sudo apt-get install graphviz
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: 3.${{ matrix.python-minor-version }}
       - name: Display Python version
