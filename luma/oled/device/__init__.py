@@ -585,11 +585,11 @@ class ssd1322_nhd(greyscale_device):
         self.command(0xB3, 0x91)  # Display divide clockratio/freq
         self.command(0xCA, 0x3F)  # Set MUX ratio
         self.command(0xA2, 0x00)  # Display offset
-        self.command(0xAB, 0x01)  # Display offset
+        self.command(0xAB, 0x01)  # Internal VDD
         self.command(0xA0, 0x16, 0x11)  # Set remap & dual COM Line
         self.command(0xC7, 0x0F)  # Master contrast (reset)
         self.command(0xC1, 0x9F)  # Set contrast current
-        self.command(0xB1, 0xF2)  # Set default greyscale table
+        self.command(0xB1, 0xF2)  # Phase 1 and 2 lengths
         self.command(0xBB, 0x1F)  # Pre-charge voltage
         self.command(0xB4, 0xA0, 0xFD)  # Display enhancement A (External VSL)
         self.command(0xBE, 0x04)  # Set VcomH
@@ -625,13 +625,13 @@ class ssd1322_nhd(greyscale_device):
     def _render_greyscale(self, buf, pixel_data):
         i = 0
         for r, g, b in pixel_data:
-            # RGB->Greyscale luma calculation into 8-bits
-            grey = (r * 306 + g * 601 + b * 117) >> 10
+            # RGB->Greyscale luma calculation into 4-bits
+            grey = (r * 306 + g * 601 + b * 117) >> 14
 
+            # NHD uses 2 SEG lines and one COM line per pixel
             if grey > 0:
-                buf[i] = grey
-
-            i += 1
+                    buf[i // 2] |= (grey << 4) | grey
+            i += 2
 
     def display(self, image):
         """
