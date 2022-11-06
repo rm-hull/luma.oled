@@ -630,7 +630,7 @@ class ssd1322_nhd(greyscale_device):
 
             # NHD uses 2 SEG lines and one COM line per pixel
             if grey > 0:
-                    buf[i // 2] |= (grey << 4) | grey
+                buf[i // 2] |= (grey << 4) | grey
             i += 2
 
     def display(self, image):
