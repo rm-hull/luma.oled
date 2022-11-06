@@ -4,7 +4,7 @@ ChangeLog
 +------------+---------------------------------------------------------------------+------------+
 | Version    | Description                                                         | Date       |
 +============+=====================================================================+============+
-| **3.10.0** | * Fix SSD1322 NHD initialization and encode each pixel as 4bit+4bit | TBD        |
+| **3.10.0** | * Fix SSD1322 NHD initialization and encode each pixel as 4bit+4bit | 2022/11/06 |
 |            |   identical nibbles                                                 |            |
 +------------+---------------------------------------------------------------------+------------+
 | **3.9.0**  | * Use native namespace package configuration                        | 2022/10/19 |
