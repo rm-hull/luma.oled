@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2014-20 Richard Hull and contributors
+# Copyright (c) 2014-2022 Richard Hull and contributors
 # See LICENSE.rst for details.
 
 """
@@ -100,8 +100,8 @@ class sh1106(device):
         :param image: Image to display.
         :type image: :py:mod:`PIL.Image`
         """
-        assert(image.mode == self.mode)
-        assert(image.size == self.size)
+        assert image.mode == self.mode
+        assert image.size == self.size
 
         image = self.preprocess(image)
 
@@ -231,7 +231,7 @@ class ssd1306(device):
 
         if settings is None:
             raise luma.core.error.DeviceDisplayModeError(
-                "Unsupported display mode: {0} x {1}".format(width, height))
+                f"Unsupported display mode: {width} x {height}")
 
         self._pages = height // 8
         self._mask = [1 << (i // width) % 8 for i in range(width * height)]
@@ -267,8 +267,8 @@ class ssd1306(device):
         :param image: Image to display.
         :type image: :py:mod:`PIL.Image`
         """
-        assert(image.mode == self.mode)
-        assert(image.size == self.size)
+        assert image.mode == self.mode
+        assert image.size == self.size
 
         image = self.preprocess(image)
 
@@ -381,7 +381,7 @@ class ssd1331(color_device):
         :param level: Desired contrast level in the range of 0-255.
         :type level: int
         """
-        assert(0 <= level <= 255)
+        assert 0 <= level <= 255
         self.command(0x81, level,  # Set contrast A
                      0x82, level,  # Set contrast B
                      0x83, level)  # Set contrast C
@@ -474,7 +474,7 @@ class ssd1351(color_device):
         :param level: Desired contrast level in the range of 0-255.
         :type level: int
         """
-        assert(0 <= level <= 255)
+        assert 0 <= level <= 255
         self.command(0xC1, level, level, level)
 
     def command(self, cmd, *args):
@@ -651,11 +651,11 @@ class ssd1322_nhd(greyscale_device):
         self.command(0xB3, 0x91)  # Display divide clockratio/freq
         self.command(0xCA, 0x3F)  # Set MUX ratio
         self.command(0xA2, 0x00)  # Display offset
-        self.command(0xAB, 0x01)  # Display offset
+        self.command(0xAB, 0x01)  # Internal VDD
         self.command(0xA0, 0x16, 0x11)  # Set remap & dual COM Line
         self.command(0xC7, 0x0F)  # Master contrast (reset)
         self.command(0xC1, 0x9F)  # Set contrast current
-        self.command(0xB1, 0xF2)  # Set default greyscale table
+        self.command(0xB1, 0xF2)  # Phase 1 and 2 lengths
         self.command(0xBB, 0x1F)  # Pre-charge voltage
         self.command(0xB4, 0xA0, 0xFD)  # Display enhancement A (External VSL)
         self.command(0xBE, 0x04)  # Set VcomH
@@ -691,13 +691,13 @@ class ssd1322_nhd(greyscale_device):
     def _render_greyscale(self, buf, pixel_data):
         i = 0
         for r, g, b in pixel_data:
-            # RGB->Greyscale luma calculation into 8-bits
-            grey = (r * 306 + g * 601 + b * 117) >> 10
+            # RGB->Greyscale luma calculation into 4-bits
+            grey = (r * 306 + g * 601 + b * 117) >> 14
 
+            # NHD uses 2 SEG lines and one COM line per pixel
             if grey > 0:
-                buf[i] = grey
-
-            i += 1
+                buf[i // 2] |= (grey << 4) | grey
+            i += 2
 
     def display(self, image):
         """
@@ -709,8 +709,8 @@ class ssd1322_nhd(greyscale_device):
         :param image: the image to render
         :type image: PIL.Image.Image
         """
-        assert(image.mode == self.mode)
-        assert(image.size == self.size)
+        assert image.mode == self.mode
+        assert image.size == self.size
 
         image = self.preprocess(image)
 
@@ -913,7 +913,7 @@ class ws0010(parallel_device, character, __framebuffer_mixin):
         supported = (width, height) in [(40, 8), (40, 16), (60, 8), (60, 16), (80, 8), (80, 16), (100, 8), (100, 16)]
         if not supported:
             raise luma.core.error.DeviceDisplayModeError(
-                "Unsupported display mode: {0} x {1}".format(width, height))
+                f"Unsupported display mode: {width} x {height}")
 
         # In case display just powered up, sleep to be sure it has finished
         # its internal initialization
@@ -952,8 +952,8 @@ class ws0010(parallel_device, character, __framebuffer_mixin):
         Takes a 1-bit :py:mod:`PIL.Image` and dumps it to the ws0010
         OLED display.
         """
-        assert(image.mode == self.mode)
-        assert(image.size == self.size)
+        assert image.mode == self.mode
+        assert image.size == self.size
 
         image = self.preprocess(image)
 

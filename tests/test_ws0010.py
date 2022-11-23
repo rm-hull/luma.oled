@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# Copyright (c) 2020 Richard Hull and contributors
+# Copyright (c) 2020-2022 Richard Hull and contributors
 # See LICENSE.rst for details.
 
 """
@@ -150,5 +150,5 @@ def test_winstar_weh():
     drw.text((0, 0), 'This is a test', font=device.font, fill='white')
 
     assert 'This is a test' == str(device.text)
-    assert device.font.getsize('This is a test') == (70, 8)
+    assert device.font.getbbox('This is a test') == (0, 0, 70, 8)
     assert device.framebuffer.image == img
