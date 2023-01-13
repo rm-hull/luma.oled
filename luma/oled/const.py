@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2014-18 Richard Hull and contributors
+# Copyright (c) 2014-2023 Richard Hull and contributors
 # See LICENSE.rst for details.
 
 
@@ -26,7 +26,7 @@ class ssd1306(common):
     SWITCHCAPVCC = 0x2
 
 
-sh1106 = ssd1306
+sh1106 = sh1107 = ssd1306
 
 
 class ssd1322(common):

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2014-2022 Richard Hull and contributors
+# Copyright (c) 2014-2023 Richard Hull and contributors
 # See LICENSE.rst for details.
 
 """
@@ -45,7 +45,11 @@ from luma.core.bitmap_font import embedded_fonts
 import luma.oled.const
 from luma.oled.device.framebuffer_mixin import __framebuffer_mixin
 
-__all__ = ["ssd1306", "ssd1309", "ssd1322", "ssd1362", "ssd1322_nhd", "ssd1325", "ssd1327", "ssd1331", "ssd1351", "sh1106", "ws0010", "winstar_weh"]
+__all__ = [
+    "ssd1306", "ssd1309", "ssd1322", "ssd1362", "ssd1322_nhd", "ssd1325",
+    "ssd1327", "ssd1331", "ssd1351", "sh1106", "sh1106", "ws0010",
+    "winstar_weh"
+]
 
 
 class sh1106(device):
@@ -127,6 +131,88 @@ class sh1106(device):
                     (image_data[x + offsets[7]] and 0x80)
 
             self.data(list(buf))
+
+
+class sh1107(device):
+    """
+    Serial interface to a monochrome SH1107 OLED display.
+
+    On creation, an initialization sequence is pumped to the display
+    to properly configure it. Further control commands can then be called to
+    affect the brightness and other settings.
+
+    :param serial_interface: The serial interface (usually a
+        :py:class:`luma.core.interface.serial.i2c` instance) to delegate sending
+        data and commands through.
+    :param width: The number of horizontal pixels (optional, defaults to 128).
+    :type width: int
+    :param height: The number of vertical pixels (optional, defaults to 64).
+    :type height: int
+    :param rotate: An integer value of 0 (default), 1, 2 or 3 only, where 0 is
+        no rotation, 1 is rotate 90° clockwise, 2 is 180° rotation and 3
+        represents 270° rotation.
+    :type rotate: int
+
+    .. versionadded:: 3.11.0
+    """
+
+    def __init__(self, serial_interface=None, width=64, height=128, rotate=0, **kwargs):
+        super(sh1107, self).__init__(luma.oled.const.sh1107, serial_interface)
+        self.capabilities(width, height, rotate)
+
+        self._pages = self._h // 8
+        self._pagelen = self._w
+
+        settings = {
+            (64, 128): dict(multiplex=0x7F, displayoffset=0x60),
+            (80, 128): dict(multiplex=0x4F, displayoffset=0x68)
+        }.get((width, height))
+
+        if settings is None:
+            raise luma.core.error.DeviceDisplayModeError(
+                f"Unsupported display mode: {width} x {height}")
+
+        self.command(
+            self._const.DISPLAYOFF,
+            self._const.MEMORYMODE,
+            self._const.NORMALDISPLAY,
+            self._const.SETMULTIPLEX,       settings['multiplex'],
+            self._const.DISPLAYALLON_RESUME,
+            self._const.SETDISPLAYOFFSET,   settings['displayoffset'],
+            self._const.SETDISPLAYCLOCKDIV, 0x80,
+            self._const.SETPRECHARGE,       0x22,
+            self._const.SETCOMPINS,         0x12,
+            self._const.SETVCOMDETECT,      0x35,
+        )
+
+        self.contrast(0x7F)
+        self.clear()
+        self.show()
+
+
+    def display(self, image):
+        """
+        Takes a 1-bit :py:mod:`PIL.Image` and dumps it to the SH1107
+        OLED display.
+
+        :param image: Image to display.
+        :type image: :py:mod:`PIL.Image`
+        """
+        assert(image.mode == self.mode)
+        assert(image.size == self.size)
+
+        image = self.preprocess(image)
+        pixmap = image.load()
+        buf = bytearray(self._pagelen)
+
+        for page in range(self._pages):
+            for x in range(self._pagelen):
+                tmp = 0
+                for y in range(8):
+                    tmp |= (pixmap[x, y + 8 * page] & 1) << y
+                buf[x] = tmp
+            self.command(0x10, 0x00, 0xb0 | page)
+            self.data(buf)
 
 
 class ssd1306(device):

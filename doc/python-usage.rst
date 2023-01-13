@@ -15,7 +15,7 @@ In this example, we are using an I2C interface with a ssd1306 display.
   from luma.core.interface.serial import i2c, spi, pcf8574
   from luma.core.interface.parallel import bitbang_6800
   from luma.core.render import canvas
-  from luma.oled.device import ssd1306, ssd1309, ssd1325, ssd1331, sh1106, ws0010
+  from luma.oled.device import ssd1306, ssd1309, ssd1325, ssd1331, sh1106, sh1107, ws0010
 
   # rev.1 users set port=0
   # substitute spi(device=0, port=0) below if using that interface
