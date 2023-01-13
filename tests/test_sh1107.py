@@ -11,9 +11,9 @@ from helpers import serial, assert_invalid_dimensions, setup_function  # noqa: F
 from unittest.mock import Mock, call
 
 
-def test_init_128x64():
+def test_init_64x128():
     """
-    SH1107 OLED with a 128 x 64 resolution works correctly.
+    SH1107 OLED with a 64 x 128 resolution works correctly.
     """
     sh1107(serial)
     serial.command.assert_has_calls([
@@ -40,7 +40,7 @@ def test_init_128x64():
 
 def test_init_invalid_dimensions():
     """
-    SH1106 OLED with an invalid resolution raises a
+    SH1107 OLED with an invalid resolution raises a
     :py:class:`luma.core.error.DeviceDisplayModeError`.
     """
     assert_invalid_dimensions(sh1107, serial, 77, 105)

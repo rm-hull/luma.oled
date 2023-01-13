@@ -8,9 +8,9 @@ Collection of serial interfaces to OLED devices.
 
 # Example usage:
 #
-#   from luma.core.interface.serial import i2c, spi
+#   from luma.core.interface.serial import i2c
 #   from luma.core.render import canvas
-#   from luma.oled.device import ssd1306, sh1106
+#   from luma.oled.device import ssd1306
 #   from PIL import ImageDraw
 #
 #   serial = i2c(port=1, address=0x3C)
@@ -32,7 +32,7 @@ Collection of serial interfaces to OLED devices.
 #            draw.rectangle(...)
 #
 # As before, as soon as the with block completes, the canvas buffer is flushed
-# to the device
+# to the device.
 
 from time import sleep
 from luma.core.device import device, parallel_device
@@ -47,7 +47,7 @@ from luma.oled.device.framebuffer_mixin import __framebuffer_mixin
 
 __all__ = [
     "ssd1306", "ssd1309", "ssd1322", "ssd1362", "ssd1322_nhd", "ssd1325",
-    "ssd1327", "ssd1331", "ssd1351", "sh1106", "sh1106", "ws0010",
+    "ssd1327", "ssd1331", "ssd1351", "sh1106", "sh1107", "ws0010",
     "winstar_weh"
 ]
 
@@ -188,7 +188,6 @@ class sh1107(device):
         self.contrast(0x7F)
         self.clear()
         self.show()
-
 
     def display(self, image):
         """

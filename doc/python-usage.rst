@@ -53,7 +53,7 @@ garbage collected.
 Color Model
 -----------
 Any of the standard :mod:`PIL.ImageColor` color formats may be used, but since
-the SSD1306, SH1106 and WS0010 OLEDs are monochrome, only the HTML color names
+the SSD1306, SH1106, SH1107 and WS0010 OLEDs are monochrome, only the HTML color names
 ``"black"`` and ``"white"`` values should really be used; in fact, by default,
 any value *other* than black is treated as white. The :py:class:`luma.core.render.canvas`
 object does have a ``dither`` flag which if set to ``True``, will convert color drawings
