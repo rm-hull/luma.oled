@@ -197,8 +197,8 @@ class sh1107(device):
         :param image: Image to display.
         :type image: :py:mod:`PIL.Image`
         """
-        assert(image.mode == self.mode)
-        assert(image.size == self.size)
+        assert (image.mode == self.mode)
+        assert (image.size == self.size)
 
         image = self.preprocess(image)
         pixmap = image.load()
@@ -211,7 +211,7 @@ class sh1107(device):
                     tmp |= (pixmap[x, y + 8 * page] & 1) << y
                 buf[x] = tmp
             self.command(0x10, 0x00, 0xb0 | page)
-            self.data(buf)
+            self.data(list(buf))
 
 
 class ssd1306(device):
