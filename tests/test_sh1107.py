@@ -41,7 +41,6 @@ def test_init_64x128():
         call(175)])
 
     # Next 1024 are all data: zero's to clear the RAM
-    # (1024 = 128 * 64 / 8)
     serial.data.assert_has_calls([call([0] * 64)] * 16)
 
 
