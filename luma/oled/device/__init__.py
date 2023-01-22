@@ -144,9 +144,9 @@ class sh1107(device):
     :param serial_interface: The serial interface (usually a
         :py:class:`luma.core.interface.serial.i2c` instance) to delegate sending
         data and commands through.
-    :param width: The number of horizontal pixels (optional, defaults to 128).
+    :param width: The number of horizontal pixels (optional, defaults to 64).
     :type width: int
-    :param height: The number of vertical pixels (optional, defaults to 64).
+    :param height: The number of vertical pixels (optional, defaults to 128).
     :type height: int
     :param rotate: An integer value of 0 (default), 1, 2 or 3 only, where 0 is
         no rotation, 1 is rotate 90° clockwise, 2 is 180° rotation and 3
