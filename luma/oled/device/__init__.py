@@ -197,8 +197,8 @@ class sh1107(device):
         :param image: Image to display.
         :type image: :py:mod:`PIL.Image`
         """
-        assert (image.mode == self.mode)
-        assert (image.size == self.size)
+        assert image.mode == self.mode
+        assert image.size == self.size
 
         image = self.preprocess(image)
         pixmap = image.load()
