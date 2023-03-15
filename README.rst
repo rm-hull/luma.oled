@@ -8,7 +8,7 @@ luma.oled
 
 luma.oled
 ---------
-**Display drivers for SSD1306 / SSD1309 / SSD1322 / SSD1325 / SSD1327 / SSD1331 / SSD1351 / SSD1362 / SH1106 / WS0010**
+**Display drivers for SSD1306 / SSD1309 / SSD1322 / SSD1325 / SSD1327 / SSD1331 / SSD1351 / SSD1362 / SH1106 / SH1107 / WS0010**
 
 .. image:: https://github.com/rm-hull/luma.oled/workflows/luma.oled/badge.svg?branch=master
    :target: https://github.com/rm-hull/luma.oled/actions?workflow=luma.oled
@@ -29,7 +29,7 @@ luma.oled
    :target: https://pypi.python.org/project/luma.oled
 
 Python 3 library interfacing OLED matrix displays with the SSD1306, SSD1309,
-SSD1322, SSD1325, SSD1327, SSD1331, SSD1351, SH1106 or WS0010 driver using
+SSD1322, SSD1325, SSD1327, SSD1331, SSD1351, SH1106, SH1107 or WS0010 driver using
 I2C/SPI/Parallel on the Raspberry Pi and other linux-based single-board
 computers - it provides a `Pillow <https://pillow.readthedocs.io/>`_-compatible
 drawing canvas, and other functionality to support:
