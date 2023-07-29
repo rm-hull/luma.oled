@@ -165,7 +165,8 @@ class sh1107(device):
 
         settings = {
             (64, 128): dict(multiplex=0x7F, displayoffset=0x60),
-            (80, 128): dict(multiplex=0x4F, displayoffset=0x68)
+            (80, 128): dict(multiplex=0x4F, displayoffset=0x68),
+            (128, 128): dict(multiplex=0x7F, displayoffset=0x00)
         }.get((width, height))
 
         if settings is None:
