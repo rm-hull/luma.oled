@@ -18,6 +18,5 @@ display consisting of semi-random pixels (uninitialized memory).
 This is due to differences in required initialization sequences and how memory
 is mapped in the two controllers.
 
-The included examples default to the SSD1306 driver. To use the SH1106 driver
-instead, include the `--display sh1106` command line switch. To use the SSH1106
-driver in code, use the `luma.oled.device.sh1106` serial interface class.
+To use the SSH1106 driver in code, use the :py:class:`luma.oled.device.sh1106`
+serial interface class.
