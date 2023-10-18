@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# Copyright (c) 2014-18 Richard Hull and contributors
+# Copyright (c) 2014-2023 Richard Hull and contributors
 # See LICENSE.rst for details.
 
 from luma.oled.device import ssd1306
@@ -65,7 +65,7 @@ def test_init_96x16():
         # set contrast
         call(129, 207),
         # reset the display
-        call(33, 0, 95, 34, 0, 1),
+        call(33, 16, 111, 34, 0, 1),
         # called last, is a command to show the screen
         call(175)
     ])
