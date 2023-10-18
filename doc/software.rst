@@ -1,11 +1,19 @@
 Software
 ========
 
-Install the latest version of the library directly from
-`PyPI <https://pypi.python.org/pypi?:action=display&name=luma.oled>`__
-with::
+Before installing the library, create a
+`virtual environment <https://docs.python.org/3/library/venv.html>`__ for your
+project using::
 
-  $ sudo -H pip3 install --upgrade luma.oled
+  $ python3 -m venv ~/luma-env
+
+This creates a virtual environment in the home directory called `luma-env`
+and a Python executable at `~/luma-env/bin/python`.
+
+Next, install the `latest version of the library <https://pypi.python.org/pypi?:action=display&name=luma.oled>`__
+in the virtual environment directly with::
+
+  $ ~/luma-env/bin/python -m pip install --upgrade luma.oled
 
 This will normally retrieve all of the dependencies ``luma.oled`` requires and
 install them automatically.
@@ -21,7 +29,6 @@ to add the required packages::
 
 $ sudo apt-get update
 $ sudo apt-get install python3 python3-pip python3-pil libjpeg-dev zlib1g-dev libfreetype6-dev liblcms2-dev libopenjp2-7 libtiff5 -y
-$ sudo -H pip3 install luma.oled
 
 If you are not using Raspberry Pi OS you will need to consult the documentation for
 your Linux distribution to determine the correct procedure to install
