@@ -17,7 +17,7 @@ Finally, you need to leverage the appropriate interface class and display
 class for your device to implement your application.  Instructions for that
 are included in :doc:`python-usage`.
 
-.. note:: This library has been tested against Python 3.7 and newer.
+.. note:: This library has been tested against Python 3.8 and newer.
 
   It was *originally* tested with Raspbian on a rev.2 model B, with a vanilla
   kernel version 4.1.16+, and has subsequently been tested on Raspberry Pi
