@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# Copyright (c) 2017-18 Richard Hull and contributors
+# Copyright (c) 2017-2024 Richard Hull and contributors
 # See LICENSE.rst for details.
 
 import pytest
@@ -215,7 +215,7 @@ def test_display():
     assert recordings == get_reference_data('demo_ssd1351')
 
 
-@ pytest.mark.parametrize("bit,expected_16_bit_color", [
+@pytest.mark.parametrize("bit,expected_16_bit_color", [
     (7, [0b10000100, 0b00010000]),
     (6, [0b01000010, 0b00001000]),
     (5, [0b00100001, 0b00000100]),
