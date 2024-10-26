@@ -33,6 +33,16 @@ jobs:
           check-latest: true
       - name: Display Python version
         run: python -c "import sys; print(sys.version)"
+      - name: Install system dependencies
+        run: sudo apt-get install swig python3-setuptools python3-dev
+      - name: Install lg library
+        run: |
+          cd $RUNNER_TEMP
+          wget http://abyz.me.uk/lg/lg.zip
+          unzip lg.zip
+          cd lg
+          make
+          sudo make install
       - name: Install Python packages
         run: pip install --upgrade setuptools pip wheel tox coveralls
       - name: Run tests
