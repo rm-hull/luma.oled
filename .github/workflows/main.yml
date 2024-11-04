@@ -25,7 +25,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-py3${{ matrix.python-minor-version }}-pip-
       - name: Install system dependencies
-        run: sudo apt-get install graphviz
+        run: sudo apt-get install graphviz swig python3-setuptools python3-dev
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -33,6 +33,14 @@ jobs:
           check-latest: true
       - name: Display Python version
         run: python -c "import sys; print(sys.version)"
+      - name: Install lg library
+        run: |
+          cd $RUNNER_TEMP
+          wget http://abyz.me.uk/lg/lg.zip
+          unzip lg.zip
+          cd lg
+          make
+          sudo make install
       - name: Install Python packages
         run: pip install --upgrade setuptools pip wheel tox coveralls
       - name: Run tests
