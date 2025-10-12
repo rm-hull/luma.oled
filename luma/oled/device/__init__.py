@@ -111,15 +111,15 @@ class sh1106(device):
 
         set_page_address = 0xB0
         image_data = image.getdata()
-        pixels_per_page = self.width * 8
-        buf = bytearray(self.width)
+        pixels_per_page = self._w * 8
+        buf = bytearray(self._w)
 
         for y in range(0, int(self._pages * pixels_per_page), pixels_per_page):
             self.command(set_page_address, 0x02, 0x10)
             set_page_address += 1
-            offsets = [y + self.width * i for i in range(8)]
+            offsets = [y + self._w * i for i in range(8)]
 
-            for x in range(self.width):
+            for x in range(self._w):
                 buf[x] = \
                     (image_data[x + offsets[0]] and 0x01) | \
                     (image_data[x + offsets[1]] and 0x02) | \
