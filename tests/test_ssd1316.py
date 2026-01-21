@@ -1,14 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# Copyright (c) 2014-18 Richard Hull and contributors
+# Copyright (c) 2026 Richard Hull and contributors
 # See LICENSE.rst for details.
 
 from luma.oled.device import ssd1316
 from luma.core.render import canvas
+from luma.oled.const import ssd1306 as ssd1306_const
 
 from baseline_data import primitives, get_reference_data
 from helpers import serial, assert_invalid_dimensions, setup_function  # noqa: F401
 from unittest.mock import call
+
 
 def test_init_128x32():
     """
@@ -17,14 +19,19 @@ def test_init_128x32():
     ssd1316(serial)
     serial.command.assert_has_calls([
         # Initial burst are initialization commands
-        call(174, 213, 128, 168, 31, 211, 0, 64, 141, 20, 32, 0,
-             161, 200, 218, 2, 217, 241, 219, 64, 164, 166),
+        call(ssd1306_const.DISPLAYOFF, ssd1306_const.SETDISPLAYCLOCKDIV, 128,
+             ssd1306_const.SETMULTIPLEX, 31, ssd1306_const.SETDISPLAYOFFSET, 0,
+             ssd1306_const.SETSTARTLINE, ssd1306_const.CHARGEPUMP, 20,
+             ssd1306_const.MEMORYMODE, 0, ssd1306_const.SETSEGMENTREMAP,
+             ssd1306_const.COMSCANDEC, ssd1306_const.SETCOMPINS, 2,
+             ssd1306_const.SETPRECHARGE, 241, ssd1306_const.SETVCOMDETECT, 64,
+             ssd1306_const.DISPLAYALLON_RESUME, ssd1306_const.NORMALDISPLAY),
         # set contrast
-        call(129, 207),
+        call(ssd1306_const.SETCONTRAST, 207),
         # reset the display
-        call(33, 0, 127, 34, 0, 3),
+        call(ssd1306_const.COLUMNADDR, 0, 127, ssd1306_const.PAGEADDR, 0, 3),
         # called last, is a command to show the screen
-        call(175)
+        call(ssd1306_const.DISPLAYON)
     ])
 
     # Next are all data: zero's to clear the RAM
@@ -46,7 +53,7 @@ def test_hide():
     device = ssd1316(serial)
     serial.reset_mock()
     device.hide()
-    serial.command.assert_called_once_with(174)
+    serial.command.assert_called_once_with(ssd1306_const.DISPLAYOFF)
 
 
 def test_show():
@@ -56,7 +63,7 @@ def test_show():
     device = ssd1316(serial)
     serial.reset_mock()
     device.show()
-    serial.command.assert_called_once_with(175)
+    serial.command.assert_called_once_with(ssd1306_const.DISPLAYON)
 
 
 def test_display():
@@ -69,5 +76,5 @@ def test_display():
     with canvas(device) as draw:
         primitives(device, draw)
 
-    serial.command.assert_called_once_with(33, 0, 127, 34, 0, 3)
+    serial.command.assert_called_once_with(ssd1306_const.COLUMNADDR, 0, 127, ssd1306_const.PAGEADDR, 0, 3)
     serial.data.assert_called_once_with(get_reference_data('demo_ssd1316'))
