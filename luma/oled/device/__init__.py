@@ -114,7 +114,7 @@ class ch1115(device):
         image = self.preprocess(image)
 
         set_page_address = 0xB0
-        image_data = list(image.getdata())
+        image_data = image.getdata()
         pixels_per_page = self.width * 8
         buf = bytearray(self.width)
 
