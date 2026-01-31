@@ -78,7 +78,7 @@ class ch1115(device):
 
         if (width, height) != (128, 64):
             raise luma.core.error.DeviceDisplayModeError(
-                "Unsupported display mode: {0} x {1}".format(width, height))
+                f"Unsupported display mode: {width} x {height}")
 
         # Init sequence adapted from the working standalone CH1115 driver
         # (page addressing, internal DC-DC on).
