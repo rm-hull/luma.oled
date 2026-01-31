@@ -51,6 +51,7 @@ __all__ = [
     "winstar_weh", "ch1115"
 ]
 
+
 class ch1115(device):
     """
     Serial interface to a monochrome CH1115 OLED display (128x64).
@@ -83,20 +84,20 @@ class ch1115(device):
         # Init sequence adapted from the working standalone CH1115 driver
         # (page addressing, internal DC-DC on).
         self.command(
-            0xAE,       # display off
-            0xD5, 0x80, # display clock divide / osc freq
-            0xA8, 0x3F, # multiplex ratio (1/64)
-            0xD3, 0x00, # display offset
-            0x40,       # start line = 0
-            0xAD, 0x8B, # DC-DC control: internal DC-DC on (CH1115 specific)
-            0xA1,       # segment remap
-            0xC8,       # COM scan direction remapped
-            0xDA, 0x12, # COM pins hardware configuration
-            0x81, 0x7F, # contrast
-            0xD9, 0x22, # pre-charge period
-            0xDB, 0x20, # VCOMH deselect level
-            0xA4,       # entire display ON follows RAM
-            0xA6        # normal (non-inverted) display
+            0xAE,        # display off
+            0xD5, 0x80,  # display clock divide / osc freq
+            0xA8, 0x3F,  # multiplex ratio (1/64)
+            0xD3, 0x00,  # display offset
+            0x40,        # start line = 0
+            0xAD, 0x8B,  # DC-DC control: internal DC-DC on (CH1115 specific)
+            0xA1,        # segment remap
+            0xC8,        # COM scan direction remapped
+            0xDA, 0x12,  # COM pins hardware configuration
+            0x81, 0x7F,  # contrast
+            0xD9, 0x22,  # pre-charge period
+            0xDB, 0x20,  # VCOMH deselect level
+            0xA4,        # entire display ON follows RAM
+            0xA6         # normal (non-inverted) display
         )
 
         self.clear()
@@ -125,16 +126,11 @@ class ch1115(device):
 
             offsets = [y + self.width * i for i in range(8)]
             for x in range(self.width):
-                buf[x] = (
-                    (image_data[x + offsets[0]] and 0x01) |
-                    (image_data[x + offsets[1]] and 0x02) |
-                    (image_data[x + offsets[2]] and 0x04) |
-                    (image_data[x + offsets[3]] and 0x08) |
-                    (image_data[x + offsets[4]] and 0x10) |
-                    (image_data[x + offsets[5]] and 0x20) |
-                    (image_data[x + offsets[6]] and 0x40) |
-                    (image_data[x + offsets[7]] and 0x80)
-                )
+                val = 0
+                for i in range(8):
+                    if image_data[x + offsets[i]]:
+                        val |= (1 << i)
+                buf[x] = val
 
             self.data(buf)
 
