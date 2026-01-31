@@ -67,6 +67,8 @@ class ch1115(device):
 
         with canvas(dev) as draw:
             draw.text((0, 0), "Hello CH1115", fill="white")
+
+    .. versionadded:: 3.15.0
     """
 
     def __init__(self, serial_interface=None, width=128, height=64,
