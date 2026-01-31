@@ -34,3 +34,4 @@ Contributors
 * @Pako2
 * Graeme Smecher (@gsmecher)
 * Romit Raj (@QuicksandDesignStudio)
+* René Girardi (@WikiZell)

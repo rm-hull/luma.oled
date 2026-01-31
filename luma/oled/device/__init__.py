@@ -46,10 +46,95 @@ import luma.oled.const
 from luma.oled.device.framebuffer_mixin import __framebuffer_mixin
 
 __all__ = [
-    "ssd1306", "ssd1309", "ssd1316", "ssd1322", "ssd1362", "ssd1322_nhd",
-    "ssd1325", "ssd1327", "ssd1331", "ssd1351", "sh1106", "sh1107", "ws0010",
-    "winstar_weh"
+    "ssd1306", "ssd1309", "ssd1322", "ssd1316", "ssd1322_nhd", "ssd1325",
+    "ssd1327", "ssd1331", "ssd1351", "ssd1362", "sh1106", "sh1107", "ws0010",
+    "winstar_weh", "ch1115"
 ]
+
+
+class ch1115(device):
+    """
+    Serial interface to a monochrome CH1115 OLED display (128x64).
+
+    Example:
+
+        from luma.core.interface.serial import i2c
+        from luma.core.render import canvas
+        from luma.oled.device import ch1115
+
+        serial = i2c(port=1, address=0x3C)
+        dev = ch1115(serial, width=128, height=64)
+
+        with canvas(dev) as draw:
+            draw.text((0, 0), "Hello CH1115", fill="white")
+
+    .. versionadded:: 3.15.0
+    """
+
+    def __init__(self, serial_interface=None, width=128, height=64,
+                 rotate=0, **kwargs):
+        # Re-use the SSD1306 command set – CH1115 is largely compatible
+        super(ch1115, self).__init__(luma.oled.const.ssd1306, serial_interface)
+        # 1-bit monochrome
+        self.capabilities(width, height, rotate, mode="1")
+        self._pages = self._h // 8
+
+        if (width, height) != (128, 64):
+            raise luma.core.error.DeviceDisplayModeError(
+                f"Unsupported display mode: {width} x {height}")
+
+        # Init sequence adapted from the working standalone CH1115 driver
+        # (page addressing, internal DC-DC on).
+        self.command(
+            0xAE,        # display off
+            0xD5, 0x80,  # display clock divide / osc freq
+            0xA8, 0x3F,  # multiplex ratio (1/64)
+            0xD3, 0x00,  # display offset
+            0x40,        # start line = 0
+            0xAD, 0x8B,  # DC-DC control: internal DC-DC on (CH1115 specific)
+            0xA1,        # segment remap
+            0xC8,        # COM scan direction remapped
+            0xDA, 0x12,  # COM pins hardware configuration
+            0x81, 0x7F,  # contrast
+            0xD9, 0x22,  # pre-charge period
+            0xDB, 0x20,  # VCOMH deselect level
+            0xA4,        # entire display ON follows RAM
+            0xA6         # normal (non-inverted) display
+        )
+
+        self.clear()
+        self.show()
+        self.command(0xAF)  # display on
+
+    def display(self, image):
+        """
+        Takes a 1-bit PIL.Image and dumps it to the CH1115
+        OLED display using page addressing (like SH1106).
+        """
+        assert image.mode == self.mode
+        assert image.size == self.size
+
+        image = self.preprocess(image)
+
+        set_page_address = 0xB0
+        image_data = image.getdata()
+        pixels_per_page = self.width * 8
+        buf = bytearray(self.width)
+
+        for y in range(0, self._pages * pixels_per_page, pixels_per_page):
+            # 0x02 column offset is what most 128x64-on-132x64 boards use
+            self.command(set_page_address, 0x02, 0x10)
+            set_page_address += 1
+
+            offsets = [y + self.width * i for i in range(8)]
+            for x in range(self.width):
+                val = 0
+                for i in range(8):
+                    if image_data[x + offsets[i]]:
+                        val |= (1 << i)
+                buf[x] = val
+
+            self.data(buf)
 
 
 class sh1106(device):
