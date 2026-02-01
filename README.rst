@@ -10,23 +10,23 @@ luma.oled
 ---------
 **Display drivers for SSD1306 / SSD1309 / SSD1316 / SSD1322 / SSD1325 / SSD1327 / SSD1331 / SSD1351 / SSD1362 / SH1106 / SH1107 / WS0010 / CH1115**
 
-.. image:: https://github.com/rm-hull/luma.oled/workflows/luma.oled/badge.svg?branch=master
-   :target: https://github.com/rm-hull/luma.oled/actions?workflow=luma.oled
+.. image:: https://github.com/rm-hull/luma.oled/actions/workflows/main.yml/badge.svg
+   :target: https://github.com/rm-hull/luma.oled/actions/workflows/main.yml
 
-.. image:: https://coveralls.io/repos/github/rm-hull/luma.oled/badge.svg?branch=master
-   :target: https://coveralls.io/github/rm-hull/luma.oled?branch=master
+.. image:: https://coveralls.io/repos/github/rm-hull/luma.oled/badge.svg?branch=main
+   :target: https://coveralls.io/github/rm-hull/luma.oled?branch=main
 
 .. image:: https://readthedocs.org/projects/luma-oled/badge/?version=latest
    :target: http://luma-oled.readthedocs.io/en/latest/?badge=latest
 
-.. image:: https://img.shields.io/pypi/pyversions/luma.oled.svg
-   :target: https://pypi.python.org/pypi/luma.oled
+.. image:: https://img.shields.io/pypi/pyversions/luma.oled
+   :target: https://pypi.org/project/luma.oled
 
-.. image:: https://img.shields.io/pypi/v/luma.oled.svg
-   :target: https://pypi.python.org/pypi/luma.oled
+.. image:: https://img.shields.io/pypi/v/luma.oled
+   :target: https://pypi.org/project/luma.oled
 
 .. image:: https://img.shields.io/pypi/dm/luma.oled
-   :target: https://pypi.python.org/project/luma.oled
+   :target: https://pypi.org/project/luma.oled
 
 Python 3 library interfacing OLED matrix displays with the SSD1306, SSD1309, SSD1316,
 SSD1322, SSD1325, SSD1327, SSD1331, SSD1351, SH1106, SH1107 or WS0010 driver using
