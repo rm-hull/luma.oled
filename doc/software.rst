@@ -38,7 +38,7 @@ the dependencies.
   If your distribution includes a pre-packaged version of Pillow,
   use it instead of installing from pip.  On many distributions the correct
   package to install is ``python3-imaging``.  Another common package name for
-  Pillow is ``python3-pil``.::
+  Pillow is ``python3-pil``::
 
     $ sudo apt-get install python3-imaging
 

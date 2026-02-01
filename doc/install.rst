@@ -21,11 +21,11 @@ are included in :doc:`python-usage`.
 
   It was *originally* tested with Raspbian on a rev.2 model B, with a vanilla
   kernel version 4.1.16+, and has subsequently been tested on Raspberry Pi
-  models A, B2, 2, 3B, Zero, Zero W, OrangePi Zero (Armbian Jessie), and 4B with
+  models A, B2, 2, 3B, Zero, Zero W, OrangePi Zero (Armbian Jessie), 4B and 5 with
   the Raspberry Pi OS operating system.
 
 .. note:: Upgrading
   If you are upgrading from a previous version, make sure to read the
   :doc:`upgrade <upgrade>` document.
 
-.. _PyPI: https://pypi.python.org/pypi?:action=display&name=luma.oled
+.. _PyPI: https://pypi.org/project/luma.oled
