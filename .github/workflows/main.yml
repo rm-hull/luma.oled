@@ -12,12 +12,12 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        python-minor-version: [8, 9, 10, 11, 12, 13]
+        python-minor-version: [9, 10, 11, 12, 13, 14]
     name: Python 3.${{ matrix.python-minor-version }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Setup pip cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         id: pipcache
         with:
           path: ~/.cache/pip
@@ -27,7 +27,7 @@ jobs:
       - name: Install system dependencies
         run: sudo apt-get install graphviz
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: 3.${{ matrix.python-minor-version }}
           check-latest: true
