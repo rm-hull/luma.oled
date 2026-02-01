@@ -10,3 +10,4 @@ References
 - https://learn.sparkfun.com/tutorials/serial-peripheral-interface-spi
 - http://code.activestate.com/recipes/577187-python-thread-pool/
 - https://www.circuits.dk/everything-about-raspberry-gpio/
+- https://peppe8o.com/ssd1306-raspberry-pi-oled-display/
