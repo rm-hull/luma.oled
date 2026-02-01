@@ -5,6 +5,7 @@ ChangeLog
 | Version    | Description                                                         | Date       |
 +============+=====================================================================+============+
 | **3.15.0** | * Add support for 128x64 CH1115                                     | TBC        |
+|            | * Add support for SSD1316                                           |            |
 |            | * Fix sh1106 display of a rotated image                             |            |
 |            | * Drop support for Python 3.8                                       |            |
 +------------+---------------------------------------------------------------------+------------+
