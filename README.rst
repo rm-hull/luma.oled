@@ -13,7 +13,7 @@ luma.oled
 .. image:: https://github.com/rm-hull/luma.oled/actions/workflows/main.yml/badge.svg
    :target: https://github.com/rm-hull/luma.oled/actions/workflows/main.yml
 
-.. image:: https://coveralls.io/repos/github/rm-hull/luma.oled/badge.svg?branch=master
+.. image:: https://coveralls.io/repos/github/rm-hull/luma.oled/badge.svg?branch=main
    :target: https://coveralls.io/github/rm-hull/luma.oled?branch=master
 
 .. image:: https://readthedocs.org/projects/luma-oled/badge/?version=latest
