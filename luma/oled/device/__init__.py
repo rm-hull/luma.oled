@@ -46,7 +46,7 @@ import luma.oled.const
 from luma.oled.device.framebuffer_mixin import __framebuffer_mixin
 
 __all__ = [
-    "ssd1306", "ssd1309", "ssd1322", "ssd1316", "ssd1322_nhd", "ssd1325",
+    "ssd1306", "ssd1309", "ssd1315", "ssd1316", "ssd1322", "ssd1322_nhd", "ssd1325",
     "ssd1327", "ssd1331", "ssd1351", "ssd1362", "sh1106", "sh1107", "ws0010",
     "winstar_weh", "ch1115"
 ]
@@ -418,6 +418,30 @@ class ssd1309(ssd1306):
 
     .. versionadded:: 3.1.0
     """
+
+
+class ssd1315(ssd1306):
+    """
+    Serial interface to a monochrome SSD1315 OLED display.
+
+    On creation, an initialization sequence is pumped to the display
+    to properly configure it. Further control commands can then be called to
+    affect the brightness and other settings.
+
+    :param serial_interface: The serial interface (usually a
+        :py:class:`luma.core.interface.serial.i2c` instance) to delegate sending
+        data and commands through.
+    :param width: The number of horizontal pixels (optional, defaults to 128).
+    :type width: int
+    :param height: The number of vertical pixels (optional, defaults to 64).
+    :type height: int
+    :param rotate: An integer value of 0 (default), 1, 2 or 3 only, where 0 is
+        no rotation, 1 is rotate 90° clockwise, 2 is 180° rotation and 3
+        represents 270° rotation.
+    :type rotate: int
+    """
+    def __init__(self, serial_interface=None, width=128, height=64, rotate=0, **kwargs):
+        super(ssd1315, self).__init__(serial_interface, width, height, rotate, **kwargs)
 
 
 class ssd1316(ssd1306):
