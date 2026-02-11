@@ -117,7 +117,7 @@ class ch1115(device):
         image = self.preprocess(image)
 
         set_page_address = 0xB0
-        image_data = image.getdata()
+        image_data = image.get_flattened_data()
         pixels_per_page = self.width * 8
         buf = bytearray(self.width)
 
@@ -195,7 +195,7 @@ class sh1106(device):
         image = self.preprocess(image)
 
         set_page_address = 0xB0
-        image_data = image.getdata()
+        image_data = image.get_flattened_data()
         pixels_per_page = self._w * 8
         buf = bytearray(self._w)
 
@@ -388,7 +388,7 @@ class ssd1306(device):
         mask = self._mask
 
         idx = 0
-        for pix in image.getdata():
+        for pix in image.get_flattened_data():
             if pix > 0:
                 buf[off[idx]] |= mask[idx]
             idx += 1
@@ -852,7 +852,7 @@ class ssd1322_nhd(greyscale_device):
 
             buf = bytearray(width * height)
             self._set_position(top, bottom)
-            self._populate(buf, image.getdata())
+            self._populate(buf, image.get_flattened_data())
             self.data(list(buf))
 
 
@@ -1106,7 +1106,7 @@ class ws0010(parallel_device, character, __framebuffer_mixin):
             buf = bytearray(w * h // 8)
 
             image_segment = image.crop((left, top, right, bottom))
-            for idx, pix in enumerate(image_segment.getdata()):
+            for idx, pix in enumerate(image_segment.get_flattened_data()):
                 if pix > 0:
                     buf[off[idx]] |= mask[idx]
 
