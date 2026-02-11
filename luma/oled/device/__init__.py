@@ -439,9 +439,9 @@ class ssd1315(ssd1306):
         no rotation, 1 is rotate 90° clockwise, 2 is 180° rotation and 3
         represents 270° rotation.
     :type rotate: int
+
+    .. versionadded:: 3.15.0
     """
-    def __init__(self, serial_interface=None, width=128, height=64, rotate=0, **kwargs):
-        super(ssd1315, self).__init__(serial_interface, width, height, rotate, **kwargs)
 
 
 class ssd1316(ssd1306):
