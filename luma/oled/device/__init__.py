@@ -46,9 +46,9 @@ import luma.oled.const
 from luma.oled.device.framebuffer_mixin import __framebuffer_mixin
 
 __all__ = [
-    "ssd1306", "ssd1309", "ssd1315", "ssd1316", "ssd1322", "ssd1322_nhd", "ssd1325",
-    "ssd1327", "ssd1331", "ssd1351", "ssd1362", "sh1106", "sh1107", "ws0010",
-    "winstar_weh", "ch1115"
+    "ssd1305", "ssd1306", "ssd1309", "ssd1315", "ssd1316", "ssd1322",
+    "ssd1322_nhd", "ssd1325", "ssd1327", "ssd1331", "ssd1351", "ssd1362",
+    "sh1106", "sh1107", "ws0010", "winstar_weh", "ch1115"
 ]
 
 
@@ -394,6 +394,74 @@ class ssd1306(device):
             idx += 1
 
         self.data(list(buf))
+
+
+class ssd1305(ssd1306):
+    """
+    Serial interface to a monochrome SSD1305 OLED display.
+
+    On creation, an initialization sequence is pumped to the display
+    to properly configure it. Further control commands can then be called to
+    affect the brightness and other settings.
+
+    The SSD1305 does not have an internal charge pump, so an external
+    VCC supply must be provided. The column start offset for 128x32
+    mode is 4.
+
+    :param serial_interface: The serial interface (usually a
+        :py:class:`luma.core.interface.serial.i2c` instance) to delegate sending
+        data and commands through.
+    :param width: The number of horizontal pixels (optional, defaults to 128).
+    :type width: int
+    :param height: The number of vertical pixels (optional, defaults to 32).
+    :type height: int
+    :param rotate: An integer value of 0 (default), 1, 2 or 3 only, where 0 is
+        no rotation, 1 is rotate 90° clockwise, 2 is 180° rotation and 3
+        represents 270° rotation.
+    :type rotate: int
+
+    .. versionadded:: 3.15.0
+    """
+
+    def __init__(self, serial_interface=None, width=128, height=32, rotate=0, **kwargs):
+        super(ssd1306, self).__init__(luma.oled.const.ssd1306, serial_interface)
+        self.capabilities(width, height, rotate)
+
+        # Supported modes
+        settings = {
+            (128, 64): dict(multiplex=0x3F, displayclockdiv=0x80, compins=0x12, colstart=0),
+            (128, 32): dict(multiplex=0x1F, displayclockdiv=0x80, compins=0x12, colstart=4),
+        }.get((width, height))
+
+        if settings is None:
+            raise luma.core.error.DeviceDisplayModeError(
+                f"Unsupported display mode: {width} x {height}")
+
+        self._pages = height // 8
+        self._mask = [1 << (i // width) % 8 for i in range(width * height)]
+        self._offsets = [(width * (i // (width * 8))) + (i % width) for i in range(width * height)]
+        self._colstart = settings['colstart']
+        self._colend = self._colstart + self._w
+
+        self.command(
+            self._const.DISPLAYOFF,
+            self._const.SETDISPLAYCLOCKDIV, settings['displayclockdiv'],
+            self._const.SETMULTIPLEX,       settings['multiplex'],
+            self._const.SETDISPLAYOFFSET,   0x00,
+            self._const.SETSTARTLINE,
+            self._const.CHARGEPUMP,         0x10,
+            self._const.MEMORYMODE,         0x00,
+            self._const.SETSEGMENTREMAP,
+            self._const.COMSCANDEC,
+            self._const.SETCOMPINS,         settings['compins'],
+            self._const.SETPRECHARGE,       0xF1,
+            self._const.SETVCOMDETECT,      0x40,
+            self._const.DISPLAYALLON_RESUME,
+            self._const.NORMALDISPLAY)
+
+        self.contrast(0xCF)
+        self.clear()
+        self.show()
 
 
 class ssd1309(ssd1306):

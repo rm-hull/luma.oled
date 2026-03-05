@@ -2,7 +2,7 @@ Introduction
 ============
 luma.oled provides a Python3 interface to `OLED matrix displays
 <https://github.com/rm-hull/luma.oled/wiki/Usage-&-Benchmarking>`_ with the
-SSD1306, SSD1309, SSD1315, SSD1316, SSD1322, SSD1325, SSD1327, SSD1331, SSD1351, SSD1362, SH1106,
+SSD1305, SSD1306, SSD1309, SSD1315, SSD1316, SSD1322, SSD1325, SSD1327, SSD1331, SSD1351, SSD1362, SH1106,
 SH1107, CH1115 or WS0010 controllers to connect with Raspberry Pi and other Linux-based
 single-board computers (SBC).  It provides a Pillow-compatible drawing canvas,
 and other functionality to support:
@@ -26,8 +26,10 @@ and will fit neatly inside the RPi case.
    Further technical information for the specific implemented devices can be found
    in the following datasheets:
 
+   - :download:`SSD1305 <tech-spec/SSD1305.pdf>`
    - :download:`SSD1306 <tech-spec/SSD1306.pdf>`
    - :download:`SSD1309 <tech-spec/SSD1309.pdf>`
+   - :download:`SSD1315 <tech-spec/SSD1315.pdf>`
    - :download:`SSD1316 <tech-spec/SSD1316.pdf>`
    - :download:`SSD1322 <tech-spec/SSD1322.pdf>`
    - :download:`SSD1325 <tech-spec/SSD1325.pdf>`
