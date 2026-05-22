@@ -935,8 +935,8 @@ class ssd1363(greyscale_device):
         self.command(0xB9)               # Linear grayscale table
 
     def _set_position(self, top, right, bottom, left):
-        col_start = (left  >> 2) + 8
-        col_end   = ((right - 1) >> 2) + 8
+        col_start = (left >> 2) + 8
+        col_end = ((right - 1) >> 2) + 8
         self.command(0x15, col_start, col_end)  # set column addr
         self.command(0x75, top, bottom - 1)      # set row addr
         self.command(0x5C)                        # Write RAM

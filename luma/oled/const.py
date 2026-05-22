@@ -42,8 +42,8 @@ class ssd1362(common):
 
 
 class ssd1363(common):
-    DISPLAYON   = 0xAF
-    DISPLAYOFF  = 0xAE
+    DISPLAYON = 0xAF
+    DISPLAYOFF = 0xAE
     SETCONTRAST = 0xC1   # SSD1363 uses 0xC1, not 0x81
 
 
