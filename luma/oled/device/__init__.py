@@ -48,6 +48,7 @@ from luma.oled.device.framebuffer_mixin import __framebuffer_mixin
 __all__ = [
     "ssd1305", "ssd1306", "ssd1309", "ssd1315", "ssd1316", "ssd1322",
     "ssd1322_nhd", "ssd1325", "ssd1327", "ssd1331", "ssd1351", "ssd1362",
+    "ssd1363",
     "sh1106", "sh1107", "ws0010", "winstar_weh", "ch1115"
 ]
 
@@ -853,6 +854,125 @@ class ssd1362(greyscale_device):
         self.command(
             0x15, left >> 1, (right - 1) >> 1,  # set column addr
             0x75, top, bottom - 1)              # set row addr
+
+
+class ssd1363(greyscale_device):
+    """
+    Serial interface to a 4-bit greyscale SSD1363 OLED display.
+
+    On creation, an initialization sequence is pumped to the
+    display to properly configure it. Further control commands can then be
+    called to affect the brightness and other settings.
+
+    .. note::
+        The SSD1363 uses a non-standard DC-pin protocol: only the command
+        opcode byte is sent at DC-LOW; all parameter bytes and pixel data
+        are sent at DC-HIGH.  Sending parameter bytes at DC-LOW causes them
+        to be misinterpreted as command opcodes — for example, a row-address
+        end value of 0x2F activates hardware scroll and prevents the row
+        window from being set.  This driver overrides ``command()`` to route
+        parameter bytes through ``data()`` (DC-HIGH), matching the official
+        manufacturer example.
+
+        Additionally, within each 2-byte column address the byte pair must be
+        written in reverse order due to the panel's column-remap wiring.
+        ``display()`` is overridden to swap adjacent byte pairs in the output
+        buffer before writing.
+
+    :param serial_interface: The serial interface (usually a
+       :py:class:`luma.core.interface.serial.spi` instance) to delegate sending
+       data and commands through.
+    :param width: The number of horizontal pixels (optional, defaults to 256).
+    :type width: int
+    :param height: The number of vertical pixels (optional, defaults to 128).
+    :type height: int
+    :param rotate: An integer value of 0 (default), 1, 2 or 3 only, where 0 is
+        no rotation, 1 is rotate 90° clockwise, 2 is 180° rotation and 3
+        represents 270° rotation.
+    :type rotate: int
+    :param mode: Supplying "1" or "RGB" effects a different rendering
+         mechanism, either to monochrome or 4-bit greyscale.
+    :type mode: str
+    :param framebuffer: Framebuffering strategy, currently instances of
+        ``diff_to_previous`` or ``full_frame`` are only supported.
+    :type framebuffer: str
+
+    .. versionadded:: 3.14.0
+    """
+
+    def __init__(self, serial_interface=None, width=256, height=128,
+                 rotate=0, mode="RGB", framebuffer=None, **kwargs):
+        super(ssd1363, self).__init__(luma.oled.const.ssd1363, serial_interface,
+                                      width, height, rotate, mode, framebuffer,
+                                      nibble_order=1, **kwargs)
+
+    def _supported_dimensions(self):
+        return [(256, 128)]
+
+    def command(self, cmd, *args):
+        """
+        Sends a command and an (optional) sequence of arguments through to the
+        delegated serial interface.
+
+        Unlike most SSD-family controllers, the SSD1363 treats DC as a
+        *per-byte* signal: only the command opcode byte uses DC-LOW; all
+        parameter bytes use DC-HIGH.  Routing parameters through ``data()``
+        satisfies this requirement.
+        """
+        self._serial_interface.command(cmd)
+        if len(args) > 0:
+            self._serial_interface.data(list(args))
+
+    def _init_sequence(self):
+        self.command(0xFD, 0x12)        # Unlock command register
+        self.command(0xAE)               # Display OFF
+        self.command(0xC1, 0xA0)         # Contrast
+        self.command(0xA0, 0x32, 0x00)   # Remap: col-remap + COM-reversed + COM-split
+        self.command(0xA2, 0x20)         # Display offset
+        self.command(0xCA, 0x7F)         # Mux ratio: 128
+        self.command(0xAD, 0x90)         # Internal IREF
+        self.command(0xB3, 0x61)         # Clock divider
+        self.command(0xB9)               # Linear grayscale table
+
+    def _set_position(self, top, right, bottom, left):
+        col_start = (left  >> 2) + 8
+        col_end   = ((right - 1) >> 2) + 8
+        self.command(0x15, col_start, col_end)  # set column addr
+        self.command(0x75, top, bottom - 1)      # set row addr
+        self.command(0x5C)                        # Write RAM
+
+    def display(self, image):
+        """
+        Takes a 1-bit monochrome or 24-bit RGB image and renders it
+        to the greyscale OLED display. RGB pixels are converted to 4-bit
+        greyscale values using a simplified Luma calculation, based on
+        *Y'=0.299R'+0.587G'+0.114B'*.
+
+        Within each 2-byte column address the byte pair is swapped before
+        writing to correct for the panel's column-remap wiring.
+
+        :param image: The image to render.
+        :type image: PIL.Image.Image
+        """
+        assert image.mode == self.mode
+        assert image.size == self.size
+
+        image = self.preprocess(image)
+
+        for _, bounding_box in self.framebuffer.redraw(image):
+            left, top, right, bottom = self._inflate_bbox(bounding_box)
+            cropped = image.crop((left, top, right, bottom))
+            width = right - left
+            height = bottom - top
+            buf = bytearray(width * height >> 1)
+            self._set_position(top, right, bottom, left)
+            self._populate(buf, cropped.getdata())
+            # Within each 2-byte column address the byte pair must be swapped;
+            # the panel's column-remap wiring reverses the expected pair order.
+            data = list(buf)
+            for i in range(0, len(data) - 1, 2):
+                data[i], data[i + 1] = data[i + 1], data[i]
+            self.data(data)
 
 
 class ssd1322_nhd(greyscale_device):
