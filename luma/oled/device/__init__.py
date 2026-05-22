@@ -969,10 +969,8 @@ class ssd1363(greyscale_device):
             self._populate(buf, cropped.getdata())
             # Within each 2-byte column address the byte pair must be swapped;
             # the panel's column-remap wiring reverses the expected pair order.
-            data = list(buf)
-            for i in range(0, len(data) - 1, 2):
-                data[i], data[i + 1] = data[i + 1], data[i]
-            self.data(data)
+            buf[0::2], buf[1::2] = buf[1::2], buf[0::2]
+            self.data(list(buf))
 
 
 class ssd1322_nhd(greyscale_device):
