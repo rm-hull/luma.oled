@@ -47,8 +47,7 @@ from luma.oled.device.framebuffer_mixin import __framebuffer_mixin
 
 __all__ = [
     "ssd1305", "ssd1306", "ssd1309", "ssd1315", "ssd1316", "ssd1322",
-    "ssd1322_nhd", "ssd1325", "ssd1327", "ssd1331", "ssd1351", "ssd1362",
-    "ssd1363",
+    "ssd1322_nhd", "ssd1325", "ssd1327", "ssd1331", "ssd1351", "ssd1362", "ssd1363",
     "sh1106", "sh1107", "ws0010", "winstar_weh", "ch1115"
 ]
 
