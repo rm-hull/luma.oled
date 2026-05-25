@@ -896,7 +896,7 @@ class ssd1363(greyscale_device):
         ``diff_to_previous`` or ``full_frame`` are only supported.
     :type framebuffer: str
 
-    .. versionadded:: 3.14.0
+    .. versionadded:: 3.16.0
     """
 
     def __init__(self, serial_interface=None, width=256, height=128,
