@@ -37,6 +37,7 @@ and will fit neatly inside the RPi case.
    - :download:`SSD1331 <tech-spec/SSD1331.pdf>`
    - :download:`SSD1351 <tech-spec/SSD1351.pdf>`
    - :download:`SSD1362 <tech-spec/SSD1362.pdf>`
+   - :download:`SSD1363 <tech-spec/SSD1363.pdf>`
    - :download:`SH1106 <tech-spec/SH1106.pdf>`
    - :download:`WS0010 <tech-spec/WS0010.pdf>`
    - :download:`WEH001602 <tech-spec/WEH001602.pdf>`
