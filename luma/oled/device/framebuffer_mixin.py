@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2020 Richard Hull and contributors
+# Copyright (c) 2020-2026 Richard Hull and contributors
 # See LICENSE.rst for details.
 
 import luma.core.framebuffer
