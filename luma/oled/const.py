@@ -41,6 +41,12 @@ class ssd1362(common):
     SETCONTRAST = 0x81
 
 
+class ssd1363(common):
+    DISPLAYON = 0xAF
+    DISPLAYOFF = 0xAE
+    SETCONTRAST = 0xC1   # SSD1363 uses 0xC1, not 0x81
+
+
 class ws0010(object):
     """
     Values to be used by the ws0010 class during initialization of the display.
