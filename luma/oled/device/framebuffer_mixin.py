@@ -11,9 +11,5 @@ class __framebuffer_mixin(object):
 
     .. versionadded:: 3.8.0
     """
-
     def init_framebuffer(self, framebuffer):
-        if framebuffer is None:
-            self.framebuffer = luma.core.framebuffer.diff_to_previous()
-        else:
-            self.framebuffer = framebuffer
+        self.framebuffer = framebuffer or luma.core.framebuffer.diff_to_previous()
