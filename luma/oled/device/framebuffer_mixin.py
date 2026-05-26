@@ -7,7 +7,7 @@ import luma.core.framebuffer
 
 class __framebuffer_mixin(object):
     """
-    Helper class for initializing the framebuffer. 
+    Helper class for initializing the framebuffer.
 
     .. versionadded:: 3.8.0
     """
