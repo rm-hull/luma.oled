@@ -1064,12 +1064,14 @@ class sh1122(greyscale_device):
         for _, bounding_box in self.framebuffer.redraw(image):
             left, top, right, bottom = self._inflate_bbox(bounding_box)
             width = right - left
+            cropped = image.crop((left, top, right, bottom))
+            pixels = list(cropped.getdata())
 
             for row in range(top, bottom):
-                row_image = image.crop((left, row, right, row + 1))
                 buf = bytearray(width >> 1)
                 self._set_position(row, right, row + 1, left)
-                self._populate(buf, row_image.getdata())
+                row_offset = (row - top) * width
+                self._populate(buf, pixels[row_offset:row_offset + width])
                 self.data(list(buf))
 
 
