@@ -48,7 +48,7 @@ from luma.oled.device.framebuffer_mixin import __framebuffer_mixin
 __all__ = [
     "ssd1305", "ssd1306", "ssd1309", "ssd1315", "ssd1316", "ssd1322",
     "ssd1322_nhd", "ssd1325", "ssd1327", "ssd1331", "ssd1351", "ssd1362", "ssd1363",
-    "sh1106", "sh1107", "ws0010", "winstar_weh", "ch1115"
+    "sh1106", "sh1107", "sh1122", "ws0010", "winstar_weh", "ch1115"
 ]
 
 
@@ -970,6 +970,107 @@ class ssd1363(greyscale_device):
             # the panel's column-remap wiring reverses the expected pair order.
             buf[0::2], buf[1::2] = buf[1::2], buf[0::2]
             self.data(list(buf))
+
+
+class sh1122(greyscale_device):
+    """
+    Serial interface to a 4-bit greyscale SH1122 OLED display.
+
+    The SH1122 uses 128 column addresses for 256 horizontal pixels, storing two
+    4-bit pixels per data byte. Unlike the SSD1322 family it does not expose a
+    rectangular write-window command with an end row, so updates are written one
+    row at a time.
+
+    :param serial_interface: The serial interface (usually a
+       :py:class:`luma.core.interface.serial.spi` or
+       :py:class:`luma.core.interface.serial.i2c` instance) to delegate sending
+       data and commands through.
+    :param width: The number of horizontal pixels (optional, defaults to 256).
+    :type width: int
+    :param height: The number of vertical pixels (optional, defaults to 64).
+    :type height: int
+    :param rotate: An integer value of 0 (default), 1, 2 or 3 only, where 0 is
+        no rotation, 1 is rotate 90° clockwise, 2 is 180° rotation and 3
+        represents 270° rotation.
+    :type rotate: int
+    :param mode: Supplying "1" or "RGB" effects a different rendering
+         mechanism, either to monochrome or 4-bit greyscale.
+    :type mode: str
+    :param framebuffer: Framebuffering strategy, currently instances of
+        ``diff_to_previous`` or ``full_frame`` are only supported.
+    :type framebuffer: str
+    :param dcdc: Whether to use the built-in DC-DC converter. Set to ``False``
+        for modules that provide external VPP.
+    :type dcdc: bool
+
+    .. versionadded:: 3.16.0
+    """
+
+    def __init__(self, serial_interface=None, width=256, height=64, rotate=0,
+                 mode="RGB", framebuffer=None, dcdc=True, **kwargs):
+        self._dcdc = dcdc
+        super(sh1122, self).__init__(luma.oled.const.sh1122, serial_interface,
+                                     width, height, rotate, mode, framebuffer,
+                                     nibble_order=0, **kwargs)
+
+    def _supported_dimensions(self):
+        return [(256, 64)]
+
+    def _init_sequence(self):
+        self.command(
+            0xAE,                    # Display OFF
+            0x40,                    # Display start line = 0
+            0x30,                    # Discharge voltage VSL = 0V
+            0xAD, 0x81 if self._dcdc else 0x80,  # Built-in DC-DC on/off
+            0xA0,                    # Segment remap: SEG0 maps to column 0
+            0xC0,                    # Common scan: COM0 to COM[N-1]
+            0xA8, self._h - 1,       # Multiplex ratio
+            0xD3, 0x00,              # Display offset
+            0xD5, 0x90,              # Display clock divide / oscillator
+            0xD9, 0x76,              # Discharge / pre-charge periods
+            0xDB, 0x3B,              # VCOM deselect level
+            0xDC, 0x1A,              # VSEGM pre-charge level
+            0xA6,                    # Normal display
+            0xA4)                    # Display follows RAM
+
+    def _inflate_bbox(self, bounding_box):
+        left, top, right, bottom = bounding_box
+        return (
+            left & 0xFFFE,
+            top,
+            right if right % 2 == 0 else (right & 0xFFFE) + 0x02,
+            bottom)
+
+    def _set_position(self, top, right, bottom, left):
+        column = left >> 1
+        self.command(
+            0xB0, top & 0x3F,              # Row address
+            column & 0x0F,                 # Lower column address
+            0x10 | ((column >> 4) & 0x07))  # Higher column address
+
+    def display(self, image):
+        """
+        Takes a 1-bit monochrome or 24-bit RGB image and renders it to the
+        greyscale OLED display.
+
+        :param image: The image to render.
+        :type image: PIL.Image.Image
+        """
+        assert image.mode == self.mode
+        assert image.size == self.size
+
+        image = self.preprocess(image)
+
+        for _, bounding_box in self.framebuffer.redraw(image):
+            left, top, right, bottom = self._inflate_bbox(bounding_box)
+            width = right - left
+
+            for row in range(top, bottom):
+                row_image = image.crop((left, row, right, row + 1))
+                buf = bytearray(width >> 1)
+                self._set_position(row, right, row + 1, left)
+                self._populate(buf, row_image.getdata())
+                self.data(list(buf))
 
 
 class ssd1322_nhd(greyscale_device):

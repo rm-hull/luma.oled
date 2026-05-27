@@ -15,7 +15,7 @@ In this example, we are using an I2C interface with a ssd1306 display.
   from luma.core.interface.serial import i2c, spi, pcf8574
   from luma.core.interface.parallel import bitbang_6800
   from luma.core.render import canvas
-  from luma.oled.device import ssd1306, ssd1309, ssd1325, ssd1331, sh1106, sh1107, ws0010
+  from luma.oled.device import ssd1306, ssd1309, ssd1325, ssd1331, sh1106, sh1107, sh1122, ws0010
 
   # rev.1 users set port=0
   # substitute spi(device=0, port=0) below if using that interface
@@ -67,7 +67,7 @@ to a dithered monochrome effect (see the *3d_box.py* example, below).
 There is no such constraint on the SSD1331 or SSD1351 OLEDs, which features
 16-bit RGB colors: 24-bit RGB images are downsized to 16-bit using a 565 scheme.
 
-The SSD1322, SSD1325 and SSD1362 OLEDs all support 16 greyscale graduations:
+The SSD1322, SSD1325, SSD1362 and SH1122 OLEDs all support 16 greyscale graduations:
 24-bit RGB images are downsized to 4-bit using a Luma conversion which is
 approximately calculated as follows:
 
