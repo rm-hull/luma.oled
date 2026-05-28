@@ -5,6 +5,7 @@ ChangeLog
 | Version    | Description                                                         | Date       |
 +============+=====================================================================+============+
 | **3.16.0** | * Add support for SSD1363                                           | TBC        |
+|            | * Add support for 256x64 SH1122                                     |            |
 |            | * Remove deprecation notice in framebuffer mixin                    |            |
 +------------+---------------------------------------------------------------------+------------+
 | **3.15.0** | * Add support for 128x64 CH1115                                     | 2026/03/05 |
