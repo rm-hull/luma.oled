@@ -1064,6 +1064,8 @@ class sh1122(greyscale_device):
         for _, bounding_box in self.framebuffer.redraw(image):
             left, top, right, bottom = self._inflate_bbox(bounding_box)
             width = right - left
+            # SH1122 packs two horizontal pixels per RAM byte, so partial
+            # redraws must stay clipped to the aligned dirty rectangle.
             cropped = image.crop((left, top, right, bottom))
             pixels = list(cropped.getdata())
 
