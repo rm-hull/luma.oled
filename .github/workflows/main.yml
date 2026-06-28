@@ -17,7 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - name: Setup pip cache
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         id: pipcache
         with:
           path: ~/.cache/pip
