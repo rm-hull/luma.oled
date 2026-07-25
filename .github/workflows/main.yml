@@ -27,7 +27,7 @@ jobs:
       - name: Install system dependencies
         run: sudo apt-get install graphviz
       - name: Set up Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: 3.${{ matrix.python-minor-version }}
           check-latest: true
