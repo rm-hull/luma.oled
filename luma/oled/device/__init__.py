@@ -146,10 +146,11 @@ class sh1106(device):
     affect the brightness and other settings.
     """
 
-    def __init__(self, serial_interface=None, width=128, height=64, rotate=0, **kwargs):
+    def __init__(self, serial_interface=None, width=128, height=64, rotate=0, page_address_offset=0x02, **kwargs):
         super(sh1106, self).__init__(luma.oled.const.sh1106, serial_interface)
         self.capabilities(width, height, rotate)
         self._pages = self._h // 8
+        self._page_address_offset = page_address_offset
 
         settings = {
             (128, 128): dict(multiplex=0xFF, displayoffset=0x02),
@@ -200,7 +201,7 @@ class sh1106(device):
         buf = bytearray(self._w)
 
         for y in range(0, int(self._pages * pixels_per_page), pixels_per_page):
-            self.command(set_page_address, 0x02, 0x10)
+            self.command(set_page_address, self._page_address_offset, 0x10)
             set_page_address += 1
             offsets = [y + self._w * i for i in range(8)]
 
