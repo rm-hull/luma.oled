@@ -4,8 +4,9 @@ ChangeLog
 +------------+---------------------------------------------------------------------+------------+
 | Version    | Description                                                         | Date       |
 +============+=====================================================================+============+
-| **3.16.0** | * Add support for SSD1363                                           | TBC        |
+| **3.16.0** | * Add support for SSD1363                                           | 2026/10/02 |
 |            | * Remove deprecation notice in framebuffer mixin                    |            |
+|            | * Make page_address_offset configurable for SH1106 displays         |            |
 +------------+---------------------------------------------------------------------+------------+
 | **3.15.0** | * Add support for 128x64 CH1115                                     | 2026/03/05 |
 |            | * Add support for SSD1305                                           |            |
