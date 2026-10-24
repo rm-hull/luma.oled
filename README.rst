@@ -69,25 +69,6 @@ git repository:
 .. image:: https://raw.githubusercontent.com/rm-hull/luma.oled/master/doc/images/crawl_anim.gif?raw=true
    :alt: crawl
 
-Upgrade
--------
-Version 2.0.0 was released on 11 January 2017: this came with a rename of the
-github project from **ssd1306** to **luma.oled** to reflect the changing nature
-of the codebase.
-
-Some core functionality has been moved out to another git repository,
-`luma.core <https://github.com/rm-hull/luma.core>`_: this has enabled
-another project to have a facelift: **pcd8544** has now been reborn as
-`luma.lcd <https://github.com/rm-hull/luma.lcd>`_: the same API can now be
-used across both projects. Likewise **max7219** has been renamed to
-`luma.led_matrix <https://github.com/rm-hull/luma.led_matrix>`_ so
-it can also take advantage of the common API.
-
-The consequence is that any existing code that uses the old **ssd1306** package
-will need to be updated. The changes should be limited to altering import
-statements only, and are described in the
-`upgrade documentation <https://luma-oled.readthedocs.io/en/latest/upgrade.html>`_.
-
 License
 -------
 The MIT License (MIT)
