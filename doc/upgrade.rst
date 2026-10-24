@@ -1,6 +1,12 @@
 Upgrade
 -------
 
+3.9.0
+"""""
+
+Version 3.9.0 was released on 19 October 2022: This was the last version that
+supported Python 3.6.
+
 3.6.0
 """""
 
