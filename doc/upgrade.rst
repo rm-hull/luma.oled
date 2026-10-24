@@ -34,9 +34,6 @@ supported Python 2.7.
 2.0.0
 """""
 
-Upgrade
--------
-
 Version 2.0.0 was released on 11 January 2017: this came with a rename of the
 project in github from **ssd1306** to **luma.oled** to reflect the changing
 nature of the codebase. It introduces some structural changes to the package
