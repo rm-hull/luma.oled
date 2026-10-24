@@ -1,6 +1,18 @@
 Upgrade
 -------
 
+3.15.0
+"""""
+
+Version 3.15.0 was released on 5 March 2026: This was the last version that
+supported Python 3.8.
+
+3.14.0
+"""""
+
+Version 3.14.0 was released on 26 October 2024: This was the last version that
+supported Python 3.7.
+
 3.9.0
 """""
 
