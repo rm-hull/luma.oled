@@ -35,3 +35,4 @@ Contributors
 * Graeme Smecher (@gsmecher)
 * Romit Raj (@QuicksandDesignStudio)
 * René Girardi (@WikiZell)
+* Robert Kihlberg (@Kihltech)

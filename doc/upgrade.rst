@@ -1,6 +1,24 @@
 Upgrade
 -------
 
+3.15.0
+""""""
+
+Version 3.15.0 was released on 5 March 2026: This was the last version that
+supported Python 3.8.
+
+3.14.0
+""""""
+
+Version 3.14.0 was released on 26 October 2024: This was the last version that
+supported Python 3.7.
+
+3.9.0
+"""""
+
+Version 3.9.0 was released on 19 October 2022: This was the last version that
+supported Python 3.6.
+
 3.6.0
 """""
 
@@ -30,3 +48,11 @@ To upgrade any existing code that uses the old package structure:
 
 This breaking change was necessary to be able to add different classes of
 devices, so that they could reuse core components.
+
+Some core functionality has been moved out to another git repository,
+`luma.core <https://github.com/rm-hull/luma.core>`_: this has enabled
+another project to have a facelift: **pcd8544** has now been reborn as
+`luma.lcd <https://github.com/rm-hull/luma.lcd>`_: the same API can now be
+used across both projects. Likewise **max7219** has been renamed to
+`luma.led_matrix <https://github.com/rm-hull/luma.led_matrix>`_ so
+it can also take advantage of the common API.

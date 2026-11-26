@@ -8,7 +8,7 @@ luma.oled
 
 luma.oled
 ---------
-**Display drivers for SSD1306 / SSD1309 / SSD1316 / SSD1322 / SSD1325 / SSD1327 / SSD1331 / SSD1351 / SSD1362 / SH1106 / SH1107 / WS0010 / CH1115**
+**Display drivers for SSD1305 / SSD1306 / SSD1309 / SSD1315 / SSD1316 / SSD1322 / SSD1325 / SSD1327 / SSD1331 / SSD1351 / SSD1362 / SSD1363 / SH1106 / SH1107 / WS0010 / CH1115**
 
 .. image:: https://github.com/rm-hull/luma.oled/actions/workflows/main.yml/badge.svg
    :target: https://github.com/rm-hull/luma.oled/actions/workflows/main.yml
@@ -25,11 +25,8 @@ luma.oled
 .. image:: https://img.shields.io/pypi/v/luma.oled
    :target: https://pypi.org/project/luma.oled
 
-.. image:: https://img.shields.io/pypi/dm/luma.oled
-   :target: https://pypi.org/project/luma.oled
-
-Python 3 library interfacing OLED matrix displays with the SSD1306, SSD1309, SSD1316,
-SSD1322, SSD1325, SSD1327, SSD1331, SSD1351, SH1106, SH1107 or WS0010 driver using
+Python 3 library interfacing OLED matrix displays with the SSD1305, SSD1306, SSD1309, SSD1315, SSD1316,
+SSD1322, SSD1325, SSD1327, SSD1331, SSD1351, SSD1362, SSD1363, SH1106, SH1107 or WS0010 driver using
 I2C/SPI/Parallel on the Raspberry Pi and other linux-based single-board
 computers - it provides a `Pillow <https://pillow.readthedocs.io/>`_-compatible
 drawing canvas, and other functionality to support:
@@ -71,25 +68,6 @@ git repository:
 
 .. image:: https://raw.githubusercontent.com/rm-hull/luma.oled/master/doc/images/crawl_anim.gif?raw=true
    :alt: crawl
-
-Upgrade
--------
-Version 2.0.0 was released on 11 January 2017: this came with a rename of the
-github project from **ssd1306** to **luma.oled** to reflect the changing nature
-of the codebase.
-
-Some core functionality has been moved out to another git repository,
-`luma.core <https://github.com/rm-hull/luma.core>`_: this has enabled
-another project to have a facelift: **pcd8544** has now been reborn as
-`luma.lcd <https://github.com/rm-hull/luma.lcd>`_: the same API can now be
-used across both projects. Likewise **max7219** has been renamed to
-`luma.led_matrix <https://github.com/rm-hull/luma.led_matrix>`_ so
-it can also take advantage of the common API.
-
-The consequence is that any existing code that uses the old **ssd1306** package
-will need to be updated. The changes should be limited to altering import
-statements only, and are described in the
-`upgrade documentation <https://luma-oled.readthedocs.io/en/latest/upgrade.html>`_.
 
 License
 -------

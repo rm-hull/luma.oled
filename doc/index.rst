@@ -1,5 +1,5 @@
-Luma.OLED: Display drivers for SSD1306 / SSD1309 / SSD1322 / SSD1325 / SSD1327 / SSD1331 / SSD1351 / SSD1362 / SH1106 / SH1107
-==============================================================================================================================
+Luma.OLED: Display drivers for SSD1305 / SSD1306 / SSD1309 / SSD1315 / SSD1316 / SSD1322 / SSD1325 / SSD1327 / SSD1331 / SSD1351 / SSD1362 / SH1106 / SH1107
+================================================================================================================================================================
 
 .. image:: https://github.com/rm-hull/luma.oled/actions/workflows/main.yml/badge.svg
    :target: https://github.com/rm-hull/luma.oled/actions/workflows/main.yml
