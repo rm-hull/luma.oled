@@ -1,0 +1,37 @@
+# Copyright (c) 2014-2026 Richard Hull and contributors
+# See LICENSE.rst for details.
+
+env_list = [
+    { product = [{ prefix = "py", start = 310, stop = 316 }] },
+    "qa",
+    "doc",
+]
+skip_missing_interpreters = true
+
+[env_run_base]
+package = "editable"
+allowlist_externals = [
+    "py.test",
+    "coverage",
+]
+set_env = { PYTHONDEVMODE = "1" }
+commands = [
+    ["coverage", "erase"],
+    ["py.test", "--cov=luma"],
+    ["coverage", "html"],
+]
+deps = [".[test]"]
+
+[env.qa]
+commands = [
+    ["flake8"],
+    ["rstcheck", "README.rst", "CHANGES.rst", "CONTRIBUTING.rst"],
+]
+deps = [".[qa]"]
+
+[env.doc]
+commands = [
+    ["sphinx-build", "-W", "-b", "html", "-d", "{env_tmp_dir}/doctrees", ".", "{env_tmp_dir}/html"],
+]
+change_dir = "doc"
+deps = [".[docs]"]
