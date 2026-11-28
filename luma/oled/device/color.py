@@ -87,7 +87,7 @@ class color_device(device, __framebuffer_mixin):
 
             i = 0
             buf = bytearray(width * height * 2)
-            for r, g, b in image.getdata():
+            for r, g, b in image.get_flattened_data():
                 if not r == g == b == 0:
                     # 65K format 1
                     buf[i] = r & 0xF8 | g >> 5
