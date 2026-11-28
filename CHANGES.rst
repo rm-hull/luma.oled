@@ -4,7 +4,8 @@ ChangeLog
 +------------+---------------------------------------------------------------------+------------+
 | Version    | Description                                                         | Date       |
 +============+=====================================================================+============+
-| **3.17.0** | * Drop support for Python 3.9                                       | TBA        |
+| **3.17.0** | * Replace deprecated Pillow getdata() with get_flattened_data()     | TBA        |
+|            | * Drop support for Python 3.9                                       |            |
 +------------+---------------------------------------------------------------------+------------+
 | **3.16.0** | * Add support for SSD1363                                           | 2026/10/02 |
 |            | * Remove deprecation notice in framebuffer mixin                    |            |

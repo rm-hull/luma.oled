@@ -131,5 +131,5 @@ class greyscale_device(device, __framebuffer_mixin):
 
             buf = bytearray(width * height >> 1)
             self._set_position(top, right, bottom, left)
-            self._populate(buf, cropped_image_segment.getdata())
+            self._populate(buf, cropped_image_segment.get_flattened_data())
             self.data(list(buf))
